@@ -1,9 +1,9 @@
 #include <iostream>
-#include "plotty_maker/plotty_maker.h"
+#include "plotly_maker/plotly_maker.h"
 
 int main(int argc, char *argv[])
 {
-    pm::testPlottyMaker();
+    davis::testPlottyMaker();
     return EXIT_SUCCESS;
 }
 
