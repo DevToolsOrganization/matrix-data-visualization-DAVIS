@@ -1,8 +1,7 @@
 #include <iostream>
 #include "plotly_maker.h"
-#include <filesystem>
 #include <fstream>
-namespace fs = std::filesystem;
+
 namespace{
 
 constexpr char kHeadPart[] =R"(<head>
@@ -50,6 +49,7 @@ void testPlottyMaker(){
     }else{
         std::cout<<"Unable to open file...";
     }
+
 }
 }; // namespace davis
 
