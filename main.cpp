@@ -46,6 +46,7 @@ inline bool plotly_script_exists () {
 
 int main(int argc, char *argv[])
 {
+	//testing
     ResourceHandle resource_handle("plotly_maker/plotly-2.27.0.min.js");
     std::cout << "res.txt contents: " << resource_handle.length() <<'\n';
     std::cout << "check plotly script exists: " << plotly_script_exists()<<'\n';
