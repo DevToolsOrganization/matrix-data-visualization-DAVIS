@@ -24,31 +24,20 @@ return s_cwd;
 }
 
 #if defined(WIN32) || defined(NT)
-void openPlotlyHtml(){
-    std::string command = "start ";
-    command.append(getCurrentPath());
-    command.append("\\example.html");
-    system(command.c_str());
-}
+std::string command = "start ";
 #elif APPLE
-void openPlotlyHtml(){
-    std::string command = "open ";
-    command.append(getCurrentPath());
-    command.append("\\example.html");
-    system(command.c_str());
-}
+std::string command = "open ";
 #elif linux
-void openPlotlyHtml(){
-    std::string command = "xdg-open";
-    command.append(getCurrentPath());
-    command.append("\\example.html");
-    system(command.c_str());
-}
+std::string command = "xdg-open";
 #else
 #error "Unknown compiler"
 #endif
 
-
+void openPlotlyHtml(){
+    command.append(getCurrentPath());
+    command.append("\\example.html");
+    system(command.c_str());
+}
 
 
 inline bool plotly_script_exists () {
