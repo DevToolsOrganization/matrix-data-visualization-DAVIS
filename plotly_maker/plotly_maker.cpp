@@ -1,8 +1,14 @@
+#include <io.h>
 #include <iostream>
 #include "plotly_maker.h"
 #include <fstream>
 
 namespace{
+
+inline bool is_file_exists (const std::string &file) {
+    return ( access( file.c_str(), F_OK ) != -1 );
+}
+
 
 constexpr char kHeadPart[] =R"(<head>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
@@ -36,8 +42,8 @@ Plotly.newPlot('gd', data);
 }
 
 namespace davis {
-
-void testPlottyMaker(){
+//TODO this test will be moved to tests
+bool testPlottyMaker(){
 
     std::string result = kHeadPart;
     result.append(kSecondPart);
@@ -49,7 +55,7 @@ void testPlottyMaker(){
     }else{
         std::cout<<"Unable to open file...";
     }
-
+ return is_file_exists("example.html");
 }
 }; // namespace davis
 
