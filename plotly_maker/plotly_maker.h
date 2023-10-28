@@ -7,7 +7,6 @@ using std::vector;
 
 namespace davis {
 
-bool testPlottyMaker();
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>> &values, std::string &page);
 
 }; // namespace davis

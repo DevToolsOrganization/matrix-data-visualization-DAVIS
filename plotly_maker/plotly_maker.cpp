@@ -7,7 +7,7 @@
 #include <fstream>
 
 namespace{
-
+// TODO MOVE ALL COMMON FUNCTIONS TO FILE UTILS
 inline bool is_file_exists (const std::string &file) {
     return ( access( file.c_str(), F_OK ) != -1 );
 }
@@ -75,23 +75,6 @@ bool createStringValues(const std::vector<std::vector<double>> &values,
 } // namespace
 
 namespace davis {
-
-//TODO this test will be moved to tests
-bool testPlottyMaker(){
-
-    std::vector<std::vector<double>>testValues = {{43,400,54,980},{200,36,400,55},{120,4,650,5}};
-    std::string result;
-    createHtmlPageWithPlotlyJS(testValues, result);
-    std::ofstream out("example.html");
-    if(out.is_open()){
-        out << result.c_str();
-        std::cout<<"Write to file...";
-        out.close();
-    }else{
-        std::cout<<"Unable to open file...";
-    }
-    return true;
-}
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
                                 std::string &page)
