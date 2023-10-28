@@ -20,7 +20,7 @@ constexpr char kHeadPart[] =R"(<head>
 <div style="height:2044px; width:2044px;" id="gd"></div>
 <script>)";
 
-constexpr char kColorMap1Part[] =R"(
+constexpr char kColorMapDefaultPart[] =R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
     ['0.111111111111', 'rgb(215,48,39)'],
@@ -79,15 +79,9 @@ namespace davis {
 //TODO this test will be moved to tests
 bool testPlottyMaker(){
 
-    std::string result = kHeadPart;
-    std::string str_values = "";
     std::vector<std::vector<double>>testValues = {{43,400,54,980},{200,36,400,55},{120,4,650,5}};
-    if(!checkThatSizesAreTheSame(testValues))return false;
-    createStringValues(testValues,str_values);
-    result.append(str_values);
-    std::cout<<result;
-    result.append(kColorMap1Part);
-    result.append(kLastPart);
+    std::string result;
+    createHtmlPageWithPlotlyJS(testValues, result);
     std::ofstream out("example.html");
     if(out.is_open()){
         out << result.c_str();
@@ -96,8 +90,22 @@ bool testPlottyMaker(){
     }else{
         std::cout<<"Unable to open file...";
     }
-  return true;
+    return true;
 }
+
+bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
+                                std::string &page)
+{
+    page = kHeadPart;
+    std::string str_values = "";
+    if(!checkThatSizesAreTheSame(values))return false;
+    createStringValues(values, str_values);
+    page.append(str_values);
+    page.append(kColorMapDefaultPart);
+    page.append(kLastPart);
+    return true;
+}
+
 }; // namespace davis
 
 
