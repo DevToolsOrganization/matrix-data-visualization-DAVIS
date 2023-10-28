@@ -5,7 +5,7 @@ namespace davis {
 
 bool testPlottyMaker();
 
-}; // namespace pm
+}; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_
 

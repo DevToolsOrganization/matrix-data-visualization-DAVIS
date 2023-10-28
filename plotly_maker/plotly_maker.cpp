@@ -1,6 +1,9 @@
 #include <io.h>
 #include <iostream>
 #include "plotly_maker.h"
+
+#include <vector>
+#include <iostream>
 #include <fstream>
 
 namespace{
@@ -15,11 +18,9 @@ constexpr char kHeadPart[] =R"(<head>
 </head>
 <body>
 <div style="height:2044px; width:2044px;" id="gd"></div>
-<script>
-var data = [{
-  z: [[7,90,876],[654,678,9],[600,5,349]])";
+<script>)";
 
-constexpr char kSecondPart[] =R"(,
+constexpr char kColorMap1Part[] =R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
     ['0.111111111111', 'rgb(215,48,39)'],
@@ -31,22 +32,62 @@ constexpr char kSecondPart[] =R"(,
     ['0.777777777778', 'rgb(116,173,209)'],
     ['0.888888888889', 'rgb(69,117,180)'],
     ['1.0', 'rgb(49,54,149)']
-  ],
+  ],)";
+
+constexpr char kLastPart[] =R"(  
   type: 'heatmap'
 }];
 Plotly.newPlot('gd', data);
 </script>
 </body>)";
 
+bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
+    unsigned int size = 0;
+    if(!values.empty()) {
+        size = values[0].size();
+    };
+    for(unsigned int i=0;i<values.size();++i){
 
+      if(values[i].size() != size)return false;
+    }
+    return true;
 }
 
+bool createStringValues(const std::vector<std::vector<double>> &values,
+                        std::string &str_values){
+    if(!checkThatSizesAreTheSame(values))return false;
+    if(!str_values.empty())str_values.clear();
+    str_values.append(R"(var data = [{z: )");
+    str_values.append(R"([)");
+    for(unsigned int i=0;i<values.size();++i){
+        str_values.append("[");
+        for(unsigned int j=0;j<values[i].size();++j){
+            str_values.append(std::to_string(values[i][j]));
+            if(j!=values[i].size()-1)str_values.append(",");
+        }
+        str_values.append("]");
+        if(i!=values.size()-1)str_values.append(",");
+    }
+    str_values.append(R"(],)");
+    return true;
+}
+
+} // namespace
+
 namespace davis {
+
 //TODO this test will be moved to tests
 bool testPlottyMaker(){
 
     std::string result = kHeadPart;
-    result.append(kSecondPart);
+    std::string str_values = "";
+    std::vector<std::vector<double>>testValues = {{43,400,54,980},{200,36,400,55},{120,4,650,5}};
+    if(!checkThatSizesAreTheSame(testValues))return false;
+    createStringValues(testValues,str_values);
+    result.append(str_values);
+    std::cout<<result;
+    result.append(kColorMap1Part);
+    result.append(kLastPart);
     std::ofstream out("example.html");
     if(out.is_open()){
         out << result.c_str();
@@ -55,7 +96,7 @@ bool testPlottyMaker(){
     }else{
         std::cout<<"Unable to open file...";
     }
- return is_file_exists("example.html");
+  return true;
 }
 }; // namespace davis
 

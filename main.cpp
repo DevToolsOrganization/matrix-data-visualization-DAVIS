@@ -51,7 +51,10 @@ int main(int argc, char *argv[])
     ResourceHandle resource_handle("plotly_maker/plotly-2.27.0.min.js");
     std::cout << "res.txt contents: " << resource_handle.length() <<'\n';
     std::cout << "check plotly script exists: " << plotly_script_exists()<<'\n';
-    davis::testPlottyMaker();
+    if(!davis::testPlottyMaker()){
+        std::cout<<"plotly html page was not created....";
+        return 0;
+    }
     if(!plotly_script_exists()){
         std::ofstream out("plotly-2.27.0.min.js");
         out << resource_handle.c_str();
