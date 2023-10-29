@@ -3,7 +3,7 @@
 
 namespace davis {
 
-void testPlottyMaker();
+bool testPlottyMaker();
 
 }; // namespace pm
 
