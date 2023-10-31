@@ -1,11 +1,10 @@
 #include <iostream>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <string>
 #include <fstream>
 #include "plotly_maker/plotly_maker.h"
 #include "ResourceManager/ResourceHandle.h"
-#include "arrayCore/arrayCore.h"
+#include "array_core/array_core.h"
 
 #ifdef _WIN32
     #include <direct.h>
@@ -52,6 +51,7 @@ int main(int argc, char *argv[])
     std::cout << "check plotly script exists: " << plotly_script_exists()<<'\n';
     std::string page;
     std::vector<std::vector<double>> values = {{3,40,98,76},{99,45,20,1},{5,56,93,25},{45,23,90,2}};
+    davis::show<double>(values);
     if(!davis::createHtmlPageWithPlotlyJS(values, page)){
         std::cout<<"plotly html page was not created....";
         return 0;
@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     }
 
     openPlotlyHtml();
+
 
     return EXIT_SUCCESS;
 }
