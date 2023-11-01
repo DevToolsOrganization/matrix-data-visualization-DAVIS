@@ -8,6 +8,7 @@ set(SOURCE_FILES
     )
 set(HEADER_FILES
     "array_core.h"
+    "utils_core.h"
     )
 add_library(${projectName} ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE PlotlyMaker)
