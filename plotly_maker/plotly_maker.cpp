@@ -1,17 +1,12 @@
 #include <io.h>
 #include <iostream>
 #include "plotly_maker.h"
-
+#include "common_utils/common_utils.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
 
 namespace{
-// TODO MOVE ALL COMMON FUNCTIONS TO FILE UTILS
-inline bool is_file_exists (const std::string &file) {
-    return ( access( file.c_str(), F_OK ) != -1 );
-}
-
 
 constexpr char kHeadPart[] =R"(<head>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
@@ -86,6 +81,14 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     page.append(str_values);
     page.append(kColorMapDefaultPart);
     page.append(kLastPart);
+    return true;
+}
+
+bool showDataInBrowser(const vector<vector<double>> &values){
+    std::string page;
+    if(!createHtmlPageWithPlotlyJS(values,page))return false;
+    davis::saveStringToFile("example.html",page);
+    openPlotlyHtml();
     return true;
 }
 

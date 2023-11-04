@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-set(projectName "DAVIS")
+set(projectName "davis")
 project(${projectName} VERSION 0.01 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,6 +10,7 @@ set(CMAKE_EXE_LINKER_FLAGS " -static")
 add_subdirectory("ResourceManager")
 add_subdirectory(plotly_maker)
 add_subdirectory(arrayCore)
+add_subdirectory(common_utils)
 
 # tests
 enable_testing()
@@ -21,6 +22,6 @@ rm_embed_resources(RESOURCES "plotly_maker/plotly-2.27.0.min.js")
 
 add_executable(${projectName} main.cpp ${RESOURCES})
 target_link_libraries(${projectName} PRIVATE PlotlyMaker -static-libgcc -static-libstdc++
-)
+PRIVATE CommonUtils)
 
 
