@@ -63,8 +63,8 @@ bool saveStringToFile(const std::string &file_name,
 }
 
 
-void openPlotlyHtml(){
-    openFileBySystem("example.html");
+void openPlotlyHtml(const std::string &file_name){
+    openFileBySystem(file_name);
 }
 
 void sleepMs(unsigned long milisec)

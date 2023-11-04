@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "html_parts.h"
+#include "windows.h"
 
 namespace{
 
@@ -86,7 +87,8 @@ bool showDataInBrowser(const vector<vector<double>> &values){
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
     davis::saveStringToFile("example.html",page);
-    openPlotlyHtml();
+    openPlotlyHtml("example.html");
+    Sleep(2000);
     return true;
 
 }
@@ -110,8 +112,8 @@ bool showLineChartInBrowser(const vector<double> &values){
     createStringLineChartValues(values,str_values);
     page.append(str_values);
     page.append(kCommonLastPart);
-    davis::saveStringToFile("example.html",page);
-    openPlotlyHtml();
+    davis::saveStringToFile("example2.html",page);
+    openPlotlyHtml("example2.html");
     return true;
 }
 
