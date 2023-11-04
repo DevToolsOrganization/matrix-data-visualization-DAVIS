@@ -12,7 +12,7 @@ constexpr char kHeadPart[] =R"(<head>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
 <body>
-<div style="height:2044px; width:2044px;" id="gd"></div>
+<div style="height:700px; width:700px;" id="gd"></div>
 <script>)";
 
 constexpr char kColorMapDefaultPart[] =R"(
@@ -90,8 +90,19 @@ bool showDataInBrowser(const vector<vector<double>> &values){
     davis::saveStringToFile("example.html",page);
     openPlotlyHtml();
     return true;
+
 }
 
+bool showDataInBrowser(const vector<double> &values){
+    // Заглушка
+    // Valery, you need to create overload createHtmlPageWithPlotlyJS with
+    // input argument const vector<double> &values
+    // In this case it will be possible to plot graphics for 1 vector instead of heatmap
+
+    vector<vector<double>> wrapper;
+    wrapper.push_back(values);
+    return showDataInBrowser(wrapper);
+}
 }; // namespace davis
 
 
