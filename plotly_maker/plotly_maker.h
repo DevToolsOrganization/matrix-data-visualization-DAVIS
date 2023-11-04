@@ -7,7 +7,9 @@ using std::vector;
 
 namespace davis {
 
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>> &values, std::string &page);
+bool createHtmlPageWithPlotlyJS(const vector<vector<double>> &values,
+                                std::string &page);
+bool showDataInBrowser(const vector<vector<double>> &values);
 
 }; // namespace davis
 
