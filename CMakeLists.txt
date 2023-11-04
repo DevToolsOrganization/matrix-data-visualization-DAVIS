@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-set(projectName "DAVIS")
+set(projectName "davis")
 project(${projectName} VERSION 0.01 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)

@@ -10,5 +10,5 @@ set(HEADER_FILES
     "plotly_maker.h"
     )
 add_library(${projectName} ${SOURCE_FILES} ${HEADER_FILES})
-#target_link_libraries(${PROJECT_NAME}plotly_maker.cpp PlotlyMaker)
-
+target_link_libraries(${PROJECT_NAME} PRIVATE CommonUtils)
+include_directories(${CMAKE_SOURCE_DIR})
