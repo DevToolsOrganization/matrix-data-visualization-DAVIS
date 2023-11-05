@@ -11,8 +11,21 @@ using std::vector;
 
 namespace davis {
 
-enum class dataType{
+enum class dataTypes{
     ptr1D, ptr2D, ptrPseudo2D, vector2D, vector1D
+};
+
+enum class visualizationTypes{
+    graph, heatmap, surface
+};
+enum class colorscale{
+    graph, heatmap, surface
+};
+
+struct showSettings{
+    visualizationTypes visualType = visualizationTypes::heatmap;
+
+
 };
 
 

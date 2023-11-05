@@ -54,7 +54,6 @@ bool isPlotlyScriptExists(){
 
 bool saveStringToFile(const std::string file_name,
                       const std::string &data){
-
     std::ofstream out(file_name);
     if(out.is_open()){
         out << data.c_str();

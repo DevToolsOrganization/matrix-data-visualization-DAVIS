@@ -73,8 +73,10 @@ TEST(ArrayCore, showTests){
 
 int main(int argc, char* argv[]){
     ResourceHandle resource_handle("res/plotly-2.27.0.min.js");
+    std::cout<< " is JS exist in Tests = "<<davis::isPlotlyScriptExists();
     if(!davis::isPlotlyScriptExists()){
-        davis::saveStringToFile("plotly-2.27.0.min.js",resource_handle.c_str());
+        std::cout<<"!!!!!!!!!!!! need to js is not exist"<<std::endl;
+        std::cout<<"bool res = "<<davis::saveStringToFile("plotly-2.27.0.min.js",resource_handle.c_str())<<std::endl;
     }
     ::testing::InitGoogleTest(&argc, argv);
     std::ignore = RUN_ALL_TESTS();
