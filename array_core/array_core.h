@@ -5,10 +5,8 @@
 #include <vector>
 #include "plotly_maker/plotly_maker.h"
 
-using std::vector;
-
-
 namespace davis {
+using std::vector;
 
 enum class visualizationTypes{
     graph, heatmap, surface
@@ -55,7 +53,7 @@ bool show(const vector<vector<T>> &data)
     vecVecDbl.reserve(data.size());
     for (vector<T> row : data) {
         vector<double> dblRow(row.begin(), row.end());
-        vecVecDbl.push_back(dblRow);
+        vecVecDbl.emplace_back(dblRow);
     }
     return davis::showDataInBrowser(vecVecDbl);
 
@@ -75,7 +73,7 @@ bool show(T **data, uint64_t arrRows, uint64_t arrCols)
     vecVecDbl.reserve(arrRows);
     for (int i = 0; i < arrRows; ++i) {
         vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
-        vecVecDbl.push_back(dblRow);
+        vecVecDbl.emplace_back(dblRow);
     }
     return davis::showDataInBrowser(vecVecDbl);
 }
@@ -87,7 +85,7 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols)
     vecVecDbl.reserve(arrRows);
     for (int i = 0; i < arrRows; ++i) {
         vector<double> dblRow(&data[i*arrCols], &data[i*arrCols] + arrCols);
-        vecVecDbl.push_back(dblRow);
+        vecVecDbl.emplace_back(dblRow);
     }
     return davis::showDataInBrowser(vecVecDbl);
 }
