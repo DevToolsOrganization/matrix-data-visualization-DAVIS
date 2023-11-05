@@ -4,6 +4,7 @@
 namespace{
 #ifdef _WIN32
 #include <direct.h>
+#include <windows.h>
 #define getcwd _getcwd // stupid MSFT "deprecation" warning
 #elif
 #include <unistd.h>
@@ -67,6 +68,15 @@ bool saveStringToFile(const std::string file_name,
 
 void openPlotlyHtml(){
     openFileBySystem("example.html");
+}
+
+void sleepMs(unsigned long milisec)
+{
+#if defined(WIN32) || defined(NT)
+    Sleep(milisec);
+#elif
+    usleep(milisec*1000);
+#endif
 }
 
 }; // namespace davis

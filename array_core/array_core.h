@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include "plotly_maker/plotly_maker.h"
-#include "utils_core.h"
 
 using std::vector;
 

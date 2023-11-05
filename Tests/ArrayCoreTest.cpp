@@ -3,10 +3,8 @@
 #include "array_core/array_core.h"
 #include "common_utils/common_utils.h"
 #include <fstream>
-#include <windows.h>
-//#include <unistd.h>
-using std::string;
 
+using std::string;
 
 TEST(ArrayCore, showHeatMap1){
     EXPECT_EQ(davis::isPlotlyScriptExists(),true);
@@ -15,20 +13,20 @@ TEST(ArrayCore, showHeatMap1){
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap2){
-    Sleep(1000);
+    davis::sleepMs(1000);
     std::vector<int> vals2 = {2, 6, 4, 34, 56, 33, 2, 1};
     bool result = davis::show(vals2);
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap3){
-    Sleep(1000);
+    davis::sleepMs(1000);
     int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
     bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]));
     EXPECT_EQ(result,true);
 }
 
 TEST(ArrayCore, showHeatMap4){
-    Sleep(1000);
+    davis::sleepMs(1000);
     int rows = 5; int cols = 3;
     int *vals4 = new int[rows*cols];
     for (int i = 0; i < rows; ++i) {
@@ -40,7 +38,7 @@ TEST(ArrayCore, showHeatMap4){
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap5){
-    Sleep(1000);
+    davis::sleepMs(1000);
     int rows2 = 20; int cols2 = 20;
     int** vals5 = new int*[rows2];
     for (int i = 0; i < rows2; ++i) {
