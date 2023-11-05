@@ -8,15 +8,19 @@ FetchContent_MakeAvailable(googletest)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # Windows specific, for googletest
 
 
-include_directories(${RESOURCE_MANAGER_INCLUDE_DIRS})
-rm_embed_resources(RESOURCES "res/plotly-2.27.0.min.js")
 
-add_executable(${PROJECT_NAME}_tests PlotlyLibTest.cpp ${RESOURCES})
+add_executable(${PROJECT_NAME}_tests PlotlyLibTest.cpp)
+add_executable(${PROJECT_NAME}_core_tests ArrayCoreTest.cpp)
 
 target_link_libraries(${PROJECT_NAME}_tests PRIVATE gtest_main)
 target_link_libraries(${PROJECT_NAME}_tests PRIVATE PlotlyMaker)
 target_link_libraries(${PROJECT_NAME}_tests PRIVATE ArrayCore)
 target_link_libraries(${PROJECT_NAME}_tests PRIVATE CommonUtils)
+
+target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE gtest_main)
+target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE PlotlyMaker)
+target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE ArrayCore)
+target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE CommonUtils)
 
 
 include_directories(${CMAKE_SOURCE_DIR})
