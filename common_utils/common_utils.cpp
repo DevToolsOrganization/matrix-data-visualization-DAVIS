@@ -16,23 +16,20 @@ inline bool is_file_exists (const std::string &file_name) {
     return true;
 }
 
-
+void openFileBySystem(const std::string &file_name){
 #if defined(WIN32) || defined(NT)
-std::string command = "start ";
+    std::string command = "start ";
 #elif APPLE
-std::string command = "open ";
+    std::string command = "open ";
 #elif linux
-std::string command = "xdg-open";
+    std::string command = "xdg-open";
 #else
 #error "Unknown compiler"
 #endif
-
-void openFileBySystem(const std::string &file_name){
     command.append(davis::getCurrentPath());
     command.append("\\");
     command.append(file_name);
     system(command.c_str());
-    command.clear();
 }
 
 } // namespace
