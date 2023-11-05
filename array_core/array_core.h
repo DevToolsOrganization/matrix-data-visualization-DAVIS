@@ -11,21 +11,17 @@ using std::vector;
 
 namespace davis {
 
-enum class dataTypes{
-    ptr1D, ptr2D, ptrPseudo2D, vector2D, vector1D
-};
-
 enum class visualizationTypes{
     graph, heatmap, surface
 };
-enum class colorscale{
-    graph, heatmap, surface
+
+enum class colorscales{
+    gray, rainbow
 };
 
 struct showSettings{
     visualizationTypes visualType = visualizationTypes::heatmap;
-
-
+    colorscales colorscale = colorscales::rainbow;
 };
 
 
@@ -79,8 +75,8 @@ bool show(T **data, uint64_t arrRows, uint64_t arrCols)
     vector<vector<double>> vecVecDbl;
     vecVecDbl.reserve(arrRows);
     for (int i = 0; i < arrRows; ++i) {
-         vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
-         vecVecDbl.push_back(dblRow);
+        vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
+        vecVecDbl.push_back(dblRow);
     }
     return davis::showDataInBrowser(vecVecDbl);
 }
@@ -100,7 +96,6 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols)
 template <typename T>
 bool show(const T *data, uint64_t count)
 {
-    std::cout << "test we are here"<<std::endl;
     vector<double> dblRow(data, data + count);
     return davis::showDataInBrowser(dblRow);
 }
