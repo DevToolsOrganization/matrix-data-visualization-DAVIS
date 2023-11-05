@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "plotly_maker/plotly_maker.h"
 #include "array_core/array_core.h"
-#include "ResourceManager/ResourceHandle.h"
 #include "common_utils/common_utils.h"
 #include <fstream>
 using std::string;
@@ -72,10 +71,6 @@ TEST(ArrayCore, showTests){
 
 
 int main(int argc, char* argv[]){
-    ResourceHandle resource_handle("res/plotly-2.27.0.min.js");
-    if(!davis::isPlotlyScriptExists()){
-        davis::saveStringToFile("plotly-2.27.0.min.js",resource_handle.c_str());
-    }
     ::testing::InitGoogleTest(&argc, argv);
     std::ignore = RUN_ALL_TESTS();
     return 0;
