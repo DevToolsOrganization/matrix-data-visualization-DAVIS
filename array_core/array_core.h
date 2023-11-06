@@ -41,7 +41,7 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title =
 
 //! one-dimensional array
 template <typename T>
-bool show(const T *data, std::string title = "data");
+bool show(const T *data, uint64_t count, std::string title = "data");
 
 // *******************************
 // template functions realisations:
