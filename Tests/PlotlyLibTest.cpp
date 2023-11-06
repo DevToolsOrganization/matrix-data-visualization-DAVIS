@@ -1,11 +1,13 @@
 #include "gtest/gtest.h"
 #include "plotly_maker/plotly_maker.h"
+#include "array_core/array_core.h"
+#include "common_utils/common_utils.h"
 #include <fstream>
 using std::string;
 
 
 TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
-    //TODO delete example.html before this test
+
     std::vector<std::vector<double>>testValues = {{43,400,54,980},{200,36,400,55},{120,4,650,5}};
     std::string str_page;
     bool result = davis::createHtmlPageWithPlotlyJS(testValues, str_page);
@@ -17,13 +19,12 @@ TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
     }else{
         std::cout<<"Unable to open file...";
     }
-	EXPECT_EQ(result,true);
+    EXPECT_EQ(result,true);
 
 }
 
 int main(int argc, char* argv[]){
-
-	::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
     std::ignore = RUN_ALL_TESTS();
-	return 0;
+    return 0;
 }

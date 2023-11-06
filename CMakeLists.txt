@@ -9,7 +9,7 @@ set(CMAKE_EXE_LINKER_FLAGS " -static")
 
 add_subdirectory("ResourceManager")
 add_subdirectory(plotly_maker)
-add_subdirectory(arrayCore)
+add_subdirectory(array_core)
 add_subdirectory(common_utils)
 
 # tests

@@ -4,7 +4,7 @@
 #include <fstream>
 #include "plotly_maker/plotly_maker.h"
 #include "ResourceManager/ResourceHandle.h"
-#include "arrayCore/arrayCore.h"
+#include "array_core/array_core.h"
 #include "common_utils/common_utils.h"
 
 
@@ -16,9 +16,11 @@ int main(int argc, char *argv[])
         davis::saveStringToFile("plotly-2.27.0.min.js",resource_handle.c_str());
     }
 
-    // example how to show values using PlotlyMaker lib
-    std::vector<std::vector<double>> values = {{300,40,98,76},{99,45,20,1},{5,56,93,25},{45,23,90,2}};
-    davis::showDataInBrowser(values);
+    // example how to show values via ArrayCore using PlotlyMaker lib
+    std::vector<std::vector<int>> values = {{300,40,98,76},{99,45,20,1},{5,56,93,25},{45,23,90,2}};
+    davis::show(values);
+
+
     return EXIT_SUCCESS;
 }
 
