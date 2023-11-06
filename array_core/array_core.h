@@ -55,7 +55,7 @@ bool show(const vector<vector<T>> &data)
         vector<double> dblRow(row.begin(), row.end());
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showDataInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl);
 
 }
 
@@ -63,7 +63,7 @@ template <typename T>
 bool show(const vector<T> &data)
 {
     vector<double> dblRow(data.begin(), data.end());
-    return davis::showDataInBrowser(dblRow);
+    return davis::showLineChartInBrowser(dblRow);
 }
 
 template <typename T>
@@ -75,7 +75,7 @@ bool show(T **data, uint64_t arrRows, uint64_t arrCols)
         vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showDataInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl);
 }
 
 template <typename T>
@@ -87,14 +87,14 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols)
         vector<double> dblRow(&data[i*arrCols], &data[i*arrCols] + arrCols);
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showDataInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl);
 }
 
 template <typename T>
 bool show(const T *data, uint64_t count)
 {
     vector<double> dblRow(data, data + count);
-    return davis::showDataInBrowser(dblRow);
+    return davis::showLineChartInBrowser(dblRow);
 }
 
 } // namespace davis
