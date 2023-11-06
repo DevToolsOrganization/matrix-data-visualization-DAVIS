@@ -6,10 +6,9 @@
 #include <iostream>
 #include <fstream>
 #include "html_parts.h"
-#include "windows.h"
 
 namespace{
-
+// I will move it later
 constexpr char kDivSizePart[] =R"(<div style="height:1022px; width:1022px;"
 id="gd"></div>
 <script>
@@ -83,26 +82,13 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     return true;
 }
 
-bool showDataInBrowser(const vector<vector<double>> &values){
+bool showHeatMapInBrowser(const vector<vector<double>> &values){
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
     davis::saveStringToFile("example.html",page);
     openPlotlyHtml("example.html");
-    Sleep(2000);
     return true;
 
-}
-
-
-bool showDataInBrowser(const vector<double> &values){
-    // Заглушка
-    // Valery, you need to create overload createHtmlPageWithPlotlyJS with
-    // input argument const vector<double> &values
-    // In this case it will be possible to plot graphics for 1 vector instead of heatmap
-
-    vector<vector<double>> wrapper;
-    wrapper.push_back(values);
-    return showDataInBrowser(wrapper);
 }
 
 bool showLineChartInBrowser(const vector<double> &values){

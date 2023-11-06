@@ -10,8 +10,7 @@ namespace davis {
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>> &values,
                                 std::string &page);
-bool showDataInBrowser(const vector<vector<double>> &values);
-bool showDataInBrowser(const vector<double> &values);
+bool showHeatMapInBrowser(const vector<vector<double>> &values);
 
 bool showLineChartInBrowser(const vector<double> &values);
 

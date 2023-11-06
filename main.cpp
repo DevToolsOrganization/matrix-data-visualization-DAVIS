@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <string>
 #include <fstream>
-#include "plotly_maker/plotly_maker.h"
 #include "ResourceManager/ResourceHandle.h"
 #include "array_core/array_core.h"
 #include "common_utils/common_utils.h"
@@ -23,7 +22,7 @@ int main(int argc, char *argv[])
 
     //line chart
     std::vector<double>values2 = {30,50,456,98,23,128,98};
-    davis::showLineChartInBrowser(values2);
+    davis::show(values2);
     return EXIT_SUCCESS;
 }
 
