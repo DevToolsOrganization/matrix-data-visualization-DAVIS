@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
     std::vector<std::vector<int>> values = {{300,40,98,76},{99,45,20,1},{5,56,93,25},{45,23,90,2}};
     davis::show(values);
 
-
     return EXIT_SUCCESS;
 }
 
