@@ -51,15 +51,15 @@ bool isPlotlyScriptExists(){
     return is_file_exists("plotly-2.27.0.min.js");
 };
 
-bool saveStringToFile(const std::string file_name,
+bool saveStringToFile(const std::string &file_name,
                       const std::string &data){
     std::ofstream out(file_name);
     if(out.is_open()){
         out << data.c_str();
-        return false;
         out.close();
+        return true;
     }
-    return true;
+    return false;
 }
 
 
