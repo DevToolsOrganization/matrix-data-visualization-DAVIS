@@ -1,5 +1,7 @@
 #include "common_utils.h"
 #include "fstream"
+#include <sys/stat.h>
+
 
 namespace{
 #ifdef _WIN32
@@ -75,6 +77,21 @@ void sleepMs(unsigned long milisec)
 #elif
     usleep(milisec*1000);
 #endif
+}
+
+bool deleteFolder(const char* fname)
+{
+    struct stat sb;
+
+    if (stat(fname, &sb) == 0){
+
+        //rmdir(fname);
+        return true;
+    }
+    else{
+        return false;
+    }
+
 }
 
 }; // namespace davis

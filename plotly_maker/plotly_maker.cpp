@@ -1,19 +1,19 @@
 #include <io.h>
 #include <iostream>
-#include "plotly_maker.h"
-#include "common_utils/common_utils.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 #include "html_parts.h"
+#include "common_utils/common_utils.h"
+#include "plotly_maker.h"
 
 namespace{
 // I will move it later
-constexpr char kDivSizePart[] =R"(<div style="height:1022px; width:1022px;"
+constexpr char kDivSizePart[] =R"(<div style="height:700px; width:700px;"
 id="gd"></div>
 <script>
 )";
-
 
 bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
     unsigned int size = 0;
@@ -68,6 +68,8 @@ x: [)";
 
 namespace davis {
 
+extern const char saveFolderName[] = "CreatedHtmls/";
+
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
                                 std::string &page)
 {
@@ -82,24 +84,34 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     return true;
 }
 
-bool showHeatMapInBrowser(const vector<vector<double>> &values){
+bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::string &title, const showSettings &settings){
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
-    davis::saveStringToFile("example.html",page);
-    openPlotlyHtml("example.html");
+    std::string pageName;
+    struct stat sb;
+    if (stat(saveFolderName, &sb) != 0)
+        mkdir(saveFolderName);
+    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    davis::saveStringToFile(pageName, page);
+    openPlotlyHtml(pageName);
     return true;
-
 }
 
-bool showLineChartInBrowser(const vector<double> &values){
+bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings){
     std::string page = kCommonHeadPart;
     page.append(kDivSizePart);
     std::string str_values = "";
     createStringLineChartValues(values,str_values);
     page.append(str_values);
     page.append(kCommonLastPart);
-    davis::saveStringToFile("example2.html",page);
-    openPlotlyHtml("example2.html");
+    std::string pageName;
+    struct stat sb;
+    if (stat(saveFolderName, &sb) != 0)
+        mkdir(saveFolderName);
+    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    davis::saveStringToFile(pageName, page);
+    davis::saveStringToFile(pageName,page);
+    openPlotlyHtml(pageName);
     return true;
 }
 

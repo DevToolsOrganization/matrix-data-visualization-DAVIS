@@ -4,21 +4,6 @@
 
 namespace davis {
 
-//#define GET_VARIABLE_NAME(var) #var //Using: char* var_name= GET_VARIABLE_NAME(var);
-
-//template <typename T>
-//std::string getVarName(T var){
-//    return std::string(GET_VARIABLE_NAME(var));
-//}
-
-
-
-
-inline std::string getVarName( const char* varname)
-{
-    return std::string(varname);
-}
-#define GET_VARIABLE_NAME(var) getVarName(#var)
 
 std::string getCurrentPath();
 bool isPlotlyScriptExists();
@@ -26,6 +11,9 @@ bool saveStringToFile(const std::string &file_name,
                       const std::string &data);
 void sleepMs(unsigned long milisec);
 void openPlotlyHtml(const std::string &file_name);
+
+// only for empty folder
+bool deleteFolder(const char *fname);
 
 }; // namespace davis
 

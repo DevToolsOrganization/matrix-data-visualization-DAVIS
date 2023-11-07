@@ -9,46 +9,33 @@
 namespace davis {
 using std::vector;
 
-enum class visualizationTypes{
-    graph, heatmap, surface
-};
-
-enum class colorscales{
-    gray, rainbow
-};
-
-struct showSettings{
-    visualizationTypes visualType = visualizationTypes::heatmap;
-    colorscales colorscale = colorscales::rainbow;
-};
-
 
 //! two-dimensional vector
 template <typename T>
-bool show(const vector<vector<T>> &data, std::string title = "data");
+bool show(const vector<vector<T>> &data, std::string title = "davis", showSettings settings = showSettings());
 
 //! one-dimensional vector
 template <typename T>
-bool show(const vector<T> &data, std::string title = "data");
+bool show(const vector<T> &data, std::string title = "davis", showSettings settings = showSettings());
 
 //! two-dimensional array
 template <typename T>
-bool show(T **data, uint64_t arrRows, uint64_t arrCols, std::string title = "data");
+bool show(T **data, uint64_t arrRows, uint64_t arrCols, std::string title = "davis", showSettings settings = showSettings());
 
 //! a one-dimensional array that simulates a two-dimensional one (element access [i*cols+j])
 template <typename T>
-bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title = "data");
+bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title = "davis", showSettings settings = showSettings());
 
 //! one-dimensional array
 template <typename T>
-bool show(const T *data, uint64_t count, std::string title = "data");
+bool show(const T *data, uint64_t count, std::string title = "davis", showSettings settings = showSettings());
 
 // *******************************
 // template functions realisations:
 // *******************************
 
 template <typename T>
-bool show(const vector<vector<T>> &data, std::string title)
+bool show(const vector<vector<T>> &data, std::string title, showSettings settings)
 {
     vector<vector<double>> vecVecDbl;
     vecVecDbl.reserve(data.size());
@@ -56,19 +43,19 @@ bool show(const vector<vector<T>> &data, std::string title)
         vector<double> dblRow(row.begin(), row.end());
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showHeatMapInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl, title, settings);
 
 }
 
 template <typename T>
-bool show(const vector<T> &data, std::string title)
+bool show(const vector<T> &data, std::string title, showSettings settings)
 {
     vector<double> dblRow(data.begin(), data.end());
-    return davis::showLineChartInBrowser(dblRow);
+    return davis::showLineChartInBrowser(dblRow, title, settings);
 }
 
 template <typename T>
-bool show(T **data, uint64_t arrRows, uint64_t arrCols, std::string title)
+bool show(T **data, uint64_t arrRows, uint64_t arrCols, std::string title, showSettings settings)
 {
     vector<vector<double>> vecVecDbl;
     vecVecDbl.reserve(arrRows);
@@ -76,11 +63,11 @@ bool show(T **data, uint64_t arrRows, uint64_t arrCols, std::string title)
         vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showHeatMapInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl, title, settings);
 }
 
 template <typename T>
-bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title)
+bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title, showSettings settings)
 {
     vector<vector<double>> vecVecDbl;
     vecVecDbl.reserve(arrRows);
@@ -88,14 +75,14 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title)
         vector<double> dblRow(&data[i*arrCols], &data[i*arrCols] + arrCols);
         vecVecDbl.emplace_back(dblRow);
     }
-    return davis::showHeatMapInBrowser(vecVecDbl);
+    return davis::showHeatMapInBrowser(vecVecDbl, title, settings);
 }
 
 template <typename T>
-bool show(const T *data, uint64_t count, std::string title)
+bool show(const T *data, uint64_t count, std::string title, showSettings settings)
 {
     vector<double> dblRow(data, data + count);
-    return davis::showLineChartInBrowser(dblRow);
+    return davis::showLineChartInBrowser(dblRow, title, settings);
 }
 
 } // namespace davis
