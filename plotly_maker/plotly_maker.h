@@ -4,8 +4,6 @@
 #include "vector"
 #include "string"
 
-using std::vector;
-
 namespace davis {
 
 extern const char saveFolderName[];

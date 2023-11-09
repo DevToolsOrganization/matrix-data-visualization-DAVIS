@@ -48,6 +48,7 @@ bool createStringHeatMapValues(const std::vector<std::vector<double>> &values,
     return true;
 }
 
+
 bool createStringLineChartValues(const std::vector<double> &values,
                                  std::string &str_values){
     if(!str_values.empty())str_values.clear();
@@ -69,6 +70,9 @@ x: [)";
 } // namespace
 
 namespace davis {
+using std::string;
+using std::vector;
+using std::istringstream;
 
 const char saveFolderName[] = "CreatedHtmls/";
 
@@ -77,11 +81,13 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
 {
     page = kCommonHeadPart;
     page.append(kDivSizePart);
-    std::string str_values = "";
+    string str_values = "";
     if(!checkThatSizesAreTheSame(values))return false;
     createStringHeatMapValues(values, str_values);
     page.append(str_values);
-    page.append(kColorMapDefaultPart);
+    //page.append(kColorMapDefaultPart);
+    page.append(kColorMapThermalPart);
+    page.append(kTypePart);
     page.append(kCommonLastPart);
     return true;
 }
@@ -101,13 +107,13 @@ bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::strin
 
 bool showHeatMapInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
 
-    std::vector<std::vector<double>>heat_map_values;
-    std::istringstream f_lines(values);
-    std::string lines;
+    vector<vector<double>>heat_map_values;
+    istringstream f_lines(values);
+    string lines;
     while (std::getline(f_lines, lines, ';')) {
-        std::vector<double>vals;
-        std::istringstream f_values(lines);
-        std::string str_value;
+        vector<double>vals;
+        istringstream f_values(lines);
+        string str_value;
         while (std::getline(f_values, str_value, ',')) {
             vals.push_back(std::stod(str_value));
         }
@@ -120,7 +126,7 @@ bool showHeatMapInBrowser(const std::string &values, const std::string &title, c
 bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings){
     std::string page = kCommonHeadPart;
     page.append(kDivSizePart);
-    std::string str_values = "";
+    string str_values = "";
     createStringLineChartValues(values,str_values);
     page.append(str_values);
     page.append(kCommonLastPart);

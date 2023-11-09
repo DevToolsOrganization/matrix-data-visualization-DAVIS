@@ -47,7 +47,7 @@ TEST(ArrayCore, showHeatMap5){
             vals5[i][j] =  i*cols2 + j;
         }
     }
-    bool result = davis::show(vals5, rows2, cols2);
+    bool result = davis::show(vals5, rows2, cols2,"showHeatMap5");
     EXPECT_EQ(result,true);
 }
 

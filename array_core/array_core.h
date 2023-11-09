@@ -7,7 +7,9 @@
 #include "common_utils/common_utils.h"
 
 namespace davis {
+
 using std::vector;
+using std::string;
 
 
 //! two-dimensional vector
@@ -30,9 +32,9 @@ bool show(const T *data, uint64_t arrRows, uint64_t arrCols, std::string title =
 template <typename T>
 bool show(const T *data, uint64_t count, std::string title = "davis", showSettings settings = showSettings());
 
-// *******************************
-// template functions realisations:
-// *******************************
+// ***********************************
+// template functions implementations:
+// ***********************************
 
 template <typename T>
 bool show(const vector<vector<T>> &data, std::string title, showSettings settings)

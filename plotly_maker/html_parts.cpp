@@ -7,11 +7,6 @@ const char kCommonHeadPart[] = R"(<head>
 </head>
 <body>)";
 
-const char kCommonLastPart[] = R"(
-Plotly.newPlot('gd', data);
-</script>
-</body>)";
-
 const char kColorMapDefaultPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
@@ -24,8 +19,47 @@ const char kColorMapDefaultPart[] = R"(
     ['0.777777777778', 'rgb(116,173,209)'],
     ['0.888888888889', 'rgb(69,117,180)'],
     ['1.0', 'rgb(49,54,149)']
-  ],
+  ],)";
+
+
+const char kColorMapSunnyPart[]=R"(
+  colorscale: [
+    ['0.0', 'rgb(250, 134, 7)'],
+    ['0.2', 'rgb(250, 150, 27)'],
+    ['0.4', 'rgb(252, 176, 51)'],
+    ['0.6', 'rgb(254, 204, 81)'],
+    ['0.8', 'rgb(255, 228, 105)'],
+    ['1.0', 'rgb(255, 245, 123)']
+  ],)";
+
+const char kColorMapGlamourPart[] = R"(
+  colorscale: [
+    ['0.0', 'rgb(17,63,93)'],
+    ['0.2', 'rgb(88,80,143)'],
+    ['0.4', 'rgb(182,79,145)'],
+    ['0.6', 'rgb(245,97,94)'],
+    ['0.8', 'rgb(248,165,0)'],
+    ['1.0', 'rgb(235,248,0)']
+  ],)";
+
+const char kColorMapThermalPart[] = R"(
+  colorscale: [
+    ['0.0', 'rgb(0,0,5)'],
+    ['0.2', 'rgb(12,0,44)'],
+    ['0.4', 'rgb(41,0,148)'],
+    ['0.6', 'rgb(196,0,123)'],
+    ['0.8', 'rgb(230,61,63)'],
+    ['1.0', 'rgb(255,213,0)']
+  ],)";
+
+
+const char kTypePart[] = R"(
 type: 'heatmap'
 }];)";
+
+const char kCommonLastPart[] = R"(
+Plotly.newPlot('gd', data);
+</script>
+</body>)";
 
 } // namespace davis
