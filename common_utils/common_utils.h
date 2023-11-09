@@ -12,7 +12,7 @@ bool saveStringToFile(const std::string &file_name,
 void sleepMs(unsigned long milisec);
 void openPlotlyHtml(const std::string &file_name);
 
-// only for empty folder
+// Now it doesn't work.
 bool deleteFolder(const char *fname);
 
 }; // namespace davis
