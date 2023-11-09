@@ -68,7 +68,7 @@ x: [)";
 
 namespace davis {
 
-extern const char saveFolderName[] = "CreatedHtmls/";
+const char saveFolderName[] = "CreatedHtmls/";
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
                                 std::string &page)
