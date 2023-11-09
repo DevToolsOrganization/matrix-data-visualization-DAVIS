@@ -29,9 +29,10 @@ struct showSettings{
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>> &values,
                                 std::string &page);
 bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::string &title, const showSettings &settings);
+bool showHeatMapInBrowser(const std::string &values);
 
 bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings);
-
+bool showLineChartInBrowser(const std::string &values);
 }; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_

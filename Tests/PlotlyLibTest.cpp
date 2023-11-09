@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "plotly_maker/plotly_maker.h"
-#include "array_core/array_core.h"
-#include "common_utils/common_utils.h"
 #include <fstream>
 using std::string;
 

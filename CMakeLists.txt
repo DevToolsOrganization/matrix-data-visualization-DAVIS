@@ -20,7 +20,7 @@ include_directories(${RESOURCE_MANAGER_INCLUDE_DIRS})
 rm_embed_resources(RESOURCES "plotly_maker/plotly-2.27.0.min.js")
 
 
-add_executable(${projectName} main.cpp ${RESOURCES})
+add_executable(${projectName} main.cpp cxxopts.hpp ${RESOURCES})
 target_link_libraries(${projectName} PRIVATE PlotlyMaker -static-libgcc -static-libstdc++
 PRIVATE CommonUtils )
 

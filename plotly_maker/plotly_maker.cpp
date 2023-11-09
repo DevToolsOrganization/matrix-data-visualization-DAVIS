@@ -7,6 +7,8 @@
 #include "html_parts.h"
 #include "common_utils/common_utils.h"
 #include "plotly_maker.h"
+#include <sstream>
+#include <iostream>
 
 namespace{
 // I will move it later
@@ -22,13 +24,13 @@ bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
     };
     for(unsigned int i=0;i<values.size();++i){
 
-      if(values[i].size() != size)return false;
+        if(values[i].size() != size)return false;
     }
     return true;
 }
 
 bool createStringHeatMapValues(const std::vector<std::vector<double>> &values,
-                        std::string &str_values){
+                               std::string &str_values){
     if(!checkThatSizesAreTheSame(values))return false;
     if(!str_values.empty())str_values.clear();
     str_values.append(R"(var data = [{z: )");
@@ -57,8 +59,8 @@ x: [)";
     }
     str_values.append("], y: [");
     for(int j=0;j<values.size();++j){
-    str_values.append(std::to_string(values[j]));
-    if(j!=values.size()-1)str_values.append(",");
+        str_values.append(std::to_string(values[j]));
+        if(j!=values.size()-1)str_values.append(",");
     }
     str_values.append("], mode: 'lines+markers'};var data = [trace];");
     return true;
@@ -97,6 +99,24 @@ bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::strin
     return true;
 }
 
+bool showHeatMapInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
+
+    std::vector<std::vector<double>>heat_map_values;
+    std::istringstream f_lines(values);
+    std::string lines;
+    while (std::getline(f_lines, lines, ';')) {
+        std::vector<double>vals;
+        std::istringstream f_values(lines);
+        std::string str_value;
+        while (std::getline(f_values, str_value, ',')) {
+            vals.push_back(std::stod(str_value));
+        }
+        heat_map_values.push_back(vals);
+    }
+    showHeatMapInBrowser(heat_map_values);
+    return true;
+};
+
 bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings){
     std::string page = kCommonHeadPart;
     page.append(kDivSizePart);
@@ -114,6 +134,17 @@ bool showLineChartInBrowser(const vector<double> &values, const std::string &tit
     openPlotlyHtml(pageName);
     return true;
 }
+
+bool showLineChartInBrowser(const std::string &values){
+    std::vector<double>vals;
+    std::istringstream f(values);
+    std::string s;
+    while (std::getline(f, s, ',')) {
+        vals.push_back(std::stod(s));
+    }
+    showLineChartInBrowser(vals);
+    return true;
+};
 
 }; // namespace davis
 
