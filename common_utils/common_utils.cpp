@@ -32,7 +32,6 @@ void openFileBySystem(const std::string &file_name){
     command.append("\\");
     command.append(file_name);
     system(command.c_str());
-    command.clear();
 }
 
 } // namespace

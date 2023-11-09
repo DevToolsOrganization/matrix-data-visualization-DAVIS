@@ -113,7 +113,7 @@ bool showHeatMapInBrowser(const std::string &values, const std::string &title, c
         }
         heat_map_values.push_back(vals);
     }
-    showHeatMapInBrowser(heat_map_values);
+    showHeatMapInBrowser(heat_map_values, title, settings);
     return true;
 };
 
@@ -135,14 +135,14 @@ bool showLineChartInBrowser(const vector<double> &values, const std::string &tit
     return true;
 }
 
-bool showLineChartInBrowser(const std::string &values){
+bool showLineChartInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
     std::vector<double>vals;
     std::istringstream f(values);
     std::string s;
     while (std::getline(f, s, ',')) {
         vals.push_back(std::stod(s));
     }
-    showLineChartInBrowser(vals);
+    showLineChartInBrowser(vals, title, settings);
     return true;
 };
 

@@ -32,13 +32,13 @@ int main(int argc, char *argv[])
 
     if(result.count("linechart")){
         auto data = result["linechart"].as<std::string>();
-        davis::showLineChartInBrowser(data);
+        davis::showLineChartInBrowser(data, "comand_line_linechart", davis::showSettings());
         return EXIT_SUCCESS;
     }
 
     if(result.count("heatmap")){
         auto data = result["heatmap"].as<std::string>();
-        davis::showHeatMapInBrowser(data);
+        davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::showSettings());
         return EXIT_SUCCESS;
     }
 
