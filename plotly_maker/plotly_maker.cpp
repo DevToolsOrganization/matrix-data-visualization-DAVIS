@@ -94,6 +94,20 @@ bool showHeatMapInBrowser(const vector<vector<double>> &values){
 }
 
 bool showHeatMapInBrowser(const std::string &values){
+
+    std::vector<std::vector<double>>heat_map_values;
+    std::istringstream f_lines(values);
+    std::string lines;
+    while (std::getline(f_lines, lines, ';')) {
+        std::vector<double>vals;
+        std::istringstream f_values(lines);
+        std::string str_value;
+        while (std::getline(f_values, str_value, ',')) {
+            vals.push_back(std::stod(str_value));
+        }
+        heat_map_values.push_back(vals);
+    }
+    showHeatMapInBrowser(heat_map_values);
     return true;
 };
 
