@@ -9,24 +9,24 @@ using std::string;
 TEST(ArrayCore, showHeatMap1){
     EXPECT_EQ(davis::isPlotlyScriptExists(),true);
     std::vector<std::vector<double>> values = {{30.3,40,98,76},{99,45,20,1},{5,56,93,25},{45,23,90,2}};
-    bool result = davis::show(values);
+    bool result = davis::show(values, "test1");
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap2){
-    davis::sleepMs(1000);
+//    davis::sleepMs(1000);
     std::vector<int> vals2 = {2, 6, 4, 34, 56, 33, 2, 1};
-    bool result = davis::show(vals2);
+    bool result = davis::show(vals2, "test2");
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap3){
-    davis::sleepMs(1000);
+//    davis::sleepMs(1000);
     int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
-    bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]));
+    bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "test3");
     EXPECT_EQ(result,true);
 }
 
 TEST(ArrayCore, showHeatMap4){
-    davis::sleepMs(1000);
+//    davis::sleepMs(1000);
     int rows = 5; int cols = 3;
     int *vals4 = new int[rows*cols];
     for (int i = 0; i < rows; ++i) {
@@ -34,11 +34,11 @@ TEST(ArrayCore, showHeatMap4){
             vals4[i*cols + j] =  i*cols + j;
         }
     }
-    bool result = davis::show(vals4, rows,cols);
+    bool result = davis::show(vals4, rows,cols, "test4");
     EXPECT_EQ(result,true);
 }
 TEST(ArrayCore, showHeatMap5){
-    davis::sleepMs(1000);
+//    davis::sleepMs(1000);
     int rows2 = 20; int cols2 = 20;
     int** vals5 = new int*[rows2];
     for (int i = 0; i < rows2; ++i) {
@@ -54,7 +54,8 @@ TEST(ArrayCore, showHeatMap5){
 
 int main(int argc, char* argv[]){
 
-	::testing::InitGoogleTest(&argc, argv);
+    //std::cout<< std::endl << davis::deleteFolder(davis::saveFolderName) << std::endl;
+    ::testing::InitGoogleTest(&argc, argv);
     std::ignore = RUN_ALL_TESTS();
 	return 0;
 }

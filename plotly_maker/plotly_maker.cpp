@@ -1,21 +1,21 @@
 #include <io.h>
 #include <iostream>
-#include "plotly_maker.h"
-#include "common_utils/common_utils.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 #include "html_parts.h"
+#include "common_utils/common_utils.h"
+#include "plotly_maker.h"
 #include <sstream>
 #include <iostream>
 
 namespace{
 // I will move it later
-constexpr char kDivSizePart[] =R"(<div style="height:1022px; width:1022px;"
+constexpr char kDivSizePart[] =R"(<div style="height:700px; width:700px;"
 id="gd"></div>
 <script>
 )";
-
 
 bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
     unsigned int size = 0;
@@ -70,6 +70,8 @@ x: [)";
 
 namespace davis {
 
+const char saveFolderName[] = "CreatedHtmls/";
+
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
                                 std::string &page)
 {
@@ -84,16 +86,20 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     return true;
 }
 
-bool showHeatMapInBrowser(const vector<vector<double>> &values){
+bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::string &title, const showSettings &settings){
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
-    davis::saveStringToFile("example.html",page);
-    openPlotlyHtml("example.html");
+    std::string pageName;
+    struct stat sb;
+    if (stat(saveFolderName, &sb) != 0)
+        mkdir(saveFolderName);
+    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    davis::saveStringToFile(pageName, page);
+    openPlotlyHtml(pageName);
     return true;
-
 }
 
-bool showHeatMapInBrowser(const std::string &values){
+bool showHeatMapInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
 
     std::vector<std::vector<double>>heat_map_values;
     std::istringstream f_lines(values);
@@ -107,30 +113,36 @@ bool showHeatMapInBrowser(const std::string &values){
         }
         heat_map_values.push_back(vals);
     }
-    showHeatMapInBrowser(heat_map_values);
+    showHeatMapInBrowser(heat_map_values, title, settings);
     return true;
 };
 
-bool showLineChartInBrowser(const vector<double> &values){
+bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings){
     std::string page = kCommonHeadPart;
     page.append(kDivSizePart);
     std::string str_values = "";
     createStringLineChartValues(values,str_values);
     page.append(str_values);
     page.append(kCommonLastPart);
-    davis::saveStringToFile("example2.html",page);
-    openPlotlyHtml("example2.html");
+    std::string pageName;
+    struct stat sb;
+    if (stat(saveFolderName, &sb) != 0)
+        mkdir(saveFolderName);
+    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    davis::saveStringToFile(pageName, page);
+    davis::saveStringToFile(pageName,page);
+    openPlotlyHtml(pageName);
     return true;
 }
 
-bool showLineChartInBrowser(const std::string &values){
+bool showLineChartInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
     std::vector<double>vals;
     std::istringstream f(values);
     std::string s;
     while (std::getline(f, s, ',')) {
         vals.push_back(std::stod(s));
     }
-    showLineChartInBrowser(vals);
+    showLineChartInBrowser(vals, title, settings);
     return true;
 };
 
