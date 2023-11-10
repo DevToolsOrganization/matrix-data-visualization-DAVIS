@@ -6,6 +6,8 @@
 
 namespace davis {
 
+using std::vector;
+
 extern const char saveFolderName[];
 
 enum class visualizationTypes{

@@ -5,6 +5,7 @@
 #include "ResourceManager/ResourceHandle.h"
 #include <cxxopts.hpp>
 #include "array_core/array_core.h"
+#include "common_utils/common_constants.h"
 #include "common_utils/common_utils.h"
 
 
@@ -25,9 +26,9 @@ int main(int argc, char *argv[])
     }
 
     // here we have to copy plotly js to current dir if it doesn't exist
-    ResourceHandle resource_handle("plotly_maker/plotly-2.27.0.min.js");
+    ResourceHandle resource_handle(davis::kPlotlyJsResourcePath);
     if(!davis::isPlotlyScriptExists()){
-        davis::saveStringToFile("plotly-2.27.0.min.js",resource_handle.c_str());
+        davis::saveStringToFile(davis::kPlotlyJsWorkPath,resource_handle.c_str());
     }
 
     if(result.count("linechart")){

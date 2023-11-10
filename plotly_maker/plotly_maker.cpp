@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include "html_parts.h"
 #include "common_utils/common_utils.h"
+#include "common_utils/common_constants.h"
 #include "plotly_maker.h"
 #include <sstream>
 #include <iostream>
@@ -74,7 +75,6 @@ using std::string;
 using std::vector;
 using std::istringstream;
 
-const char saveFolderName[] = "CreatedHtmls/";
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
                                 std::string &page)
@@ -92,20 +92,24 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     return true;
 }
 
-bool showHeatMapInBrowser(const vector<vector<double>> &values, const std::string &title, const showSettings &settings){
+bool showHeatMapInBrowser(const vector<vector<double>> &values,
+                          const std::string &title,
+                          const showSettings &settings){
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
     std::string pageName;
     struct stat sb;
-    if (stat(saveFolderName, &sb) != 0)
-        mkdir(saveFolderName);
-    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    if (stat(kOutFolderName, &sb) != 0)
+        mkdir(kOutFolderName);
+    pageName.append("./").append(kOutFolderName).append(title).append(".html");
     davis::saveStringToFile(pageName, page);
     openPlotlyHtml(pageName);
     return true;
 }
 
-bool showHeatMapInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
+bool showHeatMapInBrowser(const std::string &values,
+                          const std::string &title,
+                          const showSettings &settings){
 
     vector<vector<double>>heat_map_values;
     istringstream f_lines(values);
@@ -123,7 +127,9 @@ bool showHeatMapInBrowser(const std::string &values, const std::string &title, c
     return true;
 };
 
-bool showLineChartInBrowser(const vector<double> &values, const std::string &title, const showSettings &settings){
+bool showLineChartInBrowser(const vector<double> &values,
+                            const std::string &title,
+                            const showSettings &settings){
     std::string page = kCommonHeadPart;
     page.append(kDivSizePart);
     string str_values = "";
@@ -132,16 +138,17 @@ bool showLineChartInBrowser(const vector<double> &values, const std::string &tit
     page.append(kCommonLastPart);
     std::string pageName;
     struct stat sb;
-    if (stat(saveFolderName, &sb) != 0)
-        mkdir(saveFolderName);
-    pageName.append("./").append(saveFolderName).append(title).append(".html");
+    if (stat(kOutFolderName, &sb) != 0)
+        mkdir(kOutFolderName);
+    pageName.append("./").append(kOutFolderName).append(title).append(".html");
     davis::saveStringToFile(pageName, page);
-    davis::saveStringToFile(pageName,page);
     openPlotlyHtml(pageName);
     return true;
 }
 
-bool showLineChartInBrowser(const std::string &values, const std::string &title, const showSettings &settings){
+bool showLineChartInBrowser(const std::string &values,
+                            const std::string &title,
+                            const showSettings &settings){
     std::vector<double>vals;
     std::istringstream f(values);
     std::string s;

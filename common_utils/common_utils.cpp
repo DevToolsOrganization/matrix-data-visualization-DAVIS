@@ -1,5 +1,6 @@
 #include "common_utils.h"
 #include "fstream"
+#include "common_constants.h"
 #include <sys/stat.h>
 
 
@@ -19,17 +20,17 @@ inline bool is_file_exists (const std::string &file_name) {
 }
 
 void openFileBySystem(const std::string &file_name){
+
+    std::string command;
 #if defined(WIN32) || defined(NT)
-    std::string command = "start ";
+    command = "start ";
 #elif APPLE
-    std::string command = "open ";
+    command = "open ";
 #elif linux
-    std::string command = "xdg-open";
+    command = "xdg-open ";
 #else
 #error "Unknown compiler"
 #endif
-    command.append(davis::getCurrentPath());
-    command.append("\\");
     command.append(file_name);
     system(command.c_str());
 }
@@ -50,7 +51,7 @@ std::string getCurrentPath(){
 };
 
 bool isPlotlyScriptExists(){
-    return is_file_exists("plotly-2.27.0.min.js");
+    return is_file_exists(kPlotlyJsWorkPath);
 };
 
 bool saveStringToFile(const std::string &file_name,

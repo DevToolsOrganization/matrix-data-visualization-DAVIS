@@ -6,10 +6,14 @@ namespace davis {
 
 
 std::string getCurrentPath();
+
 bool isPlotlyScriptExists();
+
 bool saveStringToFile(const std::string &file_name,
                       const std::string &data);
+
 void sleepMs(unsigned long milisec);
+
 void openPlotlyHtml(const std::string &file_name);
 
 // Now it doesn't work.
