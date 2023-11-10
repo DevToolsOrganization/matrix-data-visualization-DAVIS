@@ -1,0 +1,9 @@
+array_core/array_core.h
+common_utils/common_utils.h
+common_utils/common_utils.cpp
+plotly_maker/plotly_maker.h
+plotly_maker/plotly_maker.cpp
+plotly_maker/html_parts.h
+plotly_maker/html_parts.cpp
+Tests/ArrayCoreTest.cpp
+Tests/PlotlyLibTest.cpp
