@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     // here we have to copy plotly js to current dir if it doesn't exist
     ResourceHandle resource_handle(davis::kPlotlyJsResourcePath);
     if(!davis::isPlotlyScriptExists()){
+        davis::mayBeCreateJsWorkingFolder();
         davis::saveStringToFile(davis::kPlotlyJsWorkPath,resource_handle.c_str());
     }
 

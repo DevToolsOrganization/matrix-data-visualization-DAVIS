@@ -85,8 +85,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>> &values,
     if(!checkThatSizesAreTheSame(values))return false;
     createStringHeatMapValues(values, str_values);
     page.append(str_values);
-    //page.append(kColorMapDefaultPart);
-    page.append(kColorMapThermalPart);
+    page.append(kColorMapDefaultPart);
     page.append(kTypePart);
     page.append(kCommonLastPart);
     return true;
@@ -98,9 +97,7 @@ bool showHeatMapInBrowser(const vector<vector<double>> &values,
     std::string page;
     if(!createHtmlPageWithPlotlyJS(values,page))return false;
     std::string pageName;
-    struct stat sb;
-    if (stat(kOutFolderName, &sb) != 0)
-        mkdir(kOutFolderName);
+    mayBeCreateJsWorkingFolder();
     pageName.append("./").append(kOutFolderName).append(title).append(".html");
     davis::saveStringToFile(pageName, page);
     openPlotlyHtml(pageName);
@@ -137,9 +134,7 @@ bool showLineChartInBrowser(const vector<double> &values,
     page.append(str_values);
     page.append(kCommonLastPart);
     std::string pageName;
-    struct stat sb;
-    if (stat(kOutFolderName, &sb) != 0)
-        mkdir(kOutFolderName);
+    mayBeCreateJsWorkingFolder();
     pageName.append("./").append(kOutFolderName).append(title).append(".html");
     davis::saveStringToFile(pageName, page);
     openPlotlyHtml(pageName);

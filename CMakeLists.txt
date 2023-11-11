@@ -27,12 +27,4 @@ target_link_libraries(${projectName}
     -static-libstdc++
     PRIVATE CommonUtils)
 
-# Copy plotly java script to tests
-add_custom_command(
-        TARGET  ${projectName} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js
-                ${CMAKE_CURRENT_BINARY_DIR}/Tests/davis_htmls/plotly-2.27.0.min.js
-                  )
-
 

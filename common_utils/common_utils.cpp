@@ -79,6 +79,12 @@ void sleepMs(unsigned long milisec)
 #endif
 }
 
+void mayBeCreateJsWorkingFolder(){
+    struct stat sb;
+    if (stat(kOutFolderName, &sb) != 0)
+        mkdir(kOutFolderName);
+}
+
 bool deleteFolder(const char* fname)
 {
     struct stat sb;

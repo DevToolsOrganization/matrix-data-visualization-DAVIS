@@ -12,6 +12,8 @@ bool isPlotlyScriptExists();
 bool saveStringToFile(const std::string &file_name,
                       const std::string &data);
 
+void mayBeCreateJsWorkingFolder();
+
 void sleepMs(unsigned long milisec);
 
 void openPlotlyHtml(const std::string &file_name);
