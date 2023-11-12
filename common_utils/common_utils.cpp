@@ -9,7 +9,7 @@ namespace{
 #include <direct.h>
 #include <windows.h>
 #define getcwd _getcwd // stupid MSFT "deprecation" warning
-#elif
+#elif __linux__
 #include <unistd.h>
 #endif
 
@@ -22,11 +22,11 @@ inline bool is_file_exists (const std::string &file_name) {
 void openFileBySystem(const std::string &file_name){
 
     std::string command;
-#if defined(WIN32) || defined(NT)
+#ifdef _WIN32
     command = "start ";
-#elif APPLE
+#elif __APPLE__
     command = "open ";
-#elif linux
+#elif __linux__
     command = "xdg-open ";
 #else
 #error "Unknown compiler"
@@ -72,17 +72,23 @@ void openPlotlyHtml(const std::string &file_name){
 
 void sleepMs(unsigned long milisec)
 {
-#if defined(WIN32) || defined(NT)
+#ifdef _WIN32
     Sleep(milisec);
-#elif
+#elif __linux__
     usleep(milisec*1000);
 #endif
 }
 
 void mayBeCreateJsWorkingFolder(){
     struct stat sb;
-    if (stat(kOutFolderName, &sb) != 0)
+    if (stat(kOutFolderName, &sb) != 0){
+        #ifdef _WIN32
         mkdir(kOutFolderName);
+        #elif __linux__
+        mode_t mode = 0755;
+        mkdir(kOutFolderName,mode);
+        #endif
+    }
 }
 
 bool deleteFolder(const char* fname)
