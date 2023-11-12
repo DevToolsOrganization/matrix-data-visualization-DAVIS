@@ -53,8 +53,12 @@ namespace davis {
   ],)";
 
 
-    const char kTypePart[] = R"(
+    const char kHeatMapTypePart[] = R"(
 type: 'heatmap'
+}];)";
+
+    const char kSurfaceTypePart[]=R"(
+type: 'surface'
 }];)";
 
     const char kCommonLastPart[] = R"(

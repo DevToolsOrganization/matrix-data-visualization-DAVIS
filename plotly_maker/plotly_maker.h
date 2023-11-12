@@ -6,37 +6,47 @@
 
 namespace davis {
 
-    using std::vector;
+using std::vector;
 
-    extern const char saveFolderName[];
+enum class visualizationTypes {
+  CHART,
+  HEATMAP,
+  SURFACE
+};
 
-    enum class visualizationTypes {
-        graph, heatmap, surface
-    };
+enum class colorscales {
+  DEFAULT,
+  SUNNY,
+  GLAMOUR,
+  THERMAL
+};
 
-    enum class colorscales {
-        gray, rainbow
-    };
+struct showSettings {
+  showSettings():
+    visualType(visualizationTypes::HEATMAP), //default params
+    colorscale(colorscales::DEFAULT) { }
+  visualizationTypes visualType = visualizationTypes::HEATMAP;
+  colorscales colorscale = colorscales::DEFAULT;
+};
 
-    struct showSettings {
-        showSettings():
-            visualType(visualizationTypes::heatmap), //default params
-            colorscale(colorscales::rainbow) { }
-        visualizationTypes visualType = visualizationTypes::heatmap;
-        colorscales colorscale = colorscales::rainbow;
-    };
-
-    bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                    std::string& page);
-    bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title,
-                              const showSettings& settings);
-    bool showHeatMapInBrowser(const std::string& values, const std::string& title,
-                              const showSettings& settings);
-
-    bool showLineChartInBrowser(const vector<double>& values, const std::string& title,
+bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
+                                std::string& page,
                                 const showSettings& settings);
-    bool showLineChartInBrowser(const std::string& values, const std::string& title,
-                                const showSettings& settings);
+
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title,
+                          const showSettings& settings);
+
+bool showHeatMapInBrowser(const std::string& values, const std::string& title,
+                          const showSettings& settings);
+
+bool showLineChartInBrowser(const vector<double>& values, const std::string& title,
+                            const showSettings& settings);
+
+bool showLineChartInBrowser(const std::string& values, const std::string& title,
+                            const showSettings& settings);
+
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title,
+                          const showSettings& settings);
 }; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_
