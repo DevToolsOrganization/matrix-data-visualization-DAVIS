@@ -5,21 +5,21 @@
 namespace davis {
 
 
-std::string getCurrentPath();
+    std::string getCurrentPath();
 
-bool isPlotlyScriptExists();
+    bool isPlotlyScriptExists();
 
-bool saveStringToFile(const std::string &file_name,
-                      const std::string &data);
+    bool saveStringToFile(const std::string& file_name,
+                          const std::string& data);
 
-void mayBeCreateJsWorkingFolder();
+    void mayBeCreateJsWorkingFolder();
 
-void sleepMs(unsigned long milisec);
+    void sleepMs(unsigned long milisec);
 
-void openPlotlyHtml(const std::string &file_name);
+    void openPlotlyHtml(const std::string& file_name);
 
 // Now it doesn't work.
-bool deleteFolder(const char *fname);
+    bool deleteFolder(const char* fname);
 
 }; // namespace davis
 
