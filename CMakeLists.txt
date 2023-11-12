@@ -5,7 +5,10 @@ project(${projectName} VERSION 0.01 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+if(WIN32)
 set(CMAKE_EXE_LINKER_FLAGS " -static")
+endif(WIN32)
 
 add_subdirectory("ResourceManager")
 add_subdirectory(plotly_maker)
@@ -21,10 +24,18 @@ rm_embed_resources(RESOURCES "plotly_maker/plotly-2.27.0.min.js")
 
 
 add_executable(${projectName} main.cpp cxxopts.hpp ${RESOURCES})
+if(WIN32)
 target_link_libraries(${projectName}
     PRIVATE PlotlyMaker
     -static-libgcc
     -static-libstdc++
     PRIVATE CommonUtils)
+endif(WIN32)
+if(UNIX)
+target_link_libraries(${projectName}
+     PRIVATE PlotlyMaker
+     PRIVATE CommonUtils)
+endif(UNIX)
+
 
 
