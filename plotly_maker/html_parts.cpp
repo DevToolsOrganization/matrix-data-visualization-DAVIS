@@ -1,13 +1,13 @@
 #include "html_parts.h"
 
 namespace davis {
-
-const char kCommonHeadPart[] = R"(<head>
+// *INDENT-OFF*
+    const char kCommonHeadPart[] = R"(<head>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
 <body>)";
 
-const char kColorMapDefaultPart[] = R"(
+    const char kColorMapDefaultPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
     ['0.111111111111', 'rgb(215,48,39)'],
@@ -22,7 +22,7 @@ const char kColorMapDefaultPart[] = R"(
   ],)";
 
 
-const char kColorMapSunnyPart[]=R"(
+    const char kColorMapSunnyPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(250, 134, 7)'],
     ['0.2', 'rgb(250, 150, 27)'],
@@ -32,7 +32,7 @@ const char kColorMapSunnyPart[]=R"(
     ['1.0', 'rgb(255, 245, 123)']
   ],)";
 
-const char kColorMapGlamourPart[] = R"(
+    const char kColorMapGlamourPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(17,63,93)'],
     ['0.2', 'rgb(88,80,143)'],
@@ -42,7 +42,7 @@ const char kColorMapGlamourPart[] = R"(
     ['1.0', 'rgb(235,248,0)']
   ],)";
 
-const char kColorMapThermalPart[] = R"(
+    const char kColorMapThermalPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(0,0,5)'],
     ['0.2', 'rgb(12,0,44)'],
@@ -53,13 +53,14 @@ const char kColorMapThermalPart[] = R"(
   ],)";
 
 
-const char kTypePart[] = R"(
+    const char kTypePart[] = R"(
 type: 'heatmap'
 }];)";
 
-const char kCommonLastPart[] = R"(
+    const char kCommonLastPart[] = R"(
 Plotly.newPlot('gd', data);
 </script>
 </body>)";
 
+   // *INDENT-ON*
 } // namespace davis

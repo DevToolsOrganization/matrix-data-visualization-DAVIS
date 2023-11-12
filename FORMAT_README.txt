@@ -1,12 +1,17 @@
 ###################################################################
-# THIS FILE DESCRIBES HOW TO INSTALL AND USE CLANG-FORMAT utility  
+# THIS FILE DESCRIBES HOW TO INSTALL AND USE astyle utility  
 ###################################################################
 
-1. Install clang-format
-   python -m pip install clang-format (https://pypi.org/project/clang-format/)
-
-2. cd project_folder
-   run in cmd: clang-format -i --files=.format_files
+1. Download or build astyle utility
+   https://sourceforge.net/projects/astyle/files/
+   https://astyle.sourceforge.net/
+   https://astyle.sourceforge.net/install.html#_Windows_Version
    
-3. the format options in file .clang-format
-   the list of files which will be formatted in file .format_files
+
+2. To launch formatting process
+   1) add path for astyle.exe to the system path variable
+   2) cd your root project_folder
+   3) astyle --project ./*.cpp,*.h
+   
+3. the format options are in the file _astylerc in the root of the project
+   https://astyle.sourceforge.net/astyle.html
