@@ -9,25 +9,59 @@ namespace davis {
 using std::vector;
 
 enum class visualizationTypes {
-  CHART,
-  HEATMAP,
-  SURFACE
+    CHART,
+    HEATMAP,
+    SURFACE
 };
 
 enum class colorscales {
-  DEFAULT,
-  SUNNY,
-  GLAMOUR,
-  THERMAL
+    DEFAULT,
+    SUNNY,
+    GLAMOUR,
+    THERMAL
 };
 
-struct showSettings {
-  showSettings():
-    visualType(visualizationTypes::HEATMAP), //default params
-    colorscale(colorscales::DEFAULT) { }
-  visualizationTypes visualType = visualizationTypes::HEATMAP;
-  colorscales colorscale = colorscales::DEFAULT;
+//struct showSettings {
+//    showSettings():
+//        visualType(visualizationTypes::HEATMAP),
+//        colorscale(colorscales::THERMAL) { }
+//    visualizationTypes visualType = visualizationTypes::HEATMAP;
+//    colorscales colorscale = colorscales::THERMAL;
+//};
+
+
+class showSettings{
+public:
+    virtual ~showSettings() {}
+    visualizationTypes visualType;
 };
+
+class showSettingsHeatMap : public showSettings{
+public:
+    showSettingsHeatMap(){
+        visualType = visualizationTypes::HEATMAP;
+        colorSc = colorscales::DEFAULT;
+    }
+    colorscales colorSc;
+};
+
+class showSettingsSurface : public showSettings{
+public:
+    showSettingsSurface(){
+        visualType = visualizationTypes::SURFACE;
+        colorSc = colorscales::DEFAULT;
+    }
+    colorscales colorSc;
+};
+
+class showSettingsChart : public showSettings{
+public:
+    showSettingsChart(){
+        visualType = visualizationTypes::CHART;
+    }
+};
+
+
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
                                 std::string& page,
