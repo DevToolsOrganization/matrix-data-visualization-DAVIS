@@ -80,10 +80,11 @@ bool createStringLineChartValues(const vector<double>& values,
 }
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const string& title,
-                                const davis::showSettings& settings) {
-  string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, settings)) {
+                                const std::string& title,
+                                const davis::visualizationTypes& visualType,
+                                const davis::colorscales& colorscale) {
+  std::string page;
+  if (!createHtmlPageWithPlotlyJS(values, page, visualType, colorscale)) {
     return false;
   }
   string pageName;
@@ -102,9 +103,10 @@ using std::vector;
 using std::istringstream;
 
 
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                string& page,
-                                const davis::showSettings& settings) {
+bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
+                                std::string& page,
+                                const visualizationTypes& visualType,
+                                const colorscales& colorscale) {
   page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -113,7 +115,7 @@ bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   page.append(str_values);
-  switch (settings.colorscale) {
+  switch (colorscale) {
     case colorscales::DEFAULT:
       page.append(kColorMapDefaultPart);
       break;
@@ -127,7 +129,7 @@ bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
       page.append(kColorMapThermalPart);
       break;
   }
-  switch (settings.visualType) {
+  switch (visualType) {
     case visualizationTypes::CHART:
       break;
     case visualizationTypes::HEATMAP:
@@ -142,14 +144,14 @@ bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const string& title,
-                          const showSettings& settings) {
-  return heatmap_and_surface(values, title, settings);
+                          const std::string& title,
+                          const showSettingsHeatMap& settings) {
+  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
 }
 
-bool showHeatMapInBrowser(const string& values,
-                          const string& title,
-                          const showSettings& settings) {
+bool showHeatMapInBrowser(const std::string& values,
+                          const std::string& title,
+                          const showSettingsHeatMap& settings) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title, settings);
@@ -215,6 +217,42 @@ bool getMatrixValuesFromString(const string& in_values,
     out_values.push_back(vals);
   }
   return true;
+};
+
+bool showLineChartInBrowser(const vector<double>& values,
+                            const std::string& title,
+                            const showSettingsChart& settings) {
+  std::string page = kCommonHeadPart;
+  page.append(kDivSizePart);
+  string str_values = "";
+  createStringLineChartValues(values, str_values);
+  page.append(str_values);
+  page.append(kCommonLastPart);
+  std::string pageName;
+  mayBeCreateJsWorkingFolder();
+  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  davis::saveStringToFile(pageName, page);
+  openPlotlyHtml(pageName);
+  return true;
+}
+
+bool showLineChartInBrowser(const std::string& values,
+                            const std::string& title,
+                            const showSettingsChart &settings) {
+  std::vector<double>vals;
+  std::istringstream f(values);
+  std::string s;
+  while (std::getline(f, s, ',')) {
+    vals.push_back(std::stod(s));
+  }
+  showLineChartInBrowser(vals, title, settings);
+  return true;
+};
+
+bool showSurfaceInBrowser(const vector<vector<double> >& values,
+                          const std::string& title,
+                          const showSettingsSurface& settings) {
+  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
 }
 
 }; // namespace davis
