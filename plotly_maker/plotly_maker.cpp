@@ -22,7 +22,7 @@ id="gd"></div>
 )";
 
 bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
-  unsigned int size = 0;
+  size_t size = 0;
   if(!values.empty()) {
     size = values[0].size();
   };
@@ -64,14 +64,14 @@ bool createStringLineChartValues(const std::vector<double>& values,
   }
   str_values = R"(var trace = {
 x: [)";
-  for (int i = 0; i < values.size(); ++i) {
+  for (size_t i = 0; i < values.size(); ++i) {
     str_values.append(std::to_string(i));
     if (i != values.size() - 1) {
       str_values.append(",");
     }
   }
   str_values.append("], y: [");
-  for (int j = 0; j < values.size(); ++j) {
+  for (size_t j = 0; j < values.size(); ++j) {
     str_values.append(std::to_string(values[j]));
     if (j != values.size() - 1) {
       str_values.append(",");
