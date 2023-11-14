@@ -7,24 +7,18 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # Windows specific, for googletest
 
-add_executable(${PROJECT_NAME}_tests PlotlyLibTest.cpp)
+add_executable(${PROJECT_NAME}_plotly_tests PlotlyLibTest.cpp)
+target_link_libraries(${PROJECT_NAME}_plotly_tests PRIVATE gtest_main)
+target_link_libraries(${PROJECT_NAME}_plotly_tests PRIVATE ArrayCore)
+
 add_executable(${PROJECT_NAME}_core_tests ArrayCoreTest.cpp)
-
-target_link_libraries(${PROJECT_NAME}_tests PRIVATE gtest_main)
-target_link_libraries(${PROJECT_NAME}_tests PRIVATE PlotlyMaker)
-target_link_libraries(${PROJECT_NAME}_tests PRIVATE ArrayCore)
-target_link_libraries(${PROJECT_NAME}_tests PRIVATE CommonUtils)
-
 target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE gtest_main)
-target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE PlotlyMaker)
 target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE ArrayCore)
-target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE CommonUtils)
-
 
 
 include_directories(${CMAKE_SOURCE_DIR})
 include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}_tests)
+gtest_discover_tests(${PROJECT_NAME}_plotly_tests _core_tests)
 
 # Copy plotly java script to tests
 add_custom_command(
