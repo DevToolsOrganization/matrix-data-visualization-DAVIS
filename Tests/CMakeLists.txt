@@ -12,9 +12,11 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # Windows specific, for goog
 MESSAGE("_____________________ Copy Plotlylib to Tests step ___________________________________________")
 if(WIN32)
 file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
-    ${CMAKE_CURRENT_BINARY_DIR}/Debug/davis_htmls)
+    ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/davis_htmls)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
-    ${CMAKE_CURRENT_BINARY_DIR}/Release/davis_htmls)
+    ${CMAKE_CURRENT_BINARY_DIR}/davis_htmls)
+endif()
 endif(WIN32)
 
 add_executable(${PROJECT_NAME}_plotly_tests PlotlyLibTest.cpp)
