@@ -1,4 +1,4 @@
-![Build Status](https://github.com/tarantool/metrics/workflows/Tests/badge.svg?branch=master)
+![Build Status](https://github.com/tarantool/metrics/workflows/Tests/badge.svg?branch=main)
 ![Workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=main)
 # devtools
 DAVIS is utility for data visualization
