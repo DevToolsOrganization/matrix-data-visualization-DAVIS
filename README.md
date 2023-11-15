@@ -17,12 +17,10 @@ Examples how to show davis:
 
 ```javascript
 davis --heatmap="9,0,8;89,7,6"
-copyCodeBlock(anHtmlFile, options);
-
+```
 ```javascript
 davis -m "7,4,5,6,7;9,6,5,40,3"
-copyCodeBlock(anHtmlFile, options);
-
+```
 ```javascript
 davis -l "6,7,9,54"
-copyCodeBlock(anHtmlFile, options);
+```
