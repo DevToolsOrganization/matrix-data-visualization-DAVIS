@@ -82,7 +82,7 @@ void mayBeCreateJsWorkingFolder() {
   struct stat sb;
   if (stat(kOutFolderName, &sb) != 0) {
 #ifdef _WIN32
-    mkdir(kOutFolderName);
+    _mkdir(kOutFolderName);
 #elif __linux__
     mode_t mode = 0755;
     mkdir(kOutFolderName, mode);
