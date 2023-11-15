@@ -9,16 +9,20 @@ Also DAVIS allows some additional functionality to work with data (saving as a f
 # CLI (command line interface)
   davis [OPTION...]
 
-  -l, --linechart arg  linechart values
-  -m, --heatmap arg    heatmap values
-  -h, --help           davis commands
+ -l, --linechart arg  linechart values
+ -m, --heatmap arg    heatmap values
+ -h, --help           davis commands
 
-Example how to show heatmap:
+Examples how to show davis:
+
+```javascript
 davis --heatmap="9,0,8;89,7,6"
-or
-davis -m "7,4,5,6,7;9,6,5,40,3"
+copyCodeBlock(anHtmlFile, options);
 
-Example how to show linear chart:
-davis --linechart="6,7,9,54"
-or
+```javascript
+davis -m "7,4,5,6,7;9,6,5,40,3"
+copyCodeBlock(anHtmlFile, options);
+
+```javascript
 davis -l "6,7,9,54"
+copyCodeBlock(anHtmlFile, options);
