@@ -1,4 +1,5 @@
 ![Build Status](https://github.com/tarantool/metrics/workflows/Tests/badge.svg?branch=master)
+![Workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=main)
 # devtools
 DAVIS is utility for data visualization
 The visualization is based on Plotly javascript https://plotly.com/
