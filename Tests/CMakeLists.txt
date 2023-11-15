@@ -14,6 +14,7 @@ cmake_print_variables(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
     ${CMAKE_CURRENT_BINARY_DIR}/Debug/davis_htmls)
 
+
 add_executable(${PROJECT_NAME}_plotly_tests PlotlyLibTest.cpp)
 target_link_libraries(${PROJECT_NAME}_plotly_tests PRIVATE gtest_main)
 target_link_libraries(${PROJECT_NAME}_plotly_tests PRIVATE ArrayCore)
