@@ -44,6 +44,7 @@ void openFileBySystem(const string& file_name) {
 namespace davis {
 
 string getCurrentPath() {
+#if defined (_WIN32) || (__linux__)
   char buffer[1024];
   char* answer = getcwd(buffer, sizeof(buffer));
   string s_cwd;
@@ -51,11 +52,15 @@ string getCurrentPath() {
     s_cwd = answer;
   }
   return s_cwd;
-};
+#elif __APPLE__
+  //TODO macos get current path implementation
+  return "";
+#endif
+}
 
 bool isPlotlyScriptExists() {
   return is_file_exists(kPlotlyJsWorkPath);
-};
+}
 
 bool saveStringToFile(const string& file_name,
                       const string& data) {
