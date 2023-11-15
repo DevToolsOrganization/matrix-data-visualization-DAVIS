@@ -9,9 +9,13 @@ FetchContent_MakeAvailable(googletest)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # Windows specific, for googletest
 
 # Copy plotly java script to tests
-#MESSAGE("_____________________ Copy Plotlylib to Tests step ___________________________________________")
-#file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
-#    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/davis_htmls)
+MESSAGE("_____________________ Copy Plotlylib to Tests step ___________________________________________")
+if(WIN32)
+file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
+    ${CMAKE_CURRENT_BINARY_DIR}/Debug/davis_htmls)
+file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
+    ${CMAKE_CURRENT_BINARY_DIR}/Release/davis_htmls)
+endif(WIN32)
 
 add_executable(${PROJECT_NAME}_plotly_tests PlotlyLibTest.cpp)
 target_link_libraries(${PROJECT_NAME}_plotly_tests PRIVATE gtest_main)
