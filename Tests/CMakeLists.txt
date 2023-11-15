@@ -27,6 +27,6 @@ target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE ArrayCore)
 
 include_directories(${CMAKE_SOURCE_DIR})
 include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}_plotly_tests _core_tests)
-
+gtest_discover_tests(${PROJECT_NAME}_plotly_tests)
+gtest_discover_tests(${PROJECT_NAME}_core_tests)
 
