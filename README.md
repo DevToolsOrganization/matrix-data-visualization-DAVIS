@@ -1,4 +1,4 @@
-![Workflow](https://github.com/github/docs/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
+![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
 # devtools
 DAVIS is utility for data visualization
 The visualization is based on Plotly javascript https://plotly.com/
