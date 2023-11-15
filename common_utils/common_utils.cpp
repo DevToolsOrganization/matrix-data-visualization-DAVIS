@@ -5,6 +5,9 @@
 
 
 namespace {
+
+using std::string;
+
 #ifdef _WIN32
   #include <direct.h>
   #include <windows.h>
@@ -13,7 +16,7 @@ namespace {
   #include <unistd.h>
 #endif
 
-inline bool is_file_exists(const std::string& file_name) {
+inline bool is_file_exists(const string& file_name) {
   std::ifstream file(file_name.c_str());
   if (!file) {
     return false;
@@ -21,8 +24,8 @@ inline bool is_file_exists(const std::string& file_name) {
   return true;
 }
 
-void openFileBySystem(const std::string& file_name) {
-  std::string command;
+void openFileBySystem(const string& file_name) {
+  string command;
 #ifdef _WIN32
   command = "start ";
 #elif __APPLE__
@@ -40,10 +43,10 @@ void openFileBySystem(const std::string& file_name) {
 
 namespace davis {
 
-std::string getCurrentPath() {
+string getCurrentPath() {
   char buffer[1024];
   char* answer = getcwd(buffer, sizeof(buffer));
-  std::string s_cwd;
+  string s_cwd;
   if (answer) {
     s_cwd = answer;
   }
@@ -54,8 +57,8 @@ bool isPlotlyScriptExists() {
   return is_file_exists(kPlotlyJsWorkPath);
 };
 
-bool saveStringToFile(const std::string& file_name,
-                      const std::string& data) {
+bool saveStringToFile(const string& file_name,
+                      const string& data) {
   std::ofstream out(file_name);
   if (out.is_open()) {
     out << data.c_str();
@@ -66,7 +69,7 @@ bool saveStringToFile(const std::string& file_name,
 }
 
 
-void openPlotlyHtml(const std::string& file_name) {
+void openPlotlyHtml(const string& file_name) {
   openFileBySystem(file_name);
 }
 
