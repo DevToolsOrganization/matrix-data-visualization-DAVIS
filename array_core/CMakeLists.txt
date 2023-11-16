@@ -15,10 +15,10 @@ set(SOURCE_FILES
     "../plotly_maker/html_parts.cpp"
     )
 set(HEADER_FILES
-    "../common_utils/common_utils.cpp"
-    "../common_utils/common_constants.cpp"
-    "../plotly_maker/plotly_maker.cpp"
-    "../plotly_maker/html_parts.cpp"
+    "../common_utils/common_utils.h"
+    "../common_utils/common_constants.h"
+    "../plotly_maker/plotly_maker.h"
+    "../plotly_maker/html_parts.h"
     "array_core.h"
     )
 add_library(${projectName} ${SOURCE_FILES} ${HEADER_FILES})
