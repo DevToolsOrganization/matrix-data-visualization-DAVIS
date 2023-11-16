@@ -13,10 +13,8 @@ MESSAGE("_____________________ Copy Plotlylib to Tests step ____________________
 if(WIN32)
 file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/davis_htmls)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
     ${CMAKE_CURRENT_BINARY_DIR}/davis_htmls)
-endif()
 endif(WIN32)
 
 add_executable(${PROJECT_NAME}_plotly_tests PlotlyLibTest.cpp)
