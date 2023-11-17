@@ -15,11 +15,7 @@ namespace {
 using std::vector;
 using std::string;
 
-// I will move it later
-constexpr char kDivSizePart[] = R"(<div style="height:700px; width:700px;"
-id="gd"></div>
-<script>
-)";
+
 
 bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
   size_t size = 0;
