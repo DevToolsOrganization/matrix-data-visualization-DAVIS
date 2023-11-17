@@ -108,4 +108,26 @@ bool deleteFolder(const char* fname) {
   }
 }
 
+bool getDataFromFile(const string& path, string& result) {
+
+  //TODO different scenarious and sanitizing
+  if (!is_file_exists(path)) {
+    return false;
+  }
+  if (!result.empty()) {
+    result.clear();
+  }
+  std::fstream file;
+  file.open(path, std::ios::in);
+  if (file.is_open()) {
+    string temp;
+    while (std::getline(file, temp)) {
+      result.append(temp).append(";");
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
 }; // namespace davis
