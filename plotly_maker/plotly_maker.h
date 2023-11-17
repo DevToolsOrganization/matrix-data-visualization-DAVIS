@@ -47,6 +47,12 @@ bool showLineChartInBrowser(const std::string& values, const std::string& title,
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title,
                           const showSettings& settings);
+
+bool showSurfaceInBrowser(const std::string& values, const std::string& title,
+                          const showSettings& settings);
+
+bool getMatrixValuesFromString(const std::string& in_values,
+                               vector<vector<double>>& out_values);
 }; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_

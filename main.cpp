@@ -12,9 +12,11 @@
 int main(int argc, char* argv[]) {
   cxxopts::Options options("davis", "data visualization utility");
   options.add_options()
+         ("h,help", "davis commands")
          ("l,linechart", "linechart values", cxxopts::value<std::string>())
          ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
-         ("h,help", "davis commands")
+         ("f,datapath", "path to data", cxxopts::value<std::string>())
+         ("t,charttype", "chart type", cxxopts::value<std::string>())
          ;
   auto result = options.parse(argc, argv);
   if (result.count("help")) {
@@ -37,6 +39,28 @@ int main(int argc, char* argv[]) {
     davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::showSettings());
     return EXIT_SUCCESS;
   }
+  if (result.count("datapath")) {
+    auto data_path = result["datapath"].as<std::string>();
+    std::string str_data;
+    if (davis::getDataFromFile(data_path, str_data)) {
+      if (result.count("charttype")) {
+        auto chart_type = result["charttype"].as<std::string>();
+        if (chart_type == "l" || chart_type == "linechart") {
+          davis::showLineChartInBrowser(str_data, "file_data", davis::showSettings());
+        } else if (chart_type == "s" || chart_type == "surface") {
+          davis::showSettings settings = davis::showSettings();
+          settings.visualType = davis::visualizationTypes::SURFACE;
+          settings.colorscale = davis::colorscales::GLAMOUR;
+          davis::showSurfaceInBrowser(str_data, "surface", settings);
+        } else if (chart_type == "m" || chart_type == "heatmap") {
+
+        }
+      } else {
+        davis::showHeatMapInBrowser(str_data, "file_data", davis::showSettings());
+      }
+    }
+  }
+
   // example how to show values via ArrayCore using PlotlyMaker lib
   std::vector<std::vector<int>> values = {{300, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   davis::show(values, "values");

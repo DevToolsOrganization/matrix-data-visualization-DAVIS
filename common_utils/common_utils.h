@@ -19,6 +19,8 @@ void sleepMs(unsigned long milisec);
 
 void openPlotlyHtml(const string& file_name);
 
+bool getDataFromFile(const string& path, string& result);
+
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 

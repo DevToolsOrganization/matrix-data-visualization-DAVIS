@@ -153,17 +153,7 @@ bool showHeatMapInBrowser(const std::string& values,
                           const std::string& title,
                           const showSettings& settings) {
   vector<vector<double>>heat_map_values;
-  istringstream f_lines(values);
-  string lines;
-  while (std::getline(f_lines, lines, ';')) {
-    vector<double>vals;
-    istringstream f_values(lines);
-    string str_value;
-    while (std::getline(f_values, str_value, ',')) {
-      vals.push_back(std::stod(str_value));
-    }
-    heat_map_values.push_back(vals);
-  }
+  getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title, settings);
   return true;
 };
@@ -198,10 +188,35 @@ bool showLineChartInBrowser(const std::string& values,
   return true;
 };
 
-bool showSurfaceInBrowser(const vector<vector<double> >& values,
+bool showSurfaceInBrowser(const vector<vector<double>>& values,
                           const std::string& title,
                           const showSettings& settings) {
   return heatmap_and_surface(values, title, settings);
+}
+
+bool showSurfaceInBrowser(const std::string& values,
+                          const std::string& title,
+                          const showSettings& settings) {
+  vector<vector<double>>surface_values;
+  getMatrixValuesFromString(values, surface_values);
+  showSurfaceInBrowser(surface_values, title, settings);
+  return true;
+}
+
+bool getMatrixValuesFromString(const std::string& in_values,
+                               vector<vector<double>>& out_values) {
+  istringstream f_lines(in_values);
+  string lines;
+  while (std::getline(f_lines, lines, ';')) {
+    vector<double>vals;
+    istringstream f_values(lines);
+    string str_value;
+    while (std::getline(f_values, str_value, ',')) {
+      vals.push_back(std::stod(str_value));
+    }
+    out_values.push_back(vals);
+  }
+  return true;
 }
 
 }; // namespace davis
