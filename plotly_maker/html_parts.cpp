@@ -2,6 +2,14 @@
 
 namespace davis {
 // *INDENT-OFF*
+
+    const char kDivSizePart[] = R"(<div style = "display: flex;
+  align-items:center;height:100%; width:100%;background:#dddfd4;
+  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+id="gd"></div></div>
+<script>
+)";
+
     const char kCommonHeadPart[] = R"(<head>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>

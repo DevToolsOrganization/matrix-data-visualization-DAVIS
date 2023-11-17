@@ -3,6 +3,7 @@
 
 namespace davis {
 extern const char kCommonHeadPart[];
+extern const char kDivSizePart[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
 extern const char kColorMapGlamourPart[];
