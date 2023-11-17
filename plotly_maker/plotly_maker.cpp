@@ -17,27 +17,30 @@ using std::string;
 
 
 
-bool checkThatSizesAreTheSame(const std::vector<std::vector<double>> &values) {
+bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   size_t size = 0;
-  if(!values.empty()) {
+  if (!values.empty()) {
     size = values[0].size();
   };
-  for(unsigned int i=0;i<values.size();++i){
+  for (size_t i = 0; i < values.size(); ++i) {
 
-    if(values[i].size() != size)return false;
+    if (values[i].size() != size)
+      return false;
   }
   return true;
 }
 
-bool createStringHeatMapValues(const vector<vector<double>> &values,
-                               string &str_values){
-  if(!checkThatSizesAreTheSame(values))return false;
-  if(!str_values.empty())str_values.clear();
+bool createStringHeatMapValues(const vector<vector<double>>& values,
+                               string& str_values) {
+  if (!checkThatSizesAreTheSame(values))
+    return false;
+  if (!str_values.empty())
+    str_values.clear();
   str_values.append(R"(var data = [{z: )");
   str_values.append(R"([)");
-  for (unsigned int i = 0; i < values.size(); ++i) {
+  for (size_t i = 0; i < values.size(); ++i) {
     str_values.append("[");
-    for (unsigned int j = 0; j < values[i].size(); ++j) {
+    for (size_t j = 0; j < values[i].size(); ++j) {
       str_values.append(std::to_string(values[i][j]));
       if (j != values[i].size() - 1) {
         str_values.append(",");
@@ -53,13 +56,12 @@ bool createStringHeatMapValues(const vector<vector<double>> &values,
 }
 
 
-bool createStringLineChartValues(const std::vector<double>& values,
-                                 std::string& str_values) {
+bool createStringLineChartValues(const vector<double>& values,
+                                 string& str_values) {
   if (!str_values.empty()) {
     str_values.clear();
   }
-  str_values = R"(var trace = {
-x: [)";
+  str_values = R"(var trace = {x: [)";
   for (size_t i = 0; i < values.size(); ++i) {
     str_values.append(std::to_string(i));
     if (i != values.size() - 1) {
@@ -78,13 +80,13 @@ x: [)";
 }
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const std::string& title,
+                                const string& title,
                                 const davis::showSettings& settings) {
-  std::string page;
+  string page;
   if (!createHtmlPageWithPlotlyJS(values, page, settings)) {
     return false;
   }
-  std::string pageName;
+  string pageName;
   davis::mayBeCreateJsWorkingFolder();
   pageName.append("./").append(davis::kOutFolderName).append(title).append(".html");
   davis::saveStringToFile(pageName, page);
@@ -100,8 +102,8 @@ using std::vector;
 using std::istringstream;
 
 
-bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
-                                std::string& page,
+bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
+                                string& page,
                                 const davis::showSettings& settings) {
   page = kCommonHeadPart;
   page.append(kDivSizePart);
@@ -140,13 +142,13 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const std::string& title,
+                          const string& title,
                           const showSettings& settings) {
   return heatmap_and_surface(values, title, settings);
 }
 
-bool showHeatMapInBrowser(const std::string& values,
-                          const std::string& title,
+bool showHeatMapInBrowser(const string& values,
+                          const string& title,
                           const showSettings& settings) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
@@ -155,15 +157,15 @@ bool showHeatMapInBrowser(const std::string& values,
 };
 
 bool showLineChartInBrowser(const vector<double>& values,
-                            const std::string& title,
+                            const string& title,
                             const showSettings& settings) {
-  std::string page = kCommonHeadPart;
+  string page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
   createStringLineChartValues(values, str_values);
   page.append(str_values);
   page.append(kCommonLastPart);
-  std::string pageName;
+  string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
   davis::saveStringToFile(pageName, page);
@@ -171,12 +173,12 @@ bool showLineChartInBrowser(const vector<double>& values,
   return true;
 }
 
-bool showLineChartInBrowser(const std::string& values,
-                            const std::string& title,
+bool showLineChartInBrowser(const string& values,
+                            const string& title,
                             const showSettings& settings) {
-  std::vector<double>vals;
-  std::istringstream f(values);
-  std::string s;
+  vector<double>vals;
+  istringstream f(values);
+  string s;
   while (std::getline(f, s, ',')) {
     vals.push_back(std::stod(s));
   }
@@ -185,13 +187,13 @@ bool showLineChartInBrowser(const std::string& values,
 };
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
-                          const std::string& title,
+                          const string& title,
                           const showSettings& settings) {
   return heatmap_and_surface(values, title, settings);
 }
 
-bool showSurfaceInBrowser(const std::string& values,
-                          const std::string& title,
+bool showSurfaceInBrowser(const string& values,
+                          const string& title,
                           const showSettings& settings) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
@@ -199,7 +201,7 @@ bool showSurfaceInBrowser(const std::string& values,
   return true;
 }
 
-bool getMatrixValuesFromString(const std::string& in_values,
+bool getMatrixValuesFromString(const string& in_values,
                                vector<vector<double>>& out_values) {
   istringstream f_lines(in_values);
   string lines;
