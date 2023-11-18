@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
          ("h,help", "davis commands")
          ("l,linechart", "linechart values", cxxopts::value<std::string>())
          ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
+         ("s,surface", "surface values", cxxopts::value<std::string>())
          ("f,datapath", "path to data", cxxopts::value<std::string>())
          ("t,charttype", "chart type", cxxopts::value<std::string>())
          ;
@@ -33,13 +34,18 @@ int main(int argc, char* argv[]) {
     auto data = result["linechart"].as<std::string>();
     davis::showLineChartInBrowser(data, "comand_line_linechart", davis::showSettings());
     return EXIT_SUCCESS;
-  }
-  if (result.count("heatmap")) {
+  } else if (result.count("heatmap")) {
     auto data = result["heatmap"].as<std::string>();
     davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::showSettings());
     return EXIT_SUCCESS;
-  }
-  if (result.count("datapath")) {
+  } else if (result.count("surface")) {
+    auto data = result["surface"].as<std::string>();
+    davis::showSettings settings = davis::showSettings();
+    settings.visualType = davis::visualizationTypes::SURFACE;
+    settings.colorscale = davis::colorscales::GLAMOUR;
+    davis::showSurfaceInBrowser(data, "comand_line_surface", settings);
+    return EXIT_SUCCESS;
+  } else if (result.count("datapath")) {
     auto data_path = result["datapath"].as<std::string>();
     std::string str_data;
     if (davis::getDataFromFile(data_path, str_data)) {
@@ -60,13 +66,6 @@ int main(int argc, char* argv[]) {
       }
     }
   }
-
-  // example how to show values via ArrayCore using PlotlyMaker lib
-  std::vector<std::vector<int>> values = {{300, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  davis::show(values, "values");
-  //line chart
-  std::vector<double>values2 = {30, 50, 456, 98, 23, 128, 98};
-  davis::show(values2, "values2");
   return EXIT_SUCCESS;
 }
 
