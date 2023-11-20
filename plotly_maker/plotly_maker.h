@@ -33,7 +33,9 @@ enum class colorscales {
 class showSettings{
 public:
     virtual ~showSettings() {}
+    static showSettings createSettings(visualizationTypes type);
     visualizationTypes visualType;
+
 };
 
 class showSettingsHeatMap : public showSettings{
@@ -82,6 +84,9 @@ bool showLineChartInBrowser(const std::string& values, const std::string& title,
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title,
                           const showSettingsSurface &settings);
+
+bool showSurfaceInBrowser(const string& values, const string& title,
+                          const showSettingsSurface& settings);
 }; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_

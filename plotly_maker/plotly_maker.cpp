@@ -102,6 +102,21 @@ using std::string;
 using std::vector;
 using std::istringstream;
 
+bool getMatrixValuesFromString(const string& in_values,
+                               vector<vector<double>>& out_values) {
+  istringstream f_lines(in_values);
+  string lines;
+  while (std::getline(f_lines, lines, ';')) {
+    vector<double>vals;
+    istringstream f_values(lines);
+    string str_value;
+    while (std::getline(f_values, str_value, ',')) {
+      vals.push_back(std::stod(str_value));
+    }
+    out_values.push_back(vals);
+  }
+  return true;
+};
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 std::string& page,
@@ -190,34 +205,18 @@ bool showLineChartInBrowser(const string& values,
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
                           const string& title,
-                          const showSettings& settings) {
-  return heatmap_and_surface(values, title, settings);
+                          const showSettingsSurface& settings) {
+  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
 }
 
 bool showSurfaceInBrowser(const string& values,
                           const string& title,
-                          const showSettings& settings) {
+                          const showSettingsSurface &settings) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
   showSurfaceInBrowser(surface_values, title, settings);
   return true;
 }
-
-bool getMatrixValuesFromString(const string& in_values,
-                               vector<vector<double>>& out_values) {
-  istringstream f_lines(in_values);
-  string lines;
-  while (std::getline(f_lines, lines, ';')) {
-    vector<double>vals;
-    istringstream f_values(lines);
-    string str_value;
-    while (std::getline(f_values, str_value, ',')) {
-      vals.push_back(std::stod(str_value));
-    }
-    out_values.push_back(vals);
-  }
-  return true;
-};
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const std::string& title,
@@ -249,11 +248,25 @@ bool showLineChartInBrowser(const std::string& values,
   return true;
 };
 
-bool showSurfaceInBrowser(const vector<vector<double> >& values,
-                          const std::string& title,
-                          const showSettingsSurface& settings) {
-  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
+showSettings showSettings::createSettings(visualizationTypes type)
+{
+    showSettings settings;
+    switch (type) {
+    case visualizationTypes::CHART:
+        settings =  showSettingsChart();
+        break;
+    case visualizationTypes::HEATMAP:
+        settings =  showSettingsHeatMap();
+        break;
+    case visualizationTypes::SURFACE:
+        settings =  showSettingsHeatMap();
+        break;
+    default:
+        std::cout << "wrong value of visualizationTypes";
+    }
+    return settings;
 }
+
 
 }; // namespace davis
 
