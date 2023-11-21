@@ -160,13 +160,13 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
                           const std::string& title,
-                          const showSettingsHeatMap& settings) {
-  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
+                          ShowSettingsHeatMap *settings) {
+  return heatmap_and_surface(values, title, settings->visualType, settings->colorSc);
 }
 
 bool showHeatMapInBrowser(const std::string& values,
                           const std::string& title,
-                          const showSettingsHeatMap& settings) {
+                          ShowSettingsHeatMap* settings) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title, settings);
@@ -175,7 +175,7 @@ bool showHeatMapInBrowser(const std::string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title,
-                            const showSettings& settings) {
+                            const ShowSettings& settings) {
   string page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -192,7 +192,7 @@ bool showLineChartInBrowser(const vector<double>& values,
 
 bool showLineChartInBrowser(const string& values,
                             const string& title,
-                            const showSettings& settings) {
+                            const ShowSettings& settings) {
   vector<double>vals;
   istringstream f(values);
   string s;
@@ -205,13 +205,13 @@ bool showLineChartInBrowser(const string& values,
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
                           const string& title,
-                          const showSettingsSurface& settings) {
-  return heatmap_and_surface(values, title, settings.visualType, settings.colorSc);
+                          ShowSettingsSurface *settings) {
+  return heatmap_and_surface(values, title, settings->visualType, settings->colorSc);
 }
 
-bool showSurfaceInBrowser(const string& values,
+bool showSurfaceInBrowser(const std::string &values,
                           const string& title,
-                          const showSettingsSurface &settings) {
+                          ShowSettingsSurface* settings) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
   showSurfaceInBrowser(surface_values, title, settings);
@@ -220,7 +220,7 @@ bool showSurfaceInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const std::string& title,
-                            const showSettingsChart& settings) {
+                            const ShowSettingsChart& settings) {
   std::string page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -237,7 +237,7 @@ bool showLineChartInBrowser(const vector<double>& values,
 
 bool showLineChartInBrowser(const std::string& values,
                             const std::string& title,
-                            const showSettingsChart &settings) {
+                            const ShowSettingsChart &settings) {
   std::vector<double>vals;
   std::istringstream f(values);
   std::string s;
@@ -248,21 +248,22 @@ bool showLineChartInBrowser(const std::string& values,
   return true;
 };
 
-showSettings showSettings::createSettings(visualizationTypes type)
+std::unique_ptr<ShowSettings> ShowSettings::createSettings(visualizationTypes type)
 {
-    showSettings settings;
+    std::unique_ptr<ShowSettings> settings;
     switch (type) {
     case visualizationTypes::CHART:
-        settings =  showSettingsChart();
+        settings = std::make_unique<ShowSettingsChart>();
         break;
     case visualizationTypes::HEATMAP:
-        settings =  showSettingsHeatMap();
+        settings = std::make_unique<ShowSettingsHeatMap>();
         break;
     case visualizationTypes::SURFACE:
-        settings =  showSettingsHeatMap();
+        settings = std::make_unique<ShowSettingsHeatMap>();
         break;
     default:
         std::cout << "wrong value of visualizationTypes";
+        break;
     }
     return settings;
 }

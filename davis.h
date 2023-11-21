@@ -32,7 +32,7 @@ void makeStringFromValues(const vector<double> in_values,
   }
 
 }
-void makeArgs(const davis::showSettings& settings,
+void makeArgs(const davis::ShowSettings& settings,
               const vector<vector<double>>& values, string& out) {
 
   switch (settings.visualType) {
@@ -65,7 +65,7 @@ void makeArgs(const davis::showSettings& settings,
   }
 }
 
-void makeArgs(const davis::showSettings& settings,
+void makeArgs(const davis::ShowSettings& settings,
               vector<double>& values, string& out) {
 
   switch (settings.visualType) {
@@ -87,19 +87,19 @@ void makeArgs(const davis::showSettings& settings,
 
 namespace dv {
 
-void show(const davis::showSettings& settings,
+void show(const davis::ShowSettings& settings,
           vector<vector<double>>& values);
-void show(const davis::showSettings& settings,
+void show(const davis::ShowSettings& settings,
           vector<double>& values);
 
-void show(const davis::showSettings& settings,
+void show(const davis::ShowSettings& settings,
           vector<double>& values) {
   string args;
   makeArgs(settings, values, args);
   runDavisBySystem(args);
 }
 
-void show(const davis::showSettings& settings,
+void show(const davis::ShowSettings& settings,
           vector<vector<double>>& values) {
   string args;
   makeArgs(settings, values, args);

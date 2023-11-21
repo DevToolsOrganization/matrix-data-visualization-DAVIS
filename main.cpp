@@ -30,43 +30,43 @@ int main(int argc, char* argv[]) {
         davis::mayBeCreateJsWorkingFolder();
         davis::saveStringToFile(davis::kPlotlyJsWorkPath, resource_handle.c_str());
     }
-    if (result.count("linechart")) {
-        auto data = result["linechart"].as<std::string>();
-        davis::showSettings set = davis::showSettings::createSettings(davis::visualizationTypes::CHART);
-        davis::showLineChartInBrowser(data, "comand_line_linechart", set);
-        return EXIT_SUCCESS;
-    } else if (result.count("heatmap")) {
-        auto data = result["heatmap"].as<std::string>();
-        davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::showSettings());
-        return EXIT_SUCCESS;
-    } else if (result.count("surface")) {
-        auto data = result["surface"].as<std::string>();
-        davis::showSettings settings = davis::showSettings();
-        settings.visualType = davis::visualizationTypes::SURFACE;
-        settings.colorscale = davis::colorscales::GLAMOUR;
-        davis::showSurfaceInBrowser(data, "comand_line_surface", settings);
-        return EXIT_SUCCESS;
-    } else if (result.count("datapath")) {
-        auto data_path = result["datapath"].as<std::string>();
-        std::string str_data;
-        if (davis::getDataFromFile(data_path, str_data)) {
-            if (result.count("charttype")) {
-                auto chart_type = result["charttype"].as<std::string>();
-                if (chart_type == "l" || chart_type == "linechart") {
-                    davis::showLineChartInBrowser(str_data, "file_data", davis::showSettings());
-                } else if (chart_type == "s" || chart_type == "surface") {
-                    davis::showSettings settings = davis::showSettings();
-                    settings.visualType = davis::visualizationTypes::SURFACE;
-                    settings.colorscale = davis::colorscales::GLAMOUR;
-                    davis::showSurfaceInBrowser(str_data, "surface", settings);
-                } else if (chart_type == "m" || chart_type == "heatmap") {
+//    if (result.count("linechart")) {
+//        auto data = result["linechart"].as<std::string>();
+//        std::unique_ptr<davis::ShowSettings> set = davis::ShowSettingsCreator(davis::visualizationTypes::CHART);
+//        davis::showLineChartInBrowser(data, "comand_line_linechart", );
+//        return EXIT_SUCCESS;
+//    } else if (result.count("heatmap")) {
+//        auto data = result["heatmap"].as<std::string>();
+//        davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::ShowSettings());
+//        return EXIT_SUCCESS;
+//    } else if (result.count("surface")) {
+//        auto data = result["surface"].as<std::string>();
+//        davis::ShowSettings settings = davis::ShowSettings();
+//        settings.visualType = davis::visualizationTypes::SURFACE;
+//        settings.colorscale = davis::colorscales::GLAMOUR;
+//        davis::showSurfaceInBrowser(data, "comand_line_surface", settings);
+//        return EXIT_SUCCESS;
+//    } else if (result.count("datapath")) {
+//        auto data_path = result["datapath"].as<std::string>();
+//        std::string str_data;
+//        if (davis::getDataFromFile(data_path, str_data)) {
+//            if (result.count("charttype")) {
+//                auto chart_type = result["charttype"].as<std::string>();
+//                if (chart_type == "l" || chart_type == "linechart") {
+//                    davis::showLineChartInBrowser(str_data, "file_data", davis::ShowSettings());
+//                } else if (chart_type == "s" || chart_type == "surface") {
+//                    davis::ShowSettings settings = davis::ShowSettings();
+//                    settings.visualType = davis::visualizationTypes::SURFACE;
+//                    settings.colorscale = davis::colorscales::GLAMOUR;
+//                    davis::showSurfaceInBrowser(str_data, "surface", settings);
+//                } else if (chart_type == "m" || chart_type == "heatmap") {
 
-                }
-            } else {
-                davis::showHeatMapInBrowser(str_data, "file_data", davis::showSettings());
-            }
-        }
-    }
+//                }
+//            } else {
+//                davis::showHeatMapInBrowser(str_data, "file_data", davis::ShowSettings());
+//            }
+//        }
+//    }
     return EXIT_SUCCESS;
 }
 
