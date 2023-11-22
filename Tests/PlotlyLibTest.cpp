@@ -7,7 +7,7 @@ using std::string;
 TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "test_page";
-  bool result = davis::createHtmlPageWithPlotlyJS(testValues, str_page,davis::visualizationTypes::HEATMAP, davis::colorscales::GLAMOUR);
+  bool result = davis::createHtmlPageWithPlotlyJS(testValues, str_page, davis::visualizationTypes::HEATMAP, davis::colorscales::GLAMOUR);
   std::ofstream out("example.html");
   if (out.is_open()) {
     out << str_page.c_str();
@@ -49,8 +49,8 @@ TEST(PlotlyMaker, ShowSunnyHeatMapHtmlPageTest) {
 TEST(PlotlyMaker, ShowThermalSurfaceHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "ThermalSurfacePage";
- auto settings = std::make_unique<davis::ShowSettingsSurface>();
- settings->colorSc = davis::colorscales::THERMAL;
+  auto settings = std::make_unique<davis::ShowSettingsSurface>();
+  settings->colorSc = davis::colorscales::THERMAL;
   bool result = davis::showSurfaceInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }

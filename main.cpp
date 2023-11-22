@@ -10,26 +10,26 @@
 
 
 int main(int argc, char* argv[]) {
-    cxxopts::Options options("davis", "data visualization utility");
-    options.add_options()
-            ("h,help", "davis commands")
-            ("l,linechart", "linechart values", cxxopts::value<std::string>())
-            ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
-            ("s,surface", "surface values", cxxopts::value<std::string>())
-            ("f,datapath", "path to data", cxxopts::value<std::string>())
-            ("t,charttype", "chart type", cxxopts::value<std::string>())
-            ;
-    auto result = options.parse(argc, argv);
-    if (result.count("help")) {
-        std::cout << options.help() << std::endl;
-        exit(0);
-    }
-    // here we have to copy plotly js to current dir if it doesn't exist
-    ResourceHandle resource_handle(davis::kPlotlyJsResourcePath);
-    if (!davis::isPlotlyScriptExists()) {
-        davis::mayBeCreateJsWorkingFolder();
-        davis::saveStringToFile(davis::kPlotlyJsWorkPath, resource_handle.c_str());
-    }
+  cxxopts::Options options("davis", "data visualization utility");
+  options.add_options()
+         ("h,help", "davis commands")
+         ("l,linechart", "linechart values", cxxopts::value<std::string>())
+         ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
+         ("s,surface", "surface values", cxxopts::value<std::string>())
+         ("f,datapath", "path to data", cxxopts::value<std::string>())
+         ("t,charttype", "chart type", cxxopts::value<std::string>())
+         ;
+  auto result = options.parse(argc, argv);
+  if (result.count("help")) {
+    std::cout << options.help() << std::endl;
+    exit(0);
+  }
+  // here we have to copy plotly js to current dir if it doesn't exist
+  ResourceHandle resource_handle(davis::kPlotlyJsResourcePath);
+  if (!davis::isPlotlyScriptExists()) {
+    davis::mayBeCreateJsWorkingFolder();
+    davis::saveStringToFile(davis::kPlotlyJsWorkPath, resource_handle.c_str());
+  }
 //    if (result.count("linechart")) {
 //        auto data = result["linechart"].as<std::string>();
 //        std::unique_ptr<davis::ShowSettings> set = davis::ShowSettingsCreator(davis::visualizationTypes::CHART);
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 //            }
 //        }
 //    }
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 
