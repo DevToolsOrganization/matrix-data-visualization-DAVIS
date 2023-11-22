@@ -9,7 +9,16 @@ using std::string;
 TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   std::vector<std::vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  bool result = davis::show(values, "test1");
+  auto settings = davis::ShowSettings::createSettings(davis::visualizationTypes::HEATMAP);
+  bool result = davis::show(values, "testHeat1", settings.get());
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, showSurface1) {
+  EXPECT_EQ(davis::isPlotlyScriptExists(), true);
+  std::vector<std::vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  auto settings = davis::ShowSettings::createSettings(davis::visualizationTypes::SURFACE);
+  bool result = davis::show(values, "testSurf1", settings.get());
   EXPECT_EQ(result, true);
 }
 

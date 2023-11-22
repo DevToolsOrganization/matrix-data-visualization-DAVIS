@@ -7,8 +7,6 @@ using std::string;
 TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "test_page";
-  //davis::ShowSettings settings = davis::ShowSettings();
-  //settings.colorscale = davis::colorscales::GLAMOUR;
   bool result = davis::createHtmlPageWithPlotlyJS(testValues, str_page,davis::visualizationTypes::HEATMAP, davis::colorscales::GLAMOUR);
   std::ofstream out("example.html");
   if (out.is_open()) {
@@ -33,9 +31,8 @@ TEST(PlotlyMaker, ShowGlamourHeatMapHtmlPageTest) {
 TEST(PlotlyMaker, ShowThermalHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "veryHotPage";
-
   auto settings = std::make_unique<davis::ShowSettingsHeatMap>();
-  //settings.colorscale = davis::colorscales::THERMAL;
+  settings->colorSc = davis::colorscales::THERMAL;
   bool result = davis::showHeatMapInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
@@ -43,19 +40,18 @@ TEST(PlotlyMaker, ShowThermalHeatMapHtmlPageTest) {
 TEST(PlotlyMaker, ShowSunnyHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "SunnyPage";
-  davis::ShowSettings settings = davis::ShowSettings();
-  //settings.colorscale = davis::colorscales::SUNNY;
-  bool result = davis::showHeatMapInBrowser(testValues, str_page, settings);
+  auto settings = std::make_unique<davis::ShowSettingsHeatMap>();
+  settings->colorSc = davis::colorscales::SUNNY;
+  bool result = davis::showHeatMapInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
 
 TEST(PlotlyMaker, ShowThermalSurfaceHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "ThermalSurfacePage";
-  davis::ShowSettings settings = davis::ShowSettings();
-  //settings.colorscale = davis::colorscales::THERMAL;
-  settings.visualType = davis::visualizationTypes::SURFACE;
-  bool result = davis::showSurfaceInBrowser(testValues, str_page, settings);
+ auto settings = std::make_unique<davis::ShowSettingsSurface>();
+ settings->colorSc = davis::colorscales::THERMAL;
+  bool result = davis::showSurfaceInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
 
