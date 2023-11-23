@@ -1,14 +1,16 @@
 #include "davis.h"
 
 int main(int argc, char* argv[]) {
-  davis::ShowSettings settings;
-  settings.visualType = davis::visualizationTypes::CHART;
+
   vector<double>v = {8.0, 8.0, 9, 0, 55};
   vector<vector<double>>hm = {{8.0, 8.0, 9, 0, 55}, {5.0, 18.0, 0.9, 50, 15}};
-  dv::show(settings, v);
-  settings.visualType = davis::visualizationTypes::HEATMAP;
-  dv::show(settings, hm);
-  settings.visualType = davis::visualizationTypes::SURFACE;
-  dv::show(settings, hm);
+  auto settings1 = davis::createShowSettingsChart();
+  auto settings2 = davis::createShowSettingsHeatMap();
+  auto settings3 = davis::createShowSettingsSurface();
+  dv::show(v, settings1.get());
+
+  dv::show(hm, settings2.get());
+
+  dv::show(hm, settings3.get());
   return EXIT_SUCCESS;
 }

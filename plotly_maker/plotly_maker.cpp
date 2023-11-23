@@ -161,7 +161,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
                           const std::string& title,
                           const ShowSettingsHeatMap* settings) {
-  return heatmap_and_surface(values, title, settings->visualType, settings->colorSc);
+  return heatmap_and_surface(values, title, settings->getVisualType(), settings->colorScale);
 }
 
 bool showHeatMapInBrowser(const std::string& values,
@@ -206,7 +206,7 @@ bool showLineChartInBrowser(const string& values,
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
                           const string& title,
                           const ShowSettingsSurface* settings) {
-  return heatmap_and_surface(values, title, settings->visualType, settings->colorSc);
+  return heatmap_and_surface(values, title, settings->getVisualType(), settings->colorScale);
 }
 
 bool showSurfaceInBrowser(const std::string& values,
@@ -248,29 +248,24 @@ bool showLineChartInBrowser(const std::string& values,
   return true;
 };
 
-std::unique_ptr<ShowSettings> testF()
-{
-return std::make_unique<ShowSettings>();
+std::unique_ptr<ShowSettings> testF() {
+  return std::make_unique<ShowSettings>();
 }
 
 
-std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap()
-{
+std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap() {
   return std::make_unique<ShowSettingsHeatMap>();
 }
 
-std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface()
-{
+std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface() {
   return std::make_unique<ShowSettingsSurface>();
 }
 
-std::unique_ptr<ShowSettingsChart> createShowSettingsChart()
-{
+std::unique_ptr<ShowSettingsChart> createShowSettingsChart() {
   return std::make_unique<ShowSettingsChart>();
 }
 
-visualizationTypes ShowSettings::getVisualType() const
-{
+visualizationTypes ShowSettings::getVisualType() const {
   return visualType;
 }
 

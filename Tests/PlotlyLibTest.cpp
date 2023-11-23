@@ -23,7 +23,7 @@ TEST(PlotlyMaker, ShowGlamourHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "veryGlamourPage";
   auto settings = std::make_unique<davis::ShowSettingsHeatMap>();
-  settings->colorSc = davis::colorscales::GLAMOUR;
+  settings->colorScale = davis::colorscales::GLAMOUR;
   bool result = davis::showHeatMapInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
@@ -32,7 +32,7 @@ TEST(PlotlyMaker, ShowThermalHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "veryHotPage";
   auto settings = std::make_unique<davis::ShowSettingsHeatMap>();
-  settings->colorSc = davis::colorscales::THERMAL;
+  settings->colorScale = davis::colorscales::THERMAL;
   bool result = davis::showHeatMapInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
@@ -41,7 +41,7 @@ TEST(PlotlyMaker, ShowSunnyHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "SunnyPage";
   auto settings = std::make_unique<davis::ShowSettingsHeatMap>();
-  settings->colorSc = davis::colorscales::SUNNY;
+  settings->colorScale = davis::colorscales::SUNNY;
   bool result = davis::showHeatMapInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
@@ -50,7 +50,7 @@ TEST(PlotlyMaker, ShowThermalSurfaceHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "ThermalSurfacePage";
   auto settings = std::make_unique<davis::ShowSettingsSurface>();
-  settings->colorSc = davis::colorscales::THERMAL;
+  settings->colorScale = davis::colorscales::THERMAL;
   bool result = davis::showSurfaceInBrowser(testValues, str_page, settings.get());
   EXPECT_EQ(result, true);
 }
