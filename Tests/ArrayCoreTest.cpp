@@ -6,7 +6,7 @@
 
 using std::string;
 using std::vector;
-/*
+
 TEST(ArrayCore, showDefaultSettings) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
@@ -17,28 +17,21 @@ TEST(ArrayCore, showDefaultSettings) {
 TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = davis::ShowSettings::createSettings(davis::visualizationTypes::HEATMAP);
-  auto heatSet = static_cast<davis::ShowSettingsHeatMap*>(settings.get());
-  heatSet->colorSc = davis::colorscales::GLAMOUR;
-  bool result = davis::show(values, "testHeat1", move(settings));
+  auto settings = davis::createShowSettingsHeatMap();
+  settings->colorScale = davis::colorscales::GLAMOUR;
+  bool result = davis::show(values, "showHeatMap1", settings.get());
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showSurface1) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = davis::ShowSettings::createSettings(davis::visualizationTypes::SURFACE);
-  bool result = davis::show(values, "testSurf1", move(settings));
+  auto settings = davis::createShowSettingsSurface();
+  bool result = davis::show(values, "showSurface1", settings.get());
   EXPECT_EQ(result, true);
 }
 
-TEST(ArrayCore, showHeatMap3) {
-  int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
-  bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "test3");
-  EXPECT_EQ(result, true);
-}
-
-TEST(ArrayCore, showHeatMap4) {
+TEST(ArrayCore, showPseudo2D) {
   int rows = 5;
   int cols = 3;
   int* vals4 = new int[rows * cols];
@@ -47,11 +40,11 @@ TEST(ArrayCore, showHeatMap4) {
       vals4[i * cols + j] = i * cols + j;
     }
   }
-  bool result = davis::show(vals4, rows, cols, "test4");
+  bool result = davis::show(vals4, rows, cols, "showPseudo2D");
   EXPECT_EQ(result, true);
 }
 
-TEST(ArrayCore, showHeatMap5) {
+TEST(ArrayCore, showArray2D) {
   int rows2 = 20;
   int cols2 = 20;
   int** vals5 = new int* [rows2];
@@ -65,12 +58,17 @@ TEST(ArrayCore, showHeatMap5) {
   EXPECT_EQ(result, true);
 }
 
-TEST(ArrayCore, showChart1) {
+TEST(ArrayCore, testChartDefault) {
   vector<int> vec = {-5, -3, -1, 0, 2, 4, 8, 15, 16};
   bool result = davis::show(vec, "testChartDefault");
   EXPECT_EQ(result, true);
 }
-*/
+
+TEST(ArrayCore, showChart) {
+  int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
+  bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
+  EXPECT_EQ(result, true);
+}
 
 int main(int argc, char* argv[]) {
   //std::cout<< std::endl << davis::deleteFolder(davis::saveFolderName) << std::endl;

@@ -34,8 +34,7 @@ void makeStringFromValues(const vector<double> in_values,
 }
 void makeArgs(const davis::ShowSettings& settings,
               const vector<vector<double>>& values, string& out) {
-
-  switch (settings.visualType) {
+  switch (settings.getVisualType()) {
     case davis::visualizationTypes::CHART:
       break;
     case davis::visualizationTypes::HEATMAP:
@@ -68,7 +67,7 @@ void makeArgs(const davis::ShowSettings& settings,
 void makeArgs(const davis::ShowSettings& settings,
               vector<double>& values, string& out) {
 
-  switch (settings.visualType) {
+  switch (settings.getVisualType()) {
     case davis::visualizationTypes::CHART:
       out.append(davis);
       out.append(command_line_chart);

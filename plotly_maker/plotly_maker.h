@@ -24,7 +24,7 @@ enum class colorscales {
 };
 
 class ShowSettings {
- public:
+public:
   virtual ~ShowSettings() {}
   visualizationTypes getVisualType() const;
 
@@ -33,7 +33,7 @@ class ShowSettings {
 };
 
 class ShowSettingsHeatMap : public ShowSettings {
- public:
+public:
   ShowSettingsHeatMap() {
     visualType = visualizationTypes::HEATMAP;
     colorScale = colorscales::DEFAULT;
@@ -42,7 +42,7 @@ class ShowSettingsHeatMap : public ShowSettings {
 };
 
 class ShowSettingsSurface : public ShowSettings {
- public:
+public:
   ShowSettingsSurface() {
     visualType = visualizationTypes::SURFACE;
     colorScale = colorscales::DEFAULT;
@@ -51,7 +51,7 @@ class ShowSettingsSurface : public ShowSettings {
 };
 
 class ShowSettingsChart : public ShowSettings {
- public:
+public:
   ShowSettingsChart() {
     visualType = visualizationTypes::CHART;
   }

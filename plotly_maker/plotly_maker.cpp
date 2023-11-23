@@ -248,23 +248,30 @@ bool showLineChartInBrowser(const std::string& values,
   return true;
 };
 
-std::unique_ptr<ShowSettings> ShowSettings::createSettings(visualizationTypes type) {
-  std::unique_ptr<ShowSettings> settings(nullptr);
-  switch (type) {
-    case visualizationTypes::CHART:
-      settings = std::make_unique<ShowSettingsChart>();
-      break;
-    case visualizationTypes::HEATMAP:
-      settings = std::make_unique<ShowSettingsHeatMap>();
-      break;
-    case visualizationTypes::SURFACE:
-      settings = std::make_unique<ShowSettingsSurface>();
-      break;
-    default:
-      std::cout << "wrong value of visualizationTypes";
-      break;
-  }
-  return settings;
+std::unique_ptr<ShowSettings> testF()
+{
+return std::make_unique<ShowSettings>();
+}
+
+
+std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap()
+{
+  return std::make_unique<ShowSettingsHeatMap>();
+}
+
+std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface()
+{
+  return std::make_unique<ShowSettingsSurface>();
+}
+
+std::unique_ptr<ShowSettingsChart> createShowSettingsChart()
+{
+  return std::make_unique<ShowSettingsChart>();
+}
+
+visualizationTypes ShowSettings::getVisualType() const
+{
+  return visualType;
 }
 
 }; // namespace davis
