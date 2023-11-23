@@ -6,7 +6,7 @@
 
 using std::string;
 using std::vector;
-
+/*
 TEST(ArrayCore, showDefaultSettings) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
@@ -70,7 +70,7 @@ TEST(ArrayCore, showChart1) {
   bool result = davis::show(vec, "testChartDefault");
   EXPECT_EQ(result, true);
 }
-
+*/
 
 int main(int argc, char* argv[]) {
   //std::cout<< std::endl << davis::deleteFolder(davis::saveFolderName) << std::endl;

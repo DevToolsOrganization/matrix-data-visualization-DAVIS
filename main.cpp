@@ -8,6 +8,7 @@
 #include "common_utils/common_constants.h"
 #include "common_utils/common_utils.h"
 
+using std::vector;
 
 int main(int argc, char* argv[]) {
   cxxopts::Options options("davis", "data visualization utility");
@@ -30,6 +31,22 @@ int main(int argc, char* argv[]) {
     davis::mayBeCreateJsWorkingFolder();
     davis::saveStringToFile(davis::kPlotlyJsWorkPath, resource_handle.c_str());
   }
+
+  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  davis::ShowSettingsHeatMap* setHeatM = std::make_unique<davis::ShowSettingsHeatMap>().get();
+
+
+
+
+  auto settings = davis::ShowSettings::createSettings(davis::visualizationTypes::HEATMAP);
+  auto heatSet = static_cast<davis::ShowSettingsHeatMap*>(settings.get());
+  heatSet->colorSc = davis::colorscales::GLAMOUR;
+  bool result2 = davis::show(values, "testHeat1", move(settings));
+
+
+
+
+
 //    if (result.count("linechart")) {
 //        auto data = result["linechart"].as<std::string>();
 //        std::unique_ptr<davis::ShowSettings> set = davis::ShowSettingsCreator(davis::visualizationTypes::CHART);
