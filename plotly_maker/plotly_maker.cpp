@@ -253,12 +253,12 @@ std::unique_ptr<ShowSettings> testF() {
 }
 
 
-std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap() {
-  return std::make_unique<ShowSettingsHeatMap>();
+std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap(colorscales color) {
+  return std::make_unique<ShowSettingsHeatMap>(color);
 }
 
-std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface() {
-  return std::make_unique<ShowSettingsSurface>();
+std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface(colorscales color) {
+  return std::make_unique<ShowSettingsSurface>(color);
 }
 
 std::unique_ptr<ShowSettingsChart> createShowSettingsChart() {

@@ -34,18 +34,18 @@ class ShowSettings {
 
 class ShowSettingsHeatMap : public ShowSettings {
  public:
-  ShowSettingsHeatMap() {
+  ShowSettingsHeatMap(colorscales color = colorscales::DEFAULT) {
     visualType = visualizationTypes::HEATMAP;
-    colorScale = colorscales::DEFAULT;
+    colorScale = color;
   }
   colorscales colorScale;
 };
 
 class ShowSettingsSurface : public ShowSettings {
  public:
-  ShowSettingsSurface() {
+  ShowSettingsSurface(colorscales color = colorscales::DEFAULT) {
     visualType = visualizationTypes::SURFACE;
-    colorScale = colorscales::DEFAULT;
+    colorScale = color;
   }
   colorscales colorScale;
 };
@@ -57,8 +57,8 @@ class ShowSettingsChart : public ShowSettings {
   }
 };
 
-std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap();
-std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface();
+std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap(colorscales color = colorscales::DEFAULT);
+std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface(colorscales color = colorscales::DEFAULT);
 std::unique_ptr<ShowSettingsChart> createShowSettingsChart();
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,

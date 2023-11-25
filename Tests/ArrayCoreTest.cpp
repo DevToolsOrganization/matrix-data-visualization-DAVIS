@@ -17,8 +17,7 @@ TEST(ArrayCore, showDefaultSettings) {
 TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(davis::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = davis::createShowSettingsHeatMap();
-  settings->colorScale = davis::colorscales::GLAMOUR;
+  auto settings = davis::createShowSettingsHeatMap(davis::colorscales::GLAMOUR);
   bool result = davis::show(values, "showHeatMap1", settings.get());
   EXPECT_EQ(result, true);
 }
