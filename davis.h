@@ -32,10 +32,9 @@ void makeStringFromValues(const vector<double> in_values,
   }
 
 }
-void makeArgs(const davis::showSettings& settings,
+void makeArgs(const davis::ShowSettings* settings,
               const vector<vector<double>>& values, string& out) {
-
-  switch (settings.visualType) {
+  switch (settings->getVisualType()) {
     case davis::visualizationTypes::CHART:
       break;
     case davis::visualizationTypes::HEATMAP:
@@ -65,10 +64,10 @@ void makeArgs(const davis::showSettings& settings,
   }
 }
 
-void makeArgs(const davis::showSettings& settings,
+void makeArgs(const davis::ShowSettings* settings,
               vector<double>& values, string& out) {
 
-  switch (settings.visualType) {
+  switch (settings->getVisualType()) {
     case davis::visualizationTypes::CHART:
       out.append(davis);
       out.append(command_line_chart);
@@ -87,25 +86,20 @@ void makeArgs(const davis::showSettings& settings,
 
 namespace dv {
 
-void show(const davis::showSettings& settings,
-          vector<vector<double>>& values);
-void show(const davis::showSettings& settings,
-          vector<double>& values);
+void show(vector<vector<double>>& values, const davis::ShowSettings* settings);
+void show(vector<double>& values, const davis::ShowSettings* settings);
 
-void show(const davis::showSettings& settings,
-          vector<double>& values) {
+void show(vector<vector<double>>& values, const davis::ShowSettings* settings) {
   string args;
   makeArgs(settings, values, args);
   runDavisBySystem(args);
 }
 
-void show(const davis::showSettings& settings,
-          vector<vector<double>>& values) {
+void show(vector<double>& values, const davis::ShowSettings* settings) {
   string args;
   makeArgs(settings, values, args);
   runDavisBySystem(args);
 }
-
 }
 
 #endif // DAVIS_H

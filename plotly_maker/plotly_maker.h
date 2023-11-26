@@ -3,6 +3,8 @@
 
 #include "vector"
 #include "string"
+#include <memory>
+#include <iostream>
 
 namespace davis {
 
@@ -21,38 +23,66 @@ enum class colorscales {
   THERMAL
 };
 
-struct showSettings {
-  showSettings():
-    visualType(visualizationTypes::HEATMAP), //default params
-    colorscale(colorscales::DEFAULT) { }
-  visualizationTypes visualType = visualizationTypes::HEATMAP;
-  colorscales colorscale = colorscales::DEFAULT;
+class ShowSettings {
+ public:
+  virtual ~ShowSettings() {}
+  visualizationTypes getVisualType() const;
+
+ protected:
+  visualizationTypes visualType;
 };
+
+class ShowSettingsHeatMap : public ShowSettings {
+ public:
+  ShowSettingsHeatMap(colorscales color = colorscales::DEFAULT) {
+    visualType = visualizationTypes::HEATMAP;
+    colorScale = color;
+  }
+  colorscales colorScale;
+};
+
+class ShowSettingsSurface : public ShowSettings {
+ public:
+  ShowSettingsSurface(colorscales color = colorscales::DEFAULT) {
+    visualType = visualizationTypes::SURFACE;
+    colorScale = color;
+  }
+  colorscales colorScale;
+};
+
+class ShowSettingsChart : public ShowSettings {
+ public:
+  ShowSettingsChart() {
+    visualType = visualizationTypes::CHART;
+  }
+};
+
+std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap(colorscales color = colorscales::DEFAULT);
+std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface(colorscales color = colorscales::DEFAULT);
+std::unique_ptr<ShowSettingsChart> createShowSettingsChart();
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
                                 std::string& page,
-                                const showSettings& settings);
+                                const visualizationTypes& visualType,
+                                const colorscales& colorscale);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title,
-                          const showSettings& settings);
+                          const ShowSettingsHeatMap* settings);
 
 bool showHeatMapInBrowser(const std::string& values, const std::string& title,
-                          const showSettings& settings);
+                          const ShowSettingsHeatMap* settings);
 
 bool showLineChartInBrowser(const vector<double>& values, const std::string& title,
-                            const showSettings& settings);
+                            const ShowSettingsChart* settings);
 
 bool showLineChartInBrowser(const std::string& values, const std::string& title,
-                            const showSettings& settings);
+                            const ShowSettingsChart* settings);
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title,
-                          const showSettings& settings);
+                          const ShowSettingsSurface* settings);
 
 bool showSurfaceInBrowser(const std::string& values, const std::string& title,
-                          const showSettings& settings);
-
-bool getMatrixValuesFromString(const std::string& in_values,
-                               vector<vector<double>>& out_values);
+                          const ShowSettingsSurface* settings);
 }; // namespace davis
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_

@@ -8,6 +8,7 @@
 #include "common_utils/common_constants.h"
 #include "common_utils/common_utils.h"
 
+using std::vector;
 
 int main(int argc, char* argv[]) {
   cxxopts::Options options("davis", "data visualization utility");
@@ -30,20 +31,28 @@ int main(int argc, char* argv[]) {
     davis::mayBeCreateJsWorkingFolder();
     davis::saveStringToFile(davis::kPlotlyJsWorkPath, resource_handle.c_str());
   }
+
+
+  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  auto setHeatM = davis::createShowSettingsHeatMap();
+  setHeatM->colorScale = davis::colorscales::GLAMOUR;
+  davis::show(values, "testHeat1", setHeatM.get());
+
   if (result.count("linechart")) {
     auto data = result["linechart"].as<std::string>();
-    davis::showLineChartInBrowser(data, "comand_line_linechart", davis::showSettings());
+    auto set = davis::createShowSettingsChart();
+    davis::showLineChartInBrowser(data, "comand_line_linechart", set.get());
     return EXIT_SUCCESS;
   } else if (result.count("heatmap")) {
     auto data = result["heatmap"].as<std::string>();
-    davis::showHeatMapInBrowser(data, "comand_line_heatmap", davis::showSettings());
+    auto set = davis::createShowSettingsHeatMap();
+    davis::showHeatMapInBrowser(data, "comand_line_heatmap", set.get());
     return EXIT_SUCCESS;
   } else if (result.count("surface")) {
     auto data = result["surface"].as<std::string>();
-    davis::showSettings settings = davis::showSettings();
-    settings.visualType = davis::visualizationTypes::SURFACE;
-    settings.colorscale = davis::colorscales::GLAMOUR;
-    davis::showSurfaceInBrowser(data, "comand_line_surface", settings);
+    auto settings = davis::createShowSettingsSurface();
+    settings->colorScale = davis::colorscales::GLAMOUR;
+    davis::showSurfaceInBrowser(data, "comand_line_surface", settings.get());
     return EXIT_SUCCESS;
   } else if (result.count("datapath")) {
     auto data_path = result["datapath"].as<std::string>();
@@ -52,17 +61,18 @@ int main(int argc, char* argv[]) {
       if (result.count("charttype")) {
         auto chart_type = result["charttype"].as<std::string>();
         if (chart_type == "l" || chart_type == "linechart") {
-          davis::showLineChartInBrowser(str_data, "file_data", davis::showSettings());
+          auto settings = davis::createShowSettingsChart();
+          davis::showLineChartInBrowser(str_data, "file_data", settings.get());
         } else if (chart_type == "s" || chart_type == "surface") {
-          davis::showSettings settings = davis::showSettings();
-          settings.visualType = davis::visualizationTypes::SURFACE;
-          settings.colorscale = davis::colorscales::GLAMOUR;
-          davis::showSurfaceInBrowser(str_data, "surface", settings);
+          auto settings = davis::createShowSettingsSurface();
+          settings->colorScale = davis::colorscales::GLAMOUR;
+          davis::showSurfaceInBrowser(str_data, "surface", settings.get());
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
-        davis::showHeatMapInBrowser(str_data, "file_data", davis::showSettings());
+        auto settings = davis::createShowSettingsHeatMap();
+        davis::showHeatMapInBrowser(str_data, "file_data", settings.get());
       }
     }
   }
