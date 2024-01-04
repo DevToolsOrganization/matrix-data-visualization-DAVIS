@@ -1,8 +1,9 @@
 #include "common_utils.h"
 #include "fstream"
+#include <iostream>
+#include <sstream>
 #include "common_constants.h"
 #include <sys/stat.h>
-
 
 namespace {
 
@@ -128,6 +129,45 @@ bool getDataFromFile(const string& path, string& result) {
     return false;
   }
   return true;
+}
+
+vector<vector<double> > readMatrix(const std::string &path, char dlmtr)
+{
+    vector<vector<double> > matrix;
+    std::ifstream ifs;
+    std::string str;
+    ifs.open( path, std::ios::in );
+
+    if(ifs)
+    {
+        while(!ifs.eof())
+        {
+            std::getline(ifs, str);
+            std::vector<std::string> parts = split(str, dlmtr);
+            vector<double> doubleLine;
+            doubleLine.resize(parts.size());
+            for (size_t i = 0; i < parts.size(); ++i) {
+                doubleLine[i] = std::stod(parts.at(i));
+            }
+            matrix.push_back(doubleLine);
+        }
+        ifs.close();
+    }
+    else std:: cout << "Unable to open file to read" << std::endl;
+    return matrix;
+}
+
+std::vector<std::string> split(const std::string &target, char c)
+{
+    std::string temp;
+    std::stringstream stringstream { target };
+    std::vector<std::string> result;
+
+    while (std::getline(stringstream, temp, c)) {
+        result.push_back(temp);
+    }
+
+    return result;
 }
 
 }; // namespace davis
