@@ -25,7 +25,7 @@ bool getDataFromFile(const string& path, string& result);
 
 std::vector<std::string> split(const std::string& target, char c);
 
-vector<vector<double>> readMatrix(const string& path, char dlmtr);
+bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
 
 
 // Now it doesn't work.

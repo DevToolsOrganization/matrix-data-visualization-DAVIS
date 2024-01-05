@@ -131,43 +131,41 @@ bool getDataFromFile(const string& path, string& result) {
   return true;
 }
 
-vector<vector<double> > readMatrix(const std::string &path, char dlmtr)
-{
-    vector<vector<double> > matrix;
-    std::ifstream ifs;
-    std::string str;
-    ifs.open( path, std::ios::in );
-
-    if(ifs)
-    {
-        while(!ifs.eof())
-        {
-            std::getline(ifs, str);
-            std::vector<std::string> parts = split(str, dlmtr);
-            vector<double> doubleLine;
-            doubleLine.resize(parts.size());
-            for (size_t i = 0; i < parts.size(); ++i) {
-                doubleLine[i] = std::stod(parts.at(i));
-            }
-            matrix.push_back(doubleLine);
-        }
-        ifs.close();
+bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
+  outMatrix.clear();
+  std::ifstream ifs;
+  std::string str;
+  ifs.open(path, std::ios::in);
+  if (ifs) {
+    while (!ifs.eof()) {
+      std::getline(ifs, str);
+      if (str.size() == 0) //if exist empty line
+        continue;
+      std::vector<std::string> parts = split(str, dlmtr);
+      vector<double> doubleLine;
+      doubleLine.resize(parts.size());
+      for (size_t i = 0; i < parts.size(); ++i) {
+        doubleLine[i] = std::stod(parts.at(i));
+      }
+      outMatrix.push_back(doubleLine);
     }
-    else std:: cout << "Unable to open file to read" << std::endl;
-    return matrix;
+    ifs.close();
+    return true;
+  } else {
+    std:: cout << "Unable to open file to read: " << path << std::endl;
+    return false;
+  }
 }
 
-std::vector<std::string> split(const std::string &target, char c)
-{
-    std::string temp;
-    std::stringstream stringstream { target };
-    std::vector<std::string> result;
+std::vector<std::string> split(const std::string& target, char c) {
+  std::string temp;
+  std::stringstream stringstream { target };
+  std::vector<std::string> result;
+  while (std::getline(stringstream, temp, c)) {
+    result.push_back(temp);
+  }
 
-    while (std::getline(stringstream, temp, c)) {
-        result.push_back(temp);
-    }
-
-    return result;
+  return result;
 }
 
 }; // namespace davis
