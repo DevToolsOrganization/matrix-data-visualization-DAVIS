@@ -1,14 +1,16 @@
 #ifndef COMMON_UTILS_COMMON_UTILS_H_
 #define COMMON_UTILS_COMMON_UTILS_H_
+//#START_GRAB_TO_INCLUDES_LIST
 #include <string>
 #include <vector>
+//#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace davis {
-
+//#START_GRAB_TO_DAVIS_NAMESPACE
 using std::string;
 using std::vector;
 
-std::string getCurrentPath();
+string getCurrentPath();
 
 bool isPlotlyScriptExists();
 
@@ -23,7 +25,7 @@ void openPlotlyHtml(const string& file_name);
 
 bool getDataFromFile(const string& path, string& result);
 
-std::vector<std::string> split(const std::string& target, char c);
+vector<string> split(const string& target, char c);
 
 bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
 
@@ -31,6 +33,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmt
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
+//#STOP_GRAB_TO_DAVIS_NAMESPACE
 }; // namespace davis
 
 #endif // COMMON_UTILS_COMMON_UTILS_H_
