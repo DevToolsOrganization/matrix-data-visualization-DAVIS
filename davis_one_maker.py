@@ -22,8 +22,8 @@ START_NAME_SPACE = """namespace {
 END_NAME_SPACE = """
 }// namespace end
 """
-OUTPUT_H_FILE_NAME = "davis_one/davis_.h"
-OUTPUT_CPP_FILE_NAME = "davis_one/davis_.cpp"
+OUTPUT_H_FILE_NAME = "davis_one/davis.h"
+OUTPUT_CPP_FILE_NAME = "davis_one/davis.cpp"
 SRC_LIST_FILE = "davis_files.txt"
 START_GRAB_INCLUDES = """#START_GRAB_TO_INCLUDES_LIST"""
 STOP_GRAB_INCLUDES = """#STOP_GRAB_TO_INCLUDES_LIST"""
@@ -112,30 +112,20 @@ for cpps in includes_cpp_set:
  print(cpps)
  file_cpp.write(cpps+"\n")
 
-file_h.write(START_NAME_SPACE)
-file_cpp.write(START_NAME_SPACE)
-is_grab_davis = False
-for el in file_src_list:
- file_src = open(el).read().splitlines()
- for f in file_src:
-  if START_GRAB_NAMESPACE in f:
-     is_grab_davis = True
-     continue
-  if STOP_GRAB_NAMESPACE in f:
-     is_grab_davis = False
-     continue
-  if is_grab_davis:
-     if '.h' in el:
-      file_h.write(f + "\n")
-     if '.cpp' in el:
-      file_cpp.write(f + "\n")
-file_h.write(END_NAME_SPACE)
-file_cpp.write(END_NAME_SPACE)
+grab_namespace_code(START_NAME_SPACE,
+                    END_NAME_SPACE,
+                    START_GRAB_NAMESPACE,
+                    STOP_GRAB_NAMESPACE,
+                    file_src_list)
 
-
-grab_namespace_code(START_NAME_SPACE_DAVIS,END_NAME_SPACE_DAVIS,START_GRAB_DAVIS_NAMESPACE,STOP_GRAB_DAVIS_NAMESPACE,file_src_list)
+grab_namespace_code(START_NAME_SPACE_DAVIS,
+                    END_NAME_SPACE_DAVIS,
+                    START_GRAB_DAVIS_NAMESPACE,
+                    STOP_GRAB_DAVIS_NAMESPACE,
+                    file_src_list)
 
 
 file_h.write(END_DAVIS_H) #DAVIS HEADER_GUARD END
 file_h.close()
 file_cpp.close()
+
