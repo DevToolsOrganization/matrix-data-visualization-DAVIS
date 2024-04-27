@@ -1,14 +1,11 @@
 #include "davis.h"
 
-#include <iostream>
 #include <vector>
+#include <sstream>
+#include <iostream>
 #include <fstream>
 #include <sys/stat.h>
-#include <sstream>
-
 namespace {
-
-using std::vector;
 using std::string;
 
 #ifdef _WIN32
@@ -41,6 +38,9 @@ void openFileBySystem(const string& file_name) {
   command.append(file_name);
   system(command.c_str());
 }
+using std::vector;
+using std::string;
+
 
 
 bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
@@ -121,8 +121,7 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   return true;// TODO handle different exceptions
 };
 
-} // namespace
-
+}// namespace end
 namespace davis {
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
@@ -130,7 +129,6 @@ const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.27.0.min.js";
 const char kPlotlyJsName[] = "plotly-2.27.0.min.js";
 const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.27.0.min.js";
 // *INDENT-OFF*
-
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
@@ -202,8 +200,130 @@ Plotly.newPlot('gd', data);
 </script>
 </body>)";
 
-   // *INDENT-ON*
+// *INDENT-ON*
+string getCurrentPath() {
+#if defined (_WIN32) || (__linux__)
+  char buffer[1024];
+  char* answer = getcwd(buffer, sizeof(buffer));
+  string s_cwd;
+  if (answer) {
+    s_cwd = answer;
+  }
+  return s_cwd;
+#elif __APPLE__
+  //TODO macos get current path implementation
+  return "";
+#endif
+}
 
+bool isPlotlyScriptExists() {
+  return is_file_exists(kPlotlyJsWorkPath);
+}
+
+bool saveStringToFile(const string& file_name,
+                      const string& data) {
+  std::ofstream out(file_name);
+  if (out.is_open()) {
+    out << data.c_str();
+    out.close();
+    return true;
+  }
+  return false;
+}
+
+
+void openPlotlyHtml(const string& file_name) {
+  openFileBySystem(file_name);
+}
+
+void sleepMs(unsigned long milisec) {
+#ifdef _WIN32
+  Sleep(milisec);
+#elif __linux__
+  usleep(milisec * 1000);
+#endif
+}
+
+void mayBeCreateJsWorkingFolder() {
+  struct stat sb;
+  if (stat(kOutFolderName, &sb) != 0) {
+#ifdef _WIN32
+    _mkdir(kOutFolderName);
+#elif __linux__
+    mode_t mode = 0755;
+    mkdir(kOutFolderName, mode);
+#endif
+  }
+}
+
+bool deleteFolder(const char* fname) {
+  struct stat sb;
+  if (stat(fname, &sb) == 0) {
+    //rmdir(fname);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool getDataFromFile(const string& path, string& result) {
+
+  //TODO different scenarious and sanitizing
+  if (!is_file_exists(path)) {
+    return false;
+  }
+  if (!result.empty()) {
+    result.clear();
+  }
+  std::fstream file;
+  file.open(path, std::ios::in);
+  if (file.is_open()) {
+    string temp;
+    while (std::getline(file, temp)) {
+      result.append(temp).append(";");
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
+bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
+  outMatrix.clear();
+  std::ifstream ifs;
+  std::string str;
+  ifs.open(path, std::ios::in);
+  if (ifs) {
+    while (!ifs.eof()) {
+      std::getline(ifs, str);
+      if (str.size() == 0) //if exist empty line
+        continue;
+      std::vector<std::string> parts = split(str, dlmtr);
+      vector<double> doubleLine;
+      doubleLine.resize(parts.size());
+      for (size_t i = 0; i < parts.size(); ++i) {
+        doubleLine[i] = std::stod(parts.at(i));
+      }
+      outMatrix.push_back(doubleLine);
+    }
+    ifs.close();
+    return true;
+  } else {
+    std:: cout << "Unable to open file to read: " << path << std::endl;
+    return false;
+  }
+}
+
+vector<string> split(const string& target, char c) {
+  std::string temp;
+  std::stringstream stringstream { target };
+  std::vector<std::string> result;
+  while (std::getline(stringstream, temp, c)) {
+    result.push_back(temp);
+  }
+
+  return result;
+}
 using std::string;
 using std::vector;
 using std::istringstream;
@@ -375,118 +495,4 @@ visualizationTypes ShowSettings::getVisualType() const {
   return visualType;
 }
 
-string getCurrentPath() {
-#if defined (_WIN32) || (__linux__)
-  char buffer[1024];
-  char* answer = getcwd(buffer, sizeof(buffer));
-  string s_cwd;
-  if (answer) {
-    s_cwd = answer;
-  }
-  return s_cwd;
-#elif __APPLE__
-  //TODO macos get current path implementation
-  return "";
-#endif
-}
-
-bool isPlotlyScriptExists() {
-  return is_file_exists(kPlotlyJsWorkPath);
-}
-
-bool saveStringToFile(const string& file_name,
-                      const string& data) {
-  std::ofstream out(file_name);
-  if (out.is_open()) {
-    out << data.c_str();
-    out.close();
-    return true;
-  }
-  return false;
-}
-
-
-void openPlotlyHtml(const string& file_name) {
-  openFileBySystem(file_name);
-}
-
-void sleepMs(unsigned long milisec) {
-#ifdef _WIN32
-  Sleep(milisec);
-#elif __linux__
-  usleep(milisec * 1000);
-#endif
-}
-
-void mayBeCreateJsWorkingFolder() {
-  struct stat sb;
-  if (stat(kOutFolderName, &sb) != 0) {
-#ifdef _WIN32
-    _mkdir(kOutFolderName);
-#elif __linux__
-    mode_t mode = 0755;
-    mkdir(kOutFolderName, mode);
-#endif
-  }
-}
-
-bool getDataFromFile(const string& path, string& result) {
-
-  //TODO different scenarious and sanitizing
-  if (!is_file_exists(path)) {
-    return false;
-  }
-  if (!result.empty()) {
-    result.clear();
-  }
-  std::fstream file;
-  file.open(path, std::ios::in);
-  if (file.is_open()) {
-    string temp;
-    while (std::getline(file, temp)) {
-      result.append(temp).append(";");
-    }
-  } else {
-    return false;
-  }
-  return true;
-}
-
-bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
-  outMatrix.clear();
-  std::ifstream ifs;
-  std::string str;
-  ifs.open(path, std::ios::in);
-  if (ifs) {
-    while (!ifs.eof()) {
-      std::getline(ifs, str);
-      if (str.size() == 0) //if exist empty line
-        continue;
-      std::vector<std::string> parts = split(str, dlmtr);
-      vector<double> doubleLine;
-      doubleLine.resize(parts.size());
-      for (size_t i = 0; i < parts.size(); ++i) {
-        doubleLine[i] = std::stod(parts.at(i));
-      }
-      outMatrix.push_back(doubleLine);
-    }
-    ifs.close();
-    return true;
-  } else {
-    std:: cout << "Unable to open file to read: " << path << std::endl;
-    return false;
-  }
-}
-
-std::vector<std::string> split(const std::string& target, char c) {
-  std::string temp;
-  std::stringstream stringstream { target };
-  std::vector<std::string> result;
-  while (std::getline(stringstream, temp, c)) {
-    result.push_back(temp);
-  }
-
-  return result;
-}
-
-}
+} // namespace davis end

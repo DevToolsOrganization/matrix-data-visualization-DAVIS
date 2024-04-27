@@ -1,15 +1,14 @@
 #ifndef DAVIS_H_
 #define DAVIS_H_
 
-#include <iostream>
+#include <string>
+#include <memory>
 #include <vector>
+#include <iostream>
+namespace {
 
-
+}// namespace end
 namespace davis {
-
-using std::vector;
-using std::string;
-
 extern const char kAppName[];
 extern const char kOutFolderName[];
 extern const char kPlotlyJsName[];
@@ -24,8 +23,34 @@ extern const char kColorMapThermalPart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kCommonLastPart[];
+using std::string;
+using std::vector;
+
+string getCurrentPath();
+
+bool isPlotlyScriptExists();
+
+bool saveStringToFile(const string& file_name,
+                      const string& data);
+
+void mayBeCreateJsWorkingFolder();
+
+void sleepMs(unsigned long milisec);
+
+void openPlotlyHtml(const string& file_name);
+
+bool getDataFromFile(const string& path, string& result);
+
+vector<string> split(const string& target, char c);
+
+bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
 
 
+// Now it doesn't work.
+bool deleteFolder(const char* fname);
+
+
+using std::vector;
 
 enum class visualizationTypes {
   CHART,
@@ -100,6 +125,9 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::strin
 
 bool showSurfaceInBrowser(const std::string& values, const std::string& title,
                           const ShowSettingsSurface* settings);
+
+using std::vector;
+using std::string;
 
 
 //! two-dimensional vector
@@ -227,25 +255,5 @@ bool show(const T* data, uint64_t count, const string& title,
   return res;
 }
 
-std::string getCurrentPath();
-
-bool isPlotlyScriptExists();
-
-bool saveStringToFile(const string& file_name,
-                      const string& data);
-
-void mayBeCreateJsWorkingFolder();
-
-void sleepMs(unsigned long milisec);
-
-void openPlotlyHtml(const string& file_name);
-
-bool getDataFromFile(const string& path, string& result);
-
-std::vector<std::string> split(const std::string& target, char c);
-
-bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
-
-} // namespace davis
-
+} // namespace davis end
 #endif // DAVIS_H_
