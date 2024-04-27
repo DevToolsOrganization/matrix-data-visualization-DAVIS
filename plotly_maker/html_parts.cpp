@@ -1,8 +1,8 @@
 #include "html_parts.h"
 
 namespace davis {
+//#START_GRAB_TO_DAVIS_NAMESPACE
 // *INDENT-OFF*
-
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
@@ -74,5 +74,6 @@ Plotly.newPlot('gd', data);
 </script>
 </body>)";
 
-   // *INDENT-ON*
+// *INDENT-ON*
+//#STOP_GRAB_TO_DAVIS_NAMESPACE
 } // namespace davis

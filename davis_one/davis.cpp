@@ -1,11 +1,10 @@
 #include "davis.h"
+
 #include <iostream>
 #include <vector>
-#include <iostream>
 #include <fstream>
 #include <sys/stat.h>
 #include <sstream>
-#include <iostream>
 
 namespace {
 
@@ -204,7 +203,7 @@ Plotly.newPlot('gd', data);
 </body>)";
 
    // *INDENT-ON*
-   
+
 using std::string;
 using std::vector;
 using std::istringstream;

@@ -1,12 +1,15 @@
 #include "common_utils.h"
-#include "fstream"
+#include "common_constants.h"
+
+//#START_GRAB_TO_INCLUDES_LIST
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include "common_constants.h"
 #include <sys/stat.h>
+//#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace {
-
+//#START_GRAB_TO_NAMESPACE
 using std::string;
 
 #ifdef _WIN32
@@ -39,11 +42,11 @@ void openFileBySystem(const string& file_name) {
   command.append(file_name);
   system(command.c_str());
 }
-
+//#STOP_GRAB_TO_NAMESPACE
 } // namespace
 
 namespace davis {
-
+//#START_GRAB_TO_DAVIS_NAMESPACE
 string getCurrentPath() {
 #if defined (_WIN32) || (__linux__)
   char buffer[1024];
@@ -157,7 +160,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char
   }
 }
 
-std::vector<std::string> split(const std::string& target, char c) {
+vector<string> split(const string& target, char c) {
   std::string temp;
   std::stringstream stringstream { target };
   std::vector<std::string> result;
@@ -167,5 +170,5 @@ std::vector<std::string> split(const std::string& target, char c) {
 
   return result;
 }
-
+//#STOP_GRAB_TO_DAVIS_NAMESPACE
 }; // namespace davis
