@@ -1,13 +1,15 @@
 #ifndef ARRAY_CORE_ARRAY_CORE_H_
 #define ARRAY_CORE_ARRAY_CORE_H_
-
+//#START_GRAB_TO_INCLUDES_LIST
 #include <iostream>
 #include <vector>
+//#STOP_GRAB_TO_INCLUDES_LIST
 #include "plotly_maker/plotly_maker.h"
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 
 namespace davis {
+//#START_GRAB_TO_DAVIS_NAMESPACE
 
 using std::vector;
 using std::string;
@@ -137,7 +139,7 @@ bool show(const T* data, uint64_t count, const string& title,
     res = davis::showLineChartInBrowser(dblRow, title, static_cast<const ShowSettingsChart*>(settings));
   return res;
 }
-
-} // namespace davis
+//#STOP_GRAB_TO_DAVIS_NAMESPACE
+} // end namespace davis
 
 #endif //ARRAY_CORE_ARRAY_CORE_H_

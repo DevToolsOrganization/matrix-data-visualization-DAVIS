@@ -1,17 +1,20 @@
+//#START_GRAB_TO_INCLUDES_LIST
 #include <iostream>
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>
+#include <sstream>
+#include <iostream>
+//#STOP_GRAB_TO_INCLUDES_LIST
+
 #include "html_parts.h"
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 #include "plotly_maker.h"
-#include <sstream>
-#include <iostream>
 
 namespace {
-
+//#START_GRAB_TO_NAMESPACE
 using std::vector;
 using std::string;
 
@@ -94,10 +97,11 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   davis::openPlotlyHtml(pageName);
   return true;// TODO handle different exceptions
 };
-
+//#STOP_GRAB_TO_NAMESPACE
 } // namespace
 
 namespace davis {
+//#START_GRAB_TO_DAVIS_NAMESPACE
 using std::string;
 using std::vector;
 using std::istringstream;
@@ -268,6 +272,6 @@ std::unique_ptr<ShowSettingsChart> createShowSettingsChart() {
 visualizationTypes ShowSettings::getVisualType() const {
   return visualType;
 }
-
+//#STOP_GRAB_TO_DAVIS_NAMESPACE
 }; // namespace davis
 
