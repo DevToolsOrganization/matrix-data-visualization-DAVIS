@@ -14,7 +14,6 @@ id="gd"></div></div>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
 <body>)";
-
     const char kColorMapDefaultPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
@@ -62,15 +61,23 @@ id="gd"></div></div>
 
 
     const char kHeatMapTypePart[] = R"(
-type: 'heatmap'
+type: 'heatmap',
+hovertemplate: '(x:%{x}, y:%{y}, val:%{z:.}<extra></extra>'
 }];)";
 
     const char kSurfaceTypePart[]=R"(
-type: 'surface'
+type: 'surface',
+hovertemplate: '(x:%{x}, y:%{y}, val:%{z:.}<extra></extra>'
 }];)";
 
     const char kCommonLastPart[] = R"(
-Plotly.newPlot('gd', data);
+var layout;
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+Plotly.newPlot('gd', data, layout, config);
 </script>
 </body>)";
 
