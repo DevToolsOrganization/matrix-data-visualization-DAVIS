@@ -5,14 +5,11 @@
 #ifndef DAVIS_H_
 #define DAVIS_H_
 
-#include <memory>
-#include <vector>
-#include <string>
 #include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 namespace {
-
-}// namespace end
-namespace davis {
 extern const char kAppName[];
 extern const char kOutFolderName[];
 extern const char kPlotlyJsName[];
@@ -53,6 +50,9 @@ bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmt
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
+
+}// namespace end
+namespace dvs {
 
 using std::vector;
 
@@ -178,10 +178,10 @@ bool show(const vector<vector<T>>& data, const string& title,
     settings = new ShowSettingsHeatMap();
     smartP.reset(settings);
   }
-  if (settings->getVisualType() == davis::visualizationTypes::HEATMAP)
-    res = davis::showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == davis::visualizationTypes::SURFACE)
-    res = davis::showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
+  if (settings->getVisualType() == visualizationTypes::HEATMAP)
+    res = showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
+  else if (settings->getVisualType() == visualizationTypes::SURFACE)
+    res = showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
   return res;
 }
 
@@ -200,10 +200,10 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& title,
     settings = new ShowSettingsHeatMap();
     smartP.reset(settings);
   }
-  if (settings->getVisualType() == davis::visualizationTypes::HEATMAP)
-    res = davis::showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == davis::visualizationTypes::SURFACE)
-    res = davis::showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
+  if (settings->getVisualType() == visualizationTypes::HEATMAP)
+    res = showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
+  else if (settings->getVisualType() == visualizationTypes::SURFACE)
+    res = showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
   return res;
 }
 
@@ -222,10 +222,10 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& title
     settings = new ShowSettingsHeatMap();
     smartP.reset(settings);
   }
-  if (settings->getVisualType() == davis::visualizationTypes::HEATMAP)
-    res = davis::showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == davis::visualizationTypes::SURFACE)
-    res = davis::showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
+  if (settings->getVisualType() == visualizationTypes::HEATMAP)
+    res = showHeatMapInBrowser(vecVecDbl, title, static_cast<const ShowSettingsHeatMap*>(settings));
+  else if (settings->getVisualType() == visualizationTypes::SURFACE)
+    res = showSurfaceInBrowser(vecVecDbl, title, static_cast<const ShowSettingsSurface*>(settings));
   return res;
 }
 
@@ -239,8 +239,8 @@ bool show(const vector<T>& data, const string& title,
     settings = new ShowSettingsChart();
     smartP.reset(settings);
   }
-  if (settings->getVisualType() == davis::visualizationTypes::CHART)
-    res = davis::showLineChartInBrowser(dblRow, title, static_cast<const ShowSettingsChart*>(settings));
+  if (settings->getVisualType() == visualizationTypes::CHART)
+    res = showLineChartInBrowser(dblRow, title, static_cast<const ShowSettingsChart*>(settings));
   return res;
 }
 
@@ -254,10 +254,10 @@ bool show(const T* data, uint64_t count, const string& title,
     settings = new ShowSettingsChart();
     smartP.reset(settings);
   }
-  if (settings->getVisualType() == davis::visualizationTypes::CHART)
-    res = davis::showLineChartInBrowser(dblRow, title, static_cast<const ShowSettingsChart*>(settings));
+  if (settings->getVisualType() == visualizationTypes::CHART)
+    res = showLineChartInBrowser(dblRow, title, static_cast<const ShowSettingsChart*>(settings));
   return res;
 }
 
-} // namespace davis end
+} // namespace dvs end
 #endif // DAVIS_H_

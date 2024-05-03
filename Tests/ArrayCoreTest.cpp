@@ -8,25 +8,25 @@ using std::string;
 using std::vector;
 
 TEST(ArrayCore, showDefaultSettings) {
-  EXPECT_EQ(davis::isPlotlyScriptExists(), true);
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  bool result = davis::show(values, "testDefaultSettings");
+  bool result = dvs::show(values, "testDefaultSettings");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showHeatMap1) {
-  EXPECT_EQ(davis::isPlotlyScriptExists(), true);
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = davis::createShowSettingsHeatMap(davis::colorscales::GLAMOUR);
-  bool result = davis::show(values, "showHeatMap1", settings.get());
+  auto settings = dvs::createShowSettingsHeatMap(dvs::colorscales::GLAMOUR);
+  bool result = dvs::show(values, "showHeatMap1", settings.get());
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showSurface1) {
-  EXPECT_EQ(davis::isPlotlyScriptExists(), true);
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = davis::createShowSettingsSurface();
-  bool result = davis::show(values, "showSurface1", settings.get());
+  auto settings = dvs::createShowSettingsSurface();
+  bool result = dvs::show(values, "showSurface1", settings.get());
   EXPECT_EQ(result, true);
 }
 
@@ -39,7 +39,7 @@ TEST(ArrayCore, showPseudo2D) {
       vals4[i * cols + j] = i * cols + j;
     }
   }
-  bool result = davis::show(vals4, rows, cols, "showPseudo2D");
+  bool result = dvs::show(vals4, rows, cols, "showPseudo2D");
   EXPECT_EQ(result, true);
 }
 
@@ -53,28 +53,28 @@ TEST(ArrayCore, showArray2D) {
       vals5[i][j] = i * cols2 + j;
     }
   }
-  bool result = davis::show(vals5, rows2, cols2);
+  bool result = dvs::show(vals5, rows2, cols2);
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, testChartDefault) {
   vector<int> vec = {-5, -3, -1, 0, 2, 4, 8, 15, 16};
-  bool result = davis::show(vec, "testChartDefault");
+  bool result = dvs::show(vec, "testChartDefault");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showChart) {
   int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
-  bool result = davis::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
+  bool result = dvs::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, readAndShowMatrixFromFile) {
-  EXPECT_EQ(davis::isPlotlyScriptExists(), true);
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values;
-  bool readRes = davis::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
+  bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
-  bool result = davis::show(values, "readAndShowMatrixFromFile");
+  bool result = dvs::show(values, "readAndShowMatrixFromFile");
   EXPECT_EQ(result, true);
 }
 

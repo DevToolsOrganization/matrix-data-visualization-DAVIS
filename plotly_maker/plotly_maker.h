@@ -8,8 +8,8 @@
 #include <iostream>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_DVS_NAMESPACE
 
 using std::vector;
 
@@ -86,8 +86,8 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::strin
 
 bool showSurfaceInBrowser(const std::string& values, const std::string& title,
                           const ShowSettingsSurface* settings);
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-}; // namespace davis
+//#STOP_GRAB_TO_DVS_NAMESPACE
+}; // namespace dvs
 
 #endif // PLOTLY_MAKER_PLOTLY_MAKER_H_
 
