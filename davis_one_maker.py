@@ -20,7 +20,13 @@ START_DAVIS_CPP = """#include "davis.h"
 START_NAME_SPACE_DAVIS = """namespace dvs {
 """
 END_NAME_SPACE_DAVIS = """
-} // namespace dvs end"""
+} // namespace dvs end
+"""
+
+START_NAME_SPACE_PUBLIC_DAVIS = """namespace dv {
+"""
+END_NAME_SPACE_PUBLIC_DAVIS = """
+} // namespace dv end"""
 
 START_NAME_SPACE = """namespace {
 """
@@ -34,6 +40,8 @@ START_GRAB_INCLUDES = """#START_GRAB_TO_INCLUDES_LIST"""
 STOP_GRAB_INCLUDES = """#STOP_GRAB_TO_INCLUDES_LIST"""
 START_GRAB_DAVIS_NAMESPACE = """#START_GRAB_TO_DVS_NAMESPACE"""
 STOP_GRAB_DAVIS_NAMESPACE = """#STOP_GRAB_TO_DVS_NAMESPACE"""
+START_GRAB_PUBLIC_DAVIS_NAMESPACE = """#START_GRAB_TO_DV_NAMESPACE"""
+STOP_GRAB_PUBLIC_DAVIS_NAMESPACE = """#STOP_GRAB_TO_DV_NAMESPACE"""
 START_GRAB_NAMESPACE = """#START_GRAB_TO_NAMESPACE"""
 STOP_GRAB_NAMESPACE = """#STOP_GRAB_TO_NAMESPACE"""
 
@@ -130,6 +138,12 @@ grab_namespace_code(START_NAME_SPACE_DAVIS,
                     END_NAME_SPACE_DAVIS,
                     START_GRAB_DAVIS_NAMESPACE,
                     STOP_GRAB_DAVIS_NAMESPACE,
+                    file_src_list)
+
+grab_namespace_code(START_NAME_SPACE_PUBLIC_DAVIS,
+                    END_NAME_SPACE_PUBLIC_DAVIS,
+                    START_GRAB_PUBLIC_DAVIS_NAMESPACE,
+                    STOP_GRAB_PUBLIC_DAVIS_NAMESPACE,
                     file_src_list)
 
 

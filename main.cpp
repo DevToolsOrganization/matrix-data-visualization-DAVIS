@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto setHeatM = dvs::createShowSettingsHeatMap();
   setHeatM->colorScale = dvs::colorscales::GLAMOUR;
-  dvs::show(values, "testHeat1", setHeatM.get());
+  dv::show(values, "testHeat1", setHeatM.get());
 
   if (result.count("linechart")) {
     auto data = result["linechart"].as<std::string>();

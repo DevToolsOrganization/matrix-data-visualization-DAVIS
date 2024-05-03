@@ -500,3 +500,6 @@ visualizationTypes ShowSettings::getVisualType() const {
 }
 
 } // namespace dvs end
+namespace dv {
+
+} // namespace dv end
