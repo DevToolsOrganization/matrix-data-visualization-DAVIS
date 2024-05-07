@@ -13,6 +13,7 @@ set(SOURCE_FILES
     "../common_utils/common_constants.cpp"
     "../plotly_maker/plotly_maker.cpp"
     "../plotly_maker/html_parts.cpp"
+    "configurator.cpp"
     )
 set(HEADER_FILES
     "../common_utils/common_utils.h"
@@ -20,6 +21,7 @@ set(HEADER_FILES
     "../plotly_maker/plotly_maker.h"
     "../plotly_maker/html_parts.h"
     "array_core.h"
+    "configurator.h"
     )
 add_library(${projectName} ${SOURCE_FILES} ${HEADER_FILES})
 include_directories(${CMAKE_SOURCE_DIR})

@@ -7,9 +7,12 @@
 #include "plotly_maker/plotly_maker.h"
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
+#include "configurator.h"
 
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
+
+
 
 using std::vector;
 using std::string;
