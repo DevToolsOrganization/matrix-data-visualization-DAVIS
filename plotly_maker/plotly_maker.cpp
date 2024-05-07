@@ -148,6 +148,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     case colorscales::THERMAL:
       page.append(kColorMapThermalPart);
       break;
+    case colorscales::GRAYSCALE:
+      page.append(kColorMapGrayscalePart);
+      break;
   }
   switch (visualType) {
     case visualizationTypes::CHART:
