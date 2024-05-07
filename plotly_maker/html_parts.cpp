@@ -62,7 +62,7 @@ id="gd"></div></div>
 
     const char kHeatMapTypePart[] = R"(
 type: 'heatmap',
-hovertemplate: 'x:%{x}, y:%{y}, val:%{z:.}<extra></extra>'
+hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
 }];)";
 
     const char kSurfaceTypePart[]=R"(
