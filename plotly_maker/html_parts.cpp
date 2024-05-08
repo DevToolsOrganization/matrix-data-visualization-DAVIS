@@ -1,7 +1,7 @@
 #include "html_parts.h"
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_NAMESPACE
 // *INDENT-OFF*
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -75,5 +75,5 @@ Plotly.newPlot('gd', data);
 </body>)";
 
 // *INDENT-ON*
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-} // namespace davis
+//#STOP_GRAB_TO_NAMESPACE
+} // namespace dvs

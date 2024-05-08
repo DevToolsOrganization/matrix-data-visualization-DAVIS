@@ -4,129 +4,12 @@
 
 #include "davis.h"
 
-#include <sstream>
-#include <vector>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <sys/stat.h>
+#include <vector>
 namespace {
-using std::string;
-
-#ifdef _WIN32
-  #include <direct.h>
-  #include <windows.h>
-  #define getcwd _getcwd // stupid MSFT "deprecation" warning
-#elif __linux__
-  #include <unistd.h>
-#endif
-
-inline bool is_file_exists(const string& file_name) {
-  std::ifstream file(file_name.c_str());
-  if (!file) {
-    return false;
-  }
-  return true;
-}
-
-void openFileBySystem(const string& file_name) {
-  string command;
-#ifdef _WIN32
-  command = "start ";
-#elif __APPLE__
-  command = "open ";
-#elif __linux__
-  command = "xdg-open ";
-#else
-#error "Unknown compiler"
-#endif
-  command.append(file_name);
-  system(command.c_str());
-}
-using std::vector;
-using std::string;
-
-
-
-bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
-  size_t size = 0;
-  if (!values.empty()) {
-    size = values[0].size();
-  };
-  for (size_t i = 0; i < values.size(); ++i) {
-
-    if (values[i].size() != size)
-      return false;
-  }
-  return true;
-}
-
-bool createStringHeatMapValues(const vector<vector<double>>& values,
-                               string& str_values) {
-  if (!checkThatSizesAreTheSame(values))
-    return false;
-  if (!str_values.empty())
-    str_values.clear();
-  str_values.append(R"(var data = [{z: )");
-  str_values.append(R"([)");
-  for (size_t i = 0; i < values.size(); ++i) {
-    str_values.append("[");
-    for (size_t j = 0; j < values[i].size(); ++j) {
-      str_values.append(std::to_string(values[i][j]));
-      if (j != values[i].size() - 1) {
-        str_values.append(",");
-      }
-    }
-    str_values.append("]");
-    if (i != values.size() - 1) {
-      str_values.append(",");
-    }
-  }
-  str_values.append(R"(],)");
-  return true;
-}
-
-
-bool createStringLineChartValues(const vector<double>& values,
-                                 string& str_values) {
-  if (!str_values.empty()) {
-    str_values.clear();
-  }
-  str_values = R"(var trace = {x: [)";
-  for (size_t i = 0; i < values.size(); ++i) {
-    str_values.append(std::to_string(i));
-    if (i != values.size() - 1) {
-      str_values.append(",");
-    }
-  }
-  str_values.append("], y: [");
-  for (size_t j = 0; j < values.size(); ++j) {
-    str_values.append(std::to_string(values[j]));
-    if (j != values.size() - 1) {
-      str_values.append(",");
-    }
-  }
-  str_values.append("], mode: 'lines+markers'};var data = [trace];");
-  return true;
-}
-
-inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const std::string& title,
-                                const davis::visualizationTypes& visualType,
-                                const davis::colorscales& colorscale) {
-  std::string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, visualType, colorscale)) {
-    return false;
-  }
-  string pageName;
-  davis::mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(davis::kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
-  davis::openPlotlyHtml(pageName);
-  return true;// TODO handle different exceptions
-};
-
-}// namespace end
-namespace davis {
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
 const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.27.0.min.js";
@@ -205,6 +88,38 @@ Plotly.newPlot('gd', data);
 </body>)";
 
 // *INDENT-ON*
+using std::string;
+
+#ifdef _WIN32
+  #include <direct.h>
+  #include <windows.h>
+  #define getcwd _getcwd // stupid MSFT "deprecation" warning
+#elif __linux__
+  #include <unistd.h>
+#endif
+
+inline bool is_file_exists(const string& file_name) {
+  std::ifstream file(file_name.c_str());
+  if (!file) {
+    return false;
+  }
+  return true;
+}
+
+void openFileBySystem(const string& file_name) {
+  string command;
+#ifdef _WIN32
+  command = "start ";
+#elif __APPLE__
+  command = "open ";
+#elif __linux__
+  command = "xdg-open ";
+#else
+#error "Unknown compiler"
+#endif
+  command.append(file_name);
+  system(command.c_str());
+}
 string getCurrentPath() {
 #if defined (_WIN32) || (__linux__)
   char buffer[1024];
@@ -328,6 +243,91 @@ vector<string> split(const string& target, char c) {
 
   return result;
 }
+using std::vector;
+using std::string;
+
+
+
+bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
+  size_t size = 0;
+  if (!values.empty()) {
+    size = values[0].size();
+  };
+  for (size_t i = 0; i < values.size(); ++i) {
+
+    if (values[i].size() != size)
+      return false;
+  }
+  return true;
+}
+
+bool createStringHeatMapValues(const vector<vector<double>>& values,
+                               string& str_values) {
+  if (!checkThatSizesAreTheSame(values))
+    return false;
+  if (!str_values.empty())
+    str_values.clear();
+  str_values.append(R"(var data = [{z: )");
+  str_values.append(R"([)");
+  for (size_t i = 0; i < values.size(); ++i) {
+    str_values.append("[");
+    for (size_t j = 0; j < values[i].size(); ++j) {
+      str_values.append(std::to_string(values[i][j]));
+      if (j != values[i].size() - 1) {
+        str_values.append(",");
+      }
+    }
+    str_values.append("]");
+    if (i != values.size() - 1) {
+      str_values.append(",");
+    }
+  }
+  str_values.append(R"(],)");
+  return true;
+}
+
+
+bool createStringLineChartValues(const vector<double>& values,
+                                 string& str_values) {
+  if (!str_values.empty()) {
+    str_values.clear();
+  }
+  str_values = R"(var trace = {x: [)";
+  for (size_t i = 0; i < values.size(); ++i) {
+    str_values.append(std::to_string(i));
+    if (i != values.size() - 1) {
+      str_values.append(",");
+    }
+  }
+  str_values.append("], y: [");
+  for (size_t j = 0; j < values.size(); ++j) {
+    str_values.append(std::to_string(values[j]));
+    if (j != values.size() - 1) {
+      str_values.append(",");
+    }
+  }
+  str_values.append("], mode: 'lines+markers'};var data = [trace];");
+  return true;
+}
+
+inline bool heatmap_and_surface(const vector<vector<double>>& values,
+                                const std::string& title,
+                                const dvs::visualizationTypes& visualType,
+                                const dvs::colorscales& colorscale) {
+  std::string page;
+  if (!createHtmlPageWithPlotlyJS(values, page, visualType, colorscale)) {
+    return false;
+  }
+  string pageName;
+  mayBeCreateJsWorkingFolder();
+  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  saveStringToFile(pageName, page);
+  openPlotlyHtml(pageName);
+  return true;// TODO handle different exceptions
+};
+
+}// namespace end
+namespace dvs {
 using std::string;
 using std::vector;
 using std::istringstream;
@@ -415,7 +415,7 @@ bool showLineChartInBrowser(const vector<double>& values,
   string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
+  saveStringToFile(pageName, page);
   openPlotlyHtml(pageName);
   return true;
 }
@@ -460,7 +460,7 @@ bool showLineChartInBrowser(const vector<double>& values,
   std::string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
+  saveStringToFile(pageName, page);
   openPlotlyHtml(pageName);
   return true;
 }
@@ -499,4 +499,7 @@ visualizationTypes ShowSettings::getVisualType() const {
   return visualType;
 }
 
-} // namespace davis end
+} // namespace dvs end
+namespace dv {
+
+} // namespace dv end
