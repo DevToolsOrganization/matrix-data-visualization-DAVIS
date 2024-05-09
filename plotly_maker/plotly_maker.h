@@ -23,7 +23,8 @@ enum class colorscales {
   DEFAULT,
   SUNNY,
   GLAMOUR,
-  THERMAL
+  THERMAL,
+  GRAYSCALE
 };
 
 class ShowSettings {

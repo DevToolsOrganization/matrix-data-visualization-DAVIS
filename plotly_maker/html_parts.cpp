@@ -61,6 +61,12 @@ id="gd"></div></div>
   ],)";
 
 
+    const char kColorMapGrayscalePart[] = R"(
+  colorscale: [
+    ['0.0', 'rgb(0,0,0)'],
+    ['1.0', 'rgb(255, 255, 255)']
+  ],)";
+
     const char kHeatMapTypePart[] = R"(
 type: 'heatmap'
 }];)";

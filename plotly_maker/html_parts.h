@@ -9,6 +9,7 @@ extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
 extern const char kColorMapGlamourPart[];
 extern const char kColorMapThermalPart[];
+extern const char kColorMapGrayscalePart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kCommonLastPart[];
