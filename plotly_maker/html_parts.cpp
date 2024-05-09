@@ -68,15 +68,23 @@ id="gd"></div></div>
   ],)";
 
     const char kHeatMapTypePart[] = R"(
-type: 'heatmap'
+type: 'heatmap',
+hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
 }];)";
 
     const char kSurfaceTypePart[]=R"(
-type: 'surface'
+type: 'surface',
+hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>'
 }];)";
 
     const char kCommonLastPart[] = R"(
-Plotly.newPlot('gd', data);
+var layout;
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+Plotly.newPlot('gd', data, layout, config);
 </script>
 </body>)";
 
