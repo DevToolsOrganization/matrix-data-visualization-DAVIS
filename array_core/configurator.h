@@ -3,7 +3,7 @@
 #include <string>
 
 namespace dv {
-using namespace dv;
+
 
 enum class conf_visualizationTypes {
   AUTO, //if user not forces some specific type it will be recognized by context

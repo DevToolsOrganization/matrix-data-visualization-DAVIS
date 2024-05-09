@@ -11,7 +11,6 @@ TEST(ArrayCore, configurator){
     EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
     vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
     auto settings = dvs::createShowSettingsHeatMap(dvs::colorscales::GLAMOUR);
-
     dv::commonSettings comS;
     comS.xLabel = "Столбцы";
     comS.yLabel = "Строки";
