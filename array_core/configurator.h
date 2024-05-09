@@ -42,6 +42,7 @@ struct surfaceSettings{
     std::string zLabel;
 };
 
+
 class Configurator
 {
 public:
@@ -67,6 +68,10 @@ public:
 private:
     Configurator(){};
 
+};
+
+Configurator& config(){
+    return Configurator::getInstance();
 };
 
 }

@@ -15,10 +15,10 @@ TEST(ArrayCore, configurator){
     dv::commonSettings comS;
     comS.xLabel = "Столбцы";
     comS.yLabel = "Строки";
-    dv::Configurator::getInstance().common = comS;
-    dv::Configurator::getInstance().heatmap.colorSc = dv::conf_colorscales::SUNNY;
+    dv::config().common = comS;
+    dv::config().heatmap.colorSc = dv::conf_colorscales::SUNNY;
     dv::show(values, "showHeatMap1");
-    dv::Configurator::getInstance().reset();
+    dv::config().reset();
     dv::show(values, "showHeatMap1");
     bool result = true;
 }
