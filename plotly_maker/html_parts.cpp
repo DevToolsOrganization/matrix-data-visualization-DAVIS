@@ -1,7 +1,7 @@
 #include "html_parts.h"
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_NAMESPACE
 // *INDENT-OFF*
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -14,6 +14,7 @@ id="gd"></div></div>
 <script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
 <body>)";
+
     const char kColorMapDefaultPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
@@ -60,6 +61,12 @@ id="gd"></div></div>
   ],)";
 
 
+    const char kColorMapGrayscalePart[] = R"(
+  colorscale: [
+    ['0.0', 'rgb(0,0,0)'],
+    ['1.0', 'rgb(255, 255, 255)']
+  ],)";
+
     const char kHeatMapTypePart[] = R"(
 type: 'heatmap',
 hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
@@ -67,7 +74,7 @@ hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
 
     const char kSurfaceTypePart[]=R"(
 type: 'surface',
-hovertemplate: '(x:%{x}, y:%{y}, val:%{z:.}<extra></extra>'
+hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>'
 }];)";
 
     const char kCommonLastPart[] = R"(
@@ -82,5 +89,5 @@ Plotly.newPlot('gd', data, layout, config);
 </body>)";
 
 // *INDENT-ON*
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-} // namespace davis
+//#STOP_GRAB_TO_NAMESPACE
+} // namespace dvs

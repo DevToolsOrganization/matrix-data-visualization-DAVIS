@@ -5,8 +5,8 @@
 #include <vector>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_NAMESPACE
 using std::string;
 using std::vector;
 
@@ -33,7 +33,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmt
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-}; // namespace davis
+//#STOP_GRAB_TO_NAMESPACE
+}; // namespace dvs
 
 #endif // COMMON_UTILS_COMMON_UTILS_H_

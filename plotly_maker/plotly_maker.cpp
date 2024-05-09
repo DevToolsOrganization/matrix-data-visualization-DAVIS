@@ -14,6 +14,7 @@
 #include "plotly_maker.h"
 
 namespace {
+using namespace dvs;
 //#START_GRAB_TO_NAMESPACE
 using std::vector;
 using std::string;
@@ -78,30 +79,30 @@ bool createStringLineChartValues(const vector<double>& values,
       str_values.append(",");
     }
   }
-  str_values.append("], mode: 'lines+markers',  hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
   return true;
 }
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const std::string& title,
-                                const davis::visualizationTypes& visualType,
-                                const davis::colorscales& colorscale) {
+                                const dvs::visualizationTypes& visualType,
+                                const dvs::colorscales& colorscale) {
   std::string page;
   if (!createHtmlPageWithPlotlyJS(values, page, visualType, colorscale)) {
     return false;
   }
   string pageName;
-  davis::mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(davis::kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
-  davis::openPlotlyHtml(pageName);
+  mayBeCreateJsWorkingFolder();
+  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  saveStringToFile(pageName, page);
+  openPlotlyHtml(pageName);
   return true;// TODO handle different exceptions
 };
 //#STOP_GRAB_TO_NAMESPACE
 } // namespace
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_DVS_NAMESPACE
 using std::string;
 using std::vector;
 using std::istringstream;
@@ -147,6 +148,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     case colorscales::THERMAL:
       page.append(kColorMapThermalPart);
       break;
+    case colorscales::GRAYSCALE:
+      page.append(kColorMapGrayscalePart);
+      break;
   }
   switch (visualType) {
     case visualizationTypes::CHART:
@@ -189,7 +193,7 @@ bool showLineChartInBrowser(const vector<double>& values,
   string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
+  saveStringToFile(pageName, page);
   openPlotlyHtml(pageName);
   return true;
 }
@@ -234,7 +238,7 @@ bool showLineChartInBrowser(const vector<double>& values,
   std::string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
-  davis::saveStringToFile(pageName, page);
+  saveStringToFile(pageName, page);
   openPlotlyHtml(pageName);
   return true;
 }
@@ -272,6 +276,6 @@ std::unique_ptr<ShowSettingsChart> createShowSettingsChart() {
 visualizationTypes ShowSettings::getVisualType() const {
   return visualType;
 }
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-}; // namespace davis
+//#STOP_GRAB_TO_DVS_NAMESPACE
+}; // namespace dvs
 

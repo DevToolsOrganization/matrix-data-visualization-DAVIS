@@ -45,8 +45,8 @@ void openFileBySystem(const string& file_name) {
 //#STOP_GRAB_TO_NAMESPACE
 } // namespace
 
-namespace davis {
-//#START_GRAB_TO_DAVIS_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_NAMESPACE
 string getCurrentPath() {
 #if defined (_WIN32) || (__linux__)
   char buffer[1024];
@@ -170,5 +170,5 @@ vector<string> split(const string& target, char c) {
 
   return result;
 }
-//#STOP_GRAB_TO_DAVIS_NAMESPACE
-}; // namespace davis
+//#STOP_GRAB_TO_NAMESPACE
+}; // namespace dvs

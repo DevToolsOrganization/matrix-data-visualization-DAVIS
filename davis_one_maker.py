@@ -17,10 +17,16 @@ END_DAVIS_H = """
 START_DAVIS_CPP = """#include "davis.h"
 
 """
-START_NAME_SPACE_DAVIS = """namespace davis {
+START_NAME_SPACE_DAVIS = """namespace dvs {
 """
 END_NAME_SPACE_DAVIS = """
-} // namespace davis end"""
+} // namespace dvs end
+"""
+
+START_NAME_SPACE_PUBLIC_DAVIS = """namespace dv {
+"""
+END_NAME_SPACE_PUBLIC_DAVIS = """
+} // namespace dv end"""
 
 START_NAME_SPACE = """namespace {
 """
@@ -32,8 +38,10 @@ OUTPUT_CPP_FILE_NAME = "davis_one/davis.cpp"
 SRC_LIST_FILE = "davis_files.txt"
 START_GRAB_INCLUDES = """#START_GRAB_TO_INCLUDES_LIST"""
 STOP_GRAB_INCLUDES = """#STOP_GRAB_TO_INCLUDES_LIST"""
-START_GRAB_DAVIS_NAMESPACE = """#START_GRAB_TO_DAVIS_NAMESPACE"""
-STOP_GRAB_DAVIS_NAMESPACE = """#STOP_GRAB_TO_DAVIS_NAMESPACE"""
+START_GRAB_DAVIS_NAMESPACE = """#START_GRAB_TO_DVS_NAMESPACE"""
+STOP_GRAB_DAVIS_NAMESPACE = """#STOP_GRAB_TO_DVS_NAMESPACE"""
+START_GRAB_PUBLIC_DAVIS_NAMESPACE = """#START_GRAB_TO_DV_NAMESPACE"""
+STOP_GRAB_PUBLIC_DAVIS_NAMESPACE = """#STOP_GRAB_TO_DV_NAMESPACE"""
 START_GRAB_NAMESPACE = """#START_GRAB_TO_NAMESPACE"""
 STOP_GRAB_NAMESPACE = """#STOP_GRAB_TO_NAMESPACE"""
 
@@ -108,14 +116,15 @@ for el in file_src_list:
       includes_cpp_set.add(f)
       #print('cpp: -->',f)
 
-
+sorted_h_includes = sorted(includes_h_set)
+sorted_cpp_includes = sorted(includes_cpp_set)
 print("ALL H INCLUDES: ")
-for hs in includes_h_set:
+for hs in sorted_h_includes:
  print(hs)
  file_h.write(hs+"\n")
 
 print("ALL CPP INCLUDES: ") 
-for cpps in includes_cpp_set:
+for cpps in sorted_cpp_includes:
  print(cpps)
  file_cpp.write(cpps+"\n")
 
@@ -129,6 +138,12 @@ grab_namespace_code(START_NAME_SPACE_DAVIS,
                     END_NAME_SPACE_DAVIS,
                     START_GRAB_DAVIS_NAMESPACE,
                     STOP_GRAB_DAVIS_NAMESPACE,
+                    file_src_list)
+
+grab_namespace_code(START_NAME_SPACE_PUBLIC_DAVIS,
+                    END_NAME_SPACE_PUBLIC_DAVIS,
+                    START_GRAB_PUBLIC_DAVIS_NAMESPACE,
+                    STOP_GRAB_PUBLIC_DAVIS_NAMESPACE,
                     file_src_list)
 
 
