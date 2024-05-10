@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
+#include <ctype.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace {
@@ -174,49 +175,33 @@ vector<string> split(const string& target, char c) {
 bool make_string(const string& src,
                  vector<string>& args,
                  string& out) {
-  if(!out.empty())out.clear();
-  string sep_string;
-  int args_size = 0;
-  int reserve_size = 0;
-  std::map<size_t, string> positions;
-  for (size_t i = 0; i < args.size(); ++i) {
-    string check = "%" + std::to_string(i + 1);
-    auto position = src.find(check);
-    if (position == string::npos) {
-      std::cout << "arg" << i + 1 << "doesn't exists...";
-      return false;
+    if(!out.empty())out.clear();
+    size_t pos = 0;
+    while(pos < src.size()){
+    size_t new_pos = src.find('%',pos);
+    if(new_pos==string::npos){
+        out.append(src.substr(pos,src.size()-pos));
+        break;
+    };
+    std::string arg_index;
+    size_t temp_pos = 0;
+    temp_pos = new_pos;
+    while(temp_pos < src.size()&&isdigit(src[++temp_pos])){
+    arg_index+=src[temp_pos];
     }
-    positions.insert({position, check});
-    //std::cout << check << position << "...ok";
-    sep_string.append(check);
-    args_size += args[i].size();
-  }
-  reserve_size = (src.size() - sep_string.size()) + args_size;
-  //std::cout << "All args exist------------------ OK -------------------";
-  //std::cout << reserve_size;
-  out.reserve(reserve_size);
-  //std::cout << "Resize out string: " << out.size();
-  size_t prev_pos = 0;
-  for (auto &&it : positions) {
-    auto pos = it.first;
-    auto arg = it.second;
-    auto substr = src.substr(prev_pos, pos - prev_pos);
-    prev_pos = pos + arg.size();
-    //std::cout << substr;
-    //std::cout << pos << arg;
-    out.append(substr);
-    arg.erase(std::remove(arg.begin(), arg.end(), '%'), arg.end());
-    int index = std::stoi(arg);
-    out.append(args[index - 1]);
-  }
-  if (prev_pos != src.size()) {
-    auto end = src.substr(prev_pos, src.size() - prev_pos);
-    //std::cout << end;
-    out.append(end);
-  }
-  //std::cout << "**************************************\n\n";
-  //std::cout << out;
-  return true;
+    string part = src.substr(pos,new_pos-pos);
+    if(!arg_index.empty()){
+    size_t index = std::stol(arg_index);
+    if(index<=args.size()){
+        part.append(args[index-1]);
+    }
+    }else{
+        part.append("%");
+    }
+    out.append(part);
+    pos = temp_pos;
+    }
+    return true;
 }
 //#STOP_GRAB_TO_NAMESPACE
 }; // namespace dvs
