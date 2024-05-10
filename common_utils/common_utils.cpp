@@ -175,33 +175,36 @@ vector<string> split(const string& target, char c) {
 bool make_string(const string& src,
                  vector<string>& args,
                  string& out) {
-    if(!out.empty())out.clear();
-    size_t pos = 0;
-    while(pos < src.size()){
-    size_t new_pos = src.find('%',pos);
-    if(new_pos==string::npos){
-        out.append(src.substr(pos,src.size()-pos));
-        break;
+  if (!out.empty())
+    out.clear();
+  size_t pos = 0;
+  while (pos < src.size()) {
+    size_t new_pos = src.find('%', pos);
+    if (new_pos == string::npos) {
+      out.append(src.substr(pos, src.size() - pos));
+      break;
     };
     std::string arg_index;
     size_t temp_pos = 0;
     temp_pos = new_pos;
-    while(temp_pos < src.size()&&isdigit(src[++temp_pos])){
-    arg_index+=src[temp_pos];
+    while (temp_pos < src.size() && isdigit(src[++temp_pos])) {
+      arg_index += src[temp_pos];
     }
-    string part = src.substr(pos,new_pos-pos);
-    if(!arg_index.empty()){
-    size_t index = std::stol(arg_index);
-    if(index<=args.size()){
-        part.append(args[index-1]);
-    }
-    }else{
-        part.append("%");
+    string part = src.substr(pos, new_pos - pos);
+    if (!arg_index.empty()) {
+      size_t index = std::stol(arg_index);
+      if (index >= 0 && index <= args.size()) {
+        part.append(args[index - 1]);
+      }else{
+        //TODO return false or continue
+      }
+    } else {
+      part.append("%");
     }
     out.append(part);
     pos = temp_pos;
-    }
-    return true;
+  }
+  return true;
 }
 //#STOP_GRAB_TO_NAMESPACE
 }; // namespace dvs
