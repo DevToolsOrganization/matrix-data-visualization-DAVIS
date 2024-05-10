@@ -25,8 +25,13 @@ add_executable(${PROJECT_NAME}_core_tests ArrayCoreTest.cpp)
 target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE gtest_main)
 target_link_libraries(${PROJECT_NAME}_core_tests PRIVATE ArrayCore)
 
+add_executable(${PROJECT_NAME}_utils_tests CommonUtilsTest.cpp)
+target_link_libraries(${PROJECT_NAME}_utils_tests PRIVATE gtest_main)
+target_link_libraries(${PROJECT_NAME}_utils_tests PRIVATE CommonUtils)
+
 include_directories(${CMAKE_SOURCE_DIR})
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_plotly_tests)
 gtest_discover_tests(${PROJECT_NAME}_core_tests)
+gtest_discover_tests(${PROJECT_NAME}_utils_tests)
 

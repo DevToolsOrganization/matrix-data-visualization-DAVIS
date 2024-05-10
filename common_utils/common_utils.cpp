@@ -170,5 +170,53 @@ vector<string> split(const string& target, char c) {
 
   return result;
 }
+
+bool make_string(const string& src,
+                 vector<string>& args,
+                 string& out) {
+  if(!out.empty())out.clear();
+  string sep_string;
+  int args_size = 0;
+  int reserve_size = 0;
+  std::map<size_t, string> positions;
+  for (size_t i = 0; i < args.size(); ++i) {
+    string check = "%" + std::to_string(i + 1);
+    auto position = src.find(check);
+    if (position == string::npos) {
+      std::cout << "arg" << i + 1 << "doesn't exists...";
+      return false;
+    }
+    positions.insert({position, check});
+    //std::cout << check << position << "...ok";
+    sep_string.append(check);
+    args_size += args[i].size();
+  }
+  reserve_size = (src.size() - sep_string.size()) + args_size;
+  //std::cout << "All args exist------------------ OK -------------------";
+  //std::cout << reserve_size;
+  out.reserve(reserve_size);
+  //std::cout << "Resize out string: " << out.size();
+  size_t prev_pos = 0;
+  for (auto &&it : positions) {
+    auto pos = it.first;
+    auto arg = it.second;
+    auto substr = src.substr(prev_pos, pos - prev_pos);
+    prev_pos = pos + arg.size();
+    //std::cout << substr;
+    //std::cout << pos << arg;
+    out.append(substr);
+    arg.erase(std::remove(arg.begin(), arg.end(), '%'), arg.end());
+    int index = std::stoi(arg);
+    out.append(args[index - 1]);
+  }
+  if (prev_pos != src.size()) {
+    auto end = src.substr(prev_pos, src.size() - prev_pos);
+    //std::cout << end;
+    out.append(end);
+  }
+  //std::cout << "**************************************\n\n";
+  //std::cout << out;
+  return true;
+}
 //#STOP_GRAB_TO_NAMESPACE
 }; // namespace dvs
