@@ -175,13 +175,21 @@ vector<string> split(const string& target, char c) {
 bool make_string(const string& src,
                  vector<string>& args,
                  string& out) {
-  if (!out.empty())
+  if (!out.empty()) {
     out.clear();
+  }
+  if (args.empty()) {
+    return false;
+  }
+  vector<vector<size_t>> road_map;
+  size_t reserve_size = 0;
   size_t pos = 0;
   while (pos < src.size()) {
     size_t new_pos = src.find('%', pos);
     if (new_pos == string::npos) {
-      out.append(src.substr(pos, src.size() - pos));
+      //out.append(src.substr(pos, src.size() - pos));
+      reserve_size += (src.size() - pos);
+      road_map.push_back({pos, src.size() - pos});
       break;
     };
     std::string arg_index;
@@ -190,20 +198,41 @@ bool make_string(const string& src,
     while (temp_pos < src.size() && isdigit(src[++temp_pos])) {
       arg_index += src[temp_pos];
     }
-    string part = src.substr(pos, new_pos - pos);
+    //string part = src.substr(pos, new_pos - pos);
+    road_map.push_back({pos, new_pos - pos});
+    reserve_size += (new_pos - pos);
     if (!arg_index.empty()) {
       size_t index = std::stol(arg_index);
-      if (index >= 0 && index <= args.size()) {
-        part.append(args[index - 1]);
-      }else{
+      if (index > 0 && index <= args.size()) {
+        //part.append(args[index - 1]);
+        reserve_size += args[index - 1].size();
+        road_map.push_back({index - 1});
+      } else {
         //TODO return false or continue
       }
     } else {
-      part.append("%");
+      //part.append("%");
+      road_map.push_back({UINT_MAX});
+      ++reserve_size;
     }
-    out.append(part);
+    //out.append(part);
     pos = temp_pos;
   }
+  // create out according on the road map
+  out.reserve(reserve_size);
+  for (int i = 0; i < road_map.size(); ++i) {
+    auto size = road_map[i].size();
+    if (size == 2) {
+      out.append(src.substr(road_map[i][0], road_map[i][1]));
+    } else if (size == 1) {
+      if (road_map[i][0] == UINT_MAX) {
+        out.append("%");
+      } else {
+        out.append(args[road_map[i][0]]);
+      }
+    }
+  }
+  //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
 }
 //#STOP_GRAB_TO_NAMESPACE
