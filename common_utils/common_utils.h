@@ -3,6 +3,9 @@
 //#START_GRAB_TO_INCLUDES_LIST
 #include <string>
 #include <vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -29,6 +32,10 @@ vector<string> split(const string& target, char c);
 
 bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
 
+
+bool make_string(const string& src,
+                 const vector<string>& args,
+                 string& out);
 
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
