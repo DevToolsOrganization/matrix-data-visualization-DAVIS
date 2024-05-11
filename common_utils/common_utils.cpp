@@ -7,6 +7,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <limits.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace {
@@ -173,7 +174,7 @@ vector<string> split(const string& target, char c) {
 }
 
 bool make_string(const string& src,
-                 vector<string>& args,
+                 const vector<string>& args,
                  string& out) {
   if (!out.empty()) {
     out.clear();

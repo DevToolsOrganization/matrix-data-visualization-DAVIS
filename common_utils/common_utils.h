@@ -34,7 +34,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmt
 
 
 bool make_string(const string& src,
-                 vector<string>& args,
+                 const vector<string>& args,
                  string& out);
 
 // Now it doesn't work.
