@@ -12,6 +12,7 @@
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 #include "plotly_maker.h"
+#include "configurator.h"
 
 namespace {
 using namespace dvs;
@@ -84,11 +85,9 @@ bool createStringLineChartValues(const vector<double>& values,
 }
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const std::string& title,
-                                const dvs::visualizationTypes& visualType,
-                                const dvs::colorscales& colorscale) {
+                                const std::string& title) {
   std::string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, visualType, colorscale)) {
+  if (!createHtmlPageWithPlotlyJS(values, page)) {
     return false;
   }
   string pageName;
@@ -124,9 +123,7 @@ bool getMatrixValuesFromString(const string& in_values,
 };
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
-                                std::string& page,
-                                const visualizationTypes& visualType,
-                                const colorscales& colorscale) {
+                                std::string& page) {
   page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -135,23 +132,34 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   page.append(str_values);
-  switch (colorscale) {
-    case colorscales::DEFAULT:
+  dv::conf_colorscales clrScale;
+  if(dv::config().common.typeVisual == dv::conf_visualizationTypes::AUTO ||
+          dv::config().common.typeVisual == dv::conf_visualizationTypes::HEATMAP )
+    clrScale = dv::config().heatmap.colorSc;
+  else if(dv::config().common.typeVisual == dv::conf_visualizationTypes::SURFACE)
+    clrScale = dv::config().surf.colorSc;
+  switch (clrScale) {
+    case dv::conf_colorscales::DEFAULT:
       page.append(kColorMapDefaultPart);
       break;
-    case colorscales::SUNNY:
+    case dv::conf_colorscales::SUNNY:
       page.append(kColorMapSunnyPart);
       break;
-    case colorscales::GLAMOUR:
+    case dv::conf_colorscales::GLAMOUR:
       page.append(kColorMapGlamourPart);
       break;
-    case colorscales::THERMAL:
+    case dv::conf_colorscales::THERMAL:
       page.append(kColorMapThermalPart);
       break;
-    case colorscales::GRAYSCALE:
+    case dv::conf_colorscales::GRAYSCALE:
       page.append(kColorMapGrayscalePart);
       break;
   }
+  //Вопрос с автотипом.
+  // Если пользователь задает тип AUTO, то по ходу дела алгоритм сам должен понимать, что сейчас отображать
+  // Но этот автоРазбор должен был сделан раньше, чем в этой функции.
+  // Предлагаю: добавить приватный член класса Configurator, в котором будет полe notForUser_visualType.
+  // Это поле заполняется само.
   switch (visualType) {
     case visualizationTypes::CHART:
       break;
@@ -167,23 +175,20 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const std::string& title,
-                          const ShowSettingsHeatMap* settings) {
-  return heatmap_and_surface(values, title, settings->getVisualType(), settings->colorScale);
+                          const std::string& title) {
+  return heatmap_and_surface(values, title);
 }
 
 bool showHeatMapInBrowser(const std::string& values,
-                          const std::string& title,
-                          const ShowSettingsHeatMap* settings) {
+                          const std::string& title) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
-  showHeatMapInBrowser(heat_map_values, title, settings);
+  showHeatMapInBrowser(heat_map_values, title);
   return true;
 };
 
 bool showLineChartInBrowser(const vector<double>& values,
-                            const string& title,
-                            const ShowSettings& settings) {
+                            const string& title) {
   string page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -199,36 +204,32 @@ bool showLineChartInBrowser(const vector<double>& values,
 }
 
 bool showLineChartInBrowser(const string& values,
-                            const string& title,
-                            const ShowSettings& settings) {
+                            const string& title) {
   vector<double>vals;
   istringstream f(values);
   string s;
   while (std::getline(f, s, ',')) {
     vals.push_back(std::stod(s));
   }
-  showLineChartInBrowser(vals, title, settings);
+  showLineChartInBrowser(vals, title);
   return true;
 };
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
-                          const string& title,
-                          const ShowSettingsSurface* settings) {
-  return heatmap_and_surface(values, title, settings->getVisualType(), settings->colorScale);
+                          const string& title) {
+  return heatmap_and_surface(values, title);
 }
 
 bool showSurfaceInBrowser(const std::string& values,
-                          const string& title,
-                          const ShowSettingsSurface* settings) {
+                          const string& title) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
-  showSurfaceInBrowser(surface_values, title, settings);
+  showSurfaceInBrowser(surface_values, title);
   return true;
 }
 
 bool showLineChartInBrowser(const vector<double>& values,
-                            const std::string& title,
-                            const ShowSettingsChart* settings) {
+                            const std::string& title) {
   std::string page = kCommonHeadPart;
   page.append(kDivSizePart);
   string str_values = "";
@@ -244,22 +245,16 @@ bool showLineChartInBrowser(const vector<double>& values,
 }
 
 bool showLineChartInBrowser(const std::string& values,
-                            const std::string& title,
-                            const ShowSettingsChart* settings) {
+                            const std::string& title) {
   std::vector<double>vals;
   std::istringstream f(values);
   std::string s;
   while (std::getline(f, s, ',')) {
     vals.push_back(std::stod(s));
   }
-  showLineChartInBrowser(vals, title, settings);
+  showLineChartInBrowser(vals, title);
   return true;
 };
-
-std::unique_ptr<ShowSettings> testF() {
-  return std::make_unique<ShowSettings>();
-}
-
 
 std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap(colorscales color) {
   return std::make_unique<ShowSettingsHeatMap>(color);

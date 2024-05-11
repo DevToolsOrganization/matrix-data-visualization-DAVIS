@@ -16,7 +16,8 @@ enum class conf_colorscales {
   DEFAULT,
   SUNNY,
   GLAMOUR,
-  THERMAL
+  THERMAL,
+  GRAYSCALE
 };
 
 
