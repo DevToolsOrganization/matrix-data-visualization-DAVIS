@@ -11,13 +11,7 @@
 using std::vector;
 
 int main(int argc, char* argv[]) {
-    vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-    dv::config().reset();
-    dv::config().heatmap.colorSc = dv::conf_colorscales::GRAYSCALE;
-    bool result = dv::show(values, "showHeatMap_gray");
 
-
-    /*
   cxxopts::Options options("davis", "data visualization utility");
   options.add_options()
          ("h,help", "davis commands")
@@ -41,25 +35,20 @@ int main(int argc, char* argv[]) {
 
 
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto setHeatM = dvs::createShowSettingsHeatMap();
-  setHeatM->colorScale = dvs::colorscales::GLAMOUR;
-  dv::show(values, "testHeat1", setHeatM.get());
+
+  dv::show(values, "testHeat1");
 
   if (result.count("linechart")) {
     auto data = result["linechart"].as<std::string>();
-    auto set = dvs::createShowSettingsChart();
-    dvs::showLineChartInBrowser(data, "comand_line_linechart", set.get());
+    dvs::showLineChartInBrowser(data, "comand_line_linechart");
     return EXIT_SUCCESS;
   } else if (result.count("heatmap")) {
     auto data = result["heatmap"].as<std::string>();
-    auto set = dvs::createShowSettingsHeatMap();
-    dvs::showHeatMapInBrowser(data, "comand_line_heatmap", set.get());
+    dvs::showHeatMapInBrowser(data, "comand_line_heatmap");
     return EXIT_SUCCESS;
   } else if (result.count("surface")) {
     auto data = result["surface"].as<std::string>();
-    auto settings = dvs::createShowSettingsSurface();
-    settings->colorScale = dvs::colorscales::GLAMOUR;
-    dvs::showSurfaceInBrowser(data, "comand_line_surface", settings.get());
+    dvs::showSurfaceInBrowser(data, "comand_line_surface");
     return EXIT_SUCCESS;
   } else if (result.count("datapath")) {
     auto data_path = result["datapath"].as<std::string>();
@@ -68,22 +57,24 @@ int main(int argc, char* argv[]) {
       if (result.count("charttype")) {
         auto chart_type = result["charttype"].as<std::string>();
         if (chart_type == "l" || chart_type == "linechart") {
-          auto settings = dvs::createShowSettingsChart();
-          dvs::showLineChartInBrowser(str_data, "file_data", settings.get());
+          dv::config().reset();
+          dv::config().common.typeVisual = dv::conf_visualizationTypes::CHART;
+          dvs::showLineChartInBrowser(str_data, "file_data");
         } else if (chart_type == "s" || chart_type == "surface") {
-          auto settings = dvs::createShowSettingsSurface();
-          settings->colorScale = dvs::colorscales::GLAMOUR;
-          dvs::showSurfaceInBrowser(str_data, "surface", settings.get());
+            dv::config().reset();
+            dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+          dvs::showSurfaceInBrowser(str_data, "surface");
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
-        auto settings = dvs::createShowSettingsHeatMap();
-        dvs::showHeatMapInBrowser(str_data, "file_data", settings.get());
+          dv::config().reset();
+          dv::config().common.typeVisual = dv::conf_visualizationTypes::HEATMAP;
+        dvs::showHeatMapInBrowser(str_data, "file_data");
       }
     }
   }
-  */
+
   return EXIT_SUCCESS;
 }
 
