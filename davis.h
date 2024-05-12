@@ -61,7 +61,7 @@ void makeArgs(const vector<vector<double>>& values, string& out) {
       }
       out.append(postfix);
       break;
-  default:
+    default:
       break;
   }
 }
@@ -80,7 +80,7 @@ void makeArgs(vector<double>& values, string& out) {
       break;
     case dv::conf_visualizationTypes::SURFACE:
       break;
-  default:
+    default:
       break;
   }
 }

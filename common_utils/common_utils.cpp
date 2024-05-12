@@ -10,7 +10,7 @@
 #include <limits.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
-namespace dvs{
+namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
 using std::string;
 

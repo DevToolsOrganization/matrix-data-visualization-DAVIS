@@ -98,53 +98,52 @@ enum class conf_colorscales {
 };
 
 
-struct commonSettings{
-    commonSettings():typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y"){}
-    conf_visualizationTypes typeVisual;
-    std::string xLabel;
-    std::string yLabel;
+struct commonSettings {
+  commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
+  conf_visualizationTypes typeVisual;
+  std::string xLabel;
+  std::string yLabel;
 };
 
-struct chartSettings{
+struct chartSettings {
 
 };
 
-struct heatMapSettings{
-    heatMapSettings():colorSc(conf_colorscales::DEFAULT){}
-    conf_colorscales colorSc;
+struct heatMapSettings {
+  heatMapSettings(): colorSc(conf_colorscales::DEFAULT) {}
+  conf_colorscales colorSc;
 };
 
-struct surfaceSettings{
-    surfaceSettings():colorSc(conf_colorscales::DEFAULT), zLabel("Z"){}
-    conf_colorscales colorSc;
-    std::string zLabel;
+struct surfaceSettings {
+  surfaceSettings(): colorSc(conf_colorscales::DEFAULT), zLabel("Z") {}
+  conf_colorscales colorSc;
+  std::string zLabel;
 };
 
 
-class Configurator
-{
-public:
-    static Configurator& getInstance(){
-        static Configurator instance;
-        return instance;
-    }
-    Configurator(Configurator const&)   = delete;
-    void operator=(Configurator const&) = delete;
+class Configurator {
+ public:
+  static Configurator& getInstance() {
+    static Configurator instance;
+    return instance;
+  }
+  Configurator(Configurator const&)   = delete;
+  void operator=(Configurator const&) = delete;
 
-    void reset(){ //to default settings
-       common = commonSettings();
-       chart = chartSettings();
-       heatmap = heatMapSettings();
-       surf = surfaceSettings();
-    };
+  void reset() { //to default settings
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
 
-    commonSettings common;
-    chartSettings chart;
-    heatMapSettings heatmap;
-    surfaceSettings surf;
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
 
-private:
-    Configurator(){};
+ private:
+  Configurator() {};
 
 };
 
@@ -193,9 +192,9 @@ bool show(const vector<vector<T>>& data, const string& htmlPageName) {
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -210,9 +209,9 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -227,9 +226,9 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -239,7 +238,7 @@ bool show(const vector<T>& data, const string& htmlPageName) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::CHART)
+      config().common.typeVisual == conf_visualizationTypes::CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
@@ -249,7 +248,7 @@ bool show(const T* data, uint64_t count, const string& htmlPageName) {
   vector<double> dblRow(data, data + count);
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::CHART)
+      config().common.typeVisual == conf_visualizationTypes::CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }

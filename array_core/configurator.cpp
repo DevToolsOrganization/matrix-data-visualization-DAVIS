@@ -3,8 +3,8 @@
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
 
-Configurator& config(){
-    return Configurator::getInstance();
+Configurator& config() {
+  return Configurator::getInstance();
 };
 
 

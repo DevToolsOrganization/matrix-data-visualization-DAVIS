@@ -54,9 +54,9 @@ bool show(const vector<vector<T>>& data, const string& htmlPageName) {
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -71,9 +71,9 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -88,9 +88,9 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
   }
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -100,7 +100,7 @@ bool show(const vector<T>& data, const string& htmlPageName) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::CHART)
+      config().common.typeVisual == conf_visualizationTypes::CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
@@ -110,7 +110,7 @@ bool show(const T* data, uint64_t count, const string& htmlPageName) {
   vector<double> dblRow(data, data + count);
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-          config().common.typeVisual == conf_visualizationTypes::CHART)
+      config().common.typeVisual == conf_visualizationTypes::CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }

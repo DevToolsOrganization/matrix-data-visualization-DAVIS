@@ -21,53 +21,52 @@ enum class conf_colorscales {
 };
 
 
-struct commonSettings{
-    commonSettings():typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y"){}
-    conf_visualizationTypes typeVisual;
-    std::string xLabel;
-    std::string yLabel;
+struct commonSettings {
+  commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
+  conf_visualizationTypes typeVisual;
+  std::string xLabel;
+  std::string yLabel;
 };
 
-struct chartSettings{
+struct chartSettings {
 
 };
 
-struct heatMapSettings{
-    heatMapSettings():colorSc(conf_colorscales::DEFAULT){}
-    conf_colorscales colorSc;
+struct heatMapSettings {
+  heatMapSettings(): colorSc(conf_colorscales::DEFAULT) {}
+  conf_colorscales colorSc;
 };
 
-struct surfaceSettings{
-    surfaceSettings():colorSc(conf_colorscales::DEFAULT), zLabel("Z"){}
-    conf_colorscales colorSc;
-    std::string zLabel;
+struct surfaceSettings {
+  surfaceSettings(): colorSc(conf_colorscales::DEFAULT), zLabel("Z") {}
+  conf_colorscales colorSc;
+  std::string zLabel;
 };
 
 
-class Configurator
-{
-public:
-    static Configurator& getInstance(){
-        static Configurator instance;
-        return instance;
-    }
-    Configurator(Configurator const&)   = delete;
-    void operator=(Configurator const&) = delete;
+class Configurator {
+ public:
+  static Configurator& getInstance() {
+    static Configurator instance;
+    return instance;
+  }
+  Configurator(Configurator const&)   = delete;
+  void operator=(Configurator const&) = delete;
 
-    void reset(){ //to default settings
-       common = commonSettings();
-       chart = chartSettings();
-       heatmap = heatMapSettings();
-       surf = surfaceSettings();
-    };
+  void reset() { //to default settings
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
 
-    commonSettings common;
-    chartSettings chart;
-    heatMapSettings heatmap;
-    surfaceSettings surf;
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
 
-private:
-    Configurator(){};
+ private:
+  Configurator() {};
 
 };
 

@@ -7,19 +7,19 @@
 using std::string;
 using std::vector;
 
-TEST(ArrayCore, configurator){
-    EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-    vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-    dv::config().reset();
-    dv::commonSettings comS;
-    comS.xLabel = "Столбцы";
-    comS.yLabel = "Строки";
-    dv::config().common = comS;
-    dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
-    bool result1 = dv::show(values, "HeatMap");
-    dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
-    bool result2 = dv::show(values, "Surface");
-    EXPECT_EQ(result1 && result2, true);
+TEST(ArrayCore, configurator) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  dv::config().reset();
+  dv::commonSettings comS;
+  comS.xLabel = "Столбцы";
+  comS.yLabel = "Строки";
+  dv::config().common = comS;
+  dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
+  bool result1 = dv::show(values, "HeatMap");
+  dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+  bool result2 = dv::show(values, "Surface");
+  EXPECT_EQ(result1 && result2, true);
 }
 
 TEST(ArrayCore, showDefaultSettings) {

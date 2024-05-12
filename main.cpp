@@ -61,15 +61,15 @@ int main(int argc, char* argv[]) {
           dv::config().common.typeVisual = dv::conf_visualizationTypes::CHART;
           dvs::showLineChartInBrowser(str_data, "file_data");
         } else if (chart_type == "s" || chart_type == "surface") {
-            dv::config().reset();
-            dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+          dv::config().reset();
+          dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
           dvs::showSurfaceInBrowser(str_data, "surface");
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
-          dv::config().reset();
-          dv::config().common.typeVisual = dv::conf_visualizationTypes::HEATMAP;
+        dv::config().reset();
+        dv::config().common.typeVisual = dv::conf_visualizationTypes::HEATMAP;
         dvs::showHeatMapInBrowser(str_data, "file_data");
       }
     }

@@ -437,9 +437,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   createStringHeatMapValues(values, str_values);
   page.append(str_values);
   dv::conf_colorscales clrScale;
-  if(type == dv::conf_visualizationTypes::HEATMAP )
+  if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
-  else if(type == dv::conf_visualizationTypes::SURFACE)
+  else if (type == dv::conf_visualizationTypes::SURFACE)
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
@@ -535,8 +535,8 @@ bool showSurfaceInBrowser(const std::string& values,
 } // namespace dvs end
 namespace dv {
 
-Configurator& config(){
-    return Configurator::getInstance();
+Configurator& config() {
+  return Configurator::getInstance();
 };
 
 
