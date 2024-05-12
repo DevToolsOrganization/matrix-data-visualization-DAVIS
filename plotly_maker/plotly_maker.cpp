@@ -14,13 +14,12 @@
 #include "plotly_maker.h"
 
 
-namespace {
-using namespace dvs;
-//#START_GRAB_TO_NAMESPACE
-using std::vector;
+namespace dvs{
+//#START_GRAB_TO_DVS_NAMESPACE
+
 using std::string;
-
-
+using std::vector;
+using std::istringstream;
 
 bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   size_t size = 0;
@@ -98,14 +97,6 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   openPlotlyHtml(pageName);
   return true;// TODO handle different exceptions
 };
-//#STOP_GRAB_TO_NAMESPACE
-} // namespace
-
-namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
-using std::string;
-using std::vector;
-using std::istringstream;
 
 bool getMatrixValuesFromString(const string& in_values,
                                vector<vector<double>>& out_values) {

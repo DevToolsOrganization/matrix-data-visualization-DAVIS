@@ -18,7 +18,7 @@ TEST(ArrayCore, configurator){
     dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
     bool result1 = dv::show(values, "HeatMap");
     dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
-    bool result2 = dv::show(values, "S w");
+    bool result2 = dv::show(values, "Surface");
     EXPECT_EQ(result1 && result2, true);
 }
 

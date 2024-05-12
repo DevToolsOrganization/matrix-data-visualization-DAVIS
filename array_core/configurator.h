@@ -3,7 +3,7 @@
 #include <string>
 
 namespace dv {
-
+//#START_GRAB_TO_DV_NAMESPACE
 
 enum class conf_visualizationTypes {
   AUTO, //if user not forces some specific type it will be recognized by context
@@ -73,5 +73,7 @@ private:
 
 Configurator& config();
 
-}
+//#STOP_GRAB_TO_DV_NAMESPACE
+}// end namespace dv
+
 #endif // CONFIGURATOR_H
