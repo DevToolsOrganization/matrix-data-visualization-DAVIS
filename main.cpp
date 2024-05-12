@@ -11,7 +11,13 @@
 using std::vector;
 
 int main(int argc, char* argv[]) {
-  /*
+    vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+    dv::config().reset();
+    dv::config().heatmap.colorSc = dv::conf_colorscales::GRAYSCALE;
+    bool result = dv::show(values, "showHeatMap_gray");
+
+
+    /*
   cxxopts::Options options("davis", "data visualization utility");
   options.add_options()
          ("h,help", "davis commands")

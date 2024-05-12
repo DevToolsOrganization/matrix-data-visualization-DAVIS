@@ -2,5 +2,9 @@
 
 namespace dv {
 
+Configurator& config(){
+    return Configurator::getInstance();
+};
+
 
 }

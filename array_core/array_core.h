@@ -20,32 +20,32 @@ using std::string;
 
 //! two-dimensional vector
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& title = dvs::kAppName);
+bool show(const vector<vector<T>>& data, const string& htmlPageName = dvs::kAppName);
 
 //! two-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const string& title = dvs::kAppName);
+          const string& htmlPageName = dvs::kAppName);
 
 //! a one-dimensional array that simulates a two-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const string& title = dvs::kAppName);
+          const string& htmlPageName = dvs::kAppName);
 
 //! one-dimensional vector
 template <typename T>
-bool show(const vector<T>& data, const string& title = dvs::kAppName);
+bool show(const vector<T>& data, const string& htmlPageName = dvs::kAppName);
 
 //! one-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const string& title = dvs::kAppName);
+bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName);
 
 // ***********************************
 // template functions implementations:
 // ***********************************
 
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& title) {
+bool show(const vector<vector<T>>& data, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(data.size());
   for (vector<T> row : data) {
@@ -55,14 +55,14 @@ bool show(const vector<vector<T>>& data, const string& title) {
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
           config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title);
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
   else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title);
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& title) {
+bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -72,14 +72,14 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& title) {
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
           config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title);
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
   else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title);
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& title) {
+bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -89,29 +89,29 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& title
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
           config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title);
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
   else if (config().common.typeVisual == conf_visualizationTypes::SURFACE )
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title);
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const vector<T>& data, const string& title) {
+bool show(const vector<T>& data, const string& htmlPageName) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
           config().common.typeVisual == conf_visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, title);
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t count, const string& title) {
+bool show(const T* data, uint64_t count, const string& htmlPageName) {
   vector<double> dblRow(data, data + count);
   bool res = false;
   if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
           config().common.typeVisual == conf_visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, title);
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
 //#STOP_GRAB_TO_DV_NAMESPACE

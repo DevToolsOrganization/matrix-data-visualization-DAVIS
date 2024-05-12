@@ -71,9 +71,7 @@ private:
 
 };
 
-Configurator& config(){
-    return Configurator::getInstance();
-};
+Configurator& config();
 
 }
 #endif // CONFIGURATOR_H
