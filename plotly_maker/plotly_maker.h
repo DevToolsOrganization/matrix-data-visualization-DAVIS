@@ -7,6 +7,7 @@
 #include <memory>
 #include <iostream>
 //#STOP_GRAB_TO_INCLUDES_LIST
+#include "../array_core/configurator.h"
 
 namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
@@ -15,7 +16,7 @@ using std::vector;
 
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                std::string& page);
+                                std::string& page, const dv::conf_visualizationTypes& type);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title);
 

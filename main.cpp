@@ -11,6 +11,7 @@
 using std::vector;
 
 int main(int argc, char* argv[]) {
+  /*
   cxxopts::Options options("davis", "data visualization utility");
   options.add_options()
          ("h,help", "davis commands")
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]) {
       }
     }
   }
+  */
   return EXIT_SUCCESS;
 }
 

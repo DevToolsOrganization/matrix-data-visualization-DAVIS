@@ -10,16 +10,16 @@ using std::vector;
 TEST(ArrayCore, configurator){
     EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
     vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-    auto settings = dvs::createShowSettingsHeatMap(dvs::colorscales::GLAMOUR);
+    dv::config().reset();
     dv::commonSettings comS;
     comS.xLabel = "Столбцы";
     comS.yLabel = "Строки";
     dv::config().common = comS;
-    dv::config().heatmap.colorSc = dv::conf_colorscales::SUNNY;
-    dv::show(values, "showHeatMap1");
-    dv::config().reset();
-    dv::show(values, "showHeatMap1");
-    bool result = true;
+    dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
+    bool result1 = dv::show(values, "HeatMap");
+    dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+    bool result2 = dv::show(values, "Surface_with_previous settings");
+    EXPECT_EQ(result1 && result2, true);
 }
 
 TEST(ArrayCore, showDefaultSettings) {
@@ -32,16 +32,16 @@ TEST(ArrayCore, showDefaultSettings) {
 TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = dvs::createShowSettingsHeatMap(dvs::colorscales::GLAMOUR);
-  bool result = dv::show(values, "showHeatMap1", settings.get());
+  dv::config().reset();
+  dv::config().heatmap.colorSc = dv::conf_colorscales::GRAYSCALE;
+  bool result = dv::show(values, "showHeatMap_gray");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showSurface1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto settings = dvs::createShowSettingsSurface();
-  bool result = dv::show(values, "showSurface1", settings.get());
+  bool result = dv::show(values, "showSurface1");
   EXPECT_EQ(result, true);
 }
 

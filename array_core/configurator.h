@@ -23,7 +23,7 @@ enum class conf_colorscales {
 
 struct commonSettings{
     commonSettings():typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y"){}
-    conf_visualizationTypes typeVisual; // мб это не должно быть здесь. Тип должен опредялться автоматически
+    conf_visualizationTypes typeVisual;
     std::string xLabel;
     std::string yLabel;
 };
