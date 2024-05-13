@@ -328,9 +328,7 @@ bool make_string(const string& src,
   return true;
 }
 
-using std::string;
-using std::vector;
-using std::istringstream;
+
 
 bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   size_t size = 0;
@@ -395,9 +393,9 @@ bool createStringLineChartValues(const vector<double>& values,
 }
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const std::string& title,
+                                const string& title,
                                 const dv::conf_visualizationTypes& type) {
-  std::string page;
+  string page;
   if (!createHtmlPageWithPlotlyJS(values, page, type)) {
     return false;
   }
@@ -426,7 +424,7 @@ bool getMatrixValuesFromString(const string& in_values,
 };
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
-                                std::string& page,
+                                string& page,
                                 const dv::conf_visualizationTypes& type) {
   page = kCommonHeadPart;
   page.append(kDivSizePart);
@@ -458,11 +456,6 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       page.append(kColorMapGrayscalePart);
       break;
   }
-  //Вопрос с автотипом.
-  // Если пользователь задает тип AUTO, то по ходу дела алгоритм сам должен понимать, что сейчас отображать
-  // Но этот автоРазбор должен был сделан раньше, чем в этой функции.
-  // Предлагаю: добавить приватный член класса Configurator, в котором будет полe notForUser_visualType.
-  // Это поле заполняется само.
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
       page.append(kHeatMapTypePart);
@@ -478,12 +471,12 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const std::string& title) {
+                          const string &title) {
   return heatmap_and_surface(values, title, dv::conf_visualizationTypes::HEATMAP);
 }
 
-bool showHeatMapInBrowser(const std::string& values,
-                          const std::string& title) {
+bool showHeatMapInBrowser(const string &values,
+                          const string &title) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title);
@@ -523,7 +516,7 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values,
   return heatmap_and_surface(values, title, dv::conf_visualizationTypes::SURFACE);
 }
 
-bool showSurfaceInBrowser(const std::string& values,
+bool showSurfaceInBrowser(const string &values,
                           const string& title) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
@@ -538,6 +531,7 @@ namespace dv {
 Configurator& config() {
   return Configurator::getInstance();
 };
+
 
 
 } // namespace dv end

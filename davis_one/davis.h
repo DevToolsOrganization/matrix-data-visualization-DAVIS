@@ -61,23 +61,25 @@ bool make_string(const string& src,
 bool deleteFolder(const char* fname);
 
 
+using std::string;
 using std::vector;
+using std::istringstream;
 
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                std::string& page, const dv::conf_visualizationTypes& type);
+                                string& page, const dv::conf_visualizationTypes& type);
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title);
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
 
-bool showHeatMapInBrowser(const std::string& values, const std::string& title);
+bool showHeatMapInBrowser(const string& values, const string& title);
 
-bool showLineChartInBrowser(const vector<double>& values, const std::string& title);
+bool showLineChartInBrowser(const vector<double>& values, const string& title);
 
-bool showLineChartInBrowser(const std::string& values, const std::string& title);
+bool showLineChartInBrowser(const string& values, const string& title);
 
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title);
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
 
-bool showSurfaceInBrowser(const std::string& values, const std::string& title);
+bool showSurfaceInBrowser(const string& values, const string& title);
 
 } // namespace dvs end
 namespace dv {
