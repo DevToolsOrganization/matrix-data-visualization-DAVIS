@@ -115,13 +115,13 @@ bool getMatrixValuesFromString(const string& in_values,
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::conf_visualizationTypes& type) {
-  vector<string> args(MAX_ELEMENT,"");
+  vector<string> args(MAX_ELEMENT, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
     return false;
   }
   createStringHeatMapValues(values, str_values);
-  args[VALUES]=str_values;
+  args[VALUES] = str_values;
   dv::conf_colorscales clrScale;
   if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
@@ -129,27 +129,27 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
-      args[COLOR_MAP]=kColorMapDefaultPart;
+      args[COLOR_MAP] = kColorMapDefaultPart;
       break;
     case dv::conf_colorscales::SUNNY:
-      args[COLOR_MAP]=kColorMapSunnyPart;
+      args[COLOR_MAP] = kColorMapSunnyPart;
       break;
     case dv::conf_colorscales::GLAMOUR:
-      args[COLOR_MAP]=kColorMapGlamourPart;
+      args[COLOR_MAP] = kColorMapGlamourPart;
       break;
     case dv::conf_colorscales::THERMAL:
-      args[COLOR_MAP]=kColorMapThermalPart;
+      args[COLOR_MAP] = kColorMapThermalPart;
       break;
     case dv::conf_colorscales::GRAYSCALE:
-      args[COLOR_MAP]=kColorMapGrayscalePart;
+      args[COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
-      args[MATRIX_TYPE]=kHeatMapTypePart;
+      args[MATRIX_TYPE] = kHeatMapTypePart;
       break;
     case dv::conf_visualizationTypes::SURFACE:
-      args[MATRIX_TYPE]=kSurfaceTypePart;
+      args[MATRIX_TYPE] = kSurfaceTypePart;
       break;
     default:
       break;
@@ -177,7 +177,7 @@ bool showHeatMapInBrowser(const string& values,
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
   string page;
-  vector<string>args(MAX_ELEMENT,"");
+  vector<string>args(MAX_ELEMENT, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[VALUES] = str_values;

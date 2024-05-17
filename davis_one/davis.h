@@ -41,6 +41,7 @@ enum class conf_colorscales {
 struct commonSettings {
   commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
   conf_visualizationTypes typeVisual;
+  std::string title;
   std::string xLabel;
   std::string yLabel;
 };
@@ -92,8 +93,16 @@ Configurator& config();
 
 } // namespace dv end
 namespace dvs {
-extern const char kCommonHeadPart[];
-extern const char kDivSizePart[];
+enum ARGS_INDEX {
+  VALUES,     //1
+  COLOR_MAP,  //2
+  MATRIX_TYPE,//3
+  TITLE,      //4
+  TITLE_X,    //5
+  TITLE_Y     //6
+};
+const int MAX_ELEMENT = 6;
+extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
 extern const char kColorMapGlamourPart[];
@@ -101,7 +110,6 @@ extern const char kColorMapThermalPart[];
 extern const char kColorMapGrayscalePart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
-extern const char kCommonLastPart[];
 
 } // namespace dvs end
 
@@ -147,7 +155,8 @@ using std::istringstream;
 
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                string& page, const dv::conf_visualizationTypes& type);
+                                string& page,
+                                const dv::conf_visualizationTypes& type);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
 
