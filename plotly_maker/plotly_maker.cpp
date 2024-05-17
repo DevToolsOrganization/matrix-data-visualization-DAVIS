@@ -116,13 +116,13 @@ bool getMatrixValuesFromString(const string& in_values,
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::conf_visualizationTypes& type) {
-  vector<string> args(MAX_ELEMENT, "");
+  vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
     return false;
   }
   createStringHeatMapValues(values, str_values);
-  args[VALUES] = str_values;
+  args[ARG_VALUES] = str_values;
   dv::conf_colorscales clrScale;
   if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
@@ -130,34 +130,34 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
-      args[COLOR_MAP] = kColorMapDefaultPart;
+      args[ARG_COLOR_MAP] = kColorMapDefaultPart;
       break;
     case dv::conf_colorscales::SUNNY:
-      args[COLOR_MAP] = kColorMapSunnyPart;
+      args[ARG_COLOR_MAP] = kColorMapSunnyPart;
       break;
     case dv::conf_colorscales::GLAMOUR:
-      args[COLOR_MAP] = kColorMapGlamourPart;
+      args[ARG_COLOR_MAP] = kColorMapGlamourPart;
       break;
     case dv::conf_colorscales::THERMAL:
-      args[COLOR_MAP] = kColorMapThermalPart;
+      args[ARG_COLOR_MAP] = kColorMapThermalPart;
       break;
     case dv::conf_colorscales::GRAYSCALE:
-      args[COLOR_MAP] = kColorMapGrayscalePart;
+      args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
-      args[MATRIX_TYPE] = kHeatMapTypePart;
+      args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       break;
     case dv::conf_visualizationTypes::SURFACE:
-      args[MATRIX_TYPE] = kSurfaceTypePart;
+      args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
       break;
     default:
       break;
   }
-  args[TITLE] = dv::config().common.title;
-  args[TITLE_X] = dv::config().common.xLabel;
-  args[TITLE_Y] = dv::config().common.yLabel;
+  args[ARG_TITLE] = dv::config().common.title;
+  args[ARG_TITLE_X] = dv::config().common.xLabel;
+  args[ARG_TITLE_Y] = dv::config().common.yLabel;
   make_string(kHtmlModel, args, page);
   return true;
 }
@@ -179,13 +179,13 @@ bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
   dv::config().common.title = title;
   string page;
-  vector<string>args(MAX_ELEMENT, "");
+  vector<string>args(ARGS_SIZE, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
-  args[VALUES] = str_values;
-  args[TITLE] = dv::config().common.title;
-  args[TITLE_X] = dv::config().common.xLabel;
-  args[TITLE_Y] = dv::config().common.yLabel;
+  args[ARG_VALUES] = str_values;
+  args[ARG_TITLE] = dv::config().common.title;
+  args[ARG_TITLE_X] = dv::config().common.xLabel;
+  args[ARG_TITLE_Y] = dv::config().common.yLabel;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();

@@ -4,14 +4,15 @@
 namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
 enum ARGS_INDEX {
-  VALUES,     //1
-  COLOR_MAP,  //2
-  MATRIX_TYPE,//3
-  TITLE,      //4
-  TITLE_X,    //5
-  TITLE_Y     //6
+  ARG_VALUES,     //%1
+  ARG_COLOR_MAP,  //%2
+  ARG_MATRIX_TYPE,//%3
+  ARG_TITLE,      //%4
+  ARG_TITLE_X,    //%5
+  ARG_TITLE_Y ,   //%6
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_SIZE
 };
-const int MAX_ELEMENT = 6;
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
