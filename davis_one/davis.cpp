@@ -427,6 +427,7 @@ bool createStringLineChartValues(const vector<double>& values,
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
                                 const dv::conf_visualizationTypes& type) {
+  dv::config().common.title = title;
   string page;
   if (!createHtmlPageWithPlotlyJS(values, page, type)) {
     return false;
@@ -519,12 +520,13 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
+  dv::config().common.title = title;
   string page;
   vector<string>args(MAX_ELEMENT, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[VALUES] = str_values;
-  args[TITLE] = title;
+  args[TITLE] = dv::config().common.title;
   args[TITLE_X] = dv::config().common.xLabel;
   args[TITLE_Y] = dv::config().common.yLabel;
   make_string(kHtmlModel, args, page);
