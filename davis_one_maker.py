@@ -20,19 +20,19 @@ START_DAVIS_CPP = """#include "davis.h"
 START_NAME_SPACE_DAVIS = """namespace dvs {
 """
 END_NAME_SPACE_DAVIS = """
-} // namespace dvs end
+} // namespace dvs end\n
 """
 
 START_NAME_SPACE_PUBLIC_DAVIS = """namespace dv {
 """
 END_NAME_SPACE_PUBLIC_DAVIS = """
-} // namespace dv end"""
+} // namespace dv end\n"""
 
 START_NAME_SPACE = """namespace {
 """
 END_NAME_SPACE = """
-}// namespace end
-"""
+}// namespace end\n"""
+
 OUTPUT_H_FILE_NAME = "davis_one/davis.h"
 OUTPUT_CPP_FILE_NAME = "davis_one/davis.cpp"
 SRC_LIST_FILE = "davis_files.txt"
@@ -56,13 +56,18 @@ def grab_namespace_code(namespace_text_start,
                         namespace_text_end,
                         start_grab_text,
                         stop_grab_text,
-                        files):
-  file_h.write(namespace_text_start)
-  file_cpp.write(namespace_text_start)
+                        file):
+  #for el in files:
+  all_text = open(file).read()
+  if not start_grab_text in all_text:
+     return
+  if '.h' in file:
+     file_h.write(namespace_text_start)
+  if '.cpp' in file:
+     file_cpp.write(namespace_text_start)
   is_grab_davis = False
-  for el in files:
-       file_src = open(el).read().splitlines()
-       for f in file_src:
+  file_src = all_text.splitlines()
+  for f in file_src:
          if start_grab_text in f:
             is_grab_davis = True
             continue
@@ -70,12 +75,14 @@ def grab_namespace_code(namespace_text_start,
             is_grab_davis = False
             continue
          if is_grab_davis:
-            if '.h' in el:
+            if '.h' in file:
               file_h.write(f + "\n")
-            if '.cpp' in el:
+            if '.cpp' in file:
               file_cpp.write(f + "\n")
-  file_h.write(namespace_text_end)
-  file_cpp.write(namespace_text_end)
+  if '.h' in file:
+      file_h.write(namespace_text_end)
+  if '.cpp' in file:
+      file_cpp.write(namespace_text_end)
 
 print("""
 ########################################
@@ -128,23 +135,24 @@ for cpps in sorted_cpp_includes:
  print(cpps)
  file_cpp.write(cpps+"\n")
 
-grab_namespace_code(START_NAME_SPACE,
-                    END_NAME_SPACE,
-                    START_GRAB_NAMESPACE,
-                    STOP_GRAB_NAMESPACE,
-                    file_src_list)
+for file in file_src_list:
+    grab_namespace_code(START_NAME_SPACE,
+                        END_NAME_SPACE,
+                        START_GRAB_NAMESPACE,
+                        STOP_GRAB_NAMESPACE,
+                        file)
 
-grab_namespace_code(START_NAME_SPACE_DAVIS,
-                    END_NAME_SPACE_DAVIS,
-                    START_GRAB_DAVIS_NAMESPACE,
-                    STOP_GRAB_DAVIS_NAMESPACE,
-                    file_src_list)
+    grab_namespace_code(START_NAME_SPACE_DAVIS,
+                        END_NAME_SPACE_DAVIS,
+                        START_GRAB_DAVIS_NAMESPACE,
+                        STOP_GRAB_DAVIS_NAMESPACE,
+                        file)
 
-grab_namespace_code(START_NAME_SPACE_PUBLIC_DAVIS,
-                    END_NAME_SPACE_PUBLIC_DAVIS,
-                    START_GRAB_PUBLIC_DAVIS_NAMESPACE,
-                    STOP_GRAB_PUBLIC_DAVIS_NAMESPACE,
-                    file_src_list)
+    grab_namespace_code(START_NAME_SPACE_PUBLIC_DAVIS,
+                        END_NAME_SPACE_PUBLIC_DAVIS,
+                        START_GRAB_PUBLIC_DAVIS_NAMESPACE,
+                        STOP_GRAB_PUBLIC_DAVIS_NAMESPACE,
+                        file)
 
 
 file_h.write(END_DAVIS_H) #DAVIS HEADER_GUARD END

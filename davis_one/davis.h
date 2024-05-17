@@ -11,77 +11,15 @@
 #include <memory>
 #include <string>
 #include <vector>
-namespace {
-
-}// namespace end
 namespace dvs {
 extern const char kAppName[];
 extern const char kOutFolderName[];
 extern const char kPlotlyJsName[];
 extern const char kPlotlyJsResourcePath[];
 extern const char kPlotlyJsWorkPath[];
-extern const char kCommonHeadPart[];
-extern const char kDivSizePart[];
-extern const char kColorMapDefaultPart[];
-extern const char kColorMapSunnyPart[];
-extern const char kColorMapGlamourPart[];
-extern const char kColorMapThermalPart[];
-extern const char kColorMapGrayscalePart[];
-extern const char kHeatMapTypePart[];
-extern const char kSurfaceTypePart[];
-extern const char kCommonLastPart[];
-using std::string;
-using std::vector;
-
-string getCurrentPath();
-
-bool isPlotlyScriptExists();
-
-bool saveStringToFile(const string& file_name,
-                      const string& data);
-
-void mayBeCreateJsWorkingFolder();
-
-void sleepMs(unsigned long milisec);
-
-void openPlotlyHtml(const string& file_name);
-
-bool getDataFromFile(const string& path, string& result);
-
-vector<string> split(const string& target, char c);
-
-bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
-
-
-bool make_string(const string& src,
-                 const vector<string>& args,
-                 string& out);
-
-// Now it doesn't work.
-bool deleteFolder(const char* fname);
-
-
-using std::string;
-using std::vector;
-using std::istringstream;
-
-
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                string& page, const dv::conf_visualizationTypes& type);
-
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
-
-bool showHeatMapInBrowser(const string& values, const string& title);
-
-bool showLineChartInBrowser(const vector<double>& values, const string& title);
-
-bool showLineChartInBrowser(const string& values, const string& title);
-
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
-
-bool showSurfaceInBrowser(const string& values, const string& title);
 
 } // namespace dvs end
+
 namespace dv {
 
 enum class conf_visualizationTypes {
@@ -151,6 +89,81 @@ class Configurator {
 
 Configurator& config();
 
+
+} // namespace dv end
+namespace dvs {
+extern const char kCommonHeadPart[];
+extern const char kDivSizePart[];
+extern const char kColorMapDefaultPart[];
+extern const char kColorMapSunnyPart[];
+extern const char kColorMapGlamourPart[];
+extern const char kColorMapThermalPart[];
+extern const char kColorMapGrayscalePart[];
+extern const char kHeatMapTypePart[];
+extern const char kSurfaceTypePart[];
+extern const char kCommonLastPart[];
+
+} // namespace dvs end
+
+namespace dvs {
+using std::string;
+using std::vector;
+
+string getCurrentPath();
+
+bool isPlotlyScriptExists();
+
+bool saveStringToFile(const string& file_name,
+                      const string& data);
+
+void mayBeCreateJsWorkingFolder();
+
+void sleepMs(unsigned long milisec);
+
+void openPlotlyHtml(const string& file_name);
+
+bool getDataFromFile(const string& path, string& result);
+
+vector<string> split(const string& target, char c);
+
+bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
+
+
+bool make_string(const string& src,
+                 const vector<string>& args,
+                 string& out);
+
+// Now it doesn't work.
+bool deleteFolder(const char* fname);
+
+
+} // namespace dvs end
+
+namespace dvs {
+
+using std::string;
+using std::vector;
+using std::istringstream;
+
+
+bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
+                                string& page, const dv::conf_visualizationTypes& type);
+
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
+
+bool showHeatMapInBrowser(const string& values, const string& title);
+
+bool showLineChartInBrowser(const vector<double>& values, const string& title);
+
+bool showLineChartInBrowser(const string& values, const string& title);
+
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
+
+bool showSurfaceInBrowser(const string& values, const string& title);
+
+} // namespace dvs end
+
+namespace dv {
 
 
 
@@ -256,4 +269,5 @@ bool show(const T* data, uint64_t count, const string& htmlPageName) {
 }
 
 } // namespace dv end
+
 #endif // DAVIS_H_
