@@ -115,14 +115,13 @@ bool getMatrixValuesFromString(const string& in_values,
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::conf_visualizationTypes& type) {
-  page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  vector<string> args;
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
     return false;
   }
   createStringHeatMapValues(values, str_values);
-  page.append(str_values);
+  args.push_back(str_values);
   dv::conf_colorscales clrScale;
   if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
@@ -130,32 +129,32 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
-      page.append(kColorMapDefaultPart);
+      args.push_back(kColorMapDefaultPart);
       break;
     case dv::conf_colorscales::SUNNY:
-      page.append(kColorMapSunnyPart);
+      args.push_back(kColorMapSunnyPart);
       break;
     case dv::conf_colorscales::GLAMOUR:
-      page.append(kColorMapGlamourPart);
+      args.push_back(kColorMapGlamourPart);
       break;
     case dv::conf_colorscales::THERMAL:
-      page.append(kColorMapThermalPart);
+      args.push_back(kColorMapThermalPart);
       break;
     case dv::conf_colorscales::GRAYSCALE:
-      page.append(kColorMapGrayscalePart);
+      args.push_back(kColorMapGrayscalePart);
       break;
   }
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
-      page.append(kHeatMapTypePart);
+      args.push_back(kHeatMapTypePart);
       break;
     case dv::conf_visualizationTypes::SURFACE:
-      page.append(kSurfaceTypePart);
+      args.push_back(kSurfaceTypePart);
       break;
     default:
       break;
   }
-  page.append(kCommonLastPart);
+  make_string(kHtmlModel, args, page);
   return true;
 }
 
@@ -174,12 +173,14 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
-  string page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  string page;
+  vector<string>args;
   string str_values = "";
   createStringLineChartValues(values, str_values);
-  page.append(str_values);
-  page.append(kCommonLastPart);
+  args.push_back(str_values);
+  args.push_back("");
+  args.push_back("");
+  make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
