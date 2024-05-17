@@ -11,15 +11,25 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
-namespace {
-
-}// namespace end
 namespace dvs {
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
 const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.27.0.min.js";
 const char kPlotlyJsName[] = "plotly-2.27.0.min.js";
 const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.27.0.min.js";
+
+} // namespace dvs end
+
+namespace dv {
+
+Configurator& config() {
+  return Configurator::getInstance();
+};
+
+
+
+} // namespace dv end
+namespace dvs {
 // *INDENT-OFF*
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -107,6 +117,10 @@ Plotly.newPlot('gd', data, layout, config);
 </body>)";
 
 // *INDENT-ON*
+
+} // namespace dvs end
+
+namespace dvs {
 using std::string;
 
 #ifdef _WIN32
@@ -328,6 +342,10 @@ bool make_string(const string& src,
   return true;
 }
 
+} // namespace dvs end
+
+namespace dvs {
+
 
 
 bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
@@ -526,12 +544,4 @@ bool showSurfaceInBrowser(const string &values,
 
 
 } // namespace dvs end
-namespace dv {
 
-Configurator& config() {
-  return Configurator::getInstance();
-};
-
-
-
-} // namespace dv end
