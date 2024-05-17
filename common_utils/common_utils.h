@@ -9,7 +9,7 @@
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
-//#START_GRAB_TO_NAMESPACE
+//#START_GRAB_TO_DVS_NAMESPACE
 using std::string;
 using std::vector;
 
@@ -40,7 +40,7 @@ bool make_string(const string& src,
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
-//#STOP_GRAB_TO_NAMESPACE
+//#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
 #endif // COMMON_UTILS_COMMON_UTILS_H_

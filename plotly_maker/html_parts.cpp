@@ -1,7 +1,7 @@
 #include "html_parts.h"
 
 namespace dvs {
-//#START_GRAB_TO_NAMESPACE
+//#START_GRAB_TO_DVS_NAMESPACE
 // *INDENT-OFF*
     const char kDivSizePart[] = R"(<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -89,5 +89,5 @@ Plotly.newPlot('gd', data, layout, config);
 </body>)";
 
 // *INDENT-ON*
-//#STOP_GRAB_TO_NAMESPACE
+//#STOP_GRAB_TO_DVS_NAMESPACE
 } // namespace dvs

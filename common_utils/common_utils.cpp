@@ -10,8 +10,8 @@
 #include <limits.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
-namespace {
-//#START_GRAB_TO_NAMESPACE
+namespace dvs {
+//#START_GRAB_TO_DVS_NAMESPACE
 using std::string;
 
 #ifdef _WIN32
@@ -44,11 +44,7 @@ void openFileBySystem(const string& file_name) {
   command.append(file_name);
   system(command.c_str());
 }
-//#STOP_GRAB_TO_NAMESPACE
-} // namespace
 
-namespace dvs {
-//#START_GRAB_TO_NAMESPACE
 string getCurrentPath() {
 #if defined (_WIN32) || (__linux__)
   char buffer[1024];
@@ -236,5 +232,5 @@ bool make_string(const string& src,
   //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
 }
-//#STOP_GRAB_TO_NAMESPACE
+//#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

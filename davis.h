@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdlib>
 #include "plotly_maker/plotly_maker.h"
+#include "array_core/configurator.h"
 
 namespace {
 
@@ -32,12 +33,11 @@ void makeStringFromValues(const vector<double> in_values,
   }
 
 }
-void makeArgs(const dvs::ShowSettings* settings,
-              const vector<vector<double>>& values, string& out) {
-  switch (settings->getVisualType()) {
-    case dvs::visualizationTypes::CHART:
+void makeArgs(const vector<vector<double>>& values, string& out) {
+  switch (dv::Configurator::getInstance().common.typeVisual) {
+    case dv::conf_visualizationTypes::CHART:
       break;
-    case dvs::visualizationTypes::HEATMAP:
+    case dv::conf_visualizationTypes::HEATMAP:
       //duplicated code
       out.append(davis);
       out.append(command_heatmap);
@@ -49,7 +49,7 @@ void makeArgs(const dvs::ShowSettings* settings,
       }
       out.append(postfix);
       break;
-    case dvs::visualizationTypes::SURFACE:
+    case dv::conf_visualizationTypes::SURFACE:
       //duplicated code
       out.append(davis);
       out.append(command_surface);
@@ -61,23 +61,26 @@ void makeArgs(const dvs::ShowSettings* settings,
       }
       out.append(postfix);
       break;
+    default:
+      break;
   }
 }
 
-void makeArgs(const dvs::ShowSettings* settings,
-              vector<double>& values, string& out) {
+void makeArgs(vector<double>& values, string& out) {
 
-  switch (settings->getVisualType()) {
-    case dvs::visualizationTypes::CHART:
+  switch (dv::Configurator::getInstance().common.typeVisual) {
+    case dv::conf_visualizationTypes::CHART:
       out.append(davis);
       out.append(command_line_chart);
       out.append(prefix);
       makeStringFromValues(values, out);
       out.append(postfix);
       break;
-    case dvs::visualizationTypes::HEATMAP:
+    case dv::conf_visualizationTypes::HEATMAP:
       break;
-    case dvs::visualizationTypes::SURFACE:
+    case dv::conf_visualizationTypes::SURFACE:
+      break;
+    default:
       break;
   }
 }
@@ -86,18 +89,18 @@ void makeArgs(const dvs::ShowSettings* settings,
 
 namespace dv {
 
-void show(vector<vector<double>>& values, const dvs::ShowSettings* settings);
-void show(vector<double>& values, const dvs::ShowSettings* settings);
+void show(vector<vector<double>>& values);
+void show(vector<double>& values);
 
-void show(vector<vector<double>>& values, const dvs::ShowSettings* settings) {
+void show(vector<vector<double>>& values) {
   string args;
-  makeArgs(settings, values, args);
+  makeArgs(values, args);
   runDavisBySystem(args);
 }
 
-void show(vector<double>& values, const dvs::ShowSettings* settings) {
+void show(vector<double>& values) {
   string args;
-  makeArgs(settings, values, args);
+  makeArgs(values, args);
   runDavisBySystem(args);
 }
 }

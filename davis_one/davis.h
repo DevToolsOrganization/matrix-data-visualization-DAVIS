@@ -5,11 +5,16 @@
 #ifndef DAVIS_H_
 #define DAVIS_H_
 
+#include <algorithm>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 namespace {
+
+}// namespace end
+namespace dvs {
 extern const char kAppName[];
 extern const char kOutFolderName[];
 extern const char kPlotlyJsName[];
@@ -21,6 +26,7 @@ extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
 extern const char kColorMapGlamourPart[];
 extern const char kColorMapThermalPart[];
+extern const char kColorMapGrayscalePart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kCommonLastPart[];
@@ -47,91 +53,106 @@ vector<string> split(const string& target, char c);
 bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
 
 
+bool make_string(const string& src,
+                 const vector<string>& args,
+                 string& out);
+
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
 
-}// namespace end
-namespace dvs {
-
+using std::string;
 using std::vector;
+using std::istringstream;
 
-enum class visualizationTypes {
+
+bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
+                                string& page, const dv::conf_visualizationTypes& type);
+
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
+
+bool showHeatMapInBrowser(const string& values, const string& title);
+
+bool showLineChartInBrowser(const vector<double>& values, const string& title);
+
+bool showLineChartInBrowser(const string& values, const string& title);
+
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
+
+bool showSurfaceInBrowser(const string& values, const string& title);
+
+} // namespace dvs end
+namespace dv {
+
+enum class conf_visualizationTypes {
+  AUTO, //if user not forces some specific type it will be recognized by context
   CHART,
   HEATMAP,
   SURFACE
 };
 
-enum class colorscales {
+enum class conf_colorscales {
   DEFAULT,
   SUNNY,
   GLAMOUR,
-  THERMAL
+  THERMAL,
+  GRAYSCALE
 };
 
-class ShowSettings {
- public:
-  virtual ~ShowSettings() {}
-  visualizationTypes getVisualType() const;
 
- protected:
-  visualizationTypes visualType;
+struct commonSettings {
+  commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
+  conf_visualizationTypes typeVisual;
+  std::string xLabel;
+  std::string yLabel;
 };
 
-class ShowSettingsHeatMap : public ShowSettings {
+struct chartSettings {
+
+};
+
+struct heatMapSettings {
+  heatMapSettings(): colorSc(conf_colorscales::DEFAULT) {}
+  conf_colorscales colorSc;
+};
+
+struct surfaceSettings {
+  surfaceSettings(): colorSc(conf_colorscales::DEFAULT), zLabel("Z") {}
+  conf_colorscales colorSc;
+  std::string zLabel;
+};
+
+
+class Configurator {
  public:
-  ShowSettingsHeatMap(colorscales color = colorscales::DEFAULT) {
-    visualType = visualizationTypes::HEATMAP;
-    colorScale = color;
+  static Configurator& getInstance() {
+    static Configurator instance;
+    return instance;
   }
-  colorscales colorScale;
+  Configurator(Configurator const&)   = delete;
+  void operator=(Configurator const&) = delete;
+
+  void reset() { //to default settings
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
+
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
+
+ private:
+  Configurator() {};
+
 };
 
-class ShowSettingsSurface : public ShowSettings {
- public:
-  ShowSettingsSurface(colorscales color = colorscales::DEFAULT) {
-    visualType = visualizationTypes::SURFACE;
-    colorScale = color;
-  }
-  colorscales colorScale;
-};
+Configurator& config();
 
-class ShowSettingsChart : public ShowSettings {
- public:
-  ShowSettingsChart() {
-    visualType = visualizationTypes::CHART;
-  }
-};
 
-std::unique_ptr<ShowSettingsHeatMap> createShowSettingsHeatMap(colorscales color = colorscales::DEFAULT);
-std::unique_ptr<ShowSettingsSurface> createShowSettingsSurface(colorscales color = colorscales::DEFAULT);
-std::unique_ptr<ShowSettingsChart> createShowSettingsChart();
 
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                std::string& page,
-                                const visualizationTypes& visualType,
-                                const colorscales& colorscale);
-
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const std::string& title,
-                          const ShowSettingsHeatMap* settings);
-
-bool showHeatMapInBrowser(const std::string& values, const std::string& title,
-                          const ShowSettingsHeatMap* settings);
-
-bool showLineChartInBrowser(const vector<double>& values, const std::string& title,
-                            const ShowSettingsChart* settings);
-
-bool showLineChartInBrowser(const std::string& values, const std::string& title,
-                            const ShowSettingsChart* settings);
-
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const std::string& title,
-                          const ShowSettingsSurface* settings);
-
-bool showSurfaceInBrowser(const std::string& values, const std::string& title,
-                          const ShowSettingsSurface* settings);
-
-} // namespace dvs end
-namespace dv {
 
 using std::vector;
 using std::string;
@@ -139,36 +160,32 @@ using std::string;
 
 //! two-dimensional vector
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& title = dvs::kAppName,
-          dvs::ShowSettings* settings = nullptr);
+bool show(const vector<vector<T>>& data, const string& htmlPageName = dvs::kAppName);
 
 //! two-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const string& title = dvs::kAppName,  dvs::ShowSettings* settings = nullptr);
+          const string& htmlPageName = dvs::kAppName);
 
 //! a one-dimensional array that simulates a two-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const string& title = dvs::kAppName,  dvs::ShowSettings* settings = nullptr);
+          const string& htmlPageName = dvs::kAppName);
 
 //! one-dimensional vector
 template <typename T>
-bool show(const vector<T>& data, const string& title = dvs::kAppName,
-          dvs::ShowSettings* settings = nullptr);
+bool show(const vector<T>& data, const string& htmlPageName = dvs::kAppName);
 
 //! one-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const string& title = dvs::kAppName,
-          dvs::ShowSettings* settings = nullptr);
+bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName);
 
 // ***********************************
 // template functions implementations:
 // ***********************************
 
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& title,
-          dvs::ShowSettings *settings) {
+bool show(const vector<vector<T>>& data, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(data.size());
   for (vector<T> row : data) {
@@ -176,21 +193,16 @@ bool show(const vector<vector<T>>& data, const string& title,
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  std::unique_ptr<dvs::ShowSettings> smartP; //Smart pointer for auto deleting settings if it will be created bellow via NEW
-  if (settings == nullptr) {
-    settings = new dvs::ShowSettingsHeatMap();
-    smartP.reset(settings);
-  }
-  if (settings->getVisualType() == dvs::visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == dvs::visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsSurface*>(settings));
+  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& title,
-          dvs::ShowSettings *settings) {
+bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -198,21 +210,16 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& title,
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  std::unique_ptr<dvs::ShowSettings> smartP; //Smart pointer for auto deleting settings if it will be created bellow via NEW
-  if (settings == nullptr) {
-    settings = new dvs::ShowSettingsHeatMap();
-    smartP.reset(settings);
-  }
-  if (settings->getVisualType() == dvs::visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == dvs::visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsSurface*>(settings));
+  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& title,
-          dvs::ShowSettings *settings) {
+bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -220,45 +227,31 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& title
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  std::unique_ptr<dvs::ShowSettings> smartP; //Smart pointer for auto deleting settings if it will be created bellow via NEW
-  if (settings == nullptr) {
-    settings = new dvs::ShowSettingsHeatMap();
-    smartP.reset(settings);
-  }
-  if (settings->getVisualType() == dvs::visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsHeatMap*>(settings));
-  else if (settings->getVisualType() == dvs::visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, title, static_cast<const dvs::ShowSettingsSurface*>(settings));
+  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
+      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
+  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const vector<T>& data, const string& title,
-          dvs::ShowSettings* settings) {
+bool show(const vector<T>& data, const string& htmlPageName) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
-  std::unique_ptr<dvs::ShowSettings> smartP; //Smart pointer for auto deleting settings if it will be created bellow via NEW
-  if (settings == nullptr) {
-    settings = new dvs::ShowSettingsChart();
-    smartP.reset(settings);
-  }
-  if (settings->getVisualType() == dvs::visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, title, static_cast<const dvs::ShowSettingsChart*>(settings));
+  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
+      config().common.typeVisual == conf_visualizationTypes::CHART)
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t count, const string& title,
-          dvs::ShowSettings *settings) {
+bool show(const T* data, uint64_t count, const string& htmlPageName) {
   vector<double> dblRow(data, data + count);
   bool res = false;
-  std::unique_ptr<dvs::ShowSettings> smartP; //Smart pointer for auto deleting settings if it will be created bellow via NEW
-  if (settings == nullptr) {
-    settings = new dvs::ShowSettingsChart();
-    smartP.reset(settings);
-  }
-  if (settings->getVisualType() == dvs::visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, title, static_cast<const dvs::ShowSettingsChart*>(settings));
+  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
+      config().common.typeVisual == conf_visualizationTypes::CHART)
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
 
