@@ -160,12 +160,12 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const string &title) {
+                          const string& title) {
   return heatmap_and_surface(values, title, dv::conf_visualizationTypes::HEATMAP);
 }
 
-bool showHeatMapInBrowser(const string &values,
-                          const string &title) {
+bool showHeatMapInBrowser(const string& values,
+                          const string& title) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title);
@@ -205,7 +205,7 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values,
   return heatmap_and_surface(values, title, dv::conf_visualizationTypes::SURFACE);
 }
 
-bool showSurfaceInBrowser(const string &values,
+bool showSurfaceInBrowser(const string& values,
                           const string& title) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
