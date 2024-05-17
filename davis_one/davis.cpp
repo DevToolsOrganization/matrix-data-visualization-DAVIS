@@ -31,17 +31,43 @@ Configurator& config() {
 } // namespace dv end
 namespace dvs {
 // *INDENT-OFF*
-    const char kDivSizePart[] = R"(<div style = "display: flex;
+    const char kHtmlModel[] =
+R"(
+<head>
+<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
+</head>
+<body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
 id="gd"></div></div>
 <script>
+%1
+%2
+%3
+var layout = {
+  title: {
+    text:'%4'
+  },
+  xaxis: {
+    title: {
+      text: '%5'
+    },
+  },
+  yaxis: {
+    title: {
+      text: '%6'
+    }
+  }
+};
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+Plotly.newPlot('gd', data, layout, config);
+</script>
+</body>
 )";
-
-    const char kCommonHeadPart[] = R"(<head>
-<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
-</head>
-<body>)";
 
     const char kColorMapDefaultPart[] = R"(
   colorscale: [
@@ -104,18 +130,6 @@ hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
 type: 'surface',
 hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>'
 }];)";
-
-    const char kCommonLastPart[] = R"(
-var layout;
-var config = {
-  editable: true,
-  showLink: true,
-  plotlyServerURL: "https://chart-studio.plotly.com"
-};
-Plotly.newPlot('gd', data, layout, config);
-</script>
-</body>)";
-
 // *INDENT-ON*
 
 } // namespace dvs end
@@ -413,6 +427,7 @@ bool createStringLineChartValues(const vector<double>& values,
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
                                 const dv::conf_visualizationTypes& type) {
+  dv::config().common.title = title;
   string page;
   if (!createHtmlPageWithPlotlyJS(values, page, type)) {
     return false;
@@ -444,14 +459,13 @@ bool getMatrixValuesFromString(const string& in_values,
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::conf_visualizationTypes& type) {
-  page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  vector<string> args(MAX_ELEMENT, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
     return false;
   }
   createStringHeatMapValues(values, str_values);
-  page.append(str_values);
+  args[VALUES] = str_values;
   dv::conf_colorscales clrScale;
   if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
@@ -459,32 +473,35 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
-      page.append(kColorMapDefaultPart);
+      args[COLOR_MAP] = kColorMapDefaultPart;
       break;
     case dv::conf_colorscales::SUNNY:
-      page.append(kColorMapSunnyPart);
+      args[COLOR_MAP] = kColorMapSunnyPart;
       break;
     case dv::conf_colorscales::GLAMOUR:
-      page.append(kColorMapGlamourPart);
+      args[COLOR_MAP] = kColorMapGlamourPart;
       break;
     case dv::conf_colorscales::THERMAL:
-      page.append(kColorMapThermalPart);
+      args[COLOR_MAP] = kColorMapThermalPart;
       break;
     case dv::conf_colorscales::GRAYSCALE:
-      page.append(kColorMapGrayscalePart);
+      args[COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
-      page.append(kHeatMapTypePart);
+      args[MATRIX_TYPE] = kHeatMapTypePart;
       break;
     case dv::conf_visualizationTypes::SURFACE:
-      page.append(kSurfaceTypePart);
+      args[MATRIX_TYPE] = kSurfaceTypePart;
       break;
     default:
       break;
   }
-  page.append(kCommonLastPart);
+  args[TITLE] = dv::config().common.title;
+  args[TITLE_X] = dv::config().common.xLabel;
+  args[TITLE_Y] = dv::config().common.yLabel;
+  make_string(kHtmlModel, args, page);
   return true;
 }
 
@@ -503,12 +520,16 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
-  string page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  dv::config().common.title = title;
+  string page;
+  vector<string>args(MAX_ELEMENT, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
-  page.append(str_values);
-  page.append(kCommonLastPart);
+  args[VALUES] = str_values;
+  args[TITLE] = dv::config().common.title;
+  args[TITLE_X] = dv::config().common.xLabel;
+  args[TITLE_Y] = dv::config().common.yLabel;
+  make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");

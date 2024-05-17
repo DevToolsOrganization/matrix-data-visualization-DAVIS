@@ -24,6 +24,7 @@ enum class conf_colorscales {
 struct commonSettings {
   commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
   conf_visualizationTypes typeVisual;
+  std::string title;
   std::string xLabel;
   std::string yLabel;
 };

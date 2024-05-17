@@ -14,6 +14,7 @@ TEST(ArrayCore, configurator) {
   dv::commonSettings comS;
   comS.xLabel = "Столбцы";
   comS.yLabel = "Строки";
+  comS.title = "Тестовая матрица";
   dv::config().common = comS;
   dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
   bool result1 = dv::show(values, "HeatMap");
@@ -33,6 +34,7 @@ TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   dv::config().reset();
+  dv::config().common.title = "Black & White TEST MATRIX";
   dv::config().heatmap.colorSc = dv::conf_colorscales::GRAYSCALE;
   bool result = dv::show(values, "showHeatMap_gray");
   EXPECT_EQ(result, true);

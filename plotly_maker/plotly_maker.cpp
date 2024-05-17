@@ -84,6 +84,7 @@ bool createStringLineChartValues(const vector<double>& values,
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
                                 const dv::conf_visualizationTypes& type) {
+  dv::config().common.title = title;
   string page;
   if (!createHtmlPageWithPlotlyJS(values, page, type)) {
     return false;
@@ -115,14 +116,13 @@ bool getMatrixValuesFromString(const string& in_values,
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::conf_visualizationTypes& type) {
-  page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
     return false;
   }
   createStringHeatMapValues(values, str_values);
-  page.append(str_values);
+  args[ARG_VALUES] = str_values;
   dv::conf_colorscales clrScale;
   if (type == dv::conf_visualizationTypes::HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
@@ -130,32 +130,35 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
     case dv::conf_colorscales::DEFAULT:
-      page.append(kColorMapDefaultPart);
+      args[ARG_COLOR_MAP] = kColorMapDefaultPart;
       break;
     case dv::conf_colorscales::SUNNY:
-      page.append(kColorMapSunnyPart);
+      args[ARG_COLOR_MAP] = kColorMapSunnyPart;
       break;
     case dv::conf_colorscales::GLAMOUR:
-      page.append(kColorMapGlamourPart);
+      args[ARG_COLOR_MAP] = kColorMapGlamourPart;
       break;
     case dv::conf_colorscales::THERMAL:
-      page.append(kColorMapThermalPart);
+      args[ARG_COLOR_MAP] = kColorMapThermalPart;
       break;
     case dv::conf_colorscales::GRAYSCALE:
-      page.append(kColorMapGrayscalePart);
+      args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
   switch (type) {
     case dv::conf_visualizationTypes::HEATMAP:
-      page.append(kHeatMapTypePart);
+      args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       break;
     case dv::conf_visualizationTypes::SURFACE:
-      page.append(kSurfaceTypePart);
+      args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
       break;
     default:
       break;
   }
-  page.append(kCommonLastPart);
+  args[ARG_TITLE] = dv::config().common.title;
+  args[ARG_TITLE_X] = dv::config().common.xLabel;
+  args[ARG_TITLE_Y] = dv::config().common.yLabel;
+  make_string(kHtmlModel, args, page);
   return true;
 }
 
@@ -174,12 +177,16 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title) {
-  string page = kCommonHeadPart;
-  page.append(kDivSizePart);
+  dv::config().common.title = title;
+  string page;
+  vector<string>args(ARGS_SIZE, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
-  page.append(str_values);
-  page.append(kCommonLastPart);
+  args[ARG_VALUES] = str_values;
+  args[ARG_TITLE] = dv::config().common.title;
+  args[ARG_TITLE_X] = dv::config().common.xLabel;
+  args[ARG_TITLE_Y] = dv::config().common.yLabel;
+  make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");

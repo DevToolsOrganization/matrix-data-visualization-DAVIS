@@ -7,7 +7,9 @@ using std::string;
 TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "test_page";
-  bool result = dvs::createHtmlPageWithPlotlyJS(testValues, str_page, dv::conf_visualizationTypes::HEATMAP);
+  bool result = dvs::createHtmlPageWithPlotlyJS(testValues,
+                                                str_page,
+                                                dv::conf_visualizationTypes::HEATMAP);
   std::ofstream out("example.html");
   if (out.is_open()) {
     out << str_page.c_str();

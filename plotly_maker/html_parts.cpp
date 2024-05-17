@@ -3,17 +3,43 @@
 namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
 // *INDENT-OFF*
-    const char kDivSizePart[] = R"(<div style = "display: flex;
+    const char kHtmlModel[] =
+R"(
+<head>
+<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
+</head>
+<body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
 id="gd"></div></div>
 <script>
+%1
+%2
+%3
+var layout = {
+  title: {
+    text:'%4'
+  },
+  xaxis: {
+    title: {
+      text: '%5'
+    },
+  },
+  yaxis: {
+    title: {
+      text: '%6'
+    }
+  }
+};
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+Plotly.newPlot('gd', data, layout, config);
+</script>
+</body>
 )";
-
-    const char kCommonHeadPart[] = R"(<head>
-<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
-</head>
-<body>)";
 
     const char kColorMapDefaultPart[] = R"(
   colorscale: [
@@ -76,18 +102,6 @@ hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
 type: 'surface',
 hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>'
 }];)";
-
-    const char kCommonLastPart[] = R"(
-var layout;
-var config = {
-  editable: true,
-  showLink: true,
-  plotlyServerURL: "https://chart-studio.plotly.com"
-};
-Plotly.newPlot('gd', data, layout, config);
-</script>
-</body>)";
-
 // *INDENT-ON*
 //#STOP_GRAB_TO_DVS_NAMESPACE
 } // namespace dvs
