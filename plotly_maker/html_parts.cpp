@@ -16,7 +16,21 @@ id="gd"></div></div>
 %1
 %2
 %3
-var layout;
+var layout = {
+  title: {
+    text:'%4'
+  },
+  xaxis: {
+    title: {
+      text: '%5'
+    },
+  },
+  yaxis: {
+    title: {
+      text: '%6'
+    }
+  }
+};
 var config = {
   editable: true,
   showLink: true,
