@@ -83,7 +83,7 @@ bool createStringLineChartValues(const vector<double>& values,
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
-                                const dv::conf_visualizationTypes& type) {
+                                const dv::config_visualizationTypes& type) {
   dv::config().common.title = title;
   string page;
   if (!createHtmlPageWithPlotlyJS(values, page, type)) {
@@ -115,7 +115,7 @@ bool getMatrixValuesFromString(const string& in_values,
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
-                                const dv::conf_visualizationTypes& type) {
+                                const dv::config_visualizationTypes& type) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -123,33 +123,33 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
-  dv::conf_colorscales clrScale;
-  if (type == dv::conf_visualizationTypes::HEATMAP)
+  dv::config_colorscales clrScale;
+  if (type == dv::config_visualizationTypes::VISUALTYPE_HEATMAP)
     clrScale = dv::config().heatmap.colorSc;
-  else if (type == dv::conf_visualizationTypes::SURFACE)
+  else if (type == dv::config_visualizationTypes::VISUALTYPE_SURFACE)
     clrScale = dv::config().surf.colorSc;
   switch (clrScale) {
-    case dv::conf_colorscales::DEFAULT:
+    case dv::config_colorscales::COLORSCALE_DEFAULT:
       args[ARG_COLOR_MAP] = kColorMapDefaultPart;
       break;
-    case dv::conf_colorscales::SUNNY:
+    case dv::config_colorscales::COLORSCALE_SUNNY:
       args[ARG_COLOR_MAP] = kColorMapSunnyPart;
       break;
-    case dv::conf_colorscales::GLAMOUR:
+    case dv::config_colorscales::COLORSCALE_GLAMOUR:
       args[ARG_COLOR_MAP] = kColorMapGlamourPart;
       break;
-    case dv::conf_colorscales::THERMAL:
+    case dv::config_colorscales::COLORSCALE_THERMAL:
       args[ARG_COLOR_MAP] = kColorMapThermalPart;
       break;
-    case dv::conf_colorscales::GRAYSCALE:
+    case dv::config_colorscales::COLORSCALE_GRAYSCALE:
       args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
   switch (type) {
-    case dv::conf_visualizationTypes::HEATMAP:
+    case dv::config_visualizationTypes::VISUALTYPE_HEATMAP:
       args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       break;
-    case dv::conf_visualizationTypes::SURFACE:
+    case dv::config_visualizationTypes::VISUALTYPE_SURFACE:
       args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
       break;
     default:
@@ -164,7 +164,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
                           const string& title) {
-  return heatmap_and_surface(values, title, dv::conf_visualizationTypes::HEATMAP);
+  return heatmap_and_surface(values, title, dv::config_visualizationTypes::VISUALTYPE_HEATMAP);
 }
 
 bool showHeatMapInBrowser(const string& values,
@@ -209,7 +209,7 @@ bool showLineChartInBrowser(const string& values,
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
                           const string& title) {
-  return heatmap_and_surface(values, title, dv::conf_visualizationTypes::SURFACE);
+  return heatmap_and_surface(values, title, dv::config_visualizationTypes::VISUALTYPE_SURFACE);
 }
 
 bool showSurfaceInBrowser(const string& values,

@@ -35,9 +35,9 @@ void makeStringFromValues(const vector<double> in_values,
 }
 void makeArgs(const vector<vector<double>>& values, string& out) {
   switch (dv::Configurator::getInstance().common.typeVisual) {
-    case dv::conf_visualizationTypes::CHART:
+    case dv::config_visualizationTypes::VISUALTYPE_CHART:
       break;
-    case dv::conf_visualizationTypes::HEATMAP:
+    case dv::config_visualizationTypes::VISUALTYPE_HEATMAP:
       //duplicated code
       out.append(davis);
       out.append(command_heatmap);
@@ -49,7 +49,7 @@ void makeArgs(const vector<vector<double>>& values, string& out) {
       }
       out.append(postfix);
       break;
-    case dv::conf_visualizationTypes::SURFACE:
+    case dv::config_visualizationTypes::VISUALTYPE_SURFACE:
       //duplicated code
       out.append(davis);
       out.append(command_surface);
@@ -69,16 +69,16 @@ void makeArgs(const vector<vector<double>>& values, string& out) {
 void makeArgs(vector<double>& values, string& out) {
 
   switch (dv::Configurator::getInstance().common.typeVisual) {
-    case dv::conf_visualizationTypes::CHART:
+    case dv::config_visualizationTypes::VISUALTYPE_CHART:
       out.append(davis);
       out.append(command_line_chart);
       out.append(prefix);
       makeStringFromValues(values, out);
       out.append(postfix);
       break;
-    case dv::conf_visualizationTypes::HEATMAP:
+    case dv::config_visualizationTypes::VISUALTYPE_HEATMAP:
       break;
-    case dv::conf_visualizationTypes::SURFACE:
+    case dv::config_visualizationTypes::VISUALTYPE_SURFACE:
       break;
     default:
       break;

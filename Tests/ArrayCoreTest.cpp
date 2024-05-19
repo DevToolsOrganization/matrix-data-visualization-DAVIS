@@ -16,9 +16,9 @@ TEST(ArrayCore, configurator) {
   comS.yLabel = "Строки";
   comS.title = "Тестовая матрица";
   dv::config().common = comS;
-  dv::config().heatmap.colorSc = dv::conf_colorscales::GLAMOUR;
+  dv::config().heatmap.colorSc = dv::COLORSCALE_GLAMOUR;
   bool result1 = dv::show(values, "HeatMap");
-  dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+  dv::config().common.typeVisual = dv::VISUALTYPE_SURFACE;
   bool result2 = dv::show(values, "Surface");
   EXPECT_EQ(result1 && result2, true);
 }
@@ -35,7 +35,7 @@ TEST(ArrayCore, showHeatMap1) {
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   dv::config().reset();
   dv::config().common.title = "Black & White TEST MATRIX";
-  dv::config().heatmap.colorSc = dv::conf_colorscales::GRAYSCALE;
+  dv::config().heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
   bool result = dv::show(values, "showHeatMap_gray");
   EXPECT_EQ(result, true);
 }

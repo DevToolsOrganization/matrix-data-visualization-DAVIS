@@ -5,25 +5,25 @@
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
 
-enum class conf_visualizationTypes {
-  AUTO, //if user not forces some specific type it will be recognized by context
-  CHART,
-  HEATMAP,
-  SURFACE
+enum config_visualizationTypes {
+  VISUALTYPE_AUTO, //if user not forces some specific type it will be recognized by context
+  VISUALTYPE_CHART,
+  VISUALTYPE_HEATMAP,
+  VISUALTYPE_SURFACE
 };
 
-enum class conf_colorscales {
-  DEFAULT,
-  SUNNY,
-  GLAMOUR,
-  THERMAL,
-  GRAYSCALE
+enum config_colorscales {
+  COLORSCALE_DEFAULT,
+  COLORSCALE_SUNNY,
+  COLORSCALE_GLAMOUR,
+  COLORSCALE_THERMAL,
+  COLORSCALE_GRAYSCALE
 };
 
 
 struct commonSettings {
-  commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
-  conf_visualizationTypes typeVisual;
+  commonSettings(): typeVisual(config_visualizationTypes::VISUALTYPE_AUTO), xLabel("X"), yLabel("Y") {}
+  config_visualizationTypes typeVisual;
   std::string title;
   std::string xLabel;
   std::string yLabel;
@@ -34,13 +34,13 @@ struct chartSettings {
 };
 
 struct heatMapSettings {
-  heatMapSettings(): colorSc(conf_colorscales::DEFAULT) {}
-  conf_colorscales colorSc;
+  heatMapSettings(): colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
+  config_colorscales colorSc;
 };
 
 struct surfaceSettings {
-  surfaceSettings(): colorSc(conf_colorscales::DEFAULT), zLabel("Z") {}
-  conf_colorscales colorSc;
+  surfaceSettings(): colorSc(config_colorscales::COLORSCALE_DEFAULT), zLabel("Z") {}
+  config_colorscales colorSc;
   std::string zLabel;
 };
 
