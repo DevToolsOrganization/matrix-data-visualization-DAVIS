@@ -26,6 +26,7 @@ TEST(ArrayCore, configurator) {
 TEST(ArrayCore, showDefaultSettings) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  dv::config().reset();
   bool result = dv::show(values, "testDefaultSettings");
   EXPECT_EQ(result, true);
 }
@@ -43,6 +44,8 @@ TEST(ArrayCore, showHeatMap1) {
 TEST(ArrayCore, showSurface1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  dv::config().reset();
+  dv::config().common.typeVisual = dv::VISUALTYPE_SURFACE;
   bool result = dv::show(values, "showSurface1");
   EXPECT_EQ(result, true);
 }
@@ -56,6 +59,7 @@ TEST(ArrayCore, showPseudo2D) {
       vals4[i * cols + j] = i * cols + j;
     }
   }
+  dv::config().reset();
   bool result = dv::show(vals4, rows, cols, "showPseudo2D");
   EXPECT_EQ(result, true);
 }
@@ -70,18 +74,21 @@ TEST(ArrayCore, showArray2D) {
       vals5[i][j] = i * cols2 + j;
     }
   }
+  dv::config().reset();
   bool result = dv::show(vals5, rows2, cols2);
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, testChartDefault) {
   vector<int> vec = {-5, -3, -1, 0, 2, 4, 8, 15, 16};
+  dv::config().reset();
   bool result = dv::show(vec, "testChartDefault");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showChart) {
   int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
+  dv::config().reset();
   bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
   EXPECT_EQ(result, true);
 }
@@ -91,6 +98,7 @@ TEST(ArrayCore, readAndShowMatrixFromFile) {
   vector<vector<double>> values;
   bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
+  dv::config().reset();
   bool result = dv::show(values, "readAndShowMatrixFromFile");
   EXPECT_EQ(result, true);
 }
