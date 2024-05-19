@@ -41,12 +41,13 @@ TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(result, true);
 }
 
-TEST(ArrayCore, showSurface1) {
+TEST(ArrayCore, showSurface) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   dv::config().reset();
   dv::config().common.typeVisual = dv::VISUALTYPE_SURFACE;
-  bool result = dv::show(values, "showSurface1");
+  dv::config().surf.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
+  bool result = dv::show(values, "showSurface");
   EXPECT_EQ(result, true);
 }
 
