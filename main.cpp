@@ -58,18 +58,18 @@ int main(int argc, char* argv[]) {
         auto chart_type = result["charttype"].as<std::string>();
         if (chart_type == "l" || chart_type == "linechart") {
           dv::config().reset();
-          dv::config().common.typeVisual = dv::conf_visualizationTypes::CHART;
+          dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_CHART;
           dvs::showLineChartInBrowser(str_data, "file_data");
         } else if (chart_type == "s" || chart_type == "surface") {
           dv::config().reset();
-          dv::config().common.typeVisual = dv::conf_visualizationTypes::SURFACE;
+          dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_SURFACE;
           dvs::showSurfaceInBrowser(str_data, "surface");
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
         dv::config().reset();
-        dv::config().common.typeVisual = dv::conf_visualizationTypes::HEATMAP;
+        dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_HEATMAP;
         dvs::showHeatMapInBrowser(str_data, "file_data");
       }
     }

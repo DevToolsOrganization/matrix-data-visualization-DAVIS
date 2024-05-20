@@ -53,10 +53,10 @@ bool show(const vector<vector<T>>& data, const string& htmlPageName) {
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+  if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      config().common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+  else if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -70,10 +70,10 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+  if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      config().common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+  else if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -87,10 +87,10 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
+  if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      config().common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
+  else if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
   return res;
 }
@@ -99,8 +99,8 @@ template <typename T>
 bool show(const vector<T>& data, const string& htmlPageName) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::CHART)
+  if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      config().common.typeVisual == config_visualizationTypes::VISUALTYPE_CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
@@ -109,8 +109,8 @@ template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName) {
   vector<double> dblRow(data, data + count);
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::CHART)
+  if (config().common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      config().common.typeVisual == config_visualizationTypes::VISUALTYPE_CHART)
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
   return res;
 }
