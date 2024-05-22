@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include "plotly_maker/plotly_maker.h"
 #include "array_core/configurator.h"
-
+/*
 namespace {
 
 using  std::string;
@@ -104,5 +104,5 @@ void show(vector<double>& values) {
   runDavisBySystem(args);
 }
 }
-
+*/
 #endif // DAVIS_H

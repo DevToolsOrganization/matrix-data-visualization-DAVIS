@@ -47,7 +47,6 @@ struct surfaceSettings {
 //New
 struct Config{
 public:
-    Config();
     void reset(){
         common = commonSettings();
         chart = chartSettings();

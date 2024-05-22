@@ -19,7 +19,7 @@ using std::istringstream;
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
                                 string& page,
-                                const dv::config_visualizationTypes& type);
+                                const dv::Config& configuration);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 

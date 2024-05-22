@@ -85,7 +85,7 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
                                 const dv::Config& configuration) {
   string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, configuration.common.typeVisual)) {
+  if (!createHtmlPageWithPlotlyJS(values, page, configuration)) {
     return false;
   }
   string pageName;
@@ -114,7 +114,7 @@ bool getMatrixValuesFromString(const string& in_values,
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
-                                 const dv::Config& configuration) {
+                                const dv::Config& configuration) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {

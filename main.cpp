@@ -37,18 +37,22 @@ int main(int argc, char* argv[]) {
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
 
   dv::show(values, "testHeat1");
+  auto config = dv::Config();
 
   if (result.count("linechart")) {
     auto data = result["linechart"].as<std::string>();
-    dvs::showLineChartInBrowser(data, "comand_line_linechart");
+    config.common.typeVisual = dv::VISUALTYPE_CHART;
+    dvs::showLineChartInBrowser(data, "comand_line_linechart", config);
     return EXIT_SUCCESS;
   } else if (result.count("heatmap")) {
     auto data = result["heatmap"].as<std::string>();
-    dvs::showHeatMapInBrowser(data, "comand_line_heatmap");
+    config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
+    dvs::showHeatMapInBrowser(data, "comand_line_heatmap", config);
     return EXIT_SUCCESS;
   } else if (result.count("surface")) {
+    config.common.typeVisual = dv::VISUALTYPE_SURFACE;
     auto data = result["surface"].as<std::string>();
-    dvs::showSurfaceInBrowser(data, "comand_line_surface");
+    dvs::showSurfaceInBrowser(data, "comand_line_surface", config);
     return EXIT_SUCCESS;
   } else if (result.count("datapath")) {
     auto data_path = result["datapath"].as<std::string>();
@@ -57,20 +61,17 @@ int main(int argc, char* argv[]) {
       if (result.count("charttype")) {
         auto chart_type = result["charttype"].as<std::string>();
         if (chart_type == "l" || chart_type == "linechart") {
-          dv::config().reset();
-          dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_CHART;
-          dvs::showLineChartInBrowser(str_data, "file_data");
+          config.common.typeVisual = dv::VISUALTYPE_CHART;
+          dvs::showLineChartInBrowser(str_data, "file_data", config);
         } else if (chart_type == "s" || chart_type == "surface") {
-          dv::config().reset();
-          dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_SURFACE;
-          dvs::showSurfaceInBrowser(str_data, "surface");
+          config.common.typeVisual = dv::VISUALTYPE_SURFACE;
+          dvs::showSurfaceInBrowser(str_data, "surface", config);
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
-        dv::config().reset();
-        dv::config().common.typeVisual = dv::config_visualizationTypes::VISUALTYPE_HEATMAP;
-        dvs::showHeatMapInBrowser(str_data, "file_data");
+        config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
+        dvs::showHeatMapInBrowser(str_data, "file_data", config);
       }
     }
   }
