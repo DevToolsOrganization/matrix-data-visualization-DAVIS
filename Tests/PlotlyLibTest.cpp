@@ -9,7 +9,7 @@ TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::string str_page = "test_page";
   auto config = dv::Config();
   config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
-  bool result = dvs::createHtmlPageWithPlotlyJS(testValues, str_page, config);
+  bool result = dvs::createHtmlPageWithPlotlyJS(testValues, str_page, config, dv::VISUALTYPE_HEATMAP);
   std::ofstream out("example.html");
   if (out.is_open()) {
     out << str_page.c_str();

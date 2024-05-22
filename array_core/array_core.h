@@ -54,9 +54,9 @@ bool show(const vector<vector<T>>& data, const string& htmlPageName, const Confi
   }
   bool res = false;
   if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
-      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
+  } else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
@@ -79,7 +79,7 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config &configuration) {
+bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {

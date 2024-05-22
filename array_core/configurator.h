@@ -45,18 +45,18 @@ struct surfaceSettings {
 };
 
 //New
-struct Config{
-public:
-    void reset(){
-        common = commonSettings();
-        chart = chartSettings();
-        heatmap = heatMapSettings();
-        surf = surfaceSettings();
-    };
-    commonSettings common;
-    chartSettings chart;
-    heatMapSettings heatmap;
-    surfaceSettings surf;
+struct Config {
+ public:
+  void reset() {
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
 };
 
 

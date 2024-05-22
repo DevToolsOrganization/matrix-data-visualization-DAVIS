@@ -22,25 +22,25 @@ extern const char kPlotlyJsWorkPath[];
 
 namespace dv {
 
-enum class conf_visualizationTypes {
-  AUTO, //if user not forces some specific type it will be recognized by context
-  CHART,
-  HEATMAP,
-  SURFACE
+enum config_visualizationTypes {
+  VISUALTYPE_AUTO, //if user not forces some specific type it will be recognized by context
+  VISUALTYPE_CHART,
+  VISUALTYPE_HEATMAP,
+  VISUALTYPE_SURFACE
 };
 
-enum class conf_colorscales {
-  DEFAULT,
-  SUNNY,
-  GLAMOUR,
-  THERMAL,
-  GRAYSCALE
+enum config_colorscales {
+  COLORSCALE_DEFAULT,
+  COLORSCALE_SUNNY,
+  COLORSCALE_GLAMOUR,
+  COLORSCALE_THERMAL,
+  COLORSCALE_GRAYSCALE
 };
 
 
 struct commonSettings {
-  commonSettings(): typeVisual(conf_visualizationTypes::AUTO), xLabel("X"), yLabel("Y") {}
-  conf_visualizationTypes typeVisual;
+  commonSettings(): typeVisual(config_visualizationTypes::VISUALTYPE_AUTO), xLabel("X"), yLabel("Y") {}
+  config_visualizationTypes typeVisual;
   std::string title;
   std::string xLabel;
   std::string yLabel;
@@ -51,17 +51,34 @@ struct chartSettings {
 };
 
 struct heatMapSettings {
-  heatMapSettings(): colorSc(conf_colorscales::DEFAULT) {}
-  conf_colorscales colorSc;
+  heatMapSettings(): colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
+  config_colorscales colorSc;
 };
 
 struct surfaceSettings {
-  surfaceSettings(): colorSc(conf_colorscales::DEFAULT), zLabel("Z") {}
-  conf_colorscales colorSc;
+  surfaceSettings(): colorSc(config_colorscales::COLORSCALE_DEFAULT), zLabel("Z") {}
+  config_colorscales colorSc;
   std::string zLabel;
 };
 
+//New
+struct Config {
+ public:
+  void reset() {
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
+};
 
+
+//Old
+/*
 class Configurator {
  public:
   static Configurator& getInstance() {
@@ -89,19 +106,21 @@ class Configurator {
 };
 
 Configurator& config();
+*/
 
 
 } // namespace dv end
 namespace dvs {
 enum ARGS_INDEX {
-  VALUES,     //1
-  COLOR_MAP,  //2
-  MATRIX_TYPE,//3
-  TITLE,      //4
-  TITLE_X,    //5
-  TITLE_Y     //6
+  ARG_VALUES,     //%1
+  ARG_COLOR_MAP,  //%2
+  ARG_MATRIX_TYPE,//%3
+  ARG_TITLE,      //%4
+  ARG_TITLE_X,    //%5
+  ARG_TITLE_Y,    //%6
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_SIZE
 };
-const int MAX_ELEMENT = 6;
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
@@ -156,19 +175,20 @@ using std::istringstream;
 
 bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
                                 string& page,
-                                const dv::conf_visualizationTypes& type);
+                                const dv::Config& configuration,
+                                dv::config_visualizationTypes typeVisual);
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 
-bool showHeatMapInBrowser(const string& values, const string& title);
+bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showLineChartInBrowser(const vector<double>& values, const string& title);
+bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
 
-bool showLineChartInBrowser(const string& values, const string& title);
+bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const string& values, const string& title);
+bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 } // namespace dvs end
 
@@ -182,32 +202,32 @@ using std::string;
 
 //! two-dimensional vector
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& htmlPageName = dvs::kAppName);
+bool show(const vector<vector<T>>& data, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! two-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::kAppName);
+          const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! a one-dimensional array that simulates a two-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::kAppName);
+          const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! one-dimensional vector
 template <typename T>
-bool show(const vector<T>& data, const string& htmlPageName = dvs::kAppName);
+bool show(const vector<T>& data, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! one-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName);
+bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 // ***********************************
 // template functions implementations:
 // ***********************************
 
 template <typename T>
-bool show(const vector<vector<T>>& data, const string& htmlPageName) {
+bool show(const vector<vector<T>>& data, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(data.size());
   for (vector<T> row : data) {
@@ -215,16 +235,16 @@ bool show(const vector<vector<T>>& data, const string& htmlPageName) {
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP) {
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+  } else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
 
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
+bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -232,16 +252,16 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+  else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName) {
+bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
   for (uint64_t i = 0; i < arrRows; ++i) {
@@ -249,31 +269,31 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::HEATMAP)
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName);
-  else if (config().common.typeVisual == conf_visualizationTypes::SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName);
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP)
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+  else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
 
 template <typename T>
-bool show(const vector<T>& data, const string& htmlPageName) {
+bool show(const vector<T>& data, const string& htmlPageName, const Config& configuration) {
   vector<double> dblRow(data.begin(), data.end());
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_CHART)
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t count, const string& htmlPageName) {
+bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
   vector<double> dblRow(data, data + count);
   bool res = false;
-  if (config().common.typeVisual == conf_visualizationTypes::AUTO ||
-      config().common.typeVisual == conf_visualizationTypes::CHART)
-    res = dvs::showLineChartInBrowser(dblRow, htmlPageName);
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_CHART)
+    res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
   return res;
 }
 
