@@ -21,17 +21,17 @@ bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
                                 string& page,
                                 const dv::config_visualizationTypes& type);
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title);
+bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 
-bool showHeatMapInBrowser(const string& values, const string& title);
+bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showLineChartInBrowser(const vector<double>& values, const string& title);
+bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
 
-bool showLineChartInBrowser(const string& values, const string& title);
+bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title);
+bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const string& values, const string& title);
+bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
