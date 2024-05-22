@@ -37,7 +37,7 @@ TEST(ArrayCore, showHeatMap1) {
   auto config = dv::Config();
   config.common.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
-  bool result = dv::show(values, "showHeatMap_gray");
+  bool result = dv::show(values, "showHeatMap_gray", config);
   EXPECT_EQ(result, true);
 }
 
@@ -47,7 +47,7 @@ TEST(ArrayCore, showSurface) {
   auto config = dv::Config();
   config.common.typeVisual = dv::VISUALTYPE_SURFACE;
   config.surf.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
-  bool result = dv::show(values, "showSurface");
+  bool result = dv::show(values, "showSurface", config);
   EXPECT_EQ(result, true);
 }
 

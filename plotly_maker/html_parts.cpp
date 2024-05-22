@@ -95,12 +95,18 @@ Plotly.newPlot('gd', data, layout, config);
 
     const char kHeatMapTypePart[] = R"(
 type: 'heatmap',
-hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>'
+hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>',
+colorbar: {
+  title: ""
+}
 }];)";
 
     const char kSurfaceTypePart[]=R"(
 type: 'surface',
-hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>'
+hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>',
+colorbar: {
+  title: ""
+}
 }];)";
 // *INDENT-ON*
 //#STOP_GRAB_TO_DVS_NAMESPACE
