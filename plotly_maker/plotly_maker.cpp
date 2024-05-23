@@ -83,10 +83,10 @@ bool createStringLineChartValues(const vector<double>& values,
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
-                                const dv::config_visualizationTypes& type) {
-  dv::config().common.title = title;
+                                const dv::Config& configuration,
+                                dv::config_visualizationTypes typeVisual) {
   string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, type)) {
+  if (!createHtmlPageWithPlotlyJS(values, page, configuration, typeVisual)) {
     return false;
   }
   string pageName;
@@ -115,7 +115,8 @@ bool getMatrixValuesFromString(const string& in_values,
 
 bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
-                                const dv::config_visualizationTypes& type) {
+                                const dv::Config& configuration,
+                                dv::config_visualizationTypes typeVisual) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -124,10 +125,12 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
   dv::config_colorscales clrScale;
-  if (type == dv::config_visualizationTypes::VISUALTYPE_HEATMAP)
-    clrScale = dv::config().heatmap.colorSc;
-  else if (type == dv::config_visualizationTypes::VISUALTYPE_SURFACE)
-    clrScale = dv::config().surf.colorSc;
+  if (typeVisual == dv::config_visualizationTypes::VISUALTYPE_HEATMAP)
+    clrScale = configuration.heatmap.colorSc;
+  else if (typeVisual == dv::config_visualizationTypes::VISUALTYPE_SURFACE)
+    clrScale = configuration.surf.colorSc;
+  else
+    return false;
   switch (clrScale) {
     case dv::config_colorscales::COLORSCALE_DEFAULT:
       args[ARG_COLOR_MAP] = kColorMapDefaultPart;
@@ -145,7 +148,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
       break;
   }
-  switch (type) {
+  switch (typeVisual) {
     case dv::config_visualizationTypes::VISUALTYPE_HEATMAP:
       args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       break;
@@ -155,37 +158,36 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     default:
       break;
   }
-  args[ARG_TITLE] = dv::config().common.title;
-  args[ARG_TITLE_X] = dv::config().common.xLabel;
-  args[ARG_TITLE_Y] = dv::config().common.yLabel;
+  args[ARG_TITLE] = configuration.common.title;
+  args[ARG_TITLE_X] = configuration.common.xLabel;
+  args[ARG_TITLE_Y] = configuration.common.yLabel;
   make_string(kHtmlModel, args, page);
   return true;
 }
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const string& title) {
-  return heatmap_and_surface(values, title, dv::config_visualizationTypes::VISUALTYPE_HEATMAP);
+                          const string& title, const dv::Config& configuration) {
+  return heatmap_and_surface(values, title, configuration, dv::VISUALTYPE_HEATMAP);
 }
 
 bool showHeatMapInBrowser(const string& values,
-                          const string& title) {
+                          const string& title, const dv::Config& configuration) {
   vector<vector<double>>heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
-  showHeatMapInBrowser(heat_map_values, title);
+  showHeatMapInBrowser(heat_map_values, title, configuration);
   return true;
 };
 
 bool showLineChartInBrowser(const vector<double>& values,
-                            const string& title) {
-  dv::config().common.title = title;
+                            const string& title, const dv::Config& configuration) {
   string page;
   vector<string>args(ARGS_SIZE, "");
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[ARG_VALUES] = str_values;
-  args[ARG_TITLE] = dv::config().common.title;
-  args[ARG_TITLE_X] = dv::config().common.xLabel;
-  args[ARG_TITLE_Y] = dv::config().common.yLabel;
+  args[ARG_TITLE] = configuration.common.title;
+  args[ARG_TITLE_X] = configuration.common.xLabel;
+  args[ARG_TITLE_Y] = configuration.common.yLabel;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
@@ -196,27 +198,27 @@ bool showLineChartInBrowser(const vector<double>& values,
 }
 
 bool showLineChartInBrowser(const string& values,
-                            const string& title) {
+                            const string& title, const dv::Config& configuration) {
   vector<double>vals;
   istringstream f(values);
   string s;
   while (std::getline(f, s, ',')) {
     vals.push_back(std::stod(s));
   }
-  showLineChartInBrowser(vals, title);
+  showLineChartInBrowser(vals, title, configuration);
   return true;
 };
 
 bool showSurfaceInBrowser(const vector<vector<double>>& values,
-                          const string& title) {
-  return heatmap_and_surface(values, title, dv::config_visualizationTypes::VISUALTYPE_SURFACE);
+                          const string& title, const dv::Config& configuration) {
+  return heatmap_and_surface(values, title, configuration, dv::VISUALTYPE_SURFACE);
 }
 
 bool showSurfaceInBrowser(const string& values,
-                          const string& title) {
+                          const string& title, const dv::Config& configuration) {
   vector<vector<double>>surface_values;
   getMatrixValuesFromString(values, surface_values);
-  showSurfaceInBrowser(surface_values, title);
+  showSurfaceInBrowser(surface_values, title, configuration);
   return true;
 }
 

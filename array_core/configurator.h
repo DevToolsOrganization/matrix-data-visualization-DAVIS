@@ -44,7 +44,24 @@ struct surfaceSettings {
   std::string zLabel;
 };
 
+//New
+struct Config {
+ public:
+  void reset() {
+    common = commonSettings();
+    chart = chartSettings();
+    heatmap = heatMapSettings();
+    surf = surfaceSettings();
+  };
+  commonSettings common;
+  chartSettings chart;
+  heatMapSettings heatmap;
+  surfaceSettings surf;
+};
 
+
+//Old
+/*
 class Configurator {
  public:
   static Configurator& getInstance() {
@@ -72,6 +89,7 @@ class Configurator {
 };
 
 Configurator& config();
+*/
 
 //#STOP_GRAB_TO_DV_NAMESPACE
 }// end namespace dv
