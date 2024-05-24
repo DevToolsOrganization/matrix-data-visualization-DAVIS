@@ -125,9 +125,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
   dv::config_colorscales clrScale;
-  if (typeVisual == dv::config_visualizationTypes::VISUALTYPE_HEATMAP)
+  if (typeVisual == dv::VISUALTYPE_HEATMAP)
     clrScale = configuration.heatmap.colorSc;
-  else if (typeVisual == dv::config_visualizationTypes::VISUALTYPE_SURFACE)
+  else if (typeVisual == dv::VISUALTYPE_SURFACE)
     clrScale = configuration.surf.colorSc;
   else
     return false;
@@ -149,18 +149,28 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       break;
   }
   switch (typeVisual) {
-    case dv::config_visualizationTypes::VISUALTYPE_HEATMAP:
+    case dv::VISUALTYPE_HEATMAP:
       args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
+      args[ARG_TITLE] = configuration.heatmap.title;
+      args[ARG_TITLE_X] = configuration.heatmap.xLabel;
+      args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
       break;
-    case dv::config_visualizationTypes::VISUALTYPE_SURFACE:
+    case dv::VISUALTYPE_SURFACE:
       args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
+      args[ARG_TITLE] = configuration.surf.title;
+      args[ARG_TITLE_X] = configuration.surf.xLabel;
+      args[ARG_TITLE_Y] = configuration.surf.yLabel;
+      args[ARG_TITLE_Z] = configuration.surf.zLabel;
+      break;
+    case dv::VISUALTYPE_CHART:
+      args[ARG_TITLE] = configuration.chart.title;
+      args[ARG_TITLE_X] = configuration.chart.xLabel;
+      args[ARG_TITLE_Y] = configuration.chart.yLabel;
       break;
     default:
       break;
   }
-  args[ARG_TITLE] = configuration.common.title;
-  args[ARG_TITLE_X] = configuration.common.xLabel;
-  args[ARG_TITLE_Y] = configuration.common.yLabel;
+
   make_string(kHtmlModel, args, page);
   return true;
 }
@@ -185,9 +195,9 @@ bool showLineChartInBrowser(const vector<double>& values,
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[ARG_VALUES] = str_values;
-  args[ARG_TITLE] = configuration.common.title;
-  args[ARG_TITLE_X] = configuration.common.xLabel;
-  args[ARG_TITLE_Y] = configuration.common.yLabel;
+  args[ARG_TITLE] = configuration.chart.title;
+  args[ARG_TITLE_X] = configuration.chart.xLabel;
+  args[ARG_TITLE_Y] = configuration.chart.yLabel;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();

@@ -29,6 +29,17 @@ var layout = {
     title: {
       text: '%6'
     }
+  },
+  scene: {
+    xaxis: {
+      title: '%5',
+    },
+    yaxis: {
+      title: '%6',
+    },
+    zaxis: {
+      title: '%7',
+    }
   }
 };
 var config = {
