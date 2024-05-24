@@ -68,6 +68,7 @@ template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00
         std::is_convertible_v<T, double>>>
 auto show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config())
 {
+
   vector<double> dblRow(container.size());
   int i = 0;
   for (auto v : container) {
