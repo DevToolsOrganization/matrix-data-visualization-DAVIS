@@ -14,6 +14,16 @@ TEST(ArrayCore, newShowChart) {
   string s1("feewf");
   std::list<double> vec = {5, 34};
   bool result = dv::show(vec);
+
+  vector<int> vec2 = {-5, -3, -1, 0, 2, 4, 8, 15, 16};
+  dv::show(vec2, "testChartDefault");
+
+  std::list<std::vector<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  dv::show(template2d, "testTemplate2d");
+
+
+
+
   EXPECT_EQ(result, true);
 }
 

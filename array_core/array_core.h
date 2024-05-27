@@ -61,14 +61,13 @@ template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00
 */
 
 
+//https://habr.com/ru/articles/205772/ - interesting article
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-    typename T = std::decay_t<
-        decltype(*begin(std::declval<C>()))>,
-    typename = std::enable_if_t<
-        std::is_convertible_v<T, double>>>
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 auto show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config())
 {
-
+  std::cout<<"show container"<<std::endl;
   vector<double> dblRow(container.size());
   int i = 0;
   for (auto v : container) {
@@ -81,6 +80,38 @@ auto show(C const& container, const string& htmlPageName = dvs::kAppName, const 
     res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
   return res;
 }
+
+template<typename C,
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename E = std::decay_t<decltype(*begin(std::declval<T>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<E, double>>
+         >
+auto show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config())
+{
+  std::cout<<"show container 2D"<<std::endl;
+
+  vector<vector<double>> vecVecDbl;
+  vecVecDbl.reserve(container.size());
+  for (auto row : container) {
+    vector<double> dblRow(row.size());
+    int i = 0;
+    for (auto v : row) {
+      dblRow[i] = v;
+      ++i;
+    }
+    vecVecDbl.emplace_back(dblRow);
+  }
+
+  bool res = false;
+  if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_AUTO ||
+      configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_HEATMAP) {
+    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+  } else if (configuration.common.typeVisual == config_visualizationTypes::VISUALTYPE_SURFACE)
+    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  return res;
+}
+
+
 
 // ***********************************
 // template functions implementations:
