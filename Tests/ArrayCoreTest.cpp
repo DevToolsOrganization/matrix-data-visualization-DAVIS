@@ -97,7 +97,11 @@ TEST(ArrayCore, testChartDefault) {
 
 TEST(ArrayCore, showChart) {
   int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
-  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
+  auto config = dv::Config();
+  config.common.title = "Custom title";
+  config.common.xLabel = "Custom xLabel";
+  config.common.yLabel = "Custom yLabel";
+  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
   EXPECT_EQ(result, true);
 }
 
