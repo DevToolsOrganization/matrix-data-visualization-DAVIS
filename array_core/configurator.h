@@ -59,38 +59,6 @@ struct Config {
   surfaceSettings surf;
 };
 
-
-//Old
-/*
-class Configurator {
- public:
-  static Configurator& getInstance() {
-    static Configurator instance;
-    return instance;
-  }
-  Configurator(Configurator const&)   = delete;
-  void operator=(Configurator const&) = delete;
-
-  void reset() { //to default settings
-    common = commonSettings();
-    chart = chartSettings();
-    heatmap = heatMapSettings();
-    surf = surfaceSettings();
-  };
-
-  commonSettings common;
-  chartSettings chart;
-  heatMapSettings heatmap;
-  surfaceSettings surf;
-
- private:
-  Configurator() {};
-
-};
-
-Configurator& config();
-*/
-
 //#STOP_GRAB_TO_DV_NAMESPACE
 }// end namespace dv
 

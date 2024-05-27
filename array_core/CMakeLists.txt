@@ -13,7 +13,6 @@ set(SOURCE_FILES
     "../common_utils/common_constants.cpp"
     "../plotly_maker/plotly_maker.cpp"
     "../plotly_maker/html_parts.cpp"
-    "configurator.cpp"
     )
 set(HEADER_FILES
     "../common_utils/common_utils.h"
