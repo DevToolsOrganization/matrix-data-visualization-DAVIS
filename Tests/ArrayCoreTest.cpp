@@ -9,25 +9,20 @@
 using std::string;
 using std::vector;
 
-TEST(ArrayCore, newShowChart) {
+TEST(ArrayCore, universal_1d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  string s1("feewf");
   std::list<double> vec = {5, 34};
   bool result = dv::show(vec);
-
-  vector<int> vec2 = {-5, -3, -1, 0, 2, 4, 8, 15, 16};
-  dv::show(vec2, "testChartDefault");
-
-  std::list<std::vector<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  dv::show(template2d, "testTemplate2d");
-
-
-
-
   EXPECT_EQ(result, true);
 }
 
-/*
+TEST(ArrayCore, universal_2d_conteiner) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  std::list<std::list<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 10, 10, 25}, {45, 23, 90, 2}};
+  bool result = dv::show(template2d, "testTemplate2d");
+  EXPECT_EQ(result, true);
+}
+
 TEST(ArrayCore, configurator) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
@@ -123,7 +118,7 @@ TEST(ArrayCore, readAndShowMatrixFromFile) {
   bool result = dv::show(values, "readAndShowMatrixFromFile");
   EXPECT_EQ(result, true);
 }
-*/
+
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();
