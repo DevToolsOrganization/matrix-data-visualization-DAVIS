@@ -3,9 +3,24 @@
 #include "array_core/array_core.h"
 #include "common_utils/common_utils.h"
 #include <fstream>
+#include <list>
 
 using std::string;
 using std::vector;
+
+TEST(ArrayCore, universal_1d_conteiner) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  std::list<double> vec = {5, 34};
+  bool result = dv::show(vec);
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, universal_2d_conteiner) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  std::list<std::list<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 10, 10, 25}, {45, 23, 90, 2}};
+  bool result = dv::show(template2d, "testTemplate2d");
+  EXPECT_EQ(result, true);
+}
 
 TEST(ArrayCore, configurator) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
@@ -86,7 +101,11 @@ TEST(ArrayCore, testChartDefault) {
 
 TEST(ArrayCore, showChart) {
   int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
-  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart");
+  auto config = dv::Config();
+  config.common.title = "Custom title";
+  config.common.xLabel = "Custom xLabel";
+  config.common.yLabel = "Custom yLabel";
+  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
   EXPECT_EQ(result, true);
 }
 
