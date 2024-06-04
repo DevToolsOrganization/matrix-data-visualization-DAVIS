@@ -8,7 +8,7 @@ TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "test_page";
   auto config = dv::Config();
-  config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
+  config.typeVisual = dv::VISUALTYPE_HEATMAP;
   bool result = dvs::createHtmlPageWithPlotlyJS(testValues, str_page, config, dv::VISUALTYPE_HEATMAP);
   std::ofstream out("example.html");
   if (out.is_open()) {

@@ -10,6 +10,7 @@ enum ARGS_INDEX {
   ARG_TITLE,      //%4
   ARG_TITLE_X,    //%5
   ARG_TITLE_Y,    //%6
+  ARG_TITLE_Z,    //%7
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };

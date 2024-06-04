@@ -1,7 +1,6 @@
 common_utils/common_constants.cpp
 common_utils/common_constants.h
 array_core/configurator.h
-array_core/configurator.cpp
 plotly_maker/html_parts.h
 plotly_maker/html_parts.cpp
 common_utils/common_utils.h

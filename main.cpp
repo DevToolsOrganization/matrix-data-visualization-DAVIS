@@ -41,16 +41,16 @@ int main(int argc, char* argv[]) {
 
   if (result.count("linechart")) {
     auto data = result["linechart"].as<std::string>();
-    config.common.typeVisual = dv::VISUALTYPE_CHART;
+    config.typeVisual = dv::VISUALTYPE_CHART;
     dvs::showLineChartInBrowser(data, "comand_line_linechart", config);
     return EXIT_SUCCESS;
   } else if (result.count("heatmap")) {
     auto data = result["heatmap"].as<std::string>();
-    config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
+    config.typeVisual = dv::VISUALTYPE_HEATMAP;
     dvs::showHeatMapInBrowser(data, "comand_line_heatmap", config);
     return EXIT_SUCCESS;
   } else if (result.count("surface")) {
-    config.common.typeVisual = dv::VISUALTYPE_SURFACE;
+    config.typeVisual = dv::VISUALTYPE_SURFACE;
     auto data = result["surface"].as<std::string>();
     dvs::showSurfaceInBrowser(data, "comand_line_surface", config);
     return EXIT_SUCCESS;
@@ -61,16 +61,16 @@ int main(int argc, char* argv[]) {
       if (result.count("charttype")) {
         auto chart_type = result["charttype"].as<std::string>();
         if (chart_type == "l" || chart_type == "linechart") {
-          config.common.typeVisual = dv::VISUALTYPE_CHART;
+          config.typeVisual = dv::VISUALTYPE_CHART;
           dvs::showLineChartInBrowser(str_data, "file_data", config);
         } else if (chart_type == "s" || chart_type == "surface") {
-          config.common.typeVisual = dv::VISUALTYPE_SURFACE;
+          config.typeVisual = dv::VISUALTYPE_SURFACE;
           dvs::showSurfaceInBrowser(str_data, "surface", config);
         } else if (chart_type == "m" || chart_type == "heatmap") {
 
         }
       } else {
-        config.common.typeVisual = dv::VISUALTYPE_HEATMAP;
+        config.typeVisual = dv::VISUALTYPE_HEATMAP;
         dvs::showHeatMapInBrowser(str_data, "file_data", config);
       }
     }

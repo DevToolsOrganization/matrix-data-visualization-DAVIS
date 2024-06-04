@@ -26,15 +26,13 @@ TEST(ArrayCore, configurator) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
-  dv::commonSettings comS;
-  comS.xLabel = "Столбцы";
-  comS.yLabel = "Строки";
-  comS.title = "Тестовая матрица";
-  config.common = comS;
+  config.heatmap.xLabel = "Столбцы";
+  config.heatmap.yLabel = "Строки";
+  config.heatmap.title = "Тестовая матрица";
   config.heatmap.colorSc = dv::COLORSCALE_GLAMOUR;
   bool result1 = dv::show(values, "HeatMap", config);
-  config.common.typeVisual = dv::VISUALTYPE_SURFACE;
-  config.common.title = "This is Surface!!!";
+  config.typeVisual = dv::VISUALTYPE_SURFACE;
+  config.surf.title = "This is Surface!!!";
   bool result2 = dv::show(values, "Surface", config);
   EXPECT_EQ(result1 && result2, true);
 }
@@ -50,7 +48,7 @@ TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
-  config.common.title = "Black & White TEST MATRIX";
+  config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
   bool result = dv::show(values, "showHeatMap_gray", config);
   EXPECT_EQ(result, true);
@@ -60,7 +58,11 @@ TEST(ArrayCore, showSurface) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
-  config.common.typeVisual = dv::VISUALTYPE_SURFACE;
+  config.typeVisual = dv::VISUALTYPE_SURFACE;
+  config.surf.xLabel = "xLabel from Settings";
+  config.surf.yLabel = "yLabel from Settings";
+  config.surf.zLabel = "zLabel from Settings";
+  config.surf.title = "Title from Settings";
   config.surf.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
   bool result = dv::show(values, "showSurface", config);
   EXPECT_EQ(result, true);
@@ -102,9 +104,9 @@ TEST(ArrayCore, testChartDefault) {
 TEST(ArrayCore, showChart) {
   int vals3[] = {2, 6, 4, -34, 56, 33, 2, 15};
   auto config = dv::Config();
-  config.common.title = "Custom title";
-  config.common.xLabel = "Custom xLabel";
-  config.common.yLabel = "Custom yLabel";
+  config.chart.title = "Custom title";
+  config.chart.xLabel = "Custom xLabel";
+  config.chart.yLabel = "Custom yLabel";
   bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
   EXPECT_EQ(result, true);
 }
