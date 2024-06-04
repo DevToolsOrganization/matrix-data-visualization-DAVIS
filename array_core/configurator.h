@@ -22,8 +22,9 @@ enum config_colorscales {
 
 
 struct commonSettings {
-  commonSettings(): xLabel("X_default"),
-    yLabel("Y_default") {}
+  commonSettings():
+    xLabel("X"),
+    yLabel("Y") {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
@@ -35,21 +36,23 @@ struct chartSettings : public commonSettings {
 };
 
 struct heatMapSettings : public commonSettings {
-  heatMapSettings(): colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
+  heatMapSettings():
+    colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
   config_colorscales colorSc;
 };
 
 struct surfaceSettings : public commonSettings {
   surfaceSettings():
     colorSc(config_colorscales::COLORSCALE_DEFAULT),
-    zLabel("Z_default") {}
+    zLabel("Z") {}
   config_colorscales colorSc;
   std::string zLabel;
 };
 
-//New
+
 struct Config {
-  Config(): typeVisual(VISUALTYPE_AUTO) {}
+  Config():
+    typeVisual(VISUALTYPE_AUTO) {}
   void reset() {
     chart = chartSettings();
     heatmap = heatMapSettings();
