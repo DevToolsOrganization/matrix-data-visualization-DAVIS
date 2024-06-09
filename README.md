@@ -62,7 +62,7 @@ std::vector<std::vector<double>> values = {{30.3, 40, 98, 76}
                                          , {5, 56, 93, 25}
                                          , {45, 23, 90, 2}};
  auto config = dv::Config();
- config.common.typeVisual = dv::VISUALTYPE_SURFACE;              // select surface visual mode          
+ config.typeVisual = dv::VISUALTYPE_SURFACE;              // select surface visual mode           
  config.surf.colorSc = dv::COLORSCALE_THERMAL;                   // change colorscale
  bool result = dv::show(values, "testSurfacePage", config);      // pass 2d data in vector form and surface name to show
 ```
@@ -77,9 +77,9 @@ std::vector<std::vector<double>> values = {{30.3, 40, 98, 76}
   
   int vals[] = {2, 6, 4, -34, 56, 33, 2, 15};
   auto config = dv::Config();
-  config.common.title = "Custom title";            // change default settings to custom
-  config.common.xLabel = "Custom xLabel";          // change default settings to custom
-  config.common.yLabel = "Custom yLabel";          // change default settings to custom
+  config.heatmap.title = "Custom title";            // change default settings to custom for heatmap
+  config.heatmap.xLabel = "Custom xLabel";          // change default settings to custom for heatmap
+  config.heatmap.yLabel = "Custom yLabel";          // change default settings to custom for heatmap
   bool result = dv::show(vals, sizeof(vals) / sizeof(vals[0]), "htmlPageName", config);
   ```
   ![chart](https://github.com/valvals/devtools/assets/104432560/43903324-f49c-42f3-9ef1-3cb7e95a786d)
