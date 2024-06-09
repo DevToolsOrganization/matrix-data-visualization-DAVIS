@@ -64,7 +64,7 @@ std::vector<std::vector<double>> values = {{30.3, 40, 98, 76}
  auto config = dv::Config();
  config.typeVisual = dv::VISUALTYPE_SURFACE;              // select surface visual mode           
  config.surf.colorSc = dv::COLORSCALE_THERMAL;                   // change colorscale
- bool result = dv::show(values, "testSurfacePage", config);      // pass 2d data in vector form and surface name to show
+ bool result = dv::show(values, "testSurfacePage", config);      // pass 2d data, html page name, configuration structure
 ```
 ![surf](https://github.com/valvals/devtools/assets/104432560/8d1c5488-049f-4471-9e58-1e97b59c03e7)
 </details>
