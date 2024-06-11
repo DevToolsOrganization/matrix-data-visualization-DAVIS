@@ -209,7 +209,7 @@ All our test are made for plotly .js file which is placed at our last [release](
 But probably newer version will also work. So download newer .js file [at plotly page](https://plotly.com/javascript/), rename it to **plotly-2.27.0.min.js** and test by yorself.
 
 ### Which containers can I use in show() function?
-Containers must support implementation of begin() and end() methods. Content of containers must be convertable to `double`
+Containers must support implementation of `begin()` and `end()` methods. Content of containers must be convertable to `double`
 
 
 # 🚀 Room for Improvement
