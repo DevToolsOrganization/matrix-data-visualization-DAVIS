@@ -1,0 +1,5 @@
+contact_links:
+  - name: Do want to discuss Davis with the community?
+    url: https://github.com/valvals/devtools/discussions
+    about: Please see the discussions page for Davis.
+blank_issues_enabled: true
