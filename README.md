@@ -16,11 +16,10 @@
 * [📝 Licence](#-license)
 
 
-
 # 💡 About
 DAVIS (Data Visualisation tool) is utility for data visualization. The visualization is based on [Plotly javascript](https://plotly.com/) So DAVIS generate html page with injected data from code and after that launch browser to show it.
 
-One of the main tasks we solve is to make it easier to debug your application. With Davis you can easy visualize your one- and two-dimensional data varibles.
+One of the main tasks we solve is to make it easier to debug your application. With Davis you can easy visualize your one- and two-dimensional data variables.
 
 Davis is easy-to-use tool:
 * one .h file, one .cpp file, one .js file
@@ -110,7 +109,7 @@ First arguments of `dv::show(...)` could be either pointer to array:
 or container:
 | Arguments  | Description  |
 | ------------ | ------------ |
-|  ` C const& container_of_containers `         |   2d array. Data placed inside container of containers. Containers can be std::vector, std::list, etc. Content of containers must be convertable to `double`                        |
+|  ` C const& container_of_containers `         |   2d array. Data placed inside container of containers. Containers can be `std::vector`, `std::list`, `std::array`, etc. Content of containers must be convertable to `double`                        |
 |  ` C const& container`                        |   1d array. Data placed inside container. Сontainer requirements are the same                            |
 
 
@@ -139,7 +138,7 @@ template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! 1-dimensional container
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+template<typename C,
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());

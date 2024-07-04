@@ -4,6 +4,7 @@
 #include "common_utils/common_utils.h"
 #include <fstream>
 #include <list>
+#include <array>
 
 using std::string;
 using std::vector;
@@ -19,6 +20,18 @@ TEST(ArrayCore, universal_2d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   std::list<std::list<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 10, 10, 25}, {45, 23, 90, 2}};
   bool result = dv::show(template2d, "testTemplate2d");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, stdArray_of_stdArrays) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  std::array<std::array<double, 5>, 5> arr2;
+  for (int i = 0; i < 5; ++i) {
+    for (int j = 0; j < 5; ++j) {
+      arr2.at(i).at(j) = i + j * 3;
+    }
+  }
+  bool result = dv::show(arr2, "stdArray_of_stdArrays");
   EXPECT_EQ(result, true);
 }
 
