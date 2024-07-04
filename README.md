@@ -138,7 +138,7 @@ template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 //! 1-dimensional container
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+template<typename C,
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
