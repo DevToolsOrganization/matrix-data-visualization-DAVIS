@@ -194,7 +194,7 @@ Settings fields can be
 
 # ⚒️ Setup
 1. Download **davis.cpp**, **davis.h** and **plotly-2.27.0.min.js** from our last [release](https://github.com/valvals/devtools/releases)
-2. Put them in one folder in your project // Надо проверить (особенно для автоматического копирования js) все различные кейсы расположения наших трех файлов: в главной папке, в отдельнйо папке и т.д.
+2. Put them in one folder in your project
 3. Include **davis.h** to your project
 4. Now you can use Davis functionality 
 
