@@ -16,7 +16,6 @@
 * [📝 Licence](#-license)
 
 
-
 # 💡 About
 DAVIS (Data Visualisation tool) is utility for data visualization. The visualization is based on [Plotly javascript](https://plotly.com/) So DAVIS generate html page with injected data from code and after that launch browser to show it.
 
@@ -110,7 +109,7 @@ First arguments of `dv::show(...)` could be either pointer to array:
 or container:
 | Arguments  | Description  |
 | ------------ | ------------ |
-|  ` C const& container_of_containers `         |   2d array. Data placed inside container of containers. Containers can be std::vector, std::list, etc. Content of containers must be convertable to `double`                        |
+|  ` C const& container_of_containers `         |   2d array. Data placed inside container of containers. Containers can be `std::vector`, `std::list`, `std::array`, etc. Content of containers must be convertable to `double`                        |
 |  ` C const& container`                        |   1d array. Data placed inside container. Сontainer requirements are the same                            |
 
 
