@@ -19,7 +19,7 @@
 # 💡 About
 DAVIS (Data Visualisation tool) is utility for data visualization. The visualization is based on [Plotly javascript](https://plotly.com/) So DAVIS generate html page with injected data from code and after that launch browser to show it.
 
-One of the main tasks we solve is to make it easier to debug your application. With Davis you can easy visualize your one- and two-dimensional data varibles.
+One of the main tasks we solve is to make it easier to debug your application. With Davis you can easy visualize your one- and two-dimensional data variables.
 
 Davis is easy-to-use tool:
 * one .h file, one .cpp file, one .js file
