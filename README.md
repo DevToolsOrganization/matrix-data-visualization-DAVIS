@@ -1,6 +1,8 @@
-![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
+![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main) <br>
+<img src="https://github.com/user-attachments/assets/4caaae9d-bf6a-46e3-8402-a797b364c987" width="90" height="90">
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
+
 
 ## Table of Contents
 
