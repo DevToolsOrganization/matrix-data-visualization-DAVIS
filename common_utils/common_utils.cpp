@@ -42,7 +42,7 @@ void openFileBySystem(const string& file_name) {
 #error "Unknown compiler"
 #endif
   command.append(file_name);
-  system(command.c_str());
+  std::ignore = system(command.c_str());
 }
 
 string getCurrentPath() {
