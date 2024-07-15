@@ -22,7 +22,7 @@ using std::string;
   #include <unistd.h>
 #endif
 
-inline bool is_file_exists(const string& file_name) {
+bool is_file_exists(const string& file_name) {
   std::ifstream file(file_name.c_str());
   if (!file) {
     return false;
