@@ -57,6 +57,10 @@ TEST(PlotlyMaker, ShowThermalSurfaceHtmlPageTest) {
   EXPECT_EQ(result, true);
 }
 
+TEST(PlotlyMaker, ShowWarnigJsAbsentPageTest) {
+  dvs::showWarningJsAbsentPage();
+}
+
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();

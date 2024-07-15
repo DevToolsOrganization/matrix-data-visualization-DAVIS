@@ -217,7 +217,7 @@ bool make_string(const string& src,
   }
   // create out according on the road map
   out.reserve(reserve_size);
-  for (int i = 0; i < road_map.size(); ++i) {
+  for (size_t i = 0; i < road_map.size(); ++i) {
     auto size = road_map[i].size();
     if (size == 2) {
       out.append(src.substr(road_map[i][0], road_map[i][1]));
