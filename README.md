@@ -5,7 +5,7 @@
 
 [<img src="path/to/image.png">](https://link-to-your-URL/),
 
-[<img src="https://github.com/user-attachments/assets/8ba3a7dc-7466-4167-b552-48bc1ac2decb" width="200" >](https://stackoverflow.com/questions/61071158/add-image-with-link-in-githubs-readme-md)
+[<img src="https://github.com/user-attachments/assets/8ba3a7dc-7466-4167-b552-48bc1ac2decb" width="200">](https://stackoverflow.com/questions/61071158/add-image-with-link-in-githubs-readme-md)
 
 
 https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS/edit/update-readme/README.md
