@@ -1,11 +1,11 @@
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
-<img src="https://github.com/user-attachments/assets/8ba3a7dc-7466-4167-b552-48bc1ac2decb" width="200" >
+[<img src="https://github.com/user-attachments/assets/aa2c32e0-d9f0-4fe2-90d5-68b67cf66a9d">]([https://stackoverflow.com/questions/61071158/add-image-with-link-in-githubs-readme-md](https://github.com/DevToolsOrganization))
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
 
-[<img src="path/to/image.png">](https://link-to-your-URL/),
 
-[<img src="https://github.com/user-attachments/assets/8ba3a7dc-7466-4167-b552-48bc1ac2decb" width="200">](https://stackoverflow.com/questions/61071158/add-image-with-link-in-githubs-readme-md)
+
+
 
 
 https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS/edit/update-readme/README.md
