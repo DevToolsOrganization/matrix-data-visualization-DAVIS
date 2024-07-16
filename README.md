@@ -1,4 +1,5 @@
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [<img src="https://github.com/user-attachments/assets/aa2c32e0-d9f0-4fe2-90d5-68b67cf66a9d">](https://github.com/DevToolsOrganization)
 
