@@ -22,6 +22,7 @@ extern const char kColorMapThermalPart[];
 extern const char kColorMapGrayscalePart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
+extern const char kWarningJSLibAbsentPage[];
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

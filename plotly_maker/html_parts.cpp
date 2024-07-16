@@ -119,6 +119,12 @@ colorbar: {
   title: ""
 }
 }];)";
+
+const char kWarningJSLibAbsentPage[] = R"(
+<p>If you see this page it means that plotly-2.27.0.min.js file is absent.
+<br>Please download it and add it to the directory %1</p>
+<p><a href="https://github.com/plotly/plotly.js/releases/tag/v2.27.0">download plotly javascript library</a
+)";
 // *INDENT-ON*
 //#STOP_GRAB_TO_DVS_NAMESPACE
 } // namespace dvs

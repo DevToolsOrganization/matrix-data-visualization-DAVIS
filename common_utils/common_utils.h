@@ -15,6 +15,10 @@ using std::vector;
 
 string getCurrentPath();
 
+bool is_file_exists(const string& file_name);
+
+void openFileBySystem(const string& file_name);
+
 bool isPlotlyScriptExists();
 
 bool saveStringToFile(const string& file_name,

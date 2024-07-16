@@ -33,6 +33,8 @@ bool showLineChartInBrowser(const string& values, const string& title, const dv:
 bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
 
 bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
+
+void showWarningJsAbsentPage();
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

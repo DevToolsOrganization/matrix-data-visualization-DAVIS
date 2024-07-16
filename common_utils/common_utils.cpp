@@ -22,7 +22,7 @@ using std::string;
   #include <unistd.h>
 #endif
 
-inline bool is_file_exists(const string& file_name) {
+bool is_file_exists(const string& file_name) {
   std::ifstream file(file_name.c_str());
   if (!file) {
     return false;
@@ -42,7 +42,7 @@ void openFileBySystem(const string& file_name) {
 #error "Unknown compiler"
 #endif
   command.append(file_name);
-  system(command.c_str());
+  std::ignore = system(command.c_str());
 }
 
 string getCurrentPath() {
@@ -217,7 +217,7 @@ bool make_string(const string& src,
   }
   // create out according on the road map
   out.reserve(reserve_size);
-  for (int i = 0; i < road_map.size(); ++i) {
+  for (size_t i = 0; i < road_map.size(); ++i) {
     auto size = road_map[i].size();
     if (size == 2) {
       out.append(src.substr(road_map[i][0], road_map[i][1]));

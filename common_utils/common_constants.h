@@ -8,6 +8,7 @@ extern const char kOutFolderName[];
 extern const char kPlotlyJsName[];
 extern const char kPlotlyJsResourcePath[];
 extern const char kPlotlyJsWorkPath[];
+extern const char kWarningPagePath[];
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 
