@@ -230,7 +230,7 @@ This project is used by the following companies:
 You are welcome to our team! 
 
 # 📞 Contacts
-For all questions contact us at <br>
+For any questions please contact<br>
 devtools.public@gmail.com
 
 # 📝 License
