@@ -1,6 +1,11 @@
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=Plastic&logo=c%2B%2B&logoColor=white)
+
+[<img src="https://github.com/user-attachments/assets/aa2c32e0-d9f0-4fe2-90d5-68b67cf66a9d">](https://github.com/DevToolsOrganization)
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
+
 
 ## Table of Contents
 
@@ -227,13 +232,13 @@ This project is used by the following companies:
 You are welcome to our team! 
 
 # 📞 Contacts
-For all questions contact us at <br>
+For any questions please contact<br>
 devtools.public@gmail.com
 
 # 📝 License
 License is [MIT](https://opensource.org/license/mit)
 
-Copyright 2024 Valery Stanchyk & Anton Martinov
+Copyright 2024 Anton Martinov & Valery Stanchyk 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
