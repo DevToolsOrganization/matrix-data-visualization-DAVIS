@@ -140,10 +140,12 @@ margin-left:2%;
 margin-top:5%;
 color:#34495E;
 font-size: 40px;
+font-family:calibri
 }
 .worry_text{
 color:#3498DB;
 font-size: 40px;
+font-family:calibri
 }
 
 .link_style{
@@ -151,6 +153,7 @@ padding-top:2%;
 padding-left:2%;
 color:#34495E;
 font-size: 40px;
+font-family:calibri
 }
 
 .email_style{
@@ -158,6 +161,7 @@ padding-top:6%;
 padding-left:35%;
 color:#34495E;
 font-size: 40px;
+font-family:calibri
 }
 
 </style>
@@ -244,7 +248,7 @@ or
 
 
 <div class="email_style">
-For all questions contact us at
+For any questions please contact
 <br>devtools.public@gmail.com</br>
 <div>
 </div>
