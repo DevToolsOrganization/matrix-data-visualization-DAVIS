@@ -15,7 +15,6 @@ namespace dv {
 using std::vector;
 using std::string;
 
-
 //! 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
