@@ -81,8 +81,6 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string &filen
     return res;
 }
 
-
-
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
