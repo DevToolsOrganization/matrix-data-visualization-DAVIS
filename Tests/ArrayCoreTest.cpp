@@ -9,6 +9,20 @@
 using std::string;
 using std::vector;
 
+TEST(ArrayCore, save_to_disk) {
+    int rows2 = 20;
+    int cols2 = 20;
+    int** vals5 = new int* [rows2];
+    for (int i = 0; i < rows2; ++i) {
+      vals5[i] = new int[cols2];
+      for (int j = 0; j < cols2; ++j) {
+        vals5[i][j] = i * cols2 + j;
+      }
+    }
+    bool result = dv::save(vals5, rows2, cols2, "D:\\test.csv");
+    EXPECT_EQ(result, true);
+}
+
 TEST(ArrayCore, universal_1d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   std::list<double> vec = {5, 34};
@@ -127,7 +141,7 @@ TEST(ArrayCore, showChart) {
 TEST(ArrayCore, readAndShowMatrixFromFile) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values;
-  bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
+  bool readRes = dvs::readMatrix(values, "D:\\test.csv", ';');
   EXPECT_EQ(readRes, true);
   bool result = dv::show(values, "readAndShowMatrixFromFile");
   EXPECT_EQ(result, true);

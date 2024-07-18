@@ -1,13 +1,13 @@
 #ifndef ARRAY_CORE_ARRAY_CORE_H_
 #define ARRAY_CORE_ARRAY_CORE_H_
 //#START_GRAB_TO_INCLUDES_LIST
-#include <iostream>
 #include <vector>
 //#STOP_GRAB_TO_INCLUDES_LIST
 #include "plotly_maker/plotly_maker.h"
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 #include "configurator.h"
+
 
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
@@ -46,9 +46,7 @@ template<typename C,
          typename = std::enable_if_t<std::is_convertible_v<E, double>> >
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
-//! save to disk vector<vector<T>> data
-template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config);
+
 
 // ***********************************
 // template functions implementations:
@@ -79,7 +77,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string &filen
       vector<T> row(&data[i][0], &data[i][0] + arrCols);
       vecVec.emplace_back(row);
     }
-    bool res = saveVecVec<T>(vecVec, configuration);
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
     return res;
 }
 
@@ -150,14 +148,10 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   return res;
 }
 
-template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config)
-{
-    return true;
-}
+
 
 
 //#STOP_GRAB_TO_DV_NAMESPACE
-} // end namespace dvs
+} // end namespace dv
 
 #endif //ARRAY_CORE_ARRAY_CORE_H_
