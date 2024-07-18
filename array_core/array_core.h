@@ -20,6 +20,10 @@ template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
           const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
+template <typename T>
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+          const configSaveToDisk& configuration = configSaveToDisk());
+
 //! 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
@@ -42,6 +46,10 @@ template<typename C,
          typename = std::enable_if_t<std::is_convertible_v<E, double>> >
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
+//! save to disk vector<vector<T>> data
+template <typename T>
+bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config);
+
 // ***********************************
 // template functions implementations:
 // ***********************************
@@ -62,6 +70,20 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
+
+template <typename T>
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string &filename, const configSaveToDisk& configuration){
+    vector<vector<T>> vecVec;
+    vecVec.reserve(arrRows);
+    for (uint64_t i = 0; i < arrRows; ++i) {
+      vector<T> row(&data[i][0], &data[i][0] + arrCols);
+      vecVec.emplace_back(row);
+    }
+    bool res = saveVecVec<T>(vecVec, configuration);
+    return res;
+}
+
+
 
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
@@ -127,6 +149,13 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   return res;
 }
+
+template <typename T>
+bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config)
+{
+    return true;
+}
+
 
 //#STOP_GRAB_TO_DV_NAMESPACE
 } // end namespace dvs

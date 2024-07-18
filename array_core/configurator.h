@@ -66,6 +66,16 @@ struct Config {
   config_visualizationTypes typeVisual;
 };
 
+struct configSaveToDisk{
+    configSaveToDisk():
+        separatorOfRows("\n"),
+        separatorOfCols(";"){}
+    std::string separatorOfRows;
+    std::string separatorOfCols;
+};
+
+
+
 //#STOP_GRAB_TO_DV_NAMESPACE
 }// end namespace dv
 
