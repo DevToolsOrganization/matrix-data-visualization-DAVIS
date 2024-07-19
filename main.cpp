@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
          ("l,linechart", "linechart values", cxxopts::value<std::string>())
          ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
          ("s,surface", "surface values", cxxopts::value<std::string>())
-         ("f,datapath", "path to data", cxxopts::value<std::string>())
+         ("f,file", "path to input file", cxxopts::value<std::string>())
          ("t,charttype", "chart type", cxxopts::value<std::string>())
          ;
   auto result = options.parse(argc, argv);
@@ -33,10 +33,6 @@ int main(int argc, char* argv[]) {
     dvs::saveStringToFile(dvs::kPlotlyJsWorkPath, resource_handle.c_str());
   }
 
-
-  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-
-  dv::show(values, "testHeat1");
   auto config = dv::Config();
 
   if (result.count("linechart")) {
