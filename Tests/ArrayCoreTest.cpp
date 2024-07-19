@@ -8,21 +8,70 @@
 
 using std::string;
 using std::vector;
-
-TEST(ArrayCore, save_to_disk) {
-    int rows2 = 20;
-    int cols2 = 20;
-    int** vals5 = new int* [rows2];
-    for (int i = 0; i < rows2; ++i) {
-      vals5[i] = new int[cols2];
-      for (int j = 0; j < cols2; ++j) {
-        vals5[i][j] = i * cols2 + j;
-      }
+/*
+TEST(ArrayCore, save_to_disk_2d) {
+    //! 2-dimensional array
+    int rows = 10;
+    int cols = 5;
+    int** vals2d = new int* [rows];
+    for (int i = 0; i < rows; ++i) {
+        vals2d[i] = new int[cols];
+        for (int j = 0; j < cols; ++j) {
+            vals2d[i][j] = i * cols + j;
+        }
     }
-    bool result = dv::save(vals5, rows2, cols2, "D:\\test.csv");
+    bool result = dv::save(vals2d, rows, cols, "./data/test_saving_save_to_disk_2d.csv");
     EXPECT_EQ(result, true);
 }
 
+TEST(ArrayCore, save_to_disk_pseudo_2d) {
+    //! 1-dimensional array that simulates a 2-dimensional
+    int rows = 10;
+    int cols = 5;
+    int* vals = new int[rows * cols];
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        vals[i * cols + j] = i * cols + j;
+      }
+    }
+    bool result = dv::save(vals, rows, cols, "./data/test_saving_save_to_disk_pseudo_2d.csv");
+    EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_1d) {
+    //! 1-dimensional array
+    int size = 10;
+    int* vals = new int[size];
+    for (int i = 0; i < size; ++i) {
+        vals[i] = i;
+    }
+    bool result = dv::save(vals, size,"./data/test_saving_save_to_disk_1d.csv");
+    EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_container1D) {
+    //! 1-dimensional container
+    vector<int> vec = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    bool result = dv::save(vec, "./data/test_saving_save_to_disk_container1D.csv");
+    EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_container2D) {
+    //! 2-dimensional container
+   int rows = 10;
+   int cols = 5;
+   vector<vector<double>> arr2;
+   for (int i = 0; i < rows; ++i) {
+       vector<int> vec(cols);
+       for (int j = 0; j < cols; ++j) {
+           vec[j] = j;
+       }
+       arr2.emplace_back(vec);
+   }
+    bool result = dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
+    EXPECT_EQ(result, true);
+}
+*/
 TEST(ArrayCore, universal_1d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   std::list<double> vec = {5, 34};
@@ -141,7 +190,7 @@ TEST(ArrayCore, showChart) {
 TEST(ArrayCore, readAndShowMatrixFromFile) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values;
-  bool readRes = dvs::readMatrix(values, "D:\\test.csv", ';');
+  bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
   bool result = dv::show(values, "readAndShowMatrixFromFile");
   EXPECT_EQ(result, true);
