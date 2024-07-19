@@ -66,12 +66,12 @@ struct Config {
   config_visualizationTypes typeVisual;
 };
 
-struct configSaveToDisk{
-    configSaveToDisk():
-        separatorOfRows("\n"),
-        separatorOfCols(";"){}
-    std::string separatorOfRows;
-    std::string separatorOfCols;
+struct configSaveToDisk {
+  configSaveToDisk():
+    separatorOfRows("\n"),
+    separatorOfCols(";") {}
+  std::string separatorOfRows;
+  std::string separatorOfCols;
 };
 
 

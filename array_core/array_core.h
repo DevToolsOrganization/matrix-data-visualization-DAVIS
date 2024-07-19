@@ -87,15 +87,15 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
 }
 
 template <typename T>
-bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string &filename, const configSaveToDisk& configuration){
-    vector<vector<T>> vecVec;
-    vecVec.reserve(arrRows);
-    for (uint64_t i = 0; i < arrRows; ++i) {
-      vector<T> row(&data[i][0], &data[i][0] + arrCols);
-      vecVec.emplace_back(row);
-    }
-    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-    return res;
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename, const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(arrRows);
+  for (uint64_t i = 0; i < arrRows; ++i) {
+    vector<T> row(&data[i][0], &data[i][0] + arrCols);
+    vecVec.emplace_back(row);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
 }
 
 template <typename T>
@@ -117,15 +117,15 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
 
 template <typename T>
 bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
-          const configSaveToDisk& configuration){
-    vector<vector<T>> vecVec;
-    vecVec.reserve(arrRows);
-    for (uint64_t i = 0; i < arrRows; ++i) {
-      vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
-      vecVec.emplace_back(row);
-    }
-    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-    return res;
+          const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(arrRows);
+  for (uint64_t i = 0; i < arrRows; ++i) {
+    vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
+    vecVec.emplace_back(row);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
 }
 
 template <typename T>
@@ -139,10 +139,10 @@ bool show(const T* data, uint64_t count, const string& htmlPageName, const Confi
 }
 
 template <typename T>
-bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration){
-    vector<T> row(data, data + count);
-    bool res = dvs::saveVec<T>(row, filename, configuration);
-    return res;
+bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
+  vector<T> row(data, data + count);
+  bool res = dvs::saveVec<T>(row, filename, configuration);
+  return res;
 }
 
 template<typename C, typename T, typename>
@@ -161,20 +161,20 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
 }
 
 template<typename C, typename T, typename>
-bool save(C const& container, const string& filename, const configSaveToDisk& configuration){
-    vector<T> row(container.size());
-    uint64_t i = 0;
-    for (auto v : container) {
-      row[i] = v;
-      ++i;
-    }
-    bool res = dvs::saveVec<T>(row, filename, configuration);
-    return res;
+bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
+  vector<T> row(container.size());
+  uint64_t i = 0;
+  for (auto v : container) {
+    row[i] = v;
+    ++i;
+  }
+  bool res = dvs::saveVec<T>(row, filename, configuration);
+  return res;
 }
 
 template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
-    vector<vector<double>> vecVecDbl;
+  vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
     vector<double> dblRow(row.size());
@@ -195,22 +195,20 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
 }
 
 template<typename C, typename E, typename T, typename >
-bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration){
-    vector<vector<T>> vecVec;
-    vecVec.reserve(container_of_containers.size());
-    for (auto row : container_of_containers) {
-      vector<T> rowTemp(row.size());
-      uint64_t i = 0;
-      for (auto v : row) {
-        rowTemp[i] = v;
-        ++i;
-      }
-      vecVec.emplace_back(rowTemp);
+bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(container_of_containers.size());
+  for (auto row : container_of_containers) {
+    vector<T> rowTemp(row.size());
+    uint64_t i = 0;
+    for (auto v : row) {
+      rowTemp[i] = v;
+      ++i;
     }
-
-   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-   return res;
-
+    vecVec.emplace_back(rowTemp);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
 }
 
 
