@@ -53,13 +53,13 @@ int main(int argc, char* argv[]) {
   } else if (result.count("file")) {
     auto data_path = result["file"].as<std::string>();
     std::vector<vector<double>> data;
-    if (dvs::readMatrix(data,data_path,';')) {
-        if(data.size()==1){
+    if (dvs::readMatrix(data, data_path, ';')) {
+      if (data.size() == 1) {
         config.typeVisual = dv::VISUALTYPE_CHART;
-        dv::show(data[0],"file_line_chart",config);
-        }else{
+        dv::show(data[0], "file_line_chart", config);
+      } else {
         dv::show(data);
-        }
+      }
     }
   }
 
