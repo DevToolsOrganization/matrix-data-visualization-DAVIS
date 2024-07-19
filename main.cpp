@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
          ("l,linechart", "linechart values", cxxopts::value<std::string>())
          ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
          ("s,surface", "surface values", cxxopts::value<std::string>())
-         ("f,datapath", "path to data", cxxopts::value<std::string>())
+         ("f,file", "path to input file", cxxopts::value<std::string>())
          ("t,charttype", "chart type", cxxopts::value<std::string>())
          ;
   auto result = options.parse(argc, argv);
@@ -33,10 +33,6 @@ int main(int argc, char* argv[]) {
     dvs::saveStringToFile(dvs::kPlotlyJsWorkPath, resource_handle.c_str());
   }
 
-
-  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-
-  dv::show(values, "testHeat1");
   auto config = dv::Config();
 
   if (result.count("linechart")) {
@@ -54,25 +50,16 @@ int main(int argc, char* argv[]) {
     auto data = result["surface"].as<std::string>();
     dvs::showSurfaceInBrowser(data, "comand_line_surface", config);
     return EXIT_SUCCESS;
-  } else if (result.count("datapath")) {
-    auto data_path = result["datapath"].as<std::string>();
-    std::string str_data;
-    if (dvs::getDataFromFile(data_path, str_data)) {
-      if (result.count("charttype")) {
-        auto chart_type = result["charttype"].as<std::string>();
-        if (chart_type == "l" || chart_type == "linechart") {
-          config.typeVisual = dv::VISUALTYPE_CHART;
-          dvs::showLineChartInBrowser(str_data, "file_data", config);
-        } else if (chart_type == "s" || chart_type == "surface") {
-          config.typeVisual = dv::VISUALTYPE_SURFACE;
-          dvs::showSurfaceInBrowser(str_data, "surface", config);
-        } else if (chart_type == "m" || chart_type == "heatmap") {
-
+  } else if (result.count("file")) {
+    auto data_path = result["file"].as<std::string>();
+    std::vector<vector<double>> data;
+    if (dvs::readMatrix(data,data_path,';')) {
+        if(data.size()==1){
+        config.typeVisual = dv::VISUALTYPE_CHART;
+        dv::show(data[0],"file_line_chart",config);
+        }else{
+        dv::show(data);
         }
-      } else {
-        config.typeVisual = dv::VISUALTYPE_HEATMAP;
-        dvs::showHeatMapInBrowser(str_data, "file_data", config);
-      }
     }
   }
 
