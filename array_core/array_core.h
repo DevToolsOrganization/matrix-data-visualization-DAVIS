@@ -16,14 +16,6 @@ using std::vector;
 using std::string;
 
 
-bool testFunc()
-{
-//    vector<vector<double>> vecVec;
-//    bool res = dvs::saveVecVecTest(vecVec);
-    return 0;
-}
-
-
 //! 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
@@ -62,15 +54,15 @@ bool save(C const& container, const string& filename, const configSaveToDisk& co
 
 //! 2-dimensional container
 template<typename C,
-         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
-         typename E = std::decay_t<decltype(*begin(std::declval<T>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<E, double>> >
+         typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename T = std::decay_t<decltype(*begin(std::declval<E>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 template<typename C,
-         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
-         typename E = std::decay_t<decltype(*begin(std::declval<T>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<E, double>> >
+         typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename T = std::decay_t<decltype(*begin(std::declval<E>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 // ***********************************
@@ -102,8 +94,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string &filen
       vector<T> row(&data[i][0], &data[i][0] + arrCols);
       vecVec.emplace_back(row);
     }
-   // bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-    bool res = true;
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
     return res;
 }
 
@@ -133,8 +124,7 @@ bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filen
       vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
       vecVec.emplace_back(row);
     }
-    //bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-    bool res = true;
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
     return res;
 }
 
@@ -182,9 +172,9 @@ bool save(C const& container, const string& filename, const configSaveToDisk& co
     return res;
 }
 
-template<typename C, typename T, typename E, typename >
+template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
+    vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
     vector<double> dblRow(row.size());
@@ -204,22 +194,23 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   return res;
 }
 
-template<typename C, typename T, typename E, typename >
+template<typename C, typename E, typename T, typename >
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration){
-//    vector<vector<double>> vecVec;
-//    vecVec.reserve(container_of_containers.size());
-//    for (auto row : container_of_containers) {
-//      vector<double> rowTemp(row.size());
-//      uint64_t i = 0;
-//      for (auto v : row) {
-//        rowTemp[i] = v;
-//        ++i;
-//      }
-//      vecVec.emplace_back(rowTemp);
-//    }
-//    bool res = dvs::saveVecVec<double>(vecVec, filename, configuration);
-//    return res;
-    return true;
+    vector<vector<T>> vecVec;
+    vecVec.reserve(container_of_containers.size());
+    for (auto row : container_of_containers) {
+      vector<T> rowTemp(row.size());
+      uint64_t i = 0;
+      for (auto v : row) {
+        rowTemp[i] = v;
+        ++i;
+      }
+      vecVec.emplace_back(rowTemp);
+    }
+
+   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+   return res;
+
 }
 
 

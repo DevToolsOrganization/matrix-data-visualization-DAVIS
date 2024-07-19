@@ -8,7 +8,7 @@
 
 using std::string;
 using std::vector;
-/*
+
 TEST(ArrayCore, save_to_disk_2d) {
     //! 2-dimensional array
     int rows = 10;
@@ -60,18 +60,18 @@ TEST(ArrayCore, save_to_disk_container2D) {
     //! 2-dimensional container
    int rows = 10;
    int cols = 5;
-   vector<vector<double>> arr2;
+   vector<vector<int>> arr2;
    for (int i = 0; i < rows; ++i) {
        vector<int> vec(cols);
        for (int j = 0; j < cols; ++j) {
-           vec[j] = j;
+           vec[j] = i * cols + j;
        }
        arr2.emplace_back(vec);
    }
     bool result = dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
     EXPECT_EQ(result, true);
 }
-*/
+
 TEST(ArrayCore, universal_1d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   std::list<double> vec = {5, 34};
