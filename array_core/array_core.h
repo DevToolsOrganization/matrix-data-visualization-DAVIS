@@ -211,8 +211,6 @@ bool save(C const& container_of_containers, const string& filename, const config
   return res;
 }
 
-
-
 //#STOP_GRAB_TO_DV_NAMESPACE
 } // end namespace dv
 
