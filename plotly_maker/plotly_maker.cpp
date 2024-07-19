@@ -93,10 +93,10 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
   saveStringToFile(pageName, page);
-  if(isPlotlyScriptExists()){
-  openPlotlyHtml(pageName);
-  }else{
-  showWarningJsAbsentPage();
+  if (isPlotlyScriptExists()) {
+    openPlotlyHtml(pageName);
+  } else {
+    showWarningJsAbsentPage();
   }
   return true;// TODO handle different exceptions
 };
@@ -207,10 +207,10 @@ bool showLineChartInBrowser(const vector<double>& values,
   mayBeCreateJsWorkingFolder();
   pageName.append("./").append(kOutFolderName).append(title).append(".html");
   saveStringToFile(pageName, page);
-  if(isPlotlyScriptExists()){
-  openPlotlyHtml(pageName);
-  }else{
-  showWarningJsAbsentPage();
+  if (isPlotlyScriptExists()) {
+    openPlotlyHtml(pageName);
+  } else {
+    showWarningJsAbsentPage();
   }
   return true;
 }
@@ -241,16 +241,16 @@ bool showSurfaceInBrowser(const string& values,
 }
 
 void showWarningJsAbsentPage() {
-    string out;
-    string davis_dir;
+  string out;
+  string davis_dir;
 #ifdef _WIN32
   davis_dir = "\\davis_htmls";
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-    vector<string>args = {getCurrentPath()+davis_dir};
-    make_string(kWarningJSLibAbsentPage,args,out);
-    saveStringToFile(kWarningPagePath, out);
+  vector<string>args = {getCurrentPath() + davis_dir};
+  make_string(kWarningJSLibAbsentPage, args, out);
+  saveStringToFile(kWarningPagePath, out);
   openFileBySystem(kWarningPagePath);
 }
 //#STOP_GRAB_TO_DVS_NAMESPACE
