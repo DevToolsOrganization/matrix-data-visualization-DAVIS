@@ -46,35 +46,58 @@ bool make_string(const string& src,
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
-//! save to disk vector<vector<T>> data
+//! save to disk vector<T> data
 template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config);
-
-template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config)
+bool saveVec(const vector<T>& vec,const string& filename, dv::configSaveToDisk config)
 {
-    if(vecVec.size() == 0){
-        return false;
-    }else if(vecVec.at(0).size() == 0){
+    if(vec.size() == 0){
         return false;
     }
-
     std::ofstream fout(filename);
     if(!fout.is_open()){
         return false;
     }
-    size_t rows = vecVec.size();
-    size_t cols = vecVec.at(0).size();
-
+    size_t rows = vec.size();
     for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j){
-            fout << vecVec.at(i).at(j) << config.separatorOfCols;
-        }
-        fout << config.separatorOfRows;
+        fout << vec.at(i) << config.separatorOfRows;
     }
     fout.close();
     return true;
 }
+
+
+//bool saveVecVecTest(const vector<vector<double>>& vecVec)
+//{
+//    return 1;
+//}
+
+
+////! save to disk vector<vector<T>> data
+//template <typename T>
+//bool saveVecVec(const vector<vector<T>>& vecVec,const string& filename, dv::configSaveToDisk config)
+//{
+//    if(vecVec.size() == 0){
+//        return false;
+//    }else if(vecVec.at(0).size() == 0){
+//        return false;
+//    }
+
+//    std::ofstream fout(filename);
+//    if(!fout.is_open()){
+//        return false;
+//    }
+//    size_t rows = vecVec.size();
+//    size_t cols = vecVec.at(0).size();
+
+//    for (int i = 0; i < rows; ++i) {
+//        for (int j = 0; j < cols; ++j){
+//            fout << vecVec.at(i).at(j) << config.separatorOfCols;
+//        }
+//        fout << config.separatorOfRows;
+//    }
+//    fout.close();
+//    return true;
+//}
 
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
