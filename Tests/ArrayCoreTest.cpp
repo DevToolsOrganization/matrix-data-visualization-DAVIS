@@ -111,7 +111,7 @@ TEST(ArrayCore, configurator) {
   config.heatmap.xLabel = "Столбцы";
   config.heatmap.yLabel = "Строки";
   config.heatmap.title = "Тестовая матрица";
-  config.heatmap.colorSc = dv::COLORSCALE_GLAMOUR;
+  config.heatmap.colorSc = dv::COLORSCALE_YlGnBu;
   bool result1 = dv::show(values, "HeatMap", config);
   config.typeVisual = dv::VISUALTYPE_SURFACE;
   config.surf.title = "This is Surface!!!";
@@ -198,7 +198,10 @@ TEST(ArrayCore, readAndShowMatrixFromFile) {
   vector<vector<double>> values;
   bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
-  bool result = dv::show(values, "readAndShowMatrixFromFile");
+  auto config = dv::Config();
+  config.heatmap.xLabel = "english";
+  config.heatmap.yLabel = "русский";
+  bool result = dv::show(values, "readAndShowMatrixFromFile", config);
   EXPECT_EQ(result, true);
 }
 

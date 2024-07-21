@@ -20,6 +20,13 @@ extern const char kColorMapSunnyPart[];
 extern const char kColorMapGlamourPart[];
 extern const char kColorMapThermalPart[];
 extern const char kColorMapGrayscalePart[];
+
+extern const char kColorMapYlGnBuPart[];
+extern const char kColorMapJetPart[];
+extern const char kColorMapHotPart[];
+extern const char kColorMapElectricPart[];
+extern const char kColorMapPortlandPart[];
+
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kWarningJSLibAbsentPage[];
