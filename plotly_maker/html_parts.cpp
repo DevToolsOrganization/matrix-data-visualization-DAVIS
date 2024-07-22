@@ -6,7 +6,7 @@ namespace dvs {
     const char kHtmlModel[] =
 R"(
 <head>
-<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
+<script src="./plotly-2.32.0.min.js" charset="utf-8"></script>
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -264,7 +264,7 @@ Please download this .js file and add to the directory
 Download plotly javascript library from
 <a href="https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS">our github</a>
 or
-<a href="https://cdn.plot.ly/plotly-2.27.0.min.js">official plotly site</a>
+<a href="https://cdn.plot.ly/plotly-2.32.0.min.js">official plotly site</a>
 
 
 <div class="email_style">
