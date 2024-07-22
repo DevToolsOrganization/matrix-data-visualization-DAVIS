@@ -14,6 +14,14 @@ enum ARGS_INDEX {
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };
+
+enum ARGS_WARNING_PAGE_INDEX {
+  ARG_WORKING_FOLDER,
+  ARG_JS_VERSION,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_WARNING_PAGE_SIZE
+};
+
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
