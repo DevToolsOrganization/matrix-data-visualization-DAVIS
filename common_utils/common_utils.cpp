@@ -1,6 +1,5 @@
 #include "common_utils.h"
 #include "common_constants.h"
-
 //#START_GRAB_TO_INCLUDES_LIST
 #include <fstream>
 #include <iostream>
@@ -232,5 +231,6 @@ bool make_string(const string& src,
   //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
 }
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

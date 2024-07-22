@@ -9,6 +9,75 @@
 using std::string;
 using std::vector;
 
+TEST(ArrayCore, save_to_disk_2d) {
+  //! 2-dimensional array
+  int rows = 10;
+  int cols = 5;
+  int** vals2d = new int* [rows];
+  for (int i = 0; i < rows; ++i) {
+    vals2d[i] = new int[cols];
+    for (int j = 0; j < cols; ++j) {
+      vals2d[i][j] = i * cols + j;
+    }
+  }
+  bool result = dv::save(vals2d, rows, cols, "./data/test_saving_save_to_disk_2d.csv");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_pseudo_2d) {
+  //! 1-dimensional array that simulates a 2-dimensional
+  int rows = 10;
+  int cols = 5;
+  int* vals = new int[rows * cols];
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      vals[i * cols + j] = i * cols + j;
+    }
+  }
+  dv::configSaveToDisk conf;
+  conf.separatorOfCols = "*";
+  conf.separatorOfRows = "____";
+  bool result = dv::save(vals, rows, cols, "./data/test_saving_save_to_disk_pseudo_2d.csv", conf);
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_1d) {
+  //! 1-dimensional array
+  int size = 10;
+  int* vals = new int[size];
+  for (int i = 0; i < size; ++i) {
+    vals[i] = i;
+  }
+  bool result = dv::save(vals, size, "./data/test_saving_save_to_disk_1d.csv");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_container1D) {
+  //! 1-dimensional container
+  vector<double> vec;
+  for (size_t i = 0; i < 10; ++i) {
+    vec.emplace_back(i * 1e-10);
+  }
+  bool result = dv::save(vec, "./data/test_saving_save_to_disk_container1D.csv");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_container2D) {
+  //! 2-dimensional container
+  int rows = 10;
+  int cols = 5;
+  vector<vector<int>> arr2;
+  for (int i = 0; i < rows; ++i) {
+    vector<int> vec(cols);
+    for (int j = 0; j < cols; ++j) {
+      vec[j] = i * cols + j;
+    }
+    arr2.emplace_back(vec);
+  }
+  bool result = dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
+  EXPECT_EQ(result, true);
+}
+
 TEST(ArrayCore, universal_1d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   std::list<double> vec = {5, 34};
@@ -42,7 +111,7 @@ TEST(ArrayCore, configurator) {
   config.heatmap.xLabel = "Столбцы";
   config.heatmap.yLabel = "Строки";
   config.heatmap.title = "Тестовая матрица";
-  config.heatmap.colorSc = dv::COLORSCALE_GLAMOUR;
+  config.heatmap.colorSc = dv::COLORSCALE_YlGnBu;
   bool result1 = dv::show(values, "HeatMap", config);
   config.typeVisual = dv::VISUALTYPE_SURFACE;
   config.surf.title = "This is Surface!!!";
@@ -129,7 +198,10 @@ TEST(ArrayCore, readAndShowMatrixFromFile) {
   vector<vector<double>> values;
   bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
-  bool result = dv::show(values, "readAndShowMatrixFromFile");
+  auto config = dv::Config();
+  config.heatmap.xLabel = "english";
+  config.heatmap.yLabel = "русский";
+  bool result = dv::show(values, "readAndShowMatrixFromFile", config);
   EXPECT_EQ(result, true);
 }
 

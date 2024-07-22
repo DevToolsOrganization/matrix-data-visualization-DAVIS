@@ -1,7 +1,6 @@
 #ifndef ARRAY_CORE_ARRAY_CORE_H_
 #define ARRAY_CORE_ARRAY_CORE_H_
 //#START_GRAB_TO_INCLUDES_LIST
-#include <iostream>
 #include <vector>
 //#STOP_GRAB_TO_INCLUDES_LIST
 #include "plotly_maker/plotly_maker.h"
@@ -9,25 +8,38 @@
 #include "common_utils/common_constants.h"
 #include "configurator.h"
 
+
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
 
 using std::vector;
 using std::string;
 
+
 //! 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
           const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+
+template <typename T>
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+          const configSaveToDisk& configuration = configSaveToDisk());
 
 //! 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
           const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
+template <typename T>
+bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+          const configSaveToDisk& configuration = configSaveToDisk());
+
 //! 1-dimensional array
 template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+
+template <typename T>
+bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 //! 1-dimensional container
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
@@ -35,12 +47,23 @@ template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
-//! 2-dimensional container
 template<typename C,
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
-         typename E = std::decay_t<decltype(*begin(std::declval<T>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<E, double>> >
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+
+//! 2-dimensional container
+template<typename C,
+         typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename T = std::decay_t<decltype(*begin(std::declval<E>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+
+template<typename C,
+         typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename T = std::decay_t<decltype(*begin(std::declval<E>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 // ***********************************
 // template functions implementations:
@@ -64,6 +87,18 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
 }
 
 template <typename T>
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename, const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(arrRows);
+  for (uint64_t i = 0; i < arrRows; ++i) {
+    vector<T> row(&data[i][0], &data[i][0] + arrCols);
+    vecVec.emplace_back(row);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
+}
+
+template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(arrRows);
@@ -81,6 +116,19 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
 }
 
 template <typename T>
+bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+          const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(arrRows);
+  for (uint64_t i = 0; i < arrRows; ++i) {
+    vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
+    vecVec.emplace_back(row);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
+}
+
+template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
   vector<double> dblRow(data, data + count);
   bool res = false;
@@ -90,10 +138,17 @@ bool show(const T* data, uint64_t count, const string& htmlPageName, const Confi
   return res;
 }
 
+template <typename T>
+bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
+  vector<T> row(data, data + count);
+  bool res = dvs::saveVec<T>(row, filename, configuration);
+  return res;
+}
+
 template<typename C, typename T, typename>
 bool show(C const& container, const string& htmlPageName, const Config& configuration) {
   vector<double> dblRow(container.size());
-  int i = 0;
+  uint64_t i = 0;
   for (auto v : container) {
     dblRow[i] = v;
     ++i;
@@ -105,20 +160,31 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
   return res;
 }
 
-template<typename C, typename T, typename E, typename >
+template<typename C, typename T, typename>
+bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
+  vector<T> row(container.size());
+  uint64_t i = 0;
+  for (auto v : container) {
+    row[i] = v;
+    ++i;
+  }
+  bool res = dvs::saveVec<T>(row, filename, configuration);
+  return res;
+}
+
+template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
     vector<double> dblRow(row.size());
-    int i = 0;
+    uint64_t i = 0;
     for (auto v : row) {
       dblRow[i] = v;
       ++i;
     }
     vecVecDbl.emplace_back(dblRow);
   }
-
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -128,7 +194,24 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   return res;
 }
 
+template<typename C, typename E, typename T, typename >
+bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
+  vector<vector<T>> vecVec;
+  vecVec.reserve(container_of_containers.size());
+  for (auto row : container_of_containers) {
+    vector<T> rowTemp(row.size());
+    uint64_t i = 0;
+    for (auto v : row) {
+      rowTemp[i] = v;
+      ++i;
+    }
+    vecVec.emplace_back(rowTemp);
+  }
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
+}
+
 //#STOP_GRAB_TO_DV_NAMESPACE
-} // end namespace dvs
+} // end namespace dv
 
 #endif //ARRAY_CORE_ARRAY_CORE_H_

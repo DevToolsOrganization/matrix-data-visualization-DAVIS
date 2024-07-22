@@ -104,6 +104,26 @@ Plotly.newPlot('gd', data, layout, config);
     ['1.0', 'rgb(255, 255, 255)']
   ],)";
 
+    const char kColorMapYlGnBuPart[] = R"(
+  colorscale: 'YlGnBu',
+  )";
+
+    const char kColorMapJetPart[] = R"(
+  colorscale: 'Jet',
+  )";
+
+    const char kColorMapHotPart[] = R"(
+  colorscale: 'Hot',
+  )";
+
+    const char kColorMapElectricPart[] = R"(
+  colorscale: 'Electric',
+  )";
+
+    const char kColorMapPortlandPart[] = R"(
+  colorscale: 'Portland',
+  )";
+
     const char kHeatMapTypePart[] = R"(
 type: 'heatmap',
 hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>',

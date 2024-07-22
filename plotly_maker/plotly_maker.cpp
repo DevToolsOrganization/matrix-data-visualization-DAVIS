@@ -151,6 +151,21 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
     case dv::config_colorscales::COLORSCALE_GRAYSCALE:
       args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
       break;
+    case dv::config_colorscales::COLORSCALE_YlGnBu:
+      args[ARG_COLOR_MAP] = kColorMapYlGnBuPart;
+      break;
+    case dv::config_colorscales::COLORSCALE_JET:
+      args[ARG_COLOR_MAP] = kColorMapJetPart;
+      break;
+    case dv::config_colorscales::COLORSCALE_HOT:
+      args[ARG_COLOR_MAP] = kColorMapHotPart;
+      break;
+    case dv::config_colorscales::COLORSCALE_ELECTRIC:
+      args[ARG_COLOR_MAP] = kColorMapElectricPart;
+      break;
+    case dv::config_colorscales::COLORSCALE_PORTLAND:
+      args[ARG_COLOR_MAP] = kColorMapPortlandPart;
+      break;
   }
   switch (typeVisual) {
     case dv::VISUALTYPE_HEATMAP:

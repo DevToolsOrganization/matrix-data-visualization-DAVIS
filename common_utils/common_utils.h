@@ -1,10 +1,12 @@
 #ifndef COMMON_UTILS_COMMON_UTILS_H_
 #define COMMON_UTILS_COMMON_UTILS_H_
+#include "../array_core/configurator.h"
 //#START_GRAB_TO_INCLUDES_LIST
 #include <string>
 #include <vector>
 #include <map>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
@@ -43,6 +45,55 @@ bool make_string(const string& src,
 
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
+
+//! save to disk vector<T> data
+template <typename T>
+bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
+  if (vec.size() == 0) {
+    return false;
+  }
+  std::ofstream fout(filename);
+  if (!fout.is_open()) {
+    return false;
+  }
+  size_t rows = vec.size();
+  for (int i = 0; i < rows; ++i) {
+    fout << vec.at(i) << config.separatorOfRows;
+  }
+  fout.close();
+  return true;
+}
+
+//! save to disk vector<vector<T>> data
+template <typename T>
+bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::configSaveToDisk config) {
+  if (vecVec.size() == 0) {
+    return false;
+  } else if (vecVec.at(0).size() == 0) {
+    return false;
+  }
+
+  std::ofstream fout(filename);
+  if (!fout.is_open()) {
+    return false;
+  }
+  size_t rows = vecVec.size();
+  size_t cols = vecVec.at(0).size();
+
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      double val = vecVec.at(i).at(j);
+      fout << val;
+      if (j < cols - 1) { // we dont need sep al row end
+        fout << config.separatorOfCols;
+      }
+    }
+    fout << config.separatorOfRows;
+  }
+  fout.close();
+  return true;
+}
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
