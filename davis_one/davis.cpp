@@ -18,9 +18,9 @@
 namespace dvs {
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
-const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.27.0.min.js";
-const char kPlotlyJsName[] = "plotly-2.27.0.min.js";
-const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.27.0.min.js";
+const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.32.0.min.js";
+const char kPlotlyJsName[] = "plotly-2.32.0.min.js";
+const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.32.0.min.js";
 const char kWarningPagePath[] = "./davis_htmls/warning_js_absent.html";
 
 } // namespace dvs end
@@ -270,7 +270,7 @@ viewBox="0 0 11237.16 8236.39"
 </svg>
 </div>
 <div class ="dont_worry">
-<p class="worry_text">If you see this page it means that plotly-2.27.0.min.js
+<p class="worry_text">If you see this page it means that %2
 <br>file is absent...</br>
 </p>
 <div class="worry_text">But don't worry!</div>
@@ -776,7 +776,9 @@ void showWarningJsAbsentPage() {
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args = {getCurrentPath() + davis_dir};
+  vector<string>args{ARGS_WARNING_PAGE_SIZE,""};
+  args[ARG_WORKING_FOLDER] = getCurrentPath() + davis_dir;
+  args[ARG_JS_VERSION] = kPlotlyJsName;
   make_string(kWarningJSLibAbsentPage, args, out);
   saveStringToFile(kWarningPagePath, out);
   openFileBySystem(kWarningPagePath);
