@@ -41,7 +41,7 @@ void DavisGUI::dropEvent(QDropEvent *event)
         std::vector<std::vector<double>> data;
         dvs::readMatrix(data,filePath.toStdString(),';');
         if(data.size()>1 && data[0].size()>1){
-        dv::show(data);
+           dv::show(data);
         }else{
             std::vector<double> showVector;
             if(data.size()>1 && data[0].size()==1){
