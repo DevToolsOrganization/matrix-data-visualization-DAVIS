@@ -128,6 +128,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
+  args[ARG_JS_VER] = kPlotlyJsName;
   dv::config_colorscales clrScale;
   if (typeVisual == dv::VISUALTYPE_HEATMAP)
     clrScale = configuration.heatmap.colorSc;
@@ -211,6 +212,7 @@ bool showLineChartInBrowser(const vector<double>& values,
                             const string& title, const dv::Config& configuration) {
   string page;
   vector<string>args(ARGS_SIZE, "");
+  args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[ARG_VALUES] = str_values;

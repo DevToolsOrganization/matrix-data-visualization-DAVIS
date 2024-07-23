@@ -39,7 +39,13 @@ void DavisGUI::dropEvent(QDropEvent *event)
     {
         std::vector<std::vector<double>> data;
         dvs::readMatrix(data,filePath.toStdString(),';');
+        if(data.size()>1){
         dv::show(data);
+        }else{
+            dv::Config config;
+            config.typeVisual = dv::VISUALTYPE_CHART;
+            dv::show(data[0],"chart",config);
+        }
     }
     else
         qDebug()<<"not exist";

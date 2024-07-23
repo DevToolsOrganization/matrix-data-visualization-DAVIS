@@ -30,7 +30,7 @@ namespace dvs {
     const char kHtmlModel[] =
 R"(
 <head>
-<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
+<script src="./%8" charset="utf-8"></script>
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -641,6 +641,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
+  args[ARG_JS_VER] = kPlotlyJsName;
   dv::config_colorscales clrScale;
   if (typeVisual == dv::VISUALTYPE_HEATMAP)
     clrScale = configuration.heatmap.colorSc;
@@ -724,6 +725,7 @@ bool showLineChartInBrowser(const vector<double>& values,
                             const string& title, const dv::Config& configuration) {
   string page;
   vector<string>args(ARGS_SIZE, "");
+  args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
   createStringLineChartValues(values, str_values);
   args[ARG_VALUES] = str_values;
