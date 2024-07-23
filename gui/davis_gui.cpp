@@ -13,6 +13,7 @@ DavisGUI::DavisGUI(QWidget *parent)
 {
     ui->setupUi(this);
     this->setAcceptDrops(true);
+    this->setWindowFlag(Qt::WindowStaysOnTopHint);
 }
 
 DavisGUI::~DavisGUI()
@@ -39,12 +40,24 @@ void DavisGUI::dropEvent(QDropEvent *event)
     {
         std::vector<std::vector<double>> data;
         dvs::readMatrix(data,filePath.toStdString(),';');
-        if(data.size()>1){
+        if(data.size()>1 && data[0].size()>1){
         dv::show(data);
         }else{
+            std::vector<double> showVector;
+            if(data.size()>1 && data[0].size()==1){
+               std::vector<double> new_data(data.size());
+               for(size_t i = 0;i<new_data.size();++i){
+                   new_data[i] = data[i][0];
+               }
+               showVector = new_data;
+            }else{
+                showVector = data[0];
+            }
             dv::Config config;
             config.typeVisual = dv::VISUALTYPE_CHART;
-            dv::show(data[0],"chart",config);
+            dv::show(showVector,"chart",config);
+
+
         }
     }
     else

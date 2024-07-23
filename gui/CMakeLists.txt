@@ -36,6 +36,8 @@ set(PROJECT_SOURCES
         davis_gui.ui
 )
 
+qt5_add_resources(PROJECT_SOURCES res.qrc)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gui
         ${PROJECT_SOURCES}
