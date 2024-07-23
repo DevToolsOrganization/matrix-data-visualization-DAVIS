@@ -2,18 +2,46 @@
 #include "./ui_davis_gui.h"
 
 #include "../davis_one/davis.h"
+#include "QDragEnterEvent"
+#include "QMimeData"
+#include "QDebug"
+#include "QFileInfo"
 
 DavisGUI::DavisGUI(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::DavisGUI)
 {
     ui->setupUi(this);
-    //std::vector<double> test_data = {5,6,8};
-    //dv::show(test_data);
+    this->setAcceptDrops(true);
 }
 
 DavisGUI::~DavisGUI()
 {
     delete ui;
+}
+
+void DavisGUI::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+     {
+         event->acceptProposedAction();
+     }
+     else{
+         qDebug()<<"not drop";
+     }
+}
+
+void DavisGUI::dropEvent(QDropEvent *event)
+{
+    QString filePath =  event->mimeData()->urls().first().toLocalFile();
+    QFileInfo info(filePath);
+    if(info.exists())
+    {
+        std::vector<std::vector<double>> data;
+        dvs::readMatrix(data,filePath.toStdString(),';');
+        dv::show(data);
+    }
+    else
+        qDebug()<<"not exist";
 }
 
