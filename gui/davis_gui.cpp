@@ -6,6 +6,10 @@
 #include "QMimeData"
 #include "QDebug"
 #include "QFileInfo"
+#include "QPainter"
+#include "QMenuBar"
+#include "QHBoxLayout"
+#include "QPushButton"
 
 DavisGUI::DavisGUI(QWidget *parent)
     : QMainWindow(parent)
@@ -13,7 +17,21 @@ DavisGUI::DavisGUI(QWidget *parent)
 {
     ui->setupUi(this);
     this->setAcceptDrops(true);
-    this->setWindowFlag(Qt::WindowStaysOnTopHint);
+    QHBoxLayout *hbl = ui->horizontalLayout_menu;
+    QMenuBar *mb = new QMenuBar;
+    mb->setFixedSize(QSize(50,20));
+    mb->setStyleSheet("background-color:rgb(82,82,82);");
+    mb->addAction(new QAction("Help"));
+    hbl->addWidget(mb);
+    hbl->addItem(new QSpacerItem(2, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    QPushButton *qpb = new QPushButton;
+    connect(qpb,&QPushButton::pressed,[this](){this->close();});
+    qpb->setFixedSize(QSize(20,20));
+    qpb->setText("X");
+    hbl->addWidget(qpb);
+    this->setLayout(hbl);
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);//(Qt::WindowStaysOnTopHint);
+    //this->setAttribute(Qt::WA_TranslucentBackground, true);
 }
 
 DavisGUI::~DavisGUI()
@@ -62,5 +80,37 @@ void DavisGUI::dropEvent(QDropEvent *event)
     }
     else
         qDebug()<<"not exist";
+}
+
+void DavisGUI::paintEvent(QPaintEvent *event)
+{
+    qDebug()<<"---------PAINT----------->";
+    const int PADDING = 20;
+    QRectF rectangle(PADDING, PADDING+20, this->width()-2*PADDING, this->height()-2*PADDING-20);
+    QPainter painter(this);
+      //Creating and customizing the pen and brush ; pen for the outline and brush for filling
+
+       // Cutomised Pen; color:black , style:dashed
+       QPen dashpen;
+       dashpen.setStyle(Qt::DashLine);
+       dashpen.setColor(QColor(82, 82, 82));
+dashpen.setWidth(7);
+
+       painter.setPen(dashpen);
+
+
+       painter.drawRect(rectangle);
+       painter.end();
+       event->accept();
+}
+
+void DavisGUI::mousePressEvent(QMouseEvent *event)
+{
+     m_point = event->pos();
+}
+
+void DavisGUI::mouseMoveEvent(QMouseEvent *event)
+{
+    move(event->globalPos() - m_point);
 }
 

@@ -17,10 +17,14 @@ public:
 
 private:
     Ui::DavisGUI *ui;
+     QPoint m_point;
 
     // QWidget interface
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 };
 #endif // DAVISGUI_H
