@@ -19,17 +19,34 @@ DavisGUI::DavisGUI(QWidget *parent)
     this->setAcceptDrops(true);
     QHBoxLayout *hbl = ui->horizontalLayout_menu;
     QMenuBar *mb = new QMenuBar;
+    QMenu  *menu_root = new QMenu("Menu");
+    QAction  *action_help = new QAction("About");
+    action_surface = new QAction("surface");
+    action_surface->setCheckable(true);
+    action_heatmap = new QAction("heatmap");
+    action_heatmap->setCheckable(true);
+    action_heatmap->setChecked(true);
+    connect(action_heatmap,&QAction::triggered,[this](){action_surface->setChecked(false);});
+    connect(action_surface,&QAction::triggered,[this](){action_heatmap->setChecked(false);});
+
+    QMenu  *menu_view = new QMenu("View");
+    menu_view->addAction(action_surface);
+    menu_view->addAction(action_heatmap);
     mb->setFixedSize(QSize(50,20));
     mb->setStyleSheet("background-color:rgb(82,82,82);");
-    mb->addAction(new QAction("Help"));
+    menu_root->addMenu(menu_view);
+    menu_root->addAction(action_help);
+    mb->addMenu(menu_root);
+
+
     hbl->addWidget(mb);
     hbl->addItem(new QSpacerItem(2, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     QPushButton *qpb = new QPushButton;
-    connect(qpb,&QPushButton::pressed,[this](){this->close();});
+    connect(qpb,&QPushButton::clicked,[this](){this->close();});
     qpb->setFixedSize(QSize(20,20));
     qpb->setText("X");
     hbl->addWidget(qpb);
-    this->setLayout(hbl);
+    //this->setLayout(hbl);
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);//(Qt::WindowStaysOnTopHint);
     //this->setAttribute(Qt::WA_TranslucentBackground, true);
 }
@@ -59,7 +76,13 @@ void DavisGUI::dropEvent(QDropEvent *event)
         std::vector<std::vector<double>> data;
         dvs::readMatrix(data,filePath.toStdString(),';');
         if(data.size()>1 && data[0].size()>1){
+           if(action_heatmap->isChecked()){
            dv::show(data);
+           }else if(action_surface->isChecked()){
+           dv::Config config;
+           config.typeVisual = dv::VISUALTYPE_SURFACE;
+           dv::show(data,"surface",config);
+           }
         }else{
             std::vector<double> showVector;
             if(data.size()>1 && data[0].size()==1){

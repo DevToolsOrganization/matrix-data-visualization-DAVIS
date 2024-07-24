@@ -18,6 +18,8 @@ public:
 private:
     Ui::DavisGUI *ui;
      QPoint m_point;
+     QAction  *action_surface;
+     QAction  *action_heatmap;
 
     // QWidget interface
 protected:
