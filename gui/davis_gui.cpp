@@ -117,7 +117,7 @@ void DavisGUI::paintEvent(QPaintEvent *event)
        QPen dashpen;
        dashpen.setStyle(Qt::DashLine);
        dashpen.setColor(QColor(82, 82, 82));
-dashpen.setWidth(7);
+dashpen.setWidth(5);
 
        painter.setPen(dashpen);
 
