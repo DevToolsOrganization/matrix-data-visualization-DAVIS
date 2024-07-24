@@ -21,6 +21,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -58,6 +61,9 @@
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -104,6 +110,25 @@
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_menu"/>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>260</y>
+      <width>41</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="res.qrc">:/description_80dp_525252_FILL0_wght500_GRAD0_opsz48.svg</pixmap>
+    </property>
    </widget>
   </widget>
  </widget>

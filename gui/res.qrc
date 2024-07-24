@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>../plotly_maker/plotly-2.32.0.min.js</file>
         <file>DevToolsDavis-updown-curves - gray.svg</file>
+        <file>description_80dp_525252_FILL0_wght500_GRAD0_opsz48.svg</file>
     </qresource>
 </RCC>
