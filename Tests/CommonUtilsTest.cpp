@@ -80,13 +80,21 @@ TEST(CommonUtils, CreateStringFantasyArgs) {
 
 
 TEST(CommonUtils, SplitString) {
-
   auto result = dvs::split(not_filled_test_string_1, '%');
-
-  for (int i = 0; i < result.size(); ++i) {
+  for (size_t i = 0; i < result.size(); ++i) {
     TEST_COUT << result[i] << "\n";
   }
   TEST_COUT << not_filled_test_string_1;
+}
+
+TEST(CommonUtils, FindSeparator) {
+    char sep;
+    dvs::find_separator("5.0;6;7;8",sep);
+    EXPECT_EQ(';',sep);
+    dvs::find_separator("5.0 6 7 8",sep);
+    EXPECT_EQ(' ',sep);
+    dvs::find_separator("5.0\t6\t7\t8",sep);
+    EXPECT_EQ('\t',sep);
 }
 
 int main(int argc, char* argv[]) {

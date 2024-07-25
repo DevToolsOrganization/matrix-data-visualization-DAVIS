@@ -32,7 +32,8 @@ void sleepMs(unsigned long milisec);
 
 void openPlotlyHtml(const string& file_name);
 
-bool getDataFromFile(const string& path, string& result);
+bool get_data_from_file(const string& path,
+                        vector<std::string> &result);
 
 vector<string> split(const string& target, char c);
 
@@ -94,6 +95,8 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   return true;
 }
 
+int find_separator(const std::string& src,
+                   char& separator);
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

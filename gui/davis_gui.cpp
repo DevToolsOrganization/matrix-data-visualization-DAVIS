@@ -64,8 +64,17 @@ void DavisGUI::dropEvent(QDropEvent* event) {
   QString filePath =  event->mimeData()->urls().first().toLocalFile();
   QFileInfo info(filePath);
   if (info.exists()) {
+    std::vector<std::string>lines;
     std::vector<std::vector<double>> data;
-    dvs::readMatrix(data, filePath.toStdString(), ';');
+    char separator;
+    dvs::get_data_from_file(filePath.toStdString(),lines);
+    if(lines.size()>0){
+    dvs::find_separator(lines[0],separator);
+    }else{
+        qDebug()<<"empty dara;";
+        return;
+    }
+    dvs::readMatrix(data, filePath.toStdString(), separator);
     if (data.size() > 1 && data[0].size() > 1) {
       if (action_heatmap->isChecked()) {
         dv::show(data);

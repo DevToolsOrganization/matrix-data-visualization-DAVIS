@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include <limits.h>
+#include <set>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -109,7 +110,8 @@ bool deleteFolder(const char* fname) {
   }
 }
 
-bool getDataFromFile(const string& path, string& result) {
+bool get_data_from_file(const string& path,
+                        vector<string>& result) {
 
   //TODO different scenarious and sanitizing
   if (!is_file_exists(path)) {
@@ -123,7 +125,7 @@ bool getDataFromFile(const string& path, string& result) {
   if (file.is_open()) {
     string temp;
     while (std::getline(file, temp)) {
-      result.append(temp).append(";");
+      result.emplace_back(temp);
     }
   } else {
     return false;
@@ -230,6 +232,26 @@ bool make_string(const string& src,
   }
   //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
+}
+
+int find_separator(const std::string &src,
+                   char &separator)
+{
+    std::vector<char> ignored_chars = {'+','-','e','.'};
+    std::set<char> unique_chars;
+    for(size_t i=0;i<src.size();++i){
+    if(isdigit(src[i]))continue;
+    bool is_service_char = false;
+    for(size_t j=0;j<ignored_chars.size();++j){
+        if(src[i]==ignored_chars[j]){
+            is_service_char = true;
+            break;
+        }
+    }
+    if(is_service_char)continue;
+    unique_chars.insert(src[i]);
+    }
+    if(unique_chars.size()==1)separator = *unique_chars.begin();
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
