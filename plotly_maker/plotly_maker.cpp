@@ -265,7 +265,7 @@ void showWarningJsAbsentPage() {
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args{ARGS_WARNING_PAGE_SIZE,""};
+  vector<string>args {ARGS_WARNING_PAGE_SIZE, ""};
   args[ARG_WORKING_FOLDER] = getCurrentPath() + davis_dir;
   args[ARG_JS_VERSION] = kPlotlyJsName;
   make_string(kWarningJSLibAbsentPage, args, out);
