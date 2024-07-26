@@ -539,9 +539,9 @@ int find_separator(const std::string& src,
 
   for (size_t i = 0; i < src.size(); ++i) {
 
-      if (isdigit(src[i]))
+    if (isdigit(src[i]))
       continue;
-      is_service_char = false;
+    is_service_char = false;
 
     if (src[i] == '.') {
       is_dot_present = true;
@@ -566,13 +566,7 @@ int find_separator(const std::string& src,
     return GOOD_SEPARATOR;
   } else if (unique_chars.size() == 1 && is_comma_present == true) {
     if (is_dot_present) {
-      if(comma_counter>dot_counter){
-         separator = ',';
-          return GOOD_SEPARATOR;
-      }else if(comma_counter<dot_counter){
-        separator = '.';
-        return GOOD_SEPARATOR;
-      }
+      separator = ',';
       return MABE_COMMA_MABE_DOT;
     }
     return GOOD_SEPARATOR;
