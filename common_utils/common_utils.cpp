@@ -234,24 +234,59 @@ bool make_string(const string& src,
   return true;
 }
 
-int find_separator(const std::string &src,
-                   char &separator)
-{
-    std::vector<char> ignored_chars = {'+','-','e','.'};
-    std::set<char> unique_chars;
-    for(size_t i=0;i<src.size();++i){
-    if(isdigit(src[i]))continue;
-    bool is_service_char = false;
-    for(size_t j=0;j<ignored_chars.size();++j){
-        if(src[i]==ignored_chars[j]){
-            is_service_char = true;
-            break;
-        }
+int find_separator(const std::string& src,
+                   char& separator) {
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.'};
+  std::set<char> unique_chars;
+  bool is_service_char = false;
+  bool is_dot_present = false;
+  bool is_comma_present = false;
+  size_t comma_counter = 0;
+  size_t dot_counter = 0;
+
+  for (size_t i = 0; i < src.size(); ++i) {
+
+      if (isdigit(src[i]))
+      continue;
+      is_service_char = false;
+
+    if (src[i] == '.') {
+      is_dot_present = true;
+      ++dot_counter;
+    } else if (src[i] == ',') {
+      is_comma_present = true;
+      ++comma_counter;
     }
-    if(is_service_char)continue;
+
+    for (size_t j = 0; j < ignored_chars.size(); ++j) {
+      if (src[i] == ignored_chars[j]) {
+        is_service_char = true;
+        break;
+      }
+    }
+    if (is_service_char)
+      continue;
     unique_chars.insert(src[i]);
+  }
+  if (unique_chars.size() == 1 && is_comma_present == false) {
+    separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 1 && is_comma_present == true) {
+    if (is_dot_present) {
+      if(comma_counter>dot_counter){
+         return GOOD_SEPARATOR;
+      }else if(comma_counter<dot_counter){
+        separator = '.';
+        return GOOD_SEPARATOR;
+      }
+      return MABE_COMMA_MABE_DOT;
     }
-    if(unique_chars.size()==1)separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 0) {
+    return NO_SEPARATOR;
+  } else if (unique_chars.size() > 1) {
+    return MORE_THAN_ONE_SEPARATOR;
+  }
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE

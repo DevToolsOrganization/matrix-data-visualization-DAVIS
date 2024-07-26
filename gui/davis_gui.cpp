@@ -67,12 +67,12 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     std::vector<std::string>lines;
     std::vector<std::vector<double>> data;
     char separator;
-    dvs::get_data_from_file(filePath.toStdString(),lines);
-    if(lines.size()>0){
-    dvs::find_separator(lines[0],separator);
-    }else{
-        qDebug()<<"empty dara;";
-        return;
+    dvs::get_data_from_file(filePath.toStdString(), lines);
+    if (lines.size() > 0) {
+      dvs::find_separator(lines[0], separator);
+    } else {
+      qDebug() << "empty dara;";
+      return;
     }
     dvs::readMatrix(data, filePath.toStdString(), separator);
     if (data.size() > 1 && data[0].size() > 1) {

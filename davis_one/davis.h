@@ -147,6 +147,12 @@ extern const char kWarningJSLibAbsentPage[];
 } // namespace dvs end
 
 namespace dvs {
+enum SEPARATOR_RESULT {
+  GOOD_SEPARATOR,
+  MORE_THAN_ONE_SEPARATOR,
+  NO_SEPARATOR,
+  MABE_COMMA_MABE_DOT
+};
 using std::string;
 using std::vector;
 
@@ -168,7 +174,7 @@ void sleepMs(unsigned long milisec);
 void openPlotlyHtml(const string& file_name);
 
 bool get_data_from_file(const string& path,
-                        vector<std::string> &result);
+                        vector<std::string>& result);
 
 vector<string> split(const string& target, char c);
 
