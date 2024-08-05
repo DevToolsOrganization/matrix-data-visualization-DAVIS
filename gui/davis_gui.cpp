@@ -10,6 +10,7 @@
 #include "QMenuBar"
 #include "QHBoxLayout"
 #include "QPushButton"
+#include "QPainterPath"
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -40,11 +41,16 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   hbl->addWidget(mb);
   hbl->addItem(new QSpacerItem(2, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
-  QPushButton* qpb = new QPushButton;
-  connect(qpb, &QPushButton::clicked, [this]() {this->close();});
-  qpb->setFixedSize(QSize(20, 20));
-  qpb->setText("X");
-  hbl->addWidget(qpb);
+  QPushButton* qpbMinim = new QPushButton;
+  connect(qpbMinim, &QPushButton::clicked, [this]() {this->showMinimized();});
+  qpbMinim->setFixedSize(QSize(20, 20));
+  qpbMinim->setText("─");
+  hbl->addWidget(qpbMinim);
+  QPushButton* qpbExit = new QPushButton;
+  connect(qpbExit, &QPushButton::clicked, [this]() {this->close();});
+  qpbExit->setFixedSize(QSize(20, 20));
+  qpbExit->setText("✕");
+  hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 }
 
@@ -105,13 +111,18 @@ void DavisGUI::dropEvent(QDropEvent* event) {
 void DavisGUI::paintEvent(QPaintEvent* event) {
   const int PADDING = 20;
   QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING, this->height() - 2 * PADDING - 20);
-  QPainter painter(this);
+   QPainter painter(this);
+
+  painter.setRenderHint(QPainter::Antialiasing);
+  QPainterPath path;
+  path.addRoundedRect(rectangle, 10, 10);
   QPen dashpen;
   dashpen.setStyle(Qt::DashLine);
-  dashpen.setColor(QColor(82, 82, 82));
-  dashpen.setWidth(5);
+  dashpen.setColor(QColor(150, 150, 150));
+  dashpen.setWidth(3);
   painter.setPen(dashpen);
-  painter.drawRect(rectangle);
+  painter.fillPath(path, QColor(60, 60, 60));
+  painter.drawPath(path);
   painter.end();
   event->accept();
 }
