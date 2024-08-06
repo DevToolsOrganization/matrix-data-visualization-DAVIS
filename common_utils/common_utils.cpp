@@ -246,7 +246,7 @@ int find_separator(const std::string& src,
 
   for (size_t i = 0; i < src.size(); ++i) {
 
-    if (isdigit(src[i]))
+    if (isdigit((unsigned char)src[i]))
       continue;
     is_service_char = false;
 

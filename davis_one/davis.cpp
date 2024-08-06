@@ -289,7 +289,7 @@ Please download this .js file and add to the directory
 Download plotly javascript library from
 <a href="https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS">our github</a>
 or
-<a href="https://cdn.plot.ly/plotly-2.27.0.min.js">official plotly site</a>
+<a href="https://cdn.plot.ly/plotly-2.32.0.min.js">official plotly site</a>
 
 
 <div class="email_style">
@@ -539,7 +539,7 @@ int find_separator(const std::string& src,
 
   for (size_t i = 0; i < src.size(); ++i) {
 
-    if (isdigit(src[i]))
+    if (isdigit((unsigned char)src[i]))
       continue;
     is_service_char = false;
 
