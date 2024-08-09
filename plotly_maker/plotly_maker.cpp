@@ -232,6 +232,12 @@ bool showLineChartInBrowser(const vector<double>& values,
   return true;
 }
 
+bool showLineChartInBrowser(const vector<double> &xValues, const vector<double> &yValues,
+                            const std::string &title, const dv::Config &configuration)
+{
+    return true;
+}
+
 bool showLineChartInBrowser(const string& values,
                             const string& title, const dv::Config& configuration) {
   vector<double>vals;
