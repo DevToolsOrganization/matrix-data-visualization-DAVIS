@@ -259,6 +259,8 @@ bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& ti
 bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
+bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
+                            const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
@@ -446,11 +448,34 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
-  if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP) {
+  size_t size1 = vecVecDbl.size();
+  size_t size2 = 0;
+  if (!vecVecDbl.empty()) {
+    size2 = vecVecDbl[0].size();
+  }
+  if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
+       configuration.typeVisual == VISUALTYPE_CHART) &&
+      (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
+    if (size1 == 2) {
+      int ff;
+      res = dvs::showLineChartInBrowser(vecVecDbl[0], vecVecDbl[1], htmlPageName, configuration);
+    } else if (size2 == 2) {
+      int df;
+      vector<double> xVals;
+      vector<double> yVals;
+      xVals.reserve(size1);
+      for (int i = 0; i < size1; ++i) {
+        xVals.emplace_back(vecVecDbl[i][0]);
+        yVals.emplace_back(vecVecDbl[i][1]);
+      }
+      res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName, configuration);
+    }
+  } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
+             configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  } else if (configuration.typeVisual == VISUALTYPE_SURFACE)
+  } else if (configuration.typeVisual == VISUALTYPE_SURFACE) {
     res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  }
   return res;
 }
 

@@ -193,6 +193,20 @@ TEST(ArrayCore, showChart) {
   EXPECT_EQ(result, true);
 }
 
+TEST(ArrayCore, showChartXY) {
+  vector<vector<double>> values;
+  vector<double> vecX = {5, 20, 21, 22, 50};
+  vector<double> vecY = {1, 2, 3, 4, 5};
+  values.emplace_back(vecX);
+  values.emplace_back(vecY);
+  auto config = dv::Config();
+  config.chart.title = "ChartXY";
+  config.chart.xLabel = "xLabel";
+  config.chart.yLabel = "yLabel";
+  bool result = dv::show(values, "showChartXY", config);
+  EXPECT_EQ(result, true);
+}
+
 TEST(ArrayCore, readAndShowMatrixFromFile) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values;
