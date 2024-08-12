@@ -81,7 +81,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       return;
     }
     dvs::readMatrix(data, filePath.toStdString(), separator);
-    if (data.size() > 1 && data[0].size() > 1) {
+    if (data.size() == 2 || data[0].size() == 2) { //chartXY
+      dv::show(data, "chartXY");
+    } else if (data.size() > 1 && data[0].size() > 1) {
       if (action_heatmap->isChecked()) {
         dv::show(data);
       } else if (action_surface->isChecked()) {
@@ -111,7 +113,7 @@ void DavisGUI::dropEvent(QDropEvent* event) {
 void DavisGUI::paintEvent(QPaintEvent* event) {
   const int PADDING = 20;
   QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING, this->height() - 2 * PADDING - 20);
-   QPainter painter(this);
+  QPainter painter(this);
 
   painter.setRenderHint(QPainter::Antialiasing);
   QPainterPath path;

@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits.h>
+#include <numeric>
 #include <set>
 #include <sstream>
 #include <sys/stat.h>
@@ -622,29 +623,35 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
   return true;
 }
 
+bool createStringLineChartValues(const vector<double>& xValues,
+                                 const vector<double>& yValues,
+                                 string& out_str_values) {
+  if (xValues.size() != yValues.size()) {
+    return false;
+  }
 
-bool createStringLineChartValues(const vector<double>& values,
-                                 string& str_values) {
-  if (!str_values.empty()) {
-    str_values.clear();
+  if (!out_str_values.empty()) {
+    out_str_values.clear();
   }
-  str_values = R"(var trace = {x: [)";
-  for (size_t i = 0; i < values.size(); ++i) {
-    str_values.append(std::to_string(i));
-    if (i != values.size() - 1) {
-      str_values.append(",");
+  out_str_values = R"(var trace = {x: [)";
+  for (size_t i = 0; i < xValues.size(); ++i) {
+    out_str_values.append(std::to_string(xValues[i]));
+    if (i != xValues.size() - 1) {
+      out_str_values.append(",");
     }
   }
-  str_values.append("], y: [");
-  for (size_t j = 0; j < values.size(); ++j) {
-    str_values.append(std::to_string(values[j]));
-    if (j != values.size() - 1) {
-      str_values.append(",");
+  out_str_values.append("], y: [");
+  for (size_t j = 0; j < yValues.size(); ++j) {
+    out_str_values.append(std::to_string(yValues[j]));
+    if (j != yValues.size() - 1) {
+      out_str_values.append(",");
     }
   }
-  str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  out_str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
   return true;
 }
+
+
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
@@ -775,11 +782,20 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title, const dv::Config& configuration) {
+
+  vector<double> x(values.size());
+  std::iota(std::begin(x), std::end(x), 0);  // Fill with 0, 1, 2...
+  showLineChartInBrowser(x, values, title, configuration);
+  return true;
+}
+
+bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
+                            const std::string& title, const dv::Config& configuration) {
   string page;
   vector<string>args(ARGS_SIZE, "");
   args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
-  createStringLineChartValues(values, str_values);
+  createStringLineChartValues(xValues, yValues, str_values);
   args[ARG_VALUES] = str_values;
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
