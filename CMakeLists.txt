@@ -24,7 +24,7 @@ enable_testing()
 add_subdirectory(Tests)
 
 include_directories(${RESOURCE_MANAGER_INCLUDE_DIRS})
-rm_embed_resources(RESOURCES "plotly_maker/plotly-2.27.0.min.js")
+rm_embed_resources(RESOURCES "plotly_maker/plotly-2.32.0.min.js")
 
 add_executable("davis_launcher" davis_launcher.cpp davis.h)
 

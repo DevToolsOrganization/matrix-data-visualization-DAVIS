@@ -1,6 +1,10 @@
 #include "gtest/gtest.h"
 #include "common_utils/common_utils.h"
 #include <fstream>
+#include <codecvt>
+#include <locale>
+#include <iostream>
+#include <windows.h>
 
 
 using std::string;
@@ -95,6 +99,29 @@ TEST(CommonUtils, FindSeparator) {
   EXPECT_EQ(' ', sep);
   dvs::find_separator("5.0\t6\t7\t8", sep);
   EXPECT_EQ('\t', sep);
+}
+
+std::string Utf8ToCp1251(const std::string& utf8Str) {
+    int len = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
+    wchar_t* wstr = new wchar_t[len];
+    MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wstr, len);
+    len = WideCharToMultiByte(1251, 0, wstr, -1, NULL, 0, NULL, NULL);
+    char* cp1251 = new char[len];
+    WideCharToMultiByte(1251, 0, wstr, -1, cp1251, len, NULL, NULL);
+    std::string result(cp1251);
+    delete[] wstr;
+    delete[] cp1251;
+    return result;
+}
+
+TEST(CommonUtils, RussianFileC) {
+
+    string russian = "файл.txt";
+    auto path = Utf8ToCp1251(russian);
+    std::fstream file;
+    file.open(path, std::ios::in);
+    EXPECT_EQ(bool(file),true);
+
 }
 
 int main(int argc, char* argv[]) {

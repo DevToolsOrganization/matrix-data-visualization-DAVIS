@@ -11,6 +11,8 @@
 #include "QHBoxLayout"
 #include "QPushButton"
 #include "QPainterPath"
+#include "QFileDialog"
+#include "QTextStream"
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -68,16 +70,35 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 
 void DavisGUI::dropEvent(QDropEvent* event) {
   QString filePath =  event->mimeData()->urls().first().toLocalFile();
+
   QFileInfo info(filePath);
+  qDebug()<<"---file path--->"<<filePath;
   if (info.exists()) {
+        qDebug()<<"exist";
     std::vector<std::string>lines;
     std::vector<std::vector<double>> data;
     char separator;
-    dvs::get_data_from_file(filePath.toStdString(), lines);
+    //dvs::get_data_from_file(filePath.toStdString(), lines);
+   //filePath = QFileDialog::getOpenFileName(this);
+    QFile file(filePath);
+    QTextStream ts(&file);
+    ts.setCodec("Cp1251");
+    file.open(QIODevice::ReadWrite);
+    QString all = QString(file.readAll());
+    QStringList str_lines = all.split('\n');
+    for(int i=0;i<str_lines.size();++i){
+    lines.emplace_back(str_lines[i].toStdString());
+    qDebug()<<str_lines[i];
+    }
+    file.close();
+
+
+    return;// DELETE
+
     if (lines.size() > 0) {
       dvs::find_separator(lines[0], separator);
     } else {
-      qDebug() << "empty dara;";
+      qDebug() << "empty data;";
       return;
     }
     dvs::readMatrix(data, filePath.toStdString(), separator);
