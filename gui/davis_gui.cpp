@@ -75,33 +75,30 @@ void DavisGUI::dropEvent(QDropEvent* event) {
   qDebug()<<"---file path--->"<<filePath;
   if (info.exists()) {
         qDebug()<<"exist";
-    std::vector<std::string>lines;
+    std::vector<double>lines;
     std::vector<std::vector<double>> data;
     char separator;
-    //dvs::get_data_from_file(filePath.toStdString(), lines);
-   //filePath = QFileDialog::getOpenFileName(this);
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("Cp1251");
     file.open(QIODevice::ReadWrite);
     QString all = QString(file.readAll());
     QStringList str_lines = all.split('\n');
+    if(str_lines.size()<=0)return;
+    auto res = dvs::find_separator(str_lines[0].toStdString(),separator);
+    qDebug()<<"sep result: "<<res;
     for(int i=0;i<str_lines.size();++i){
-    lines.emplace_back(str_lines[i].toStdString());
-    qDebug()<<str_lines[i];
+    std::vector<double>values;
+    QStringList str_values = str_lines[i].split(' ');
+    for(int j=0;j<str_values.size();++j){
+
+        values.emplace_back(std::stod(str_values[j].toStdString()));
+    }
+    data.emplace_back(values);
     }
     file.close();
 
 
-    return;// DELETE
-
-    if (lines.size() > 0) {
-      dvs::find_separator(lines[0], separator);
-    } else {
-      qDebug() << "empty data;";
-      return;
-    }
-    dvs::readMatrix(data, filePath.toStdString(), separator);
     if (data.size() == 2 || data[0].size() == 2) { //chartXY
       dv::show(data, "chartXY");
     } else if (data.size() > 1 && data[0].size() > 1) {
