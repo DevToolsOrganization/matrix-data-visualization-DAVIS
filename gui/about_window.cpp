@@ -9,10 +9,9 @@ About_window::About_window(QWidget *parent) :
     ui(new Ui::about_window)
 {
     ui->setupUi(this);
-
-    //qpbExit->setText("✕");
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     ui->label_nearLogo->setOpenExternalLinks(true);
+    ui->label_center->setOpenExternalLinks(true);
 }
 
 About_window::~About_window()
