@@ -41,10 +41,14 @@ set(PROJECT_SOURCES
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)
 
-
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+qt_add_executable(gui
+ ${PROJECT_SOURCES}
+    )
+else()
 add_executable(gui
     WIN32
         ${PROJECT_SOURCES}
     )
-
+endif()
 target_link_libraries(gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

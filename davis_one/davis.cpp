@@ -570,6 +570,7 @@ int find_separator(const std::string& src,
       separator = ',';
       return MABE_COMMA_MABE_DOT;
     }
+    separator = *unique_chars.begin();
     return GOOD_SEPARATOR;
   } else if (unique_chars.size() == 0) {
     return NO_SEPARATOR;

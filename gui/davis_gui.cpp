@@ -59,15 +59,14 @@ DavisGUI::DavisGUI(QWidget* parent)
 }
 
 DavisGUI::~DavisGUI() {
-    delete ui;
+  delete ui;
 }
 
-void DavisGUI::showAboutWindow()
-{
-qDebug()<<"trigerred";
-About_window *aboutWindow = new About_window();
-aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
-aboutWindow->show();
+void DavisGUI::showAboutWindow() {
+  qDebug() << "trigerred";
+  About_window* aboutWindow = new About_window();
+  aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
+  aboutWindow->show();
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
@@ -100,7 +99,7 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     if (str_lines.size() <= 0)
       return;
     auto res = dvs::find_separator(str_lines[0].toStdString(), separator);
-    qDebug() << "sep result: "<<separator<<"--->"<< res;
+    qDebug() << "sep result: " << separator << "--->" << res;
     for (int i = 0; i < str_lines.size(); ++i) {
       std::vector<double>values;
       QStringList str_values = str_lines[i].split(separator);
