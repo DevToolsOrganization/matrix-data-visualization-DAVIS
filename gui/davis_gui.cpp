@@ -72,9 +72,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
   QString filePath =  event->mimeData()->urls().first().toLocalFile();
 
   QFileInfo info(filePath);
-  qDebug()<<"---file path--->"<<filePath;
+  qDebug() << "---file path--->" << filePath;
   if (info.exists()) {
-        qDebug()<<"exist";
+    qDebug() << "exist";
     std::vector<double>lines;
     std::vector<std::vector<double>> data;
     char separator;
@@ -82,19 +82,23 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     QTextStream ts(&file);
     ts.setCodec("Cp1251");
     file.open(QIODevice::ReadWrite);
-    QString all = QString(file.readAll());
-    QStringList str_lines = all.split('\n');
-    if(str_lines.size()<=0)return;
-    auto res = dvs::find_separator(str_lines[0].toStdString(),separator);
-    qDebug()<<"sep result: "<<res;
-    for(int i=0;i<str_lines.size();++i){
-    std::vector<double>values;
-    QStringList str_values = str_lines[i].split(' ');
-    for(int j=0;j<str_values.size();++j){
+    QString line;
+    QStringList str_lines;
+    while (ts.readLineInto(&line)) {
+      str_lines.append(line);
+    }
+    if (str_lines.size() <= 0)
+      return;
+    auto res = dvs::find_separator(str_lines[0].toStdString(), separator);
+    qDebug() << "sep result: "<<separator<<"--->"<< res;
+    for (int i = 0; i < str_lines.size(); ++i) {
+      std::vector<double>values;
+      QStringList str_values = str_lines[i].split(separator);
+      for (int j = 0; j < str_values.size(); ++j) {
 
         values.emplace_back(std::stod(str_values[j].toStdString()));
-    }
-    data.emplace_back(values);
+      }
+      data.emplace_back(values);
     }
     file.close();
 

@@ -236,7 +236,7 @@ bool make_string(const string& src,
 
 int find_separator(const std::string& src,
                    char& separator) {
-  std::vector<char> ignored_chars = {'+', '-', 'e', '.'};
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r'};
   std::set<char> unique_chars;
   bool is_service_char = false;
   bool is_dot_present = false;
@@ -276,6 +276,7 @@ int find_separator(const std::string& src,
       separator = ',';
       return MABE_COMMA_MABE_DOT;
     }
+    separator = *unique_chars.begin();
     return GOOD_SEPARATOR;
   } else if (unique_chars.size() == 0) {
     return NO_SEPARATOR;
