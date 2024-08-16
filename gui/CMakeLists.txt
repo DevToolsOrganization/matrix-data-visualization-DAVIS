@@ -33,7 +33,10 @@ set(PROJECT_SOURCES
         ../davis_one/davis.cpp
         davis_gui.cpp
         davis_gui.h
+        about_window.h
+        about_window.cpp
         davis_gui.ui
+        about_window.ui
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)

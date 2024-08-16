@@ -1,9 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>../plotly_maker/plotly-2.32.0.min.js</file>
-        <file>DevToolsDavis-updown-curves - gray.svg</file>
-        <file>description_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
-        <file>finance_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
-        <file>chevron_right_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
+        <file>res/chevron_right_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
+        <file>res/Davis.png</file>
+        <file>res/description_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
+        <file>res/DevToolsDavis-updown-curves - gray.svg</file>
+        <file>res/finance_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</file>
     </qresource>
 </RCC>

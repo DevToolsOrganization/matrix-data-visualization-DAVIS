@@ -2,6 +2,7 @@
 #include "./ui_davis_gui.h"
 
 #include "../davis_one/davis.h"
+#include "about_window.h"
 #include "QDragEnterEvent"
 #include "QMimeData"
 #include "QDebug"
@@ -30,6 +31,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   action_heatmap->setChecked(true);
   connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
   connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
+  connect(action_help, SIGNAL(triggered()), this, SLOT(showAboutWindow()));
 
   QMenu*  menu_view = new QMenu("View");
   menu_view->addAction(action_surface);
@@ -57,7 +59,15 @@ DavisGUI::DavisGUI(QWidget* parent)
 }
 
 DavisGUI::~DavisGUI() {
-  delete ui;
+    delete ui;
+}
+
+void DavisGUI::showAboutWindow()
+{
+qDebug()<<"trigerred";
+About_window *aboutWindow = new About_window();
+aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
+aboutWindow->show();
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
