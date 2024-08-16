@@ -74,7 +74,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/description_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
+     <pixmap resource="res.qrc">:/res/description_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -96,7 +96,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/finance_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
+     <pixmap resource="res.qrc">:/res/finance_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -118,9 +118,12 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/chevron_right_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
+     <pixmap resource="res.qrc">:/res/chevron_right_200dp_969696_FILL0_wght300_GRAD0_opsz48.png</pixmap>
     </property>
     <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="openExternalLinks">
      <bool>true</bool>
     </property>
    </widget>

@@ -14,6 +14,9 @@ class DavisGUI : public QMainWindow {
   DavisGUI(QWidget* parent = nullptr);
   ~DavisGUI();
 
+ private slots:
+  void showAboutWindow();
+
  private:
   Ui::DavisGUI* ui;
   QPoint m_point;
