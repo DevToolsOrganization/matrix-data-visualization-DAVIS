@@ -1,7 +1,8 @@
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=Plastic&logo=c%2B%2B&logoColor=white)
-
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
 [<img src="https://github.com/user-attachments/assets/7425ddb9-8b6e-4303-8e29-f1144cc79acb" width="220">](https://github.com/DevToolsOrganization)
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
