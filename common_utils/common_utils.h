@@ -84,18 +84,32 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   if (!fout.is_open()) {
     return false;
   }
-  size_t rows = vecVec.size();
-  size_t cols = vecVec.at(0).size();
-
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      double val = vecVec.at(i).at(j);
-      fout << val;
-      if (j < cols - 1) { // we dont need sep al row end
-        fout << config.separatorOfCols;
+  if (config.isTranspose) {
+    size_t rows = vecVec.at(0).size();
+    size_t cols = vecVec.size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(j).at(i);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
       }
+      fout << config.separatorOfRows;
     }
-    fout << config.separatorOfRows;
+  } else {
+    size_t rows = vecVec.size();
+    size_t cols = vecVec.at(0).size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(i).at(j);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
+      }
+      fout << config.separatorOfRows;
+    }
   }
   fout.close();
   return true;

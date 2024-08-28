@@ -52,6 +52,19 @@ template<typename C,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
+
+//! Two 1-dimensional container for X-Y plots
+template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+
+template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+
+
 //! 2-dimensional container
 template<typename C,
          typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
@@ -171,6 +184,53 @@ bool save(C const& container, const string& filename, const configSaveToDisk& co
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
+
+template<typename C, typename T, typename>
+bool show(C const& containerX, C const& containerY, const string& htmlPageName, const Config& configuration) {
+  if (containerX.size() != containerY.size()) {
+    return false;
+  }
+  vector<double> dblRowX(containerX.size());
+  uint64_t i = 0;
+  for (auto v : containerX) {
+    dblRowX[i] = v;
+    ++i;
+  }
+  vector<double> dblRowY(containerY.size());
+  i = 0;
+  for (auto v : containerY) {
+    dblRowY[i] = v;
+    ++i;
+  }
+  bool res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+  return res;
+}
+
+template<typename C, typename T, typename>
+bool save(C const& containerX, C const& containerY,  const string& filename, const configSaveToDisk& configuration) {
+  if (containerX.size() != containerY.size()) {
+    return false;
+  }
+  vector<double> dblRowX(containerX.size());
+  uint64_t i = 0;
+  for (auto v : containerX) {
+    dblRowX[i] = v;
+    ++i;
+  }
+  vector<double> dblRowY(containerY.size());
+  i = 0;
+  for (auto v : containerY) {
+    dblRowY[i] = v;
+    ++i;
+  }
+
+  vector<vector<double>> vecVec;
+  vecVec.emplace_back(dblRowX);
+  vecVec.emplace_back(dblRowY);
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+}
+
+
 
 template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
