@@ -228,9 +228,8 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
   vecVec.emplace_back(dblRowX);
   vecVec.emplace_back(dblRowY);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  return res;
 }
-
-
 
 template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
