@@ -2,6 +2,7 @@
 #define DAVISGUI_H
 
 #include <QMainWindow>
+#include "about_window.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -22,6 +23,8 @@ class DavisGUI : public QMainWindow {
   QPoint m_point;
   QAction*  action_surface;
   QAction*  action_heatmap;
+  About_window* aboutWindow;
+  bool isAboutWindowShowed;
 
   // QWidget interface
  protected:

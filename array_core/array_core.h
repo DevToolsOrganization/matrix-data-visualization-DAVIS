@@ -160,12 +160,7 @@ bool save(const T* data, uint64_t count, const string& filename, const configSav
 
 template<typename C, typename T, typename>
 bool show(C const& container, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow(container.size());
-  uint64_t i = 0;
-  for (auto v : container) {
-    dblRow[i] = v;
-    ++i;
-  }
+  vector<double> dblRow = dvs::vecFromTemplate<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART)
@@ -175,12 +170,7 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
 
 template<typename C, typename T, typename>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row(container.size());
-  uint64_t i = 0;
-  for (auto v : container) {
-    row[i] = v;
-    ++i;
-  }
+  vector<T> row = dvs::vecFromTemplate<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
@@ -190,18 +180,8 @@ bool show(C const& containerX, C const& containerY, const string& htmlPageName, 
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  vector<double> dblRowX(containerX.size());
-  uint64_t i = 0;
-  for (auto v : containerX) {
-    dblRowX[i] = v;
-    ++i;
-  }
-  vector<double> dblRowY(containerY.size());
-  i = 0;
-  for (auto v : containerY) {
-    dblRowY[i] = v;
-    ++i;
-  }
+  vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
+  vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
   bool res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
   return res;
 }
@@ -211,22 +191,11 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  vector<double> dblRowX(containerX.size());
-  uint64_t i = 0;
-  for (auto v : containerX) {
-    dblRowX[i] = v;
-    ++i;
-  }
-  vector<double> dblRowY(containerY.size());
-  i = 0;
-  for (auto v : containerY) {
-    dblRowY[i] = v;
-    ++i;
-  }
-
-  vector<vector<double>> vecVec;
-  vecVec.emplace_back(dblRowX);
-  vecVec.emplace_back(dblRowY);
+  vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
+  vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
+  vector<vector<T>> vecVec;
+  vecVec.emplace_back(rowX);
+  vecVec.emplace_back(rowY);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
@@ -236,12 +205,7 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
-    vector<double> dblRow(row.size());
-    uint64_t i = 0;
-    for (auto v : row) {
-      dblRow[i] = v;
-      ++i;
-    }
+    vector<double> dblRow = dvs::vecFromTemplate<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
@@ -254,10 +218,8 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
        configuration.typeVisual == VISUALTYPE_CHART) &&
       (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
     if (size1 == 2) {
-      int ff;
       res = dvs::showLineChartInBrowser(vecVecDbl[0], vecVecDbl[1], htmlPageName, configuration);
     } else if (size2 == 2) {
-      int df;
       vector<double> xVals;
       vector<double> yVals;
       xVals.reserve(size1);
@@ -281,12 +243,7 @@ bool save(C const& container_of_containers, const string& filename, const config
   vector<vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
-    vector<T> rowTemp(row.size());
-    uint64_t i = 0;
-    for (auto v : row) {
-      rowTemp[i] = v;
-      ++i;
-    }
+    vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
     vecVec.emplace_back(rowTemp);
   }
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);

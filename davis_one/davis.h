@@ -97,9 +97,11 @@ struct Config {
 struct configSaveToDisk {
   configSaveToDisk():
     separatorOfRows("\n"),
-    separatorOfCols(";") {}
+    separatorOfCols(";"),
+    isTranspose(false) {}
   std::string separatorOfRows;
   std::string separatorOfCols;
+  bool isTranspose; //rows-cols or cols-rows
 };
 
 
@@ -151,7 +153,8 @@ enum SEPARATOR_RESULT {
   GOOD_SEPARATOR,
   MORE_THAN_ONE_SEPARATOR,
   NO_SEPARATOR,
-  MABE_COMMA_MABE_DOT
+  MABE_COMMA_MABE_DOT,
+  UNDEFINED_BEHAVIOR
 };
 using std::string;
 using std::vector;
@@ -188,6 +191,9 @@ bool make_string(const string& src,
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
+int find_separator(const std::string& src,
+                   char& separator);
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
@@ -219,25 +225,51 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   if (!fout.is_open()) {
     return false;
   }
-  size_t rows = vecVec.size();
-  size_t cols = vecVec.at(0).size();
-
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      double val = vecVec.at(i).at(j);
-      fout << val;
-      if (j < cols - 1) { // we dont need sep al row end
-        fout << config.separatorOfCols;
+  if (config.isTranspose) {
+    size_t rows = vecVec.at(0).size();
+    size_t cols = vecVec.size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(j).at(i);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
       }
+      fout << config.separatorOfRows;
     }
-    fout << config.separatorOfRows;
+  } else {
+    size_t rows = vecVec.size();
+    size_t cols = vecVec.at(0).size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(i).at(j);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
+      }
+      fout << config.separatorOfRows;
+    }
   }
   fout.close();
   return true;
 }
 
-int find_separator(const std::string& src,
-                   char& separator);
+//! convert any container to std::vector with G type
+template<typename G,
+         typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>>>
+vector<G> vecFromTemplate(const C& container) {
+  vector<G> vec(container.size());
+  uint64_t i = 0;
+  for (auto v : container) {
+    vec[i] = static_cast<G>(v);
+    ++i;
+  }
+  return vec;
+}
 
 
 } // namespace dvs end
@@ -313,6 +345,19 @@ template<typename C,
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+
+
+//! Two 1-dimensional container for X-Y plots
+template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+
+template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+
 
 //! 2-dimensional container
 template<typename C,
@@ -409,12 +454,7 @@ bool save(const T* data, uint64_t count, const string& filename, const configSav
 
 template<typename C, typename T, typename>
 bool show(C const& container, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow(container.size());
-  uint64_t i = 0;
-  for (auto v : container) {
-    dblRow[i] = v;
-    ++i;
-  }
+  vector<double> dblRow = dvs::vecFromTemplate<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART)
@@ -424,13 +464,33 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
 
 template<typename C, typename T, typename>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row(container.size());
-  uint64_t i = 0;
-  for (auto v : container) {
-    row[i] = v;
-    ++i;
-  }
+  vector<T> row = dvs::vecFromTemplate<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
+  return res;
+}
+
+template<typename C, typename T, typename>
+bool show(C const& containerX, C const& containerY, const string& htmlPageName, const Config& configuration) {
+  if (containerX.size() != containerY.size()) {
+    return false;
+  }
+  vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
+  vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
+  bool res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+  return res;
+}
+
+template<typename C, typename T, typename>
+bool save(C const& containerX, C const& containerY,  const string& filename, const configSaveToDisk& configuration) {
+  if (containerX.size() != containerY.size()) {
+    return false;
+  }
+  vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
+  vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
+  vector<vector<T>> vecVec;
+  vecVec.emplace_back(rowX);
+  vecVec.emplace_back(rowY);
+  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
 
@@ -439,12 +499,7 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
-    vector<double> dblRow(row.size());
-    uint64_t i = 0;
-    for (auto v : row) {
-      dblRow[i] = v;
-      ++i;
-    }
+    vector<double> dblRow = dvs::vecFromTemplate<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
@@ -457,10 +512,8 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
        configuration.typeVisual == VISUALTYPE_CHART) &&
       (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
     if (size1 == 2) {
-      int ff;
       res = dvs::showLineChartInBrowser(vecVecDbl[0], vecVecDbl[1], htmlPageName, configuration);
     } else if (size2 == 2) {
-      int df;
       vector<double> xVals;
       vector<double> yVals;
       xVals.reserve(size1);
@@ -484,12 +537,7 @@ bool save(C const& container_of_containers, const string& filename, const config
   vector<vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
   for (auto row : container_of_containers) {
-    vector<T> rowTemp(row.size());
-    uint64_t i = 0;
-    for (auto v : row) {
-      rowTemp[i] = v;
-      ++i;
-    }
+    vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
     vecVec.emplace_back(rowTemp);
   }
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);

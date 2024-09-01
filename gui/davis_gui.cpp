@@ -2,7 +2,7 @@
 #include "./ui_davis_gui.h"
 
 #include "../davis_one/davis.h"
-#include "about_window.h"
+
 #include "QDragEnterEvent"
 #include "QMimeData"
 #include "QDebug"
@@ -18,6 +18,7 @@
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI) {
+  isAboutWindowShowed = false;
   ui->setupUi(this);
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
@@ -56,6 +57,8 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbExit->setText("✕");
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+
 }
 
 DavisGUI::~DavisGUI() {
@@ -63,10 +66,13 @@ DavisGUI::~DavisGUI() {
 }
 
 void DavisGUI::showAboutWindow() {
-  qDebug() << "trigerred";
-  About_window* aboutWindow = new About_window();
-  aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
+  if (isAboutWindowShowed) {
+    delete aboutWindow;
+  }
+  aboutWindow = new About_window(); //NO LEAK because of Qt::WA_DeleteOnClose
+  connect(aboutWindow, &About_window::about_window_closed, [ = ]() {isAboutWindowShowed = false;});
   aboutWindow->show();
+  isAboutWindowShowed = true;
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {

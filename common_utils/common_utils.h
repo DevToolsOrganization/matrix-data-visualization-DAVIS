@@ -54,6 +54,9 @@ bool make_string(const string& src,
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
+int find_separator(const std::string& src,
+                   char& separator);
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
@@ -116,8 +119,20 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   return true;
 }
 
-int find_separator(const std::string& src,
-                   char& separator);
+//! convert any container to std::vector with G type
+template<typename G,
+         typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>>>
+vector<G> vecFromTemplate(const C& container) {
+  vector<G> vec(container.size());
+  uint64_t i = 0;
+  for (auto v : container) {
+    vec[i] = static_cast<G>(v);
+    ++i;
+  }
+  return vec;
+}
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
