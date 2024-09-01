@@ -95,14 +95,84 @@ p, li { white-space: pre-wrap; }
      </spacer>
     </item>
     <item>
-     <widget class="QLabel" name="label_center">
+     <widget class="QLabel" name="label_wiki">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Read documentation at our &lt;/span&gt;&lt;a href=&quot;https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS/wiki&quot;&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#75bcff;&quot;&gt;WIKI&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;For any questions please contact &lt;/span&gt;&lt;span style=&quot; font-size:12pt; color:#8cdeff;&quot;&gt;devtools.public@gmail.com&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Read documentation at our &lt;/span&gt;&lt;a href=&quot;https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS/wiki&quot;&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#75bcff;&quot;&gt;WIKI&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textInteractionFlags">
        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
       </property>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_mail">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;For any questions please contact &lt;/span&gt;&lt;span style=&quot; font-size:12pt; color:#8cdeff;&quot;&gt;devtools.public@gmail.com&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_copyMail">
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#pushButton_copyMail {
+background-color: transparent;
+border-image: url(:/res/content_copy_200dp_969696_FILL0_wght300_GRAD0_opsz48.png);
+background: none;
+background-repeat: none;
+border-width: 0px;
+height: 20px;
+width: 20px;
+}
+#pushButton_copyMail:pressed
+{
+ border-image: url(:/res/check_200dp_969696_FILL0_wght300_GRAD0_opsz48.png);
+}
+#pushButton_copyMail:hover
+{
+ background-color: rgb(80, 80, 80);
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
     <item>
      <spacer name="verticalSpacer">

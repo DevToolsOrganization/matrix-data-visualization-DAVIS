@@ -13,7 +13,6 @@ class About_window : public QMainWindow {
 
  signals:
   void about_window_closed();
-  void tripleClick();
 
  public:
   explicit About_window(QWidget* parent = nullptr);
@@ -27,7 +26,9 @@ class About_window : public QMainWindow {
  private slots:
   void on_pushButton_close_clicked();
 
- private:
+  void on_pushButton_copyMail_clicked();
+
+private:
   Ui::about_window* ui;
   QPoint m_point;
   bool isMusicPlaying;
