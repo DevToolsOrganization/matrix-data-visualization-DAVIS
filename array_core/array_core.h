@@ -196,7 +196,9 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
   vector<vector<T>> vecVec;
   vecVec.emplace_back(rowX);
   vecVec.emplace_back(rowY);
-  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+  configSaveToDisk newConf = configuration;
+  newConf.isTranspose = !configuration.isTranspose;
+  bool res = dvs::saveVecVec<T>(vecVec, filename, newConf);
   return res;
 }
 

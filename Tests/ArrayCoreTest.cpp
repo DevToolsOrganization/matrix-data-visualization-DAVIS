@@ -88,9 +88,7 @@ TEST(ArrayCore, save_to_disk_XYdata) {
   for (size_t i = 0; i < 10; ++i) {
     vecY.emplace_back(i * 3);
   }
-  dv::configSaveToDisk config;
-  config.isTranspose = true;
-  bool result = dv::save(vecX, vecY, "./data/test_saving_save_to_disk_XYdata.csv", config);
+  bool result = dv::save(vecX, vecY, "./data/test_saving_save_to_disk_XYdata.csv");
   EXPECT_EQ(result, true);
 }
 
