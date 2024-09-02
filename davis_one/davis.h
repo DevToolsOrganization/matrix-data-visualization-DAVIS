@@ -194,6 +194,9 @@ bool deleteFolder(const char* fname);
 int find_separator(const std::string& src,
                    char& separator);
 
+//! remove special characters except letters, numbers and '-', '_'. Spaces -> '_'
+string removeSpecialCharacters(const string& s);
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {

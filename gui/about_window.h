@@ -28,7 +28,7 @@ class About_window : public QMainWindow {
 
   void on_pushButton_copyMail_clicked();
 
-private:
+ private:
   Ui::about_window* ui;
   QPoint m_point;
   bool isMusicPlaying;

@@ -101,6 +101,13 @@ TEST(CommonUtils, FindSeparator) {
   EXPECT_EQ('\t', sep);
 }
 
+TEST(CommonUtils, htmlPageNameSanitizer) {
+  std::vector<double> vec = {1, 2, 3, 4};
+  std::string name("n-a-m-e 123 e_n_d.,'/now");
+  std::string clearName = dvs::removeSpecialCharacters(name);
+  EXPECT_EQ(clearName, std::string("n-a-m-e_123_e_n_dnow"));
+}
+
 /*std::string Utf8ToCp1251(const std::string& utf8Str) {
   int len = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
   wchar_t* wstr = new wchar_t[len];

@@ -57,8 +57,6 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbExit->setText("✕");
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-
-
 }
 
 DavisGUI::~DavisGUI() {

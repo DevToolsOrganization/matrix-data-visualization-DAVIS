@@ -580,6 +580,21 @@ int find_separator(const std::string& src,
   return UNDEFINED_BEHAVIOR;
 }
 
+string removeSpecialCharacters(const string& s) {
+  string t;
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == ' ') {
+      t += '_';
+    } else if ((s[i] >= 'a' && s[i] <= 'z')
+               || (s[i] >= 'A' && s[i] <= 'Z')
+               || (s[i] >= '0' && s[i] <= '9')
+               || (s[i] == '-') || (s[i] == '_')) {
+      t += s[i];
+    }
+  }
+  return t;
+}
+
 
 } // namespace dvs end
 
@@ -665,7 +680,8 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   }
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -805,7 +821,8 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);

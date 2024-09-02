@@ -98,7 +98,8 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   }
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -238,7 +239,8 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);

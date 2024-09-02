@@ -19,16 +19,16 @@ About_window::About_window(QWidget* parent) :
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
   ui->label_nearLogo->setOpenExternalLinks(true);
   ui->label_wiki->setOpenExternalLinks(true);
-  connect(ui->pushButton_copyMail,&QPushButton::pressed,[&](){
-      QLabel* label = new QLabel(this);
-      label->setText("e-mail copied");
-      QFont font;
-      font.setPointSize(12);
-      label->setFont(font);
-      auto posMail = ui->pushButton_copyMail->pos();
-      label->setGeometry(QRect(posMail.x()-50, posMail.y()+20, 120, 20));
-      label->show();
-      QTimer::singleShot(2000, label, &QLabel::hide);
+  connect(ui->pushButton_copyMail, &QPushButton::pressed, [&]() {
+    QLabel* label = new QLabel(this);
+    label->setText("e-mail copied");
+    QFont font;
+    font.setPointSize(12);
+    label->setFont(font);
+    auto posMail = ui->pushButton_copyMail->pos();
+    label->setGeometry(QRect(posMail.x() - 50, posMail.y() + 20, 120, 20));
+    label->show();
+    QTimer::singleShot(2000, label, &QLabel::hide);
   });
 
   ui->label_DevtoolsDavis->installEventFilter(this);
@@ -76,9 +76,8 @@ bool About_window::eventFilter(QObject* o, QEvent* e) {
   return QObject::eventFilter(o, e);
 }
 
-void About_window::on_pushButton_copyMail_clicked()
-{
-    QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setText("devtools.public@gmail.com");
+void About_window::on_pushButton_copyMail_clicked() {
+  QClipboard* clipboard = QGuiApplication::clipboard();
+  clipboard->setText("devtools.public@gmail.com");
 }
 

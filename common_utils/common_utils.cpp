@@ -286,5 +286,20 @@ int find_separator(const std::string& src,
   return UNDEFINED_BEHAVIOR;
 }
 
+string removeSpecialCharacters(const string& s) {
+  string t;
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == ' ') {
+      t += '_';
+    } else if ((s[i] >= 'a' && s[i] <= 'z')
+               || (s[i] >= 'A' && s[i] <= 'Z')
+               || (s[i] >= '0' && s[i] <= '9')
+               || (s[i] == '-') || (s[i] == '_')) {
+      t += s[i];
+    }
+  }
+  return t;
+}
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
