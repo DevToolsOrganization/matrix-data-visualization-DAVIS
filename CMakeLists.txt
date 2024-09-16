@@ -15,7 +15,10 @@ add_subdirectory("ResourceManager")
 add_subdirectory(plotly_maker)
 add_subdirectory(array_core)
 add_subdirectory(common_utils)
+
+
 add_subdirectory(gui)
+
 
 set(HEADER_FILES davis.h)
 
