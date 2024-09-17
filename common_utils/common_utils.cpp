@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include <limits.h>
+#include <set>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -109,7 +110,8 @@ bool deleteFolder(const char* fname) {
   }
 }
 
-bool getDataFromFile(const string& path, string& result) {
+bool get_data_from_file(const string& path,
+                        vector<string>& result) {
 
   //TODO different scenarious and sanitizing
   if (!is_file_exists(path)) {
@@ -123,7 +125,7 @@ bool getDataFromFile(const string& path, string& result) {
   if (file.is_open()) {
     string temp;
     while (std::getline(file, temp)) {
-      result.append(temp).append(";");
+      result.emplace_back(temp);
     }
   } else {
     return false;
@@ -230,6 +232,73 @@ bool make_string(const string& src,
   }
   //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
+}
+
+int find_separator(const std::string& src,
+                   char& separator) {
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r'};
+  std::set<char> unique_chars;
+  bool is_service_char = false;
+  bool is_dot_present = false;
+  bool is_comma_present = false;
+  size_t comma_counter = 0;
+  size_t dot_counter = 0;
+
+  for (size_t i = 0; i < src.size(); ++i) {
+
+    if (isdigit((unsigned char)src[i]))
+      continue;
+    is_service_char = false;
+
+    if (src[i] == '.') {
+      is_dot_present = true;
+      ++dot_counter;
+    } else if (src[i] == ',') {
+      is_comma_present = true;
+      ++comma_counter;
+    }
+
+    for (size_t j = 0; j < ignored_chars.size(); ++j) {
+      if (src[i] == ignored_chars[j]) {
+        is_service_char = true;
+        break;
+      }
+    }
+    if (is_service_char)
+      continue;
+    unique_chars.insert(src[i]);
+  }
+  if (unique_chars.size() == 1 && is_comma_present == false) {
+    separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 1 && is_comma_present == true) {
+    if (is_dot_present) {
+      separator = ',';
+      return MABE_COMMA_MABE_DOT;
+    }
+    separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 0) {
+    return NO_SEPARATOR;
+  } else if (unique_chars.size() > 1) {
+    return MORE_THAN_ONE_SEPARATOR;
+  }
+  return UNDEFINED_BEHAVIOR;
+}
+
+string removeSpecialCharacters(const string& s) {
+  string t;
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == ' ') {
+      t += '_';
+    } else if ((s[i] >= 'a' && s[i] <= 'z')
+               || (s[i] >= 'A' && s[i] <= 'Z')
+               || (s[i] >= '0' && s[i] <= '9')
+               || (s[i] == '-') || (s[i] == '_')) {
+      t += s[i];
+    }
+  }
+  return t;
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE

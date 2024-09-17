@@ -35,8 +35,8 @@ TEST(ArrayCore, save_to_disk_pseudo_2d) {
     }
   }
   dv::configSaveToDisk conf;
-  conf.separatorOfCols = "*";
-  conf.separatorOfRows = "____";
+  conf.separatorOfCols = ";";
+  conf.separatorOfRows = "\n";
   bool result = dv::save(vals, rows, cols, "./data/test_saving_save_to_disk_pseudo_2d.csv", conf);
   EXPECT_EQ(result, true);
 }
@@ -75,6 +75,20 @@ TEST(ArrayCore, save_to_disk_container2D) {
     arr2.emplace_back(vec);
   }
   bool result = dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, save_to_disk_XYdata) {
+  //! 1-dimensional container
+  vector<double> vecX;
+  for (size_t i = 0; i < 10; ++i) {
+    vecX.emplace_back(i * 2);
+  }
+  vector<double> vecY;
+  for (size_t i = 0; i < 10; ++i) {
+    vecY.emplace_back(i * 3);
+  }
+  bool result = dv::save(vecX, vecY, "./data/test_saving_save_to_disk_XYdata.csv");
   EXPECT_EQ(result, true);
 }
 
@@ -190,6 +204,28 @@ TEST(ArrayCore, showChart) {
   config.chart.xLabel = "Custom xLabel";
   config.chart.yLabel = "Custom yLabel";
   bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, showChartXYfromContainerOfConteiners) {
+  vector<vector<double>> values;
+  vector<double> vecX = {5, 20, 21, 22, 50};
+  vector<double> vecY = {1, 2, 3, 4, 5};
+  values.emplace_back(vecX);
+  values.emplace_back(vecY);
+  auto config = dv::Config();
+  config.chart.title = "ChartXY";
+  config.chart.xLabel = "xLabel";
+  config.chart.yLabel = "yLabel";
+  bool result = dv::show(values, "showChartXY_ContainerOfContainers", config);
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, showChartXYfrom2Containers) {
+  vector<vector<double>> values;
+  vector<double> vecX = {5, 20, 21, 22, 50};
+  vector<double> vecY = {1, 2, 3, 4, 5};
+  bool result = dv::show(vecX, vecY, "showChartXY_2containers");
   EXPECT_EQ(result, true);
 }
 

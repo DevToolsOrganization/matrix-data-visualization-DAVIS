@@ -74,9 +74,11 @@ struct Config {
 struct configSaveToDisk {
   configSaveToDisk():
     separatorOfRows("\n"),
-    separatorOfCols(";") {}
+    separatorOfCols(";"),
+    isTranspose(false) {}
   std::string separatorOfRows;
   std::string separatorOfCols;
+  bool isTranspose; //rows-cols or cols-rows
 };
 
 

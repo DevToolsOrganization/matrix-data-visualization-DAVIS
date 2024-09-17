@@ -11,9 +11,9 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)  # Windows specific, for goog
 # Copy plotly java script to tests
 MESSAGE("_____________________ Copy Plotlylib to Tests step ___________________________________________")
 if(WIN32)
-file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
+file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.32.0.min.js DESTINATION
     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/davis_htmls)
-file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.27.0.min.js DESTINATION
+file(COPY ${CMAKE_SOURCE_DIR}/plotly_maker/plotly-2.32.0.min.js DESTINATION
     ${CMAKE_CURRENT_BINARY_DIR}/davis_htmls)
 endif(WIN32)
 

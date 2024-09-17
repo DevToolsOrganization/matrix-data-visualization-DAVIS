@@ -12,6 +12,8 @@
 #include <fstream>
 #include <iostream>
 #include <limits.h>
+#include <numeric>
+#include <set>
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
@@ -30,7 +32,7 @@ namespace dvs {
     const char kHtmlModel[] =
 R"(
 <head>
-<script src="./plotly-2.27.0.min.js" charset="utf-8"></script>
+<script src="./%8" charset="utf-8"></script>
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
@@ -288,7 +290,7 @@ Please download this .js file and add to the directory
 Download plotly javascript library from
 <a href="https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS">our github</a>
 or
-<a href="https://cdn.plot.ly/plotly-2.27.0.min.js">official plotly site</a>
+<a href="https://cdn.plot.ly/plotly-2.32.0.min.js">official plotly site</a>
 
 
 <div class="email_style">
@@ -402,7 +404,8 @@ bool deleteFolder(const char* fname) {
   }
 }
 
-bool getDataFromFile(const string& path, string& result) {
+bool get_data_from_file(const string& path,
+                        vector<string>& result) {
 
   //TODO different scenarious and sanitizing
   if (!is_file_exists(path)) {
@@ -416,7 +419,7 @@ bool getDataFromFile(const string& path, string& result) {
   if (file.is_open()) {
     string temp;
     while (std::getline(file, temp)) {
-      result.append(temp).append(";");
+      result.emplace_back(temp);
     }
   } else {
     return false;
@@ -525,6 +528,73 @@ bool make_string(const string& src,
   return true;
 }
 
+int find_separator(const std::string& src,
+                   char& separator) {
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r'};
+  std::set<char> unique_chars;
+  bool is_service_char = false;
+  bool is_dot_present = false;
+  bool is_comma_present = false;
+  size_t comma_counter = 0;
+  size_t dot_counter = 0;
+
+  for (size_t i = 0; i < src.size(); ++i) {
+
+    if (isdigit((unsigned char)src[i]))
+      continue;
+    is_service_char = false;
+
+    if (src[i] == '.') {
+      is_dot_present = true;
+      ++dot_counter;
+    } else if (src[i] == ',') {
+      is_comma_present = true;
+      ++comma_counter;
+    }
+
+    for (size_t j = 0; j < ignored_chars.size(); ++j) {
+      if (src[i] == ignored_chars[j]) {
+        is_service_char = true;
+        break;
+      }
+    }
+    if (is_service_char)
+      continue;
+    unique_chars.insert(src[i]);
+  }
+  if (unique_chars.size() == 1 && is_comma_present == false) {
+    separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 1 && is_comma_present == true) {
+    if (is_dot_present) {
+      separator = ',';
+      return MABE_COMMA_MABE_DOT;
+    }
+    separator = *unique_chars.begin();
+    return GOOD_SEPARATOR;
+  } else if (unique_chars.size() == 0) {
+    return NO_SEPARATOR;
+  } else if (unique_chars.size() > 1) {
+    return MORE_THAN_ONE_SEPARATOR;
+  }
+  return UNDEFINED_BEHAVIOR;
+}
+
+string removeSpecialCharacters(const string& s) {
+  string t;
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == ' ') {
+      t += '_';
+    } else if ((s[i] >= 'a' && s[i] <= 'z')
+               || (s[i] >= 'A' && s[i] <= 'Z')
+               || (s[i] >= '0' && s[i] <= '9')
+               || (s[i] == '-') || (s[i] == '_')) {
+      t += s[i];
+    }
+  }
+  return t;
+}
+
 
 } // namespace dvs end
 
@@ -570,29 +640,35 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
   return true;
 }
 
+bool createStringLineChartValues(const vector<double>& xValues,
+                                 const vector<double>& yValues,
+                                 string& out_str_values) {
+  if (xValues.size() != yValues.size()) {
+    return false;
+  }
 
-bool createStringLineChartValues(const vector<double>& values,
-                                 string& str_values) {
-  if (!str_values.empty()) {
-    str_values.clear();
+  if (!out_str_values.empty()) {
+    out_str_values.clear();
   }
-  str_values = R"(var trace = {x: [)";
-  for (size_t i = 0; i < values.size(); ++i) {
-    str_values.append(std::to_string(i));
-    if (i != values.size() - 1) {
-      str_values.append(",");
+  out_str_values = R"(var trace = {x: [)";
+  for (size_t i = 0; i < xValues.size(); ++i) {
+    out_str_values.append(std::to_string(xValues[i]));
+    if (i != xValues.size() - 1) {
+      out_str_values.append(",");
     }
   }
-  str_values.append("], y: [");
-  for (size_t j = 0; j < values.size(); ++j) {
-    str_values.append(std::to_string(values[j]));
-    if (j != values.size() - 1) {
-      str_values.append(",");
+  out_str_values.append("], y: [");
+  for (size_t j = 0; j < yValues.size(); ++j) {
+    out_str_values.append(std::to_string(yValues[j]));
+    if (j != yValues.size() - 1) {
+      out_str_values.append(",");
     }
   }
-  str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  out_str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
   return true;
 }
+
+
 
 inline bool heatmap_and_surface(const vector<vector<double>>& values,
                                 const string& title,
@@ -604,7 +680,8 @@ inline bool heatmap_and_surface(const vector<vector<double>>& values,
   }
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -641,6 +718,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
+  args[ARG_JS_VER] = kPlotlyJsName;
   dv::config_colorscales clrScale;
   if (typeVisual == dv::VISUALTYPE_HEATMAP)
     clrScale = configuration.heatmap.colorSc;
@@ -722,10 +800,20 @@ bool showHeatMapInBrowser(const string& values,
 
 bool showLineChartInBrowser(const vector<double>& values,
                             const string& title, const dv::Config& configuration) {
+
+  vector<double> x(values.size());
+  std::iota(std::begin(x), std::end(x), 0);  // Fill with 0, 1, 2...
+  showLineChartInBrowser(x, values, title, configuration);
+  return true;
+}
+
+bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
+                            const std::string& title, const dv::Config& configuration) {
   string page;
   vector<string>args(ARGS_SIZE, "");
+  args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
-  createStringLineChartValues(values, str_values);
+  createStringLineChartValues(xValues, yValues, str_values);
   args[ARG_VALUES] = str_values;
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
@@ -733,7 +821,8 @@ bool showLineChartInBrowser(const vector<double>& values,
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
-  pageName.append("./").append(kOutFolderName).append(title).append(".html");
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -776,7 +865,7 @@ void showWarningJsAbsentPage() {
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args{ARGS_WARNING_PAGE_SIZE,""};
+  vector<string>args {ARGS_WARNING_PAGE_SIZE, ""};
   args[ARG_WORKING_FOLDER] = getCurrentPath() + davis_dir;
   args[ARG_JS_VERSION] = kPlotlyJsName;
   make_string(kWarningJSLibAbsentPage, args, out);

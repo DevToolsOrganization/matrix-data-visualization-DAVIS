@@ -12,6 +12,13 @@
 
 namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
+enum SEPARATOR_RESULT {
+  GOOD_SEPARATOR,
+  MORE_THAN_ONE_SEPARATOR,
+  NO_SEPARATOR,
+  MABE_COMMA_MABE_DOT,
+  UNDEFINED_BEHAVIOR
+};
 using std::string;
 using std::vector;
 
@@ -32,7 +39,8 @@ void sleepMs(unsigned long milisec);
 
 void openPlotlyHtml(const string& file_name);
 
-bool getDataFromFile(const string& path, string& result);
+bool get_data_from_file(const string& path,
+                        vector<std::string>& result);
 
 vector<string> split(const string& target, char c);
 
@@ -45,6 +53,12 @@ bool make_string(const string& src,
 
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
+
+int find_separator(const std::string& src,
+                   char& separator);
+
+//! remove special characters except letters, numbers and '-', '_'. Spaces -> '_'
+string removeSpecialCharacters(const string& s);
 
 //! save to disk vector<T> data
 template <typename T>
@@ -77,23 +91,51 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   if (!fout.is_open()) {
     return false;
   }
-  size_t rows = vecVec.size();
-  size_t cols = vecVec.at(0).size();
-
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      double val = vecVec.at(i).at(j);
-      fout << val;
-      if (j < cols - 1) { // we dont need sep al row end
-        fout << config.separatorOfCols;
+  if (config.isTranspose) {
+    size_t rows = vecVec.at(0).size();
+    size_t cols = vecVec.size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(j).at(i);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
       }
+      fout << config.separatorOfRows;
     }
-    fout << config.separatorOfRows;
+  } else {
+    size_t rows = vecVec.size();
+    size_t cols = vecVec.at(0).size();
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        double val = vecVec.at(i).at(j);
+        fout << val;
+        if (j < cols - 1) { // we dont need sep at row end
+          fout << config.separatorOfCols;
+        }
+      }
+      fout << config.separatorOfRows;
+    }
   }
   fout.close();
   return true;
 }
 
+//! convert any container to std::vector with G type
+template<typename G,
+         typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename = std::enable_if_t<std::is_convertible_v<T, double>>>
+vector<G> vecFromTemplate(const C& container) {
+  vector<G> vec(container.size());
+  uint64_t i = 0;
+  for (auto v : container) {
+    vec[i] = static_cast<G>(v);
+    ++i;
+  }
+  return vec;
+}
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

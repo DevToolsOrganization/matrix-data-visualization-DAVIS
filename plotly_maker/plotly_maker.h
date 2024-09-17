@@ -27,6 +27,8 @@ bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& ti
 bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
+bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
+                            const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 

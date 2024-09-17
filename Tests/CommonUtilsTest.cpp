@@ -1,6 +1,10 @@
 #include "gtest/gtest.h"
 #include "common_utils/common_utils.h"
 #include <fstream>
+#include <codecvt>
+#include <locale>
+#include <iostream>
+//#include <windows.h>
 
 
 using std::string;
@@ -80,14 +84,52 @@ TEST(CommonUtils, CreateStringFantasyArgs) {
 
 
 TEST(CommonUtils, SplitString) {
-
   auto result = dvs::split(not_filled_test_string_1, '%');
-
-  for (int i = 0; i < result.size(); ++i) {
+  for (size_t i = 0; i < result.size(); ++i) {
     TEST_COUT << result[i] << "\n";
   }
   TEST_COUT << not_filled_test_string_1;
 }
+
+TEST(CommonUtils, FindSeparator) {
+  char sep;
+  dvs::find_separator("5.0;6;7;8", sep);
+  EXPECT_EQ(';', sep);
+  dvs::find_separator("5.0 6 7 8", sep);
+  EXPECT_EQ(' ', sep);
+  dvs::find_separator("5.0\t6\t7\t8", sep);
+  EXPECT_EQ('\t', sep);
+}
+
+TEST(CommonUtils, htmlPageNameSanitizer) {
+  std::vector<double> vec = {1, 2, 3, 4};
+  std::string name("n-a-m-e 123 e_n_d.,'/now");
+  std::string clearName = dvs::removeSpecialCharacters(name);
+  EXPECT_EQ(clearName, std::string("n-a-m-e_123_e_n_dnow"));
+}
+
+/*std::string Utf8ToCp1251(const std::string& utf8Str) {
+  int len = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
+  wchar_t* wstr = new wchar_t[len];
+  MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, wstr, len);
+  len = WideCharToMultiByte(1251, 0, wstr, -1, NULL, 0, NULL, NULL);
+  char* cp1251 = new char[len];
+  WideCharToMultiByte(1251, 0, wstr, -1, cp1251, len, NULL, NULL);
+  std::string result(cp1251);
+  delete[] wstr;
+  delete[] cp1251;
+  return result;
+}
+
+TEST(CommonUtils, RussianFileC) {
+
+  string russian = "файл.txt";
+  auto path = Utf8ToCp1251(russian);
+  std::fstream file;
+  file.open(path, std::ios::in);
+  EXPECT_EQ(bool(file), true);
+
+}*/
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

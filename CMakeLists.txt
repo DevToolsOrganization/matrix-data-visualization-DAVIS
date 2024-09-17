@@ -16,6 +16,10 @@ add_subdirectory(plotly_maker)
 add_subdirectory(array_core)
 add_subdirectory(common_utils)
 
+
+add_subdirectory(gui)
+
+
 set(HEADER_FILES davis.h)
 
 # tests
@@ -23,7 +27,7 @@ enable_testing()
 add_subdirectory(Tests)
 
 include_directories(${RESOURCE_MANAGER_INCLUDE_DIRS})
-rm_embed_resources(RESOURCES "plotly_maker/plotly-2.27.0.min.js")
+rm_embed_resources(RESOURCES "plotly_maker/plotly-2.32.0.min.js")
 
 add_executable("davis_launcher" davis_launcher.cpp davis.h)
 

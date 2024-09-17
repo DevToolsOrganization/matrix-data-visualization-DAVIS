@@ -6,7 +6,7 @@ namespace dvs {
     const char kHtmlModel[] =
 R"(
 <head>
-<script src="./plotly-2.32.0.min.js" charset="utf-8"></script>
+<script src="./%8" charset="utf-8"></script>
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
