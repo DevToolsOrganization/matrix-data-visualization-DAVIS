@@ -25,7 +25,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets QUIET)
-if(QT_NOT_FOUND)
+if(NOT QT_FOUND)
 return()
 endif()
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
