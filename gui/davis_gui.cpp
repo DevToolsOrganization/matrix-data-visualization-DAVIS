@@ -93,7 +93,7 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     char separator;
     QFile file(filePath);
     QTextStream ts(&file);
-    ts.setCodec("Cp1251");
+    ts.setCodec("UTF-8");
     file.open(QIODevice::ReadWrite);
     QString line;
     QStringList str_lines;
