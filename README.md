@@ -15,7 +15,7 @@
 
 </br>
 
-# [--------------------- FULL DOCUMENTATION PAGE ---------------------](https://devtoolsorganization.github.io/matrix-data-visualization-DAVIS/#/)
+# [------------- FULL DOCUMENTATION PAGE -------------](https://devtoolsorganization.github.io/matrix-data-visualization-DAVIS/#/)
 
 </br>
 
