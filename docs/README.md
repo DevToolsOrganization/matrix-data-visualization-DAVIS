@@ -14,11 +14,11 @@ td, th {
 <tr style="height: 68px;">
 <td style="width: 15%; height: 68px; text-align: right;  vertical-align: top;">
 <p><br /><br /><br /><br /><br /><br /><br /></p>
-<p><a href="/#/c++_intro.md">Documentation</a></p>
+<p><a href="/matrix-data-visualization-DAVIS/#/c++_intro.md">Documentation</a></p>
 <p><br /><br /><br /><br /><br /></p>
-<p><a href="/#/gui_intro.md">Documentation</a></p>
+<p><a href="/matrix-data-visualization-DAVIS/#/gui_intro.md">Documentation</a></p>
 <p><br /><br /><br /><br /><br /></p>
-<p><a href="/#/cmd_intro.md">Documentation</a></p>
+<p><a href="/matrix-data-visualization-DAVIS/#/cmd_intro.md">Documentation</a></p>
 </td>
 <td style="width: 85%; height: 177px;">
 <p>&nbsp;</p>
