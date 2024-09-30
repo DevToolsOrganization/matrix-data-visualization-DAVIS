@@ -13,6 +13,11 @@
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
 
+</br>
+
+# [------------- FULL DOCUMENTATION PAGE -------------](https://devtoolsorganization.github.io/matrix-data-visualization-DAVIS/#/)
+
+</br>
 
 ## Table of Contents
 
