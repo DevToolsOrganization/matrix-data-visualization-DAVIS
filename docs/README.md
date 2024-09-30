@@ -17,12 +17,13 @@ td, th {
 <p><a href="/matrix-data-visualization-DAVIS/#/c++_intro.md">Documentation</a></p>
 <p><br /><br /><br /><br /><br /></p>
 <p><a href="/matrix-data-visualization-DAVIS/#/gui_intro.md">Documentation</a></p>
-<p><br /><br /><br /><br /><br /></p>
+<p><br /><br /><br /><br /></p>
 <p><a href="/matrix-data-visualization-DAVIS/#/cmd_intro.md">Documentation</a></p>
+<p><br /></p>
 </td>
 <td style="width: 85%; height: 177px;">
 <p>&nbsp;</p>
-<h1 style="color: #5e9ca0;"><img src="_media//DAVIS-components.png" width="820"></h1>
+<h1 style="color: #5e9ca0;"><img src="_media//DAVIS-components.png" width="720"></h1>
 </td>
 </tr>
 </tbody>
