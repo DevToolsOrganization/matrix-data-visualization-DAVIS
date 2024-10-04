@@ -4,7 +4,8 @@
 2. Drag and drop your text files to application window
 3. Wait for vizualization data in browser
 
-<img src="_media//gui-all.png" width="800">
+<img src="_media/gui/gui-all.png" width="800">
+
 
 We are using smart recognising of:
 * column & line separators

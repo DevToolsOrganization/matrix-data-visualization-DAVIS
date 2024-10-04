@@ -4,7 +4,7 @@ All you need is just include "davis.h" and use it's functions from `dv::` namesp
 ## show(...) function
 There is one template overload function to visualize different types of data:
 
-<img src="_media//dv_show.png" width="1110">
+<img src="_media/dv_show.png" width="1110">
 
 
 <a name="arguments"></a>
@@ -75,7 +75,7 @@ dv::show(yourData, "yourName", config);
 
 ## save(...) function
 There is one template overload function for saving different types of data as text files:
-<img src="_media//dv_save.png" width="1110">
+<img src="_media/dv_save.png" width="1110">
 
 Supported data types are identical to described for [show(...) function](#show-function)
 
