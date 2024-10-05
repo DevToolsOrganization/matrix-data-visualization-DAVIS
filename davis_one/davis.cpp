@@ -577,7 +577,7 @@ int find_separator(const std::string& src,
   } else if (unique_chars.size() > 1) {
     return MORE_THAN_ONE_SEPARATOR;
   }
-  return UNDEFINED_BEHAVIOR;
+  return UNDEFINED_CASE;
 }
 
 string removeSpecialCharacters(const string& s) {

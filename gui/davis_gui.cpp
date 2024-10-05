@@ -97,23 +97,71 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     file.open(QIODevice::ReadWrite);
     QString line;
     QStringList str_lines;
+
     while (ts.readLineInto(&line)) {
+      if(line.isEmpty())continue;
       str_lines.append(line);
     }
+
+
+
+   QHash<quint32,quint32>count_sizes;
+
     if (str_lines.size() <= 0)
       return;
-    auto res = dvs::find_separator(str_lines[0].toStdString(), separator);
-    qDebug() << "sep result: " << separator << "--->" << res;
-    for (int i = 0; i < str_lines.size(); ++i) {
-      std::vector<double>values;
-      QStringList str_values = str_lines[i].split(separator);
-      for (int j = 0; j < str_values.size(); ++j) {
 
+
+    for (size_t i = 0; i < str_lines.size(); ++i) {
+      std::vector<double>values;
+
+
+      auto verification_result = dvs::find_separator(str_lines[i].toStdString(), separator);
+      qDebug() << "sep result: " << separator << "--->" << verification_result;
+
+      switch((dvs::SEPARATOR_RESULT)verification_result){
+
+      case dvs::GOOD_SEPARATOR:
+          goto valid;
+      case dvs::MORE_THAN_ONE_SEPARATOR:
+          continue;
+      case dvs::NO_SEPARATOR:
+          continue;
+      case dvs::MABE_COMMA_MABE_DOT:
+          continue;
+      case dvs::UNDEFINED_CASE:
+          continue;
+      }
+valid:
+
+      QStringList str_values = str_lines[i].split(separator);
+
+      quint32 counter = 1;
+      if(count_sizes.find(str_values.size())!=count_sizes.end()){
+      counter += count_sizes.value(str_values.size());
+      }
+      count_sizes.insert(str_values.size(),counter);
+
+      for (size_t j = 0; j < str_values.size(); ++j) {
+        if(str_values[j].toStdString().empty())continue;
         values.emplace_back(std::stod(str_values[j].toStdString()));
       }
       data.emplace_back(values);
     }
+
     file.close();
+    bool is_sizes_the_same = true;
+    size_t first_size = 0;
+    if(data.size()>0)first_size = data[0].size();
+    for(size_t i=0;i<data.size();++i){
+    if(first_size!=data[i].size()){
+     is_sizes_the_same = false;
+     break;
+    }
+    }
+    if(is_sizes_the_same == false){
+    //This is the case when lines sizes are different
+    qDebug()<<count_sizes;
+    }
 
 
     if (data.size() == 2 || data[0].size() == 2) { //chartXY
