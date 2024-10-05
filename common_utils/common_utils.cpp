@@ -244,6 +244,10 @@ int find_separator(const std::string& src,
   size_t comma_counter = 0;
   size_t dot_counter = 0;
 
+  if(src.empty()){
+      return EMPTY_LINE;
+  }
+
   for (size_t i = 0; i < src.size(); ++i) {
 
     if (isdigit((unsigned char)src[i]))
