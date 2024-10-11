@@ -84,5 +84,8 @@ td, th {
 ## 📞 Contacts
 For any questions please contact<br>
 devtools.public@gmail.com
+<br>
+<br>
+<br>
 
 [Next page →](/c++_intro.md)
