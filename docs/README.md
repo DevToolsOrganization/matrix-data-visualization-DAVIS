@@ -16,8 +16,9 @@ our following requirements:
 
 all these requirements were embodied in DAVIS.
 
-Also, applications with a command line interface and a graphical interface were created on its basis, which allow you to display
+Also, applications with a command line interface and a graphical interface were created on c++ library basis, which allow you to display
 numeric data in text files, automatically selecting the desired type of visualization and conducting semantic analysis of the file contents.
+
 
 <style>
 td, th {
