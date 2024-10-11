@@ -12,11 +12,11 @@ our following requirements:
 - no need to use heavy libraries, which also require compilation. Preferably a one-header library;
 - only pure C++ functionality, no frameworks;
 - intuitively simple use without a long study of the documentation. Data visualization from code should be called with just one line of code - one function;
-- cross-platform
+- cross-platform.
 
-all these requirements were embodied in DAVIS.
+All these requirements were embodied in DAVIS.
 
-Also, applications with a command line interface and a graphical interface were created on c++ DAVIS library basis, which allow you to display
+Also, applications with a command line interface and a graphical interface were created on C++ DAVIS library basis, which allow you to display
 numeric data in text files, automatically selecting the desired type of visualization and conducting semantic analysis of the file contents.
 
 <style>
