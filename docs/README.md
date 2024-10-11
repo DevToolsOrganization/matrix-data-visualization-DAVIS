@@ -19,7 +19,6 @@ all these requirements were embodied in DAVIS.
 Also, applications with a command line interface and a graphical interface were created on c++ DAVIS library basis, which allow you to display
 numeric data in text files, automatically selecting the desired type of visualization and conducting semantic analysis of the file contents.
 
-
 <style>
 td, th {
    border: none!important;
@@ -28,7 +27,7 @@ td, th {
 
 <table>
 <tbody>
-<tr style="height: 68px;">
+<tr style="height: 68px; border: 1px">
 <td style="width: 15%; height: 68px; text-align: left;  vertical-align: top;">
 <p><br /><br /><br /><br /><br /><br /><br /></p>
 <p><a href="/matrix-data-visualization-DAVIS/#/c++_intro.md">Documentation С++</a></p>
@@ -56,8 +55,31 @@ This project is used by the following companies:
 <br>
 
 ## 🐝 Authors
-[AntonMrt](https://www.github.com/AntonMrt), [ValeryStk](https://www.github.com/ValeryStk)
 
+<style>
+td, th {
+   border: 1px solid black;
+}
+</style>
+<table>
+  <tbody>
+   <tr style="border: 1px">
+    <td align="center" >
+      <img width="150 height="150"
+      src="https://avatars.githubusercontent.com/u/104432560?v=4">
+      <br />
+      <a href="https://www.github.com/AntonMrt">Anton</a>
+    </td>
+    <td align="center">
+      <img width="150 height="150"
+      src="https://avatars.githubusercontent.com/u/73784374?v=4">
+      <br />
+      <a href="https://www.github.com/ValeryStk">Valery</a>
+    </td>
+
+   </tr>
+  <tbody>
+</table>
 
 ## 📞 Contacts
 For any questions please contact<br>
