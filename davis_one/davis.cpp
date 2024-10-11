@@ -530,7 +530,7 @@ bool make_string(const string& src,
 
 int find_separator(const std::string& src,
                    char& separator) {
-  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r'};
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.', ',','\r'};
   std::set<char> unique_chars;
   bool is_service_char = false;
   bool is_dot_present = false;

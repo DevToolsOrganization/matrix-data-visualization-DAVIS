@@ -118,14 +118,26 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       auto verification_result = dvs::find_separator(str_lines[i].toStdString(), separator);
       qDebug() << "sep result: " << separator << "--->" << verification_result;
 
+      QStringList str_values;
+      bool no_sep_to_double_result = false;
       switch((dvs::SEPARATOR_RESULT)verification_result){
 
       case dvs::GOOD_SEPARATOR:
+          str_values = str_lines[i].split(separator);
           goto valid;
       case dvs::MORE_THAN_ONE_SEPARATOR:
           continue;
-      case dvs::NO_SEPARATOR:
-          continue;
+      case dvs::NO_SEPARATOR:{
+          QString temp = str_lines[i];
+          temp.replace(",",".");
+          temp.toDouble(&no_sep_to_double_result);
+          if(no_sep_to_double_result){
+          str_values.append(temp);
+          goto valid;
+          }else{
+              continue;
+          }
+      }
       case dvs::MABE_COMMA_MABE_DOT:
           continue;
       case dvs::UNDEFINED_CASE:
@@ -133,7 +145,7 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       }
 valid:
 
-      QStringList str_values = str_lines[i].split(separator);
+
 
       quint32 counter = 1;
       if(count_sizes.find(str_values.size())!=count_sizes.end()){
@@ -143,7 +155,14 @@ valid:
 
       for (size_t j = 0; j < str_values.size(); ++j) {
         if(str_values[j].toStdString().empty())continue;
-        values.emplace_back(std::stod(str_values[j].toStdString()));
+
+        QString temp = str_values[j];
+        temp.replace(",",".");
+        auto value = temp.toDouble(&no_sep_to_double_result);
+        if(no_sep_to_double_result){
+        values.emplace_back(value);
+        }
+
       }
       data.emplace_back(values);
     }
