@@ -1,6 +1,8 @@
+
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=Plastic&logo=c%2B%2B&logoColor=white)
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
@@ -9,7 +11,7 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=bugs)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DevToolsOrganization_matrix-data-visualization-DAVIS&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=DevToolsOrganization_matrix-data-visualization-DAVIS)
 
-[<img src="https://github.com/user-attachments/assets/7425ddb9-8b6e-4303-8e29-f1144cc79acb" width="220">](https://github.com/DevToolsOrganization)
+
 
 ![Logo](https://github.com/valvals/devtools/assets/104432560/27f28dde-27bc-47f6-8696-f80fb7b4661b)
 
@@ -240,7 +242,26 @@ This project is used by the following companies:
 - A. N. Sevchenko  Institute  of  Applied  Physical Problems of Belarusian State University
  
 # 🐝 Authors
-[AntonMrt](https://www.github.com/AntonMrt), [ValeryStk](https://www.github.com/ValeryStk)\
+<table>
+  <tbody>
+   <tr style="border: 1px">
+    <td align="center" >
+      <a href="https://www.github.com/AntonMrt"><img width="100 height="100"
+      src="https://avatars.githubusercontent.com/u/104432560?v=4"></a>
+      </br>
+      Anton
+    </td>
+    <td align="center">
+      <a href="https://www.github.com/ValeryStk"><img width="100 height="100"
+      src="https://avatars.githubusercontent.com/u/73784374?v=4"></a>
+      </br>
+      Valery
+    </td>
+
+   </tr>
+  <tbody>
+</table>
+
 You are welcome to our team! 
 
 # 📞 Contacts
