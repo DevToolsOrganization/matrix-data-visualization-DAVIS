@@ -65,16 +65,16 @@ td, th {
   <tbody>
    <tr style="border: 1px">
     <td align="center" >
-      <img width="150 height="150"
-      src="https://avatars.githubusercontent.com/u/104432560?v=4">
-      <br />
-      <a href="https://www.github.com/AntonMrt">Anton</a>
+      <a href="https://www.github.com/AntonMrt"><img width="100 height="100"
+      src="https://avatars.githubusercontent.com/u/104432560?v=4"></a>
+      </br>
+      Anton
     </td>
     <td align="center">
-      <img width="150 height="150"
-      src="https://avatars.githubusercontent.com/u/73784374?v=4">
-      <br />
-      <a href="https://www.github.com/ValeryStk">Valery</a>
+      <a href="https://www.github.com/ValeryStk"><img width="100 height="100"
+      src="https://avatars.githubusercontent.com/u/73784374?v=4"></a>
+      </br>
+      Valery
     </td>
 
    </tr>
