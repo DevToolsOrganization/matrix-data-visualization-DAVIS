@@ -1,4 +1,3 @@
-
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=Plastic&logo=c%2B%2B&logoColor=white)
 ![Workflow](https://github.com/valvals/devtools/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -242,6 +241,10 @@ This project is used by the following companies:
 - A. N. Sevchenko  Institute  of  Applied  Physical Problems of Belarusian State University
  
 # 🐝 Authors
+
+<a href="https://github.com/DevToolsOrganization"><img width="220"
+src="https://github.com/user-attachments/assets/7425ddb9-8b6e-4303-8e29-f1144cc79acb"></a>
+
 <table>
   <tbody>
    <tr style="border: 1px">
