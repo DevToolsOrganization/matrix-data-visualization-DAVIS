@@ -102,19 +102,25 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     }
     if (str_lines.size() <= 0)
       return;
-    auto res = dvs::find_separator(str_lines[0].toStdString(), separator);
-    qDebug() << "sep result: " << separator << "--->" << res;
+
     for (int i = 0; i < str_lines.size(); ++i) {
       std::vector<double>values;
+      auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
+      //qDebug() << "sep result: " << separator << "--->" << res;
+      if(res!=dvs::GOOD_SEPARATOR)continue;
       QStringList str_values = str_lines[i].split(separator);
       for (int j = 0; j < str_values.size(); ++j) {
-
+       if(dvs::is_string_convertable_to_digit(str_values[j].toStdString())==false){continue;}
         values.emplace_back(std::stod(str_values[j].toStdString()));
       }
       data.emplace_back(values);
     }
     file.close();
 
+    if(data.empty()){// Empty file case
+        qDebug()<<"Empty file";
+        return;
+    }
 
     if (data.size() == 2 || data[0].size() == 2) { //chartXY
       dv::show(data, "chartXY");

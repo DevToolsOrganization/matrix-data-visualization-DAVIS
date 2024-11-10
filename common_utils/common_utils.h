@@ -137,6 +137,10 @@ vector<G> vecFromTemplate(const C& container) {
   return vec;
 }
 
+
+bool is_string_convertable_to_digit(const string& sample);
+
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
