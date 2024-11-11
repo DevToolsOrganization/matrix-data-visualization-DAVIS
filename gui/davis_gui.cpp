@@ -94,7 +94,10 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
-    file.open(QIODevice::ReadWrite);
+    if(file.open(QIODevice::ReadWrite)==false){
+        dvs::showReportFileNotFounded();
+        return;
+    };
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
