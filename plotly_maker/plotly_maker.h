@@ -42,6 +42,8 @@ void showWarningJsAbsentPage();
 void showReportPage(const string& title, const string& svg, const string& description);
 
 void showReportFileNotFounded();
+
+void showReportFileEmpty();
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

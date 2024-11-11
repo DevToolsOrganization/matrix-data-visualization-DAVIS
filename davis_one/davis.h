@@ -328,6 +328,8 @@ void showReportPage(const string& title, const string& svg, const string& descri
 
 void showReportFileNotFounded();
 
+void showReportFileEmpty();
+
 } // namespace dvs end
 
 namespace dv {

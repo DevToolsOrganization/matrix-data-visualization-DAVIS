@@ -103,8 +103,10 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     while (ts.readLineInto(&line)) {
       str_lines.append(line);
     }
-    if (str_lines.size() <= 0)
+    if (str_lines.empty()){
+      dvs::showReportFileEmpty();
       return;
+    }
 
     for (int i = 0; i < str_lines.size(); ++i) {
       std::vector<double>values;

@@ -971,6 +971,13 @@ showReportPage("Ошибка открытия файла.",
                "Файл не найден. Пожалуйста, проверьте правильность пути.");
 }
 
+void showReportFileEmpty(){
+
+showReportPage("Файл пустой.",
+               kWarningIcon,
+               "Файл не содержит информации для отображения.");
+}
+
 
 } // namespace dvs end
 
