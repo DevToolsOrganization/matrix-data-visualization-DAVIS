@@ -108,6 +108,7 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
       //qDebug() << "sep result: " << separator << "--->" << res;
       bool is_one_value = false;
+      std::replace(str_lines[i].begin(),str_lines[i].end(),',','.');
       if(res!=dvs::GOOD_SEPARATOR){
       if(dvs::is_string_convertable_to_digit(str_lines[i].toStdString())==false){
           continue;
