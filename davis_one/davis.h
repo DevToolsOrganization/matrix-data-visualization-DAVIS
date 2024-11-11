@@ -23,6 +23,7 @@ extern const char kPlotlyJsName[];
 extern const char kPlotlyJsResourcePath[];
 extern const char kPlotlyJsWorkPath[];
 extern const char kWarningPagePath[];
+extern const char kReportPagePath[];
 
 } // namespace dvs end
 
@@ -129,6 +130,16 @@ enum ARGS_WARNING_PAGE_INDEX {
   ARGS_WARNING_PAGE_SIZE
 };
 
+
+enum ARGS_REPORT_PAGE_INDEX {
+  ARG_SVG_ICON,
+  ARG_REPORT_TITLE,
+  ARG_REPORT_DESCRIPTION,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_REPORT_PAGE_SIZE
+};
+
+
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
@@ -145,6 +156,9 @@ extern const char kColorMapPortlandPart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kWarningJSLibAbsentPage[];
+extern const char kNoFileFoundedPage[];
+
+extern const char kWarningIcon[];
 
 } // namespace dvs end
 
@@ -308,6 +322,11 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& ti
 bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 void showWarningJsAbsentPage();
+
+
+void showReportPage(const string& title, const string& svg, const string& description);
+
+void showReportFileNotFounded();
 
 } // namespace dvs end
 

@@ -147,8 +147,10 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       config.typeVisual = dv::VISUALTYPE_CHART;
       dv::show(showVector, "chart", config);
     }
-  } else
+  } else{
     qDebug() << "not exist";
+    dvs::showReportFileNotFounded();
+  }
 }
 
 void DavisGUI::paintEvent(QPaintEvent* event) {

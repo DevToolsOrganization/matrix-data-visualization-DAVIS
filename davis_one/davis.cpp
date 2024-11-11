@@ -24,6 +24,7 @@ const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.32.0.min.js";
 const char kPlotlyJsName[] = "plotly-2.32.0.min.js";
 const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.32.0.min.js";
 const char kWarningPagePath[] = "./davis_htmls/warning_js_absent.html";
+const char kReportPagePath[] = "./davis_htmls/report.html";
 
 } // namespace dvs end
 
@@ -301,6 +302,59 @@ For any questions please contact
 </div>
 </html>
 )";
+
+
+
+const char kNoFileFoundedPage[] = R"(<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>%1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    %1
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        <h1>%2</h1>
+        <p>%3</p>
+    </div>
+</body>
+</html>
+
+
+)";
+
+
+extern const char kWarningIcon[] = R"davis_delimeter(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.262 144.407"><path d="M-109.166 7.227a2 2 0 0 0-.406.046c-3.195.03-6.176 1.695-7.785 4.483l-31.25 54.127-31.25 54.127h.002c-3.42 5.922 1.017 13.609 7.855 13.61h125.002c6.839-.001 11.277-7.688 7.857-13.61l-31.25-54.127-31.252-54.127c-1.465-2.539-4.079-4.164-6.978-4.45a2 2 0 0 0-.445-.077h-.004a2.006 2.006 0 0 0-.094-.002z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fff" d="M-109.165 9.227a7.081 7.081 0 0 0-6.46 3.529l-31.25 54.127-31.25 54.127c-2.674 4.631.777 10.609 6.126 10.61h125.002c5.348-.001 8.8-5.979 6.125-10.61l-31.25-54.127-31.252-54.127a7.079 7.079 0 0 0-5.79-3.53h-.001z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path d="M-109.26 11.225a5.073 5.073 0 0 0-4.632 2.53l-31.25 54.128-31.25 54.127c-1.953 3.381.488 7.609 4.393 7.61h125.002c3.905-.001 6.345-4.229 4.392-7.61l-31.25-54.127-31.252-54.127a5.073 5.073 0 0 0-4.152-2.531z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fc0" d="M140.053 125.83H16.209L47.17 72.204l30.961-53.626 30.961 53.626z"/><g transform="translate(.295 2.437) scale(.99073)"><circle cx="78.564" cy="111.117" r="8.817"/><path d="M78.564 42.955a8.817 8.817 0 0 0-8.818 8.816l3.156 37.461a5.662 5.662 0 0 0 11.325 0l3.154-37.46a8.817 8.817 0 0 0-8.817-8.817z"/></g></svg>)davis_delimeter";
+
 // *INDENT-ON*
 
 } // namespace dvs end
@@ -890,6 +944,37 @@ void showWarningJsAbsentPage() {
   saveStringToFile(kWarningPagePath, out);
   openFileBySystem(kWarningPagePath);
 }
+
+
+void showReportPage(const string& title,
+                    const string& svg,
+                    const string& description){
+
+    string out;
+    string davis_dir;
+  #ifdef _WIN32
+    davis_dir = "\\davis_htmls";
+  #elif __linux__
+    davis_dir = "/davis_htmls";
+  #endif
+    vector<string>args {ARGS_REPORT_PAGE_SIZE, ""};
+    args[ARG_REPORT_TITLE] = title;
+    args[ARG_SVG_ICON] = svg;
+    args[ARG_REPORT_DESCRIPTION] = description;
+    make_string(kNoFileFoundedPage, args, out);
+    saveStringToFile(kReportPagePath, out);
+    openFileBySystem(kReportPagePath);
+
+}
+
+
+void showReportFileNotFounded(){
+
+showReportPage("Ошибка открытия файла.",
+               kWarningIcon,
+               "Файл не найден. Пожалуйста, проверьте правильность пути.");
+}
+
 
 } // namespace dvs end
 
