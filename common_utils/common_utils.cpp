@@ -302,16 +302,16 @@ string removeSpecialCharacters(const string& s) {
 }
 
 
-bool is_string_convertable_to_digit(const string& sample){
+bool is_string_convertable_to_digit(const string& sample) {
 
-    try {
-            std::ignore = std::stod(sample);
-        } catch (const std::invalid_argument& e) {
-            return false;
-        } catch (const std::out_of_range& e) {
-            return false;
-        }
-        return true;
+  try {
+    std::ignore = std::stod(sample);
+  } catch (const std::invalid_argument& e) {
+    return false;
+  } catch (const std::out_of_range& e) {
+    return false;
+  }
+  return true;
 }
 
 

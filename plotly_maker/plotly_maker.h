@@ -39,7 +39,7 @@ bool showSurfaceInBrowser(const string& values, const string& title, const dv::C
 void showWarningJsAbsentPage();
 
 
-void showReportPage(const string &page, const string& title, const string& svg, const string& description);
+void showReportPage(const string& page, const string& title, const string& svg, const string& description);
 
 void showReportFileNotFounded();
 
