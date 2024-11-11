@@ -27,8 +27,10 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   };
   for (size_t i = 0; i < values.size(); ++i) {
 
-    if (values[i].size() != size)
+    if (values[i].size() != size){
+      showMatrixSizesAreNotTheSame();
       return false;
+    }
   }
   return true;
 }
@@ -326,6 +328,14 @@ void showReportFileEmpty(){
 showReportPage("Файл пустой.",
                kWarningIcon,
                "Файл не содержит информации для отображения.");
+}
+
+
+void showMatrixSizesAreNotTheSame(){
+
+showReportPage("Не совпадение размера строк",
+               kWarningIcon,
+               "Строки в матрице имеют разный размер");
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE

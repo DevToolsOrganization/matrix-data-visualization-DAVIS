@@ -132,9 +132,9 @@ enum ARGS_WARNING_PAGE_INDEX {
 
 
 enum ARGS_REPORT_PAGE_INDEX {
-  ARG_SVG_ICON,
-  ARG_REPORT_TITLE,
-  ARG_REPORT_DESCRIPTION,
+  ARG_REPORT_TITLE,       //%1
+  ARG_SVG_ICON,           //%2
+  ARG_REPORT_DESCRIPTION, //%3
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_REPORT_PAGE_SIZE
 };
@@ -324,11 +324,14 @@ bool showSurfaceInBrowser(const string& values, const string& title, const dv::C
 void showWarningJsAbsentPage();
 
 
-void showReportPage(const string& title, const string& svg, const string& description);
+void showReportPage(const string &page, const string& title, const string& svg, const string& description);
 
 void showReportFileNotFounded();
 
 void showReportFileEmpty();
+
+void showMatrixSizesAreNotTheSame();
+
 
 } // namespace dvs end
 
