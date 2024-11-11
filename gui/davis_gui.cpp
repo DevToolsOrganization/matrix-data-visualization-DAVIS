@@ -94,27 +94,52 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
-    file.open(QIODevice::ReadWrite);
+    if (file.open(QIODevice::ReadWrite) == false) {
+      dvs::showReportFileNotFounded();
+      return;
+    };
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
       str_lines.append(line);
     }
-    if (str_lines.size() <= 0)
+    if (str_lines.empty()) {
+      dvs::showReportFileEmpty();
       return;
-    auto res = dvs::find_separator(str_lines[0].toStdString(), separator);
-    qDebug() << "sep result: " << separator << "--->" << res;
+    }
+
     for (int i = 0; i < str_lines.size(); ++i) {
       std::vector<double>values;
-      QStringList str_values = str_lines[i].split(separator);
-      for (int j = 0; j < str_values.size(); ++j) {
-
-        values.emplace_back(std::stod(str_values[j].toStdString()));
+      auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
+      //qDebug() << "sep result: " << separator << "--->" << res;
+      bool is_one_value = false;
+      std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
+      if (res != dvs::GOOD_SEPARATOR) {
+        if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+          continue;
+        } else {
+          is_one_value = true;
+        }
+      }
+      if (is_one_value == false) {
+        QStringList str_values = str_lines[i].split(separator);
+        for (int j = 0; j < str_values.size(); ++j) {
+          if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+            continue;
+          }
+          values.emplace_back(std::stod(str_values[j].toStdString()));
+        }
+      } else {
+        values.emplace_back(std::stod(str_lines[i].toStdString()));
       }
       data.emplace_back(values);
     }
     file.close();
 
+    if (data.empty()) { // Empty file case
+      qDebug() << "Empty file";
+      return;
+    }
 
     if (data.size() == 2 || data[0].size() == 2) { //chartXY
       dv::show(data, "chartXY");
@@ -141,8 +166,10 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       config.typeVisual = dv::VISUALTYPE_CHART;
       dv::show(showVector, "chart", config);
     }
-  } else
+  } else {
     qDebug() << "not exist";
+    dvs::showReportFileNotFounded();
+  }
 }
 
 void DavisGUI::paintEvent(QPaintEvent* event) {

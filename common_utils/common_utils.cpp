@@ -236,7 +236,7 @@ bool make_string(const string& src,
 
 int find_separator(const std::string& src,
                    char& separator) {
-  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r'};
+  std::vector<char> ignored_chars = {'+', '-', 'e', '.', '\r', ','};
   std::set<char> unique_chars;
   bool is_service_char = false;
   bool is_dot_present = false;
@@ -300,6 +300,20 @@ string removeSpecialCharacters(const string& s) {
   }
   return t;
 }
+
+
+bool is_string_convertable_to_digit(const string& sample) {
+
+  try {
+    std::ignore = std::stod(sample);
+  } catch (const std::invalid_argument& e) {
+    return false;
+  } catch (const std::out_of_range& e) {
+    return false;
+  }
+  return true;
+}
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

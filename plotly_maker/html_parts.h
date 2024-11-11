@@ -23,6 +23,16 @@ enum ARGS_WARNING_PAGE_INDEX {
   ARGS_WARNING_PAGE_SIZE
 };
 
+
+enum ARGS_REPORT_PAGE_INDEX {
+  ARG_REPORT_TITLE,       //%1
+  ARG_SVG_ICON,           //%2
+  ARG_REPORT_DESCRIPTION, //%3
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_REPORT_PAGE_SIZE
+};
+
+
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
 extern const char kColorMapSunnyPart[];
@@ -39,6 +49,9 @@ extern const char kColorMapPortlandPart[];
 extern const char kHeatMapTypePart[];
 extern const char kSurfaceTypePart[];
 extern const char kWarningJSLibAbsentPage[];
+extern const char kNoFileFoundedPage[];
+
+extern const char kWarningIcon[];
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

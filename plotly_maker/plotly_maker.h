@@ -37,6 +37,16 @@ bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& ti
 bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 void showWarningJsAbsentPage();
+
+
+void showReportPage(const string& page, const string& title, const string& svg, const string& description);
+
+void showReportFileNotFounded();
+
+void showReportFileEmpty();
+
+void showMatrixSizesAreNotTheSame();
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
