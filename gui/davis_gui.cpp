@@ -107,11 +107,22 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       std::vector<double>values;
       auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
       //qDebug() << "sep result: " << separator << "--->" << res;
-      if(res!=dvs::GOOD_SEPARATOR)continue;
+      bool is_one_value = false;
+      if(res!=dvs::GOOD_SEPARATOR){
+      if(dvs::is_string_convertable_to_digit(str_lines[i].toStdString())==false){
+          continue;
+      }else{
+         is_one_value = true;
+      }
+      }
+      if(is_one_value==false){
       QStringList str_values = str_lines[i].split(separator);
       for (int j = 0; j < str_values.size(); ++j) {
        if(dvs::is_string_convertable_to_digit(str_values[j].toStdString())==false){continue;}
         values.emplace_back(std::stod(str_values[j].toStdString()));
+      }
+      }else{
+        values.emplace_back(std::stod(str_lines[i].toStdString()));
       }
       data.emplace_back(values);
     }

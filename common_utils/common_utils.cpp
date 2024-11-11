@@ -304,15 +304,11 @@ string removeSpecialCharacters(const string& s) {
 
 bool is_string_convertable_to_digit(const string& sample){
 
-
     try {
-            int num = std::stod(sample);
-            std::cout << "Число: " << num << std::endl;
+            std::ignore = std::stod(sample);
         } catch (const std::invalid_argument& e) {
-            std::cout << "Неверный ввод: не удалось преобразовать строку в число" << std::endl;
             return false;
         } catch (const std::out_of_range& e) {
-            std::cout << "Переполнение: число выходит за пределы допустимого диапазона" << std::endl;
             return false;
         }
         return true;
