@@ -968,24 +968,24 @@ void showReportPage(const string& title,
 
 void showReportFileNotFounded() {
 
-  showReportPage("Ошибка открытия файла.",
+  showReportPage("Open file error.",
                  kWarningIcon,
-                 "Файл не найден. Пожалуйста, проверьте правильность пути.");
+                 "File is not founded. Please, check the path to the file.");
 }
 
 void showReportFileEmpty() {
 
-  showReportPage("Файл пустой.",
+  showReportPage("File is empty.",
                  kWarningIcon,
-                 "Файл не содержит информации для отображения.");
+                 "No data to show.");
 }
 
 
 void showMatrixSizesAreNotTheSame() {
 
-  showReportPage("Разный размер строк",
+  showReportPage("Rows sizes are not the same",
                  kWarningIcon,
-                 "Строки в матрице имеют разный размер");
+                 "Rows have different sizes in matrix");
 }
 
 

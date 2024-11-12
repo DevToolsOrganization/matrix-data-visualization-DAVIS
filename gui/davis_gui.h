@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "about_window.h"
+#include "QAction"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -17,6 +18,7 @@ class DavisGUI : public QMainWindow {
 
  private slots:
   void showAboutWindow();
+  void pasteTextAdded();
 
  private:
   Ui::DavisGUI* ui;
@@ -25,6 +27,8 @@ class DavisGUI : public QMainWindow {
   QAction*  action_heatmap;
   About_window* aboutWindow;
   bool isAboutWindowShowed;
+  QAction* m_copy_paste_action;
+  void readPlotText(QStringList& str_lines);
 
   // QWidget interface
  protected:

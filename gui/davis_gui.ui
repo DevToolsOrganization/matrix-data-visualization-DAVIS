@@ -16,10 +16,16 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::ActionsContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>davis</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="contextMenuPolicy">
+    <enum>Qt::ActionsContextMenu</enum>
+   </property>
    <widget class="QLabel" name="label_31">
     <property name="enabled">
      <bool>false</bool>
