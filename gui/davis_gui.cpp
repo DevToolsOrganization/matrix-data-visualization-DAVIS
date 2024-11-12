@@ -3,6 +3,7 @@
 
 #include "../davis_one/davis.h"
 
+#include <QApplication>
 #include "QDragEnterEvent"
 #include "QMimeData"
 #include "QDebug"
@@ -14,12 +15,15 @@
 #include "QPainterPath"
 #include "QFileDialog"
 #include "QTextStream"
+#include <QClipboard>
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
-  , ui(new Ui::DavisGUI) {
+  , ui(new Ui::DavisGUI),
+  m_copy_paste_action(new QAction("Вставить из буфера обмена")){
   isAboutWindowShowed = false;
   ui->setupUi(this);
+  ui->centralwidget->addAction(m_copy_paste_action);
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
   QMenuBar* mb = new QMenuBar;
@@ -57,6 +61,8 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbExit->setText("✕");
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+  connect(m_copy_paste_action,SIGNAL(triggered()),SLOT(pasteTextAdded()));
 }
 
 DavisGUI::~DavisGUI() {
@@ -73,41 +79,20 @@ void DavisGUI::showAboutWindow() {
   isAboutWindowShowed = true;
 }
 
-void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
-  if (event->mimeData()->hasUrls()) {
-    event->acceptProposedAction();
-  } else {
-    qDebug() << "not drop";
-  }
+void DavisGUI::pasteTextAdded()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    QString clipboardText = clipboard->text();
+    qDebug()<<clipboardText;
+    QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
+    readPlotText(lines);
 }
 
-void DavisGUI::dropEvent(QDropEvent* event) {
-  QString filePath =  event->mimeData()->urls().first().toLocalFile();
-
-  QFileInfo info(filePath);
-  qDebug() << "---file path--->" << filePath;
-  if (info.exists()) {
-    qDebug() << "exist";
+void DavisGUI::readPlotText(QStringList &str_lines)
+{
     std::vector<double>lines;
     std::vector<std::vector<double>> data;
     char separator;
-    QFile file(filePath);
-    QTextStream ts(&file);
-    ts.setCodec("UTF-8");
-    if (file.open(QIODevice::ReadWrite) == false) {
-      dvs::showReportFileNotFounded();
-      return;
-    };
-    QString line;
-    QStringList str_lines;
-    while (ts.readLineInto(&line)) {
-      str_lines.append(line);
-    }
-    if (str_lines.empty()) {
-      dvs::showReportFileEmpty();
-      return;
-    }
-
     for (int i = 0; i < str_lines.size(); ++i) {
       std::vector<double>values;
       auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
@@ -134,9 +119,8 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       }
       data.emplace_back(values);
     }
-    file.close();
 
-    if (data.empty()) { // Empty file case
+    if (data.empty()) {
       qDebug() << "Empty file";
       return;
     }
@@ -166,6 +150,40 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       config.typeVisual = dv::VISUALTYPE_CHART;
       dv::show(showVector, "chart", config);
     }
+}
+
+void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
+  if (event->mimeData()->hasUrls()) {
+    event->acceptProposedAction();
+  } else {
+    qDebug() << "not drop";
+  }
+}
+
+void DavisGUI::dropEvent(QDropEvent* event) {
+  QString filePath =  event->mimeData()->urls().first().toLocalFile();
+  QFileInfo info(filePath);
+  qDebug() << "---file path--->" << filePath;
+  if (info.exists()) {
+    qDebug() << "exist";
+    QFile file(filePath);
+    QTextStream ts(&file);
+    ts.setCodec("UTF-8");
+    if (file.open(QIODevice::ReadWrite) == false) {
+      dvs::showReportFileNotFounded();
+      return;
+    };
+    QString line;
+    QStringList str_lines;
+    while (ts.readLineInto(&line)) {
+      str_lines.append(line);
+    }
+    if (str_lines.empty()) {
+      dvs::showReportFileEmpty();
+      return;
+    }
+    file.close();
+    readPlotText(str_lines);
   } else {
     qDebug() << "not exist";
     dvs::showReportFileNotFounded();
