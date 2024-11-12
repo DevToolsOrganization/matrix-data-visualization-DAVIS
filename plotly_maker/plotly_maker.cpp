@@ -333,7 +333,7 @@ void showReportFileEmpty() {
 
 void showMatrixSizesAreNotTheSame() {
 
-  showReportPage("Не совпадение размера строк",
+  showReportPage("Разный размер строк",
                  kWarningIcon,
                  "Строки в матрице имеют разный размер");
 }
