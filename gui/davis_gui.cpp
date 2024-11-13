@@ -87,8 +87,8 @@ void DavisGUI::pasteTextAdded() {
   QString clipboardText = clipboard->text();
   qDebug() << clipboardText;
   QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-  if(checkDateTimeVariant(lines)==false){
-     readPlotText(lines);
+  if (checkDateTimeVariant(lines) == false) {
+    readPlotText(lines);
   };
 }
 
@@ -168,7 +168,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
     for (int j = 0; j < jarr.size(); ++j) {
       int template_time_stamp_size = jarr[j].toString().size();
       QString template_time_stamp = jarr[j].toString();
-      if (test.size() < template_time_stamp_size+1) {
+      if (test.size() < template_time_stamp_size + 1) {
         continue;
       }
       QString separator = QString(test[template_time_stamp_size]);
@@ -180,13 +180,13 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
         dates.append("'");
         dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
         dates.append("'");
-        if(j<jarr.size()-1){
-            dates.append(",");
+        if (j < jarr.size() - 1) {
+          dates.append(",");
         }
 
-        auto values_list= test.split(separator);
-        if(values_list.size()!=2){
-            continue;
+        auto values_list = test.split(separator);
+        if (values_list.size() != 2) {
+          continue;
         }
         double value = values_list[1].toDouble();
         values.emplace_back(value);
@@ -194,9 +194,11 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
       }
     }
   }
-  qDebug()<<"check sizes: "<<lines.size()<<values.size();
-  if(lines.size()<values.size()){
-      return false;
+  if (values.size() == 0)
+    return false;
+  qDebug() << "check sizes: " << lines.size() << values.size();
+  if (lines.size() != values.size()) {
+    return false;
   }
   dvs::showDateTimeChart(dates.toStdString(), values);
   return true;
@@ -235,8 +237,8 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       return;
     }
     file.close();
-    if(checkDateTimeVariant(str_lines)==false){
-       readPlotText(str_lines);
+    if (checkDateTimeVariant(str_lines) == false) {
+      readPlotText(str_lines);
     };
   } else {
     qDebug() << "not exist";
