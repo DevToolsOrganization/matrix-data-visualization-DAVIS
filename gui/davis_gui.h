@@ -29,7 +29,7 @@ class DavisGUI : public QMainWindow {
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
   void readPlotText(QStringList& str_lines);
-  bool checkDateTimeVariant(const QStringList &lines);
+  bool checkDateTimeVariant(const QStringList& lines);
 
   // QWidget interface
  protected:

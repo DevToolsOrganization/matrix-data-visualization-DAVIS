@@ -87,8 +87,9 @@ void DavisGUI::pasteTextAdded() {
   QString clipboardText = clipboard->text();
   qDebug() << clipboardText;
   QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-  readPlotText(lines);
-  checkDateTimeVariant(lines);
+  if(checkDateTimeVariant(lines)==false){
+     readPlotText(lines);
+  };
 }
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
@@ -154,30 +155,53 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 }
 
-bool DavisGUI::checkDateTimeVariant(const QStringList& lines)
-{
-    bool result = false;
-    QJsonArray jarr;
-    jsn::getJsonArrayFromFile(":/date_time_formats.json",jarr);
-    qDebug()<<jarr;
+bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
-    for(int i=0;i<lines.size();++i){
+  QJsonArray jarr;
+  jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
+  qDebug() << jarr;
+  QString dates;
+  std::vector<double> values;
+
+  for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
-    for(int j=0;j<jarr.size();++j){
-        int template_time_stamp_size = jarr[j].toString().size();
-        QString template_time_stamp = jarr[j].toString();
-        if(test.size()<template_time_stamp_size){
+    for (int j = 0; j < jarr.size(); ++j) {
+      int template_time_stamp_size = jarr[j].toString().size();
+      QString template_time_stamp = jarr[j].toString();
+      if (test.size() < template_time_stamp_size+1) {
+        continue;
+      }
+      QString separator = QString(test[template_time_stamp_size]);
+      QString substr = test.mid(0, template_time_stamp_size);
+      QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
+      if (dt.isValid()) {
+        //2013-10-04 22:23:00
+        qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
+        dates.append("'");
+        dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
+        dates.append("'");
+        if(j<jarr.size()-1){
+            dates.append(",");
+        }
+
+        auto values_list= test.split(separator);
+        if(values_list.size()!=2){
             continue;
         }
-        QString substr = test.mid(0,template_time_stamp_size);
-        QDateTime dt = QDateTime::fromString(substr,template_time_stamp);
-        if(dt.isValid()){
-        qDebug()<<dt.toString();
-        }
-    }
-    }
+        double value = values_list[1].toDouble();
+        values.emplace_back(value);
 
-    return result;
+      }
+    }
+  }
+  qDebug()<<"check sizes: "<<lines.size()<<values.size();
+  if(lines.size()<values.size()){
+      return false;
+  }
+  dvs::showDateTimeChart(dates.toStdString(), values);
+  return true;
+
+
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
@@ -211,7 +235,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       return;
     }
     file.close();
-    readPlotText(str_lines);
+    if(checkDateTimeVariant(str_lines)==false){
+       readPlotText(str_lines);
+    };
   } else {
     qDebug() << "not exist";
     dvs::showReportFileNotFounded();

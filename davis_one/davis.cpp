@@ -1035,8 +1035,18 @@ void showDateTimeChart(const string& date_time_values,
 #endif
   vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
-  args[ARG_DATE_TIME_VALUES] = R"('2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00')";
-  args[ARG_Y_DATE_TIME_VALUES] = R"(1, 3, 6)";
+  args[ARG_DATE_TIME_VALUES] = date_time_values;
+
+  std::string values;
+  for (size_t i = 0; i < yValues.size(); ++i) {
+    std::string value = std::to_string(yValues[i]);
+    values.append(value);
+    if (i != yValues.size() - 1) {
+      values.append(",");
+    }
+  }
+
+  args[ARG_Y_DATE_TIME_VALUES] = values;
   make_string(kHtmlDateTimeModel, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
