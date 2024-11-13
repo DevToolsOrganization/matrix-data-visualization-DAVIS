@@ -16,6 +16,9 @@
 #include "QFileDialog"
 #include "QTextStream"
 #include <QClipboard>
+#include <QJsonArray>
+#include "json_utils.h"
+#include "QDateTime"
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -85,6 +88,7 @@ void DavisGUI::pasteTextAdded() {
   qDebug() << clipboardText;
   QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
   readPlotText(lines);
+  checkDateTimeVariant(lines);
 }
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
@@ -148,6 +152,32 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
     config.typeVisual = dv::VISUALTYPE_CHART;
     dv::show(showVector, "chart", config);
   }
+}
+
+bool DavisGUI::checkDateTimeVariant(const QStringList& lines)
+{
+    bool result = false;
+    QJsonArray jarr;
+    jsn::getJsonArrayFromFile(":/date_time_formats.json",jarr);
+    qDebug()<<jarr;
+
+    for(int i=0;i<lines.size();++i){
+    QString test = lines[i];
+    for(int j=0;j<jarr.size();++j){
+        int template_time_stamp_size = jarr[j].toString().size();
+        QString template_time_stamp = jarr[j].toString();
+        if(test.size()<template_time_stamp_size){
+            continue;
+        }
+        QString substr = test.mid(0,template_time_stamp_size);
+        QDateTime dt = QDateTime::fromString(substr,template_time_stamp);
+        if(dt.isValid()){
+        qDebug()<<dt.toString();
+        }
+    }
+    }
+
+    return result;
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
