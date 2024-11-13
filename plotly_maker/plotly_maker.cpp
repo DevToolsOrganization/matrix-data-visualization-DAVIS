@@ -338,6 +338,27 @@ void showMatrixSizesAreNotTheSame() {
                  "Rows have different sizes in matrix");
 }
 
+void showDateTimeChart(const string& date_time_values,
+                       const vector<double>& yValues) {
+
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  args[ARG_JS_NAME] = kPlotlyJsName;
+  args[ARG_DATE_TIME_VALUES] = R"('2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00')";
+  args[ARG_Y_DATE_TIME_VALUES] = R"(1, 3, 6)";
+  make_string(kHtmlDateTimeModel, args, out);
+  saveStringToFile(kReportPagePath, out);
+  openFileBySystem(kReportPagePath);
+
+
+}
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
