@@ -124,7 +124,7 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 
   if (data.empty()) {
-    qDebug() << "Empty file";
+    dvs::showReportFileEmpty();
     return;
   }
 
