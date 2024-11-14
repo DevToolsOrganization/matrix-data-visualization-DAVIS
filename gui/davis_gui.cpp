@@ -158,7 +158,9 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
 bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   QJsonArray jarr;
+  if(jsn::getJsonArrayFromFile("date_time_formats.json", jarr)==false){
   jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
+  }
   qDebug() << jarr;
   QString dates;
   std::vector<double> values;
@@ -180,7 +182,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
         dates.append("'");
         dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
         dates.append("'");
-        if (j < jarr.size() - 1) {
+        if (i < lines.size() - 1) {
           dates.append(",");
         }
 
@@ -189,6 +191,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
           continue;
         }
         double value = values_list[1].toDouble();
+        qDebug()<<value;
         values.emplace_back(value);
 
       }
