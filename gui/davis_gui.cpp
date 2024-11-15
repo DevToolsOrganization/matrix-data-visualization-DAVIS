@@ -19,6 +19,7 @@
 #include <QJsonArray>
 #include "json_utils.h"
 #include "QDateTime"
+#include <QProcess>
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -220,9 +221,7 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 void DavisGUI::dropEvent(QDropEvent* event) {
   QString filePath =  event->mimeData()->urls().first().toLocalFile();
   QFileInfo info(filePath);
-  qDebug() << "---file path--->" << filePath;
   if (info.exists()) {
-    qDebug() << "exist";
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
@@ -230,6 +229,17 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       dvs::showReportFileNotFounded();
       return;
     };
+
+    QString suffix = info.suffix();
+    QStringList suffixes = {"jpg","bmp","png","svg","mp4","json"};
+    for(int i=0;i<suffixes.size();++i){
+       if(suffix == suffixes[i]){
+           QProcess process;
+           process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
+           return;
+       }
+    }
+
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
