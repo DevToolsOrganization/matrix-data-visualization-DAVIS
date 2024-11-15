@@ -40,6 +40,14 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARGS_DATE_TIME_PAGE_SIZE
 };
 
+enum ARGS_MULTI_CHARTS_PAGE {
+  ARG_JS_MC_NAME,
+  ARG_TRACES_BLOCKS,
+  ARG_DATA_OF_TRACES,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_MULTI_CHARTS_PAGE_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -62,6 +70,10 @@ extern const char kNoFileFoundedPage[];
 extern const char kWarningIcon[];
 
 extern const char kHtmlDateTimeModel[];
+
+
+extern const char kHtmlMultiChartBlock[];
+extern const char kHtmlMultiChartModel[];
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
