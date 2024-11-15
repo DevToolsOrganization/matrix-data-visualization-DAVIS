@@ -219,7 +219,12 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void DavisGUI::dropEvent(QDropEvent* event) {
-  QString filePath =  event->mimeData()->urls().first().toLocalFile();
+  QList<QUrl> file_list = event->mimeData()->urls();
+  if(file_list.size()>1){
+      qDebug()<<"file list size: "<<file_list.size();
+      return;
+  }
+  QString filePath =  file_list.first().toLocalFile();
   QFileInfo info(filePath);
   if (info.exists()) {
     QFile file(filePath);
