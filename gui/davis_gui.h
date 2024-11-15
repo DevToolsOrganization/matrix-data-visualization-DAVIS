@@ -30,6 +30,9 @@ class DavisGUI : public QMainWindow {
   QAction* m_copy_paste_action;
   void readPlotText(QStringList& str_lines);
   bool checkDateTimeVariant(const QStringList& lines);
+  bool isFileContainsSingleChart(const QString &pathToFile,
+                                 QString &outX,
+                                 QString &outY);
 
   // QWidget interface
  protected:
