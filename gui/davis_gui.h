@@ -15,10 +15,11 @@ class DavisGUI : public QMainWindow {
  public:
   DavisGUI(QWidget* parent = nullptr);
   ~DavisGUI();
+  void show();
 
  private:
- void setMaxStyleWindow();
- void setMinStyleWindow();
+ void setMaxStyleWindow(int animDuration);
+ void setMinStyleWindow(int animDuration);
  void readPlotText(QStringList& str_lines);
 
  private slots:
