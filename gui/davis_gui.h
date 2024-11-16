@@ -16,6 +16,11 @@ class DavisGUI : public QMainWindow {
   DavisGUI(QWidget* parent = nullptr);
   ~DavisGUI();
 
+ private:
+ void setMaxStyleWindow();
+ void setMinStyleWindow();
+ void readPlotText(QStringList& str_lines);
+
  private slots:
   void showAboutWindow();
   void pasteTextAdded();
@@ -28,7 +33,7 @@ class DavisGUI : public QMainWindow {
   About_window* aboutWindow;
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
-  void readPlotText(QStringList& str_lines);
+  bool m_isMinStyleWindow;
 
   // QWidget interface
  protected:

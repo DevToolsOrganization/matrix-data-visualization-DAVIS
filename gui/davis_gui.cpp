@@ -16,6 +16,7 @@
 #include "QFileDialog"
 #include "QTextStream"
 #include <QClipboard>
+#include <QPropertyAnimation>
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -23,6 +24,7 @@ DavisGUI::DavisGUI(QWidget* parent)
     m_copy_paste_action(new QAction("Вставить из буфера обмена")) {
   isAboutWindowShowed = false;
   ui->setupUi(this);
+  setMaxStyleWindow();
   ui->centralwidget->addAction(m_copy_paste_action);
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
@@ -46,10 +48,20 @@ DavisGUI::DavisGUI(QWidget* parent)
   menu_root->addMenu(menu_view);
   menu_root->addAction(action_help);
   mb->addMenu(menu_root);
-
-
   hbl->addWidget(mb);
   hbl->addItem(new QSpacerItem(2, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+  QPushButton* qpbMinMaxSize = new QPushButton;
+  connect(qpbMinMaxSize, &QPushButton::clicked, [this]() {
+      m_isMinStyleWindow = !m_isMinStyleWindow;
+      if(m_isMinStyleWindow)
+          setMinStyleWindow();
+      else
+          setMaxStyleWindow();
+  });
+  qpbMinMaxSize->setFixedSize(QSize(20, 20));
+  qpbMinMaxSize->setText("◰");
+  hbl->addWidget(qpbMinMaxSize);
   QPushButton* qpbMinim = new QPushButton;
   connect(qpbMinim, &QPushButton::clicked, [this]() {this->showMinimized();});
   qpbMinim->setFixedSize(QSize(20, 20));
@@ -66,7 +78,46 @@ DavisGUI::DavisGUI(QWidget* parent)
 }
 
 DavisGUI::~DavisGUI() {
-  delete ui;
+    delete ui;
+}
+
+void DavisGUI::setMaxStyleWindow()
+{
+    //resize(397,370);
+    ui->label_doc->setGeometry(90,60,91,91);
+    ui->label_arrow->setGeometry(170,90,50,50);
+    ui->label_graph->setGeometry(210,70,81,81);
+    ui->label_text->setGeometry(40,150,311,211);
+    ui->frame_panel->setGeometry(20,10,361,21);
+    update();
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(500); // Длительность анимации в миллисекундах
+    animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
+    // Начальное и конечное значение анимации
+    animation->setStartValue(this->geometry());
+    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 397, 370)); // Пример конечного размера
+    animation->start(QAbstractAnimation::DeleteWhenStopped); // Запуск анимации
+    m_isMinStyleWindow = false;
+}
+
+void DavisGUI::setMinStyleWindow()
+{
+    //resize(159,137);
+    ui->label_doc->setGeometry(30,60,41,41);
+    ui->label_arrow->setGeometry(60,60,41,41);
+    ui->label_graph->setGeometry(90,60,41,41);
+    ui->label_text->setGeometry(40,150,311,211);
+    ui->frame_panel->setGeometry(4,4,151,21);
+    update();
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(500); // Длительность анимации в миллисекундах
+    animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
+    // Начальное и конечное значение анимации
+    animation->setStartValue(this->geometry());
+    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
+    animation->start(QAbstractAnimation::DeleteWhenStopped); // Запуск анимации
+
+    m_isMinStyleWindow = true;
 }
 
 void DavisGUI::showAboutWindow() {
@@ -80,6 +131,7 @@ void DavisGUI::showAboutWindow() {
 }
 
 void DavisGUI::pasteTextAdded() {
+    setMaxStyleWindow();
   QClipboard* clipboard = QApplication::clipboard();
   QString clipboardText = clipboard->text();
   qDebug() << clipboardText;

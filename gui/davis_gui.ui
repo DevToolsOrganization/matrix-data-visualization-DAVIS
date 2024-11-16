@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>378</height>
+    <width>159</width>
+    <height>137</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,16 +26,16 @@
    <property name="contextMenuPolicy">
     <enum>Qt::ActionsContextMenu</enum>
    </property>
-   <widget class="QLabel" name="label_31">
+   <widget class="QLabel" name="label_text">
     <property name="enabled">
      <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>150</y>
-      <width>311</width>
-      <height>211</height>
+      <x>70</x>
+      <y>210</y>
+      <width>51</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -53,16 +53,16 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#969696;&quot;&gt;drag &amp;amp; drop&lt;br/&gt;text file with numbers &lt;br/&gt;for visualize it's data&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#969696;&quot;&gt;the file must contain 1 or 2 columns&lt;br/&gt;or be a rectangular matrix in csv-like format&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="label_doc">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>30</x>
       <y>60</y>
-      <width>91</width>
-      <height>91</height>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -75,16 +75,16 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="label_graph">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>70</y>
-      <width>81</width>
-      <height>81</height>
+      <x>90</x>
+      <y>60</y>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -97,16 +97,16 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="label_arrow">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>90</y>
-      <width>50</width>
-      <height>50</height>
+      <x>60</x>
+      <y>60</y>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -122,12 +122,12 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="frame_panel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>361</width>
+      <x>4</x>
+      <y>4</y>
+      <width>151</width>
       <height>21</height>
      </rect>
     </property>
