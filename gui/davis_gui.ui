@@ -53,17 +53,6 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#969696;&quot;&gt;drag &amp;amp; drop&lt;br/&gt;text file with numbers &lt;br/&gt;for visualize it's data&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#969696;&quot;&gt;the file must contain 1 or 2 columns&lt;br/&gt;or be a rectangular matrix in csv-like format&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>361</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_menu"/>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="enabled">
      <bool>true</bool>
@@ -132,6 +121,42 @@
     <property name="openExternalLinks">
      <bool>true</bool>
     </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>361</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_menu"/>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
