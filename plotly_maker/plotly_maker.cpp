@@ -28,7 +28,7 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   for (size_t i = 0; i < values.size(); ++i) {
 
     if (values[i].size() != size) {
-      showMatrixSizesAreNotTheSame();
+      showMatrixSizesAreNotTheSame(i);
       return false;
     }
   }
@@ -331,11 +331,13 @@ void showReportFileEmpty() {
 }
 
 
-void showMatrixSizesAreNotTheSame() {
+void showMatrixSizesAreNotTheSame(int badRow) {
 
+  string text;
+  text.append("Rows have different sizes in matrix. Check the row № ").append(std::to_string(badRow + 1));
   showReportPage("Rows sizes are not the same",
                  kWarningIcon,
-                 "Rows have different sizes in matrix");
+                 text);
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE

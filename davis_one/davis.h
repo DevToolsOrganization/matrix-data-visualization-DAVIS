@@ -330,7 +330,7 @@ void showReportFileNotFounded();
 
 void showReportFileEmpty();
 
-void showMatrixSizesAreNotTheSame();
+void showMatrixSizesAreNotTheSame(int badRow);
 
 
 } // namespace dvs end

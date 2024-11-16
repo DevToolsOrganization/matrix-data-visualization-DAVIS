@@ -45,7 +45,7 @@ void showReportFileNotFounded();
 
 void showReportFileEmpty();
 
-void showMatrixSizesAreNotTheSame();
+void showMatrixSizesAreNotTheSame(int badRow);
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

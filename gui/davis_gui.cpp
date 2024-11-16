@@ -20,7 +20,7 @@
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI),
-  m_copy_paste_action(new QAction("Вставить из буфера обмена")){
+    m_copy_paste_action(new QAction("Вставить из буфера обмена")) {
   isAboutWindowShowed = false;
   ui->setupUi(this);
   ui->centralwidget->addAction(m_copy_paste_action);
@@ -62,7 +62,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
-  connect(m_copy_paste_action,SIGNAL(triggered()),SLOT(pasteTextAdded()));
+  connect(m_copy_paste_action, SIGNAL(triggered()), SLOT(pasteTextAdded()));
 }
 
 DavisGUI::~DavisGUI() {
@@ -79,77 +79,75 @@ void DavisGUI::showAboutWindow() {
   isAboutWindowShowed = true;
 }
 
-void DavisGUI::pasteTextAdded()
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    QString clipboardText = clipboard->text();
-    qDebug()<<clipboardText;
-    QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-    readPlotText(lines);
+void DavisGUI::pasteTextAdded() {
+  QClipboard* clipboard = QApplication::clipboard();
+  QString clipboardText = clipboard->text();
+  qDebug() << clipboardText;
+  QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
+  readPlotText(lines);
 }
 
-void DavisGUI::readPlotText(QStringList &str_lines)
-{
-    std::vector<double>lines;
-    std::vector<std::vector<double>> data;
-    char separator;
-    for (int i = 0; i < str_lines.size(); ++i) {
-      std::vector<double>values;
-      auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
-      //qDebug() << "sep result: " << separator << "--->" << res;
-      bool is_one_value = false;
-      std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
-      if (res != dvs::GOOD_SEPARATOR) {
-        if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
-          continue;
-        } else {
-          is_one_value = true;
-        }
-      }
-      if (is_one_value == false) {
-        QStringList str_values = str_lines[i].split(separator);
-        for (int j = 0; j < str_values.size(); ++j) {
-          if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
-            continue;
-          }
-          values.emplace_back(std::stod(str_values[j].toStdString()));
-        }
+void DavisGUI::readPlotText(QStringList& str_lines) {
+  std::vector<double>lines;
+  std::vector<std::vector<double>> data;
+  char separator;
+  for (int i = 0; i < str_lines.size(); ++i) {
+    std::vector<double>values;
+    auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
+    //qDebug() << "sep result: " << separator << "--->" << res;
+    bool is_one_value = false;
+    std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
+    if (res != dvs::GOOD_SEPARATOR) {
+      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+        continue;
       } else {
-        values.emplace_back(std::stod(str_lines[i].toStdString()));
+        is_one_value = true;
       }
-      data.emplace_back(values);
     }
-
-    if (data.empty()) {
-      qDebug() << "Empty file";
-      return;
-    }
-
-    if (data.size() == 2 || data[0].size() == 2) { //chartXY
-      dv::show(data, "chartXY");
-    } else if (data.size() > 1 && data[0].size() > 1) {
-      if (action_heatmap->isChecked()) {
-        dv::show(data);
-      } else if (action_surface->isChecked()) {
-        dv::Config config;
-        config.typeVisual = dv::VISUALTYPE_SURFACE;
-        dv::show(data, "surface", config);
+    if (is_one_value == false) {
+      QStringList str_values = str_lines[i].split(separator);
+      for (int j = 0; j < str_values.size(); ++j) {
+        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+          continue;
+        }
+        values.emplace_back(std::stod(str_values[j].toStdString()));
       }
     } else {
-      std::vector<double> showVector;
-      if (data.size() > 1 && data[0].size() == 1) {
-        std::vector<double> new_data(data.size());
-        for (size_t i = 0; i < new_data.size(); ++i) {
-          new_data[i] = data[i][0];
-        }
-        showVector = new_data;
-      } else {
-        showVector = data[0];
-      }
-      dv::Config config;
-      config.typeVisual = dv::VISUALTYPE_CHART;
-      dv::show(showVector, "chart", config);
+      values.emplace_back(std::stod(str_lines[i].toStdString()));
     }
+    data.emplace_back(values);
+  }
+
+  if (data.empty()) {
+    qDebug() << "Empty file";
+    return;
+  }
+
+  if (data.size() == 2 || data[0].size() == 2) { //chartXY
+    dv::show(data, "chartXY");
+  } else if (data.size() > 1 && data[0].size() > 1) {
+    if (action_heatmap->isChecked()) {
+      dv::show(data);
+    } else if (action_surface->isChecked()) {
+      dv::Config config;
+      config.typeVisual = dv::VISUALTYPE_SURFACE;
+      dv::show(data, "surface", config);
+    }
+  } else {
+    std::vector<double> showVector;
+    if (data.size() > 1 && data[0].size() == 1) {
+      std::vector<double> new_data(data.size());
+      for (size_t i = 0; i < new_data.size(); ++i) {
+        new_data[i] = data[i][0];
+      }
+      showVector = new_data;
+    } else {
+      showVector = data[0];
+    }
+    dv::Config config;
+    config.typeVisual = dv::VISUALTYPE_CHART;
+    dv::show(showVector, "chart", config);
+  }
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
