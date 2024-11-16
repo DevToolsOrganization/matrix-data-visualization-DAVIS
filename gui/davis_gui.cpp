@@ -83,41 +83,83 @@ DavisGUI::~DavisGUI() {
 
 void DavisGUI::setMaxStyleWindow()
 {
-    //resize(397,370);
-    ui->label_doc->setGeometry(90,60,91,91);
-    ui->label_arrow->setGeometry(170,90,50,50);
-    ui->label_graph->setGeometry(210,70,81,81);
-    ui->label_text->setGeometry(40,150,311,211);
-    ui->frame_panel->setGeometry(20,10,361,21);
+    m_isMinStyleWindow = false;
+    ui->label_doc->setVisible(false);
+    ui->label_arrow->setVisible(false);
+    ui->label_graph->setVisible(false);
+    ui->label_text->setVisible(false);
+    ui->frame_panel->setVisible(false);
     update();
+
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(500); // Длительность анимации в миллисекундах
     animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
     // Начальное и конечное значение анимации
     animation->setStartValue(this->geometry());
     animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 397, 370)); // Пример конечного размера
+    connect(animation, &QPropertyAnimation::finished, this, [this](){
+        ui->label_doc->setVisible(true);
+        ui->label_arrow->setVisible(true);
+        ui->label_graph->setVisible(true);
+        ui->label_text->setVisible(true);
+        ui->frame_panel->setVisible(true);
+        update();
+    });
     animation->start(QAbstractAnimation::DeleteWhenStopped); // Запуск анимации
-    m_isMinStyleWindow = false;
+
+
+    //resize(397,370);
+    ui->label_doc->setVisible(true);
+    ui->label_arrow->setVisible(true);
+    ui->label_graph->setVisible(true);
+    ui->label_text->setVisible(true);
+    ui->frame_panel->setVisible(true);
+    ui->label_doc->setGeometry(90,60,91,91);
+    ui->label_arrow->setGeometry(170,90,50,50);
+    ui->label_graph->setGeometry(210,70,81,81);
+    ui->label_text->setGeometry(40,150,311,211);
+    ui->frame_panel->setGeometry(20,10,361,21);
+    update();
+
+
 }
 
 void DavisGUI::setMinStyleWindow()
 {
-    //resize(159,137);
-    ui->label_doc->setGeometry(30,60,41,41);
-    ui->label_arrow->setGeometry(60,60,41,41);
-    ui->label_graph->setGeometry(90,60,41,41);
-    ui->label_text->setGeometry(40,150,311,211);
-    ui->frame_panel->setGeometry(4,4,151,21);
+    m_isMinStyleWindow = true;
+    ui->label_doc->setVisible(false);
+    ui->label_arrow->setVisible(false);
+    ui->label_graph->setVisible(false);
+    ui->label_text->setVisible(false);
+    ui->frame_panel->setVisible(false);
     update();
+    //resize(159,137);
+
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(500); // Длительность анимации в миллисекундах
     animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
     // Начальное и конечное значение анимации
     animation->setStartValue(this->geometry());
     animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
+    connect(animation, &QPropertyAnimation::finished, this, [this](){
+        ui->label_doc->setVisible(true);
+        ui->label_arrow->setVisible(true);
+        ui->label_graph->setVisible(true);
+        ui->label_text->setVisible(true);
+        ui->frame_panel->setVisible(true);
+        update();
+    });
     animation->start(QAbstractAnimation::DeleteWhenStopped); // Запуск анимации
 
-    m_isMinStyleWindow = true;
+
+    ui->label_doc->setGeometry(30,60,41,41);
+    ui->label_arrow->setGeometry(60,60,41,41);
+    ui->label_graph->setGeometry(90,60,41,41);
+    ui->label_text->setGeometry(40,150,311,211);
+    ui->frame_panel->setGeometry(0,0,159,21);
+
+
+
 }
 
 void DavisGUI::showAboutWindow() {
