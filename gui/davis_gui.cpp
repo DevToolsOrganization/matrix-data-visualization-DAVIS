@@ -16,6 +16,10 @@
 #include "QFileDialog"
 #include "QTextStream"
 #include <QClipboard>
+#include <QJsonArray>
+#include "json_utils.h"
+#include "QDateTime"
+#include <QProcess>
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -84,7 +88,9 @@ void DavisGUI::pasteTextAdded() {
   QString clipboardText = clipboard->text();
   qDebug() << clipboardText;
   QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-  readPlotText(lines);
+  if (checkDateTimeVariant(lines) == false) {
+    readPlotText(lines);
+  };
 }
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
@@ -119,7 +125,7 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 
   if (data.empty()) {
-    qDebug() << "Empty file";
+    dvs::showReportFileEmpty();
     return;
   }
 
@@ -150,6 +156,60 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 }
 
+bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
+
+  QJsonArray jarr;
+  if(jsn::getJsonArrayFromFile("date_time_formats.json", jarr)==false){
+  jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
+  }
+  qDebug() << jarr;
+  QString dates;
+  std::vector<double> values;
+
+  for (int i = 0; i < lines.size(); ++i) {
+    QString test = lines[i];
+    for (int j = 0; j < jarr.size(); ++j) {
+      int template_time_stamp_size = jarr[j].toString().size();
+      QString template_time_stamp = jarr[j].toString();
+      if (test.size() < template_time_stamp_size + 1) {
+        continue;
+      }
+      QString separator = QString(test[template_time_stamp_size]);
+      QString substr = test.mid(0, template_time_stamp_size);
+      QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
+      if (dt.isValid()) {
+        //2013-10-04 22:23:00
+        qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
+        dates.append("'");
+        dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
+        dates.append("'");
+        if (i < lines.size() - 1) {
+          dates.append(",");
+        }
+
+        auto values_list = test.split(separator);
+        if (values_list.size() != 2) {
+          continue;
+        }
+        double value = values_list[1].toDouble();
+        qDebug()<<value;
+        values.emplace_back(value);
+
+      }
+    }
+  }
+  if (values.size() == 0)
+    return false;
+  qDebug() << "check sizes: " << lines.size() << values.size();
+  if (lines.size() != values.size()) {
+    return false;
+  }
+  dvs::showDateTimeChart(dates.toStdString(), values);
+  return true;
+
+
+}
+
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
@@ -159,11 +219,14 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void DavisGUI::dropEvent(QDropEvent* event) {
-  QString filePath =  event->mimeData()->urls().first().toLocalFile();
+  QList<QUrl> file_list = event->mimeData()->urls();
+  if(file_list.size()>1){
+      qDebug()<<"file list size: "<<file_list.size();
+      return;
+  }
+  QString filePath =  file_list.first().toLocalFile();
   QFileInfo info(filePath);
-  qDebug() << "---file path--->" << filePath;
   if (info.exists()) {
-    qDebug() << "exist";
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
@@ -171,6 +234,17 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       dvs::showReportFileNotFounded();
       return;
     };
+
+    QString suffix = info.suffix();
+    QStringList suffixes = {"jpg","bmp","png","svg","mp4","json"};
+    for(int i=0;i<suffixes.size();++i){
+       if(suffix == suffixes[i]){
+           QProcess process;
+           process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
+           return;
+       }
+    }
+
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
@@ -181,7 +255,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       return;
     }
     file.close();
-    readPlotText(str_lines);
+    if (checkDateTimeVariant(str_lines) == false) {
+      readPlotText(str_lines);
+    };
   } else {
     qDebug() << "not exist";
     dvs::showReportFileNotFounded();

@@ -47,6 +47,9 @@ void showReportFileEmpty();
 
 void showMatrixSizesAreNotTheSame(int badRow);
 
+void showDateTimeChart(const string& date_time_values,
+                       const vector<double>& yValues);
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

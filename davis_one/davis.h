@@ -139,6 +139,14 @@ enum ARGS_REPORT_PAGE_INDEX {
   ARGS_REPORT_PAGE_SIZE
 };
 
+enum ARGS_DATE_TIME_PAGE_INDEX {
+  ARG_JS_NAME,            //%1
+  ARG_DATE_TIME_VALUES,   //%2
+  ARG_Y_DATE_TIME_VALUES, //%3
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_DATE_TIME_PAGE_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -159,6 +167,9 @@ extern const char kWarningJSLibAbsentPage[];
 extern const char kNoFileFoundedPage[];
 
 extern const char kWarningIcon[];
+
+extern const char kHtmlDateTimeModel[];
+
 
 } // namespace dvs end
 
@@ -331,6 +342,9 @@ void showReportFileNotFounded();
 void showReportFileEmpty();
 
 void showMatrixSizesAreNotTheSame(int badRow);
+
+void showDateTimeChart(const string& date_time_values,
+                       const vector<double>& yValues);
 
 
 } // namespace dvs end
