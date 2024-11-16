@@ -19,7 +19,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
-const int ANIMATION_DURATION = 500;
+const int ANIMATION_DURATION = 300;
 
 DavisGUI::DavisGUI(QWidget* parent)
     : QMainWindow(parent)
@@ -152,8 +152,7 @@ void DavisGUI::setMaxStyleWindow(int animDuration)
     int newWidth = 397;
     int newHeight = 370;
     int deltaW = newWidth - this->geometry().width();
-    int deltaH = newHeight - this->geometry().height();
-    animation->setEndValue(QRect(xOld-deltaW/2, yOld-deltaH/2, newWidth, newHeight)); // Пример конечного размера
+    animation->setEndValue(QRect(xOld-deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
     //animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 397, 370)); // Пример конечного размера
     connect(animation, &QPropertyAnimation::finished, this, [this](){
         ui->label_doc->setVisible(true);
@@ -205,8 +204,7 @@ void DavisGUI::setMinStyleWindow(int animDuration)
     int newWidth = 159;
     int newHeight = 137;
     int deltaW = newWidth - this->geometry().width();
-    int deltaH = newHeight - this->geometry().height();
-    animation->setEndValue(QRect(xOld-deltaW/2, yOld-deltaH/2, newWidth, newHeight)); // Пример конечного размера
+    animation->setEndValue(QRect(xOld-deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
     //    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
     connect(animation, &QPropertyAnimation::finished, this, [this](){
         ui->label_doc->setVisible(true);
