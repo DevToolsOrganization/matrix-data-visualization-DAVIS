@@ -45,8 +45,6 @@ set(PROJECT_SOURCES
         about_window.cpp
         davis_gui.ui
         about_window.ui
-        json_utils.h
-        json_utils.cpp
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)

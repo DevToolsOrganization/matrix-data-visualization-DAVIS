@@ -28,7 +28,7 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   for (size_t i = 0; i < values.size(); ++i) {
 
     if (values[i].size() != size) {
-      showMatrixSizesAreNotTheSame();
+      showMatrixSizesAreNotTheSame(i);
       return false;
     }
   }
@@ -331,42 +331,13 @@ void showReportFileEmpty() {
 }
 
 
-void showMatrixSizesAreNotTheSame() {
+void showMatrixSizesAreNotTheSame(int badRow) {
 
+  string text;
+  text.append("Rows have different sizes in matrix. Check the row № ").append(std::to_string(badRow + 1));
   showReportPage("Rows sizes are not the same",
                  kWarningIcon,
-                 "Rows have different sizes in matrix");
-}
-
-void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues) {
-
-  string out;
-  string davis_dir;
-#ifdef _WIN32
-  davis_dir = "\\davis_htmls";
-#elif __linux__
-  davis_dir = "/davis_htmls";
-#endif
-  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
-  args[ARG_JS_NAME] = kPlotlyJsName;
-  args[ARG_DATE_TIME_VALUES] = date_time_values;
-
-  std::string values;
-  for (size_t i = 0; i < yValues.size(); ++i) {
-    std::string value = std::to_string(yValues[i]);
-    values.append(value);
-    if (i != yValues.size() - 1) {
-      values.append(",");
-    }
-  }
-
-  args[ARG_Y_DATE_TIME_VALUES] = values;
-  make_string(kHtmlDateTimeModel, args, out);
-  saveStringToFile(kReportPagePath, out);
-  openFileBySystem(kReportPagePath);
-
-
+                 text);
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
