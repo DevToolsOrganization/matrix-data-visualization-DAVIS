@@ -45,10 +45,7 @@ void showReportFileNotFounded();
 
 void showReportFileEmpty();
 
-void showMatrixSizesAreNotTheSame();
-
-void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues);
+void showMatrixSizesAreNotTheSame(int badRow);
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
