@@ -4,41 +4,32 @@
 #include <QPropertyAnimation>
 
 QString buttonStyle(
-            "QPushButton {"
-            "    background-color: %1;" // Цвет фона
-            "    border: none;" // Без границ
-            "    color:white;" // Цвет текста
-            "    text-align: center;" // Выравнивание текста
-            "    text-decoration: none;" // Без подчеркивания текста
-            "    font-size: 13px;" // Размер шрифта
-            "    border-radius: 8px;" // Закругленные углы
-            "}"
-            );
+        "QPushButton {"
+        "    background-color: %1;"
+        "    border: none;"
+        "    color:white;" // text color
+        "    text-align: center;"
+        "    font-size: 13px;"
+        "    border-radius: 14px;"
+        "}"
+        );
 
 
 AnimatedButton::AnimatedButton(const QString &text, QColor startColor, QColor endColor, QWidget *parent) : QPushButton(text, parent) {
-        setStyleSheet(buttonStyle.arg(startColor.name()));
-//        "QPushButton:hover {"
-//        "    background-color: rgb(42, 130, 218);" // Цвет фона при наведении
-//        "    color: white;" // Цвет текста
-//        "}"
-//        "QPushButton:pressed {"
-//        "    background-color: #45a049;" // Цвет фона при нажатии
-//        "}"
-        m_startColor = startColor;
-        m_endColor = endColor;
-        connect(this, &QPushButton::pressed, this, &AnimatedButton::animateButtonPress);
-        connect(this, &QPushButton::released, this, &AnimatedButton::animateButtonRelease);
+    setStyleSheet(buttonStyle.arg(startColor.name()));
+    m_startColor = startColor;
+    m_endColor = endColor;
+    connect(this, &QPushButton::pressed, this, &AnimatedButton::animateButtonPress);
+    connect(this, &QPushButton::released, this, &AnimatedButton::animateButtonRelease);
 }
 
 void AnimatedButton::enterEvent(QEvent *event) {
-    //startColorAnimation(m_startColor, m_endColor);
     QPropertyAnimation *animation = new QPropertyAnimation(this, "backgroundColor");
-            animation->setDuration(250);
-            animation->setStartValue(m_startColor);
-            animation->setEndValue(m_endColor);
-            animation->start(QAbstractAnimation::DeleteWhenStopped);
-            QPushButton::enterEvent(event);
+    animation->setDuration(250);
+    animation->setStartValue(m_startColor);
+    animation->setEndValue(m_endColor);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    QPushButton::enterEvent(event);
     QPushButton::enterEvent(event);
 }
 
@@ -48,14 +39,10 @@ void AnimatedButton::leaveEvent(QEvent *event) {
     animation->setStartValue(m_endColor);
     animation->setEndValue(m_startColor);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
-    //startColorAnimation(m_endColor, m_startColor);
     QPushButton::leaveEvent(event);
 }
 
 void AnimatedButton::animateButtonPress() {
-    qDebug()<<"current: "<<geometry();
-    qDebug()<<"origin: "<<m_originalGeometry;
-
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(100);
     animation->setStartValue(geometry());
@@ -65,8 +52,6 @@ void AnimatedButton::animateButtonPress() {
 }
 
 void AnimatedButton::animateButtonRelease() {
-    qDebug()<<"current: "<<geometry();
-    qDebug()<<"origin: "<<m_originalGeometry;
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(100);
     animation->setStartValue(geometry());
@@ -74,31 +59,6 @@ void AnimatedButton::animateButtonRelease() {
     animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void AnimatedButton::startColorAnimation(const QColor &startColor, const QColor &endColor) {
-    QTimer *timer = new QTimer(this);
-    timer->setInterval(15); // Интервал обновления в миллисекундах
-    int duration = 210; // Длительность анимации в миллисекундах (кратно ^)
-    int steps = duration / timer->interval();
-    int currentStep = 0;
-
-    connect(timer, &QTimer::timeout, this, [=] () mutable {
-        if (currentStep > steps) {
-            timer->stop();
-            timer->deleteLater();
-            return;
-        }
-
-        qreal progress = static_cast<qreal>(currentStep) / steps;
-        QColor currentColor = startColor;
-        currentColor.setRed(startColor.red() + progress * (endColor.red() - startColor.red()));
-        currentColor.setGreen(startColor.green() + progress * (endColor.green() - startColor.green()));
-        currentColor.setBlue(startColor.blue() + progress * (endColor.blue() - startColor.blue()));
-        setStyleSheet(buttonStyle.arg(currentColor.name()));
-        currentStep++;
-    });
-
-    timer->start();
-}
 
 void AnimatedButton::setOriginalGeometry(const QRect &newOriginalGeometry)
 {

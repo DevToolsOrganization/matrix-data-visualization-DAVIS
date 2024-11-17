@@ -23,19 +23,17 @@ protected:
     void enterEvent(QEvent *event) override;
 
     void leaveEvent(QEvent *event) override;
+
 private slots:
     void animateButtonPress();
 
     void animateButtonRelease();
 
 private:
-    void startColorAnimation(const QColor &startColor, const QColor &endColor);
-
     QColor m_startColor;
     QColor m_endColor;
-    QRect m_originalGeometry;
-
     QColor m_backgroundColor;
+    QRect m_originalGeometry;
 };
 
 
