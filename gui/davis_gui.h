@@ -18,10 +18,10 @@ class DavisGUI : public QMainWindow {
   void show();
 
  private:
- void setMaxStyleWindow(int animDuration);
- void setMinStyleWindow(int animDuration);
- void readPlotText(QStringList& str_lines);
- QStringList selectFiles();
+  void setMaxStyleWindow(int animDuration);
+  void setMinStyleWindow(int animDuration);
+  void readPlotText(QStringList& str_lines);
+  QStringList selectFiles();
 
  private slots:
   void showAboutWindow();

@@ -27,131 +27,131 @@
 const int ANIMATION_DURATION = 300;
 
 DavisGUI::DavisGUI(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::DavisGUI),
-      m_copy_paste_action(new QAction("Вставить из буфера обмена")) {
-    isAboutWindowShowed = false;
-    ui->setupUi(this);
-    ui->centralwidget->addAction(m_copy_paste_action);
-    this->setAcceptDrops(true);
-    QHBoxLayout* hbl = ui->horizontalLayout_menu;
-    QMenuBar* mb = new QMenuBar;
-    QString menuStyle(
-                "QMenuBar {"
-                "    background-color: transparent;"
-                "    font-size: 13px;"
-                "}"
-                "QMenuBar:hover {"
-                "    background-color: rgb(42, 130, 218);"
-                "}"
-                );
-    QMenu*  menu_root = new QMenu("Menu");
-    mb->setStyleSheet(menuStyle);
-    action_surface = new QAction("surface");
-    action_surface->setCheckable(true);
-    action_heatmap = new QAction("heatmap");
-    action_heatmap->setCheckable(true);
-    action_heatmap->setChecked(true);
-    connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
-    connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
+  : QMainWindow(parent)
+  , ui(new Ui::DavisGUI),
+    m_copy_paste_action(new QAction("Вставить из буфера обмена")) {
+  isAboutWindowShowed = false;
+  ui->setupUi(this);
+  ui->centralwidget->addAction(m_copy_paste_action);
+  this->setAcceptDrops(true);
+  QHBoxLayout* hbl = ui->horizontalLayout_menu;
+  QMenuBar* mb = new QMenuBar;
+  QString menuStyle(
+      "QMenuBar {"
+      "    background-color: transparent;"
+      "    font-size: 13px;"
+      "}"
+      "QMenuBar:hover {"
+      "    background-color: rgb(42, 130, 218);"
+      "}"
+  );
+  QMenu*  menu_root = new QMenu("Menu");
+  mb->setStyleSheet(menuStyle);
+  action_surface = new QAction("surface");
+  action_surface->setCheckable(true);
+  action_heatmap = new QAction("heatmap");
+  action_heatmap->setCheckable(true);
+  action_heatmap->setChecked(true);
+  connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
+  connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
 
-    QMenu*  menu_view = new QMenu("View");
-    menu_view->setStyleSheet(menuStyle);
-    menu_view->addAction(action_surface);
-    menu_view->addAction(action_heatmap);
-    mb->setFixedSize(QSize(50, 25));
-    //mb->setStyleSheet("background-color:rgb(82,82,82);");
-    menu_root->addMenu(menu_view);
-    mb->addMenu(menu_root);
-    hbl->addWidget(mb);
-    hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-
-    QString buttonStyle(
-                "QPushButton {"
-                "    background-color: none;"
-                "    border: none;"
-                "    font-size: 13px;"
-                "}"
-                "QPushButton:hover {"
-                "    background-color: rgb(42, 130, 218);"
-                "}"
-                );
-    QPushButton* qpbAbout = new QPushButton;
-    qpbAbout->setFlat(true);
-    qpbAbout->setStyleSheet(buttonStyle);
-    qpbAbout->setToolTip("About");
-    connect(qpbAbout, &QPushButton::clicked, this, &DavisGUI::showAboutWindow);
-    qpbAbout->setFixedSize(QSize(25, 25));
-    qpbAbout->setText("?");
-    hbl->addWidget(qpbAbout);
-
-    QPushButton* qpbMinMaxSize = new QPushButton;
-    qpbMinMaxSize->setFlat(true);
-    qpbMinMaxSize->setStyleSheet(buttonStyle);
-    qpbMinMaxSize->setToolTip("Full/compact size");
-    connect(qpbMinMaxSize, &QPushButton::clicked, [this]() {
-        m_isMinStyleWindow = !m_isMinStyleWindow;
-        if(m_isMinStyleWindow)
-            setMinStyleWindow(ANIMATION_DURATION);
-        else
-            setMaxStyleWindow(ANIMATION_DURATION);
-    });
-    qpbMinMaxSize->setFixedSize(QSize(25, 25));
-    qpbMinMaxSize->setText("◰");
-    hbl->addWidget(qpbMinMaxSize);
-
-    QPushButton* qpbMinim = new QPushButton;
-    qpbMinim->setFlat(true);
-    qpbMinim->setStyleSheet(buttonStyle);
-    qpbMinim->setToolTip("Minimize");
-    connect(qpbMinim, &QPushButton::clicked, [this]() {this->showMinimized();});
-    qpbMinim->setFixedSize(QSize(25, 25));
-    qpbMinim->setText("─");
-    hbl->addWidget(qpbMinim);
-
-    QString buttonStyleExit(
-                "QPushButton {"
-                "    background-color: none;"
-                "    border: none;"
-                "    font-size: 13px;"
-                "}"
-                "QPushButton:hover {"
-                "    background-color: rgb(218, 42, 42);"
-                "}"
-                );
-    QPushButton* qpbExit = new QPushButton;
-    qpbExit->setFlat(true);
-    qpbExit->setStyleSheet(buttonStyleExit);
-    qpbExit->setToolTip("Close");
-    connect(qpbExit, &QPushButton::clicked, [this]() {this->close();});
-    qpbExit->setFixedSize(QSize(25, 25));
-    qpbExit->setText("✕");
-    hbl->addWidget(qpbExit);
-    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+  QMenu*  menu_view = new QMenu("View");
+  menu_view->setStyleSheet(menuStyle);
+  menu_view->addAction(action_surface);
+  menu_view->addAction(action_heatmap);
+  mb->setFixedSize(QSize(50, 25));
+  //mb->setStyleSheet("background-color:rgb(82,82,82);");
+  menu_root->addMenu(menu_view);
+  mb->addMenu(menu_root);
+  hbl->addWidget(mb);
+  hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
 
-    // --- buttons---
+  QString buttonStyle(
+      "QPushButton {"
+      "    background-color: none;"
+      "    border: none;"
+      "    font-size: 13px;"
+      "}"
+      "QPushButton:hover {"
+      "    background-color: rgb(42, 130, 218);"
+      "}"
+  );
+  QPushButton* qpbAbout = new QPushButton;
+  qpbAbout->setFlat(true);
+  qpbAbout->setStyleSheet(buttonStyle);
+  qpbAbout->setToolTip("About");
+  connect(qpbAbout, &QPushButton::clicked, this, &DavisGUI::showAboutWindow);
+  qpbAbout->setFixedSize(QSize(25, 25));
+  qpbAbout->setText("?");
+  hbl->addWidget(qpbAbout);
 
-    AnimatedButton*  qpbOpen = new AnimatedButton("Open",QColor(150,150,150), QColor(42, 130, 218),this);
-    qpbOpen->setGeometry(90,150,90,30);
-    qpbOpen->setOriginalGeometry(qpbOpen->geometry());
+  QPushButton* qpbMinMaxSize = new QPushButton;
+  qpbMinMaxSize->setFlat(true);
+  qpbMinMaxSize->setStyleSheet(buttonStyle);
+  qpbMinMaxSize->setToolTip("Full/compact size");
+  connect(qpbMinMaxSize, &QPushButton::clicked, [this]() {
+    m_isMinStyleWindow = !m_isMinStyleWindow;
+    if (m_isMinStyleWindow)
+      setMinStyleWindow(ANIMATION_DURATION);
+    else
+      setMaxStyleWindow(ANIMATION_DURATION);
+  });
+  qpbMinMaxSize->setFixedSize(QSize(25, 25));
+  qpbMinMaxSize->setText("◰");
+  hbl->addWidget(qpbMinMaxSize);
+
+  QPushButton* qpbMinim = new QPushButton;
+  qpbMinim->setFlat(true);
+  qpbMinim->setStyleSheet(buttonStyle);
+  qpbMinim->setToolTip("Minimize");
+  connect(qpbMinim, &QPushButton::clicked, [this]() {this->showMinimized();});
+  qpbMinim->setFixedSize(QSize(25, 25));
+  qpbMinim->setText("─");
+  hbl->addWidget(qpbMinim);
+
+  QString buttonStyleExit(
+      "QPushButton {"
+      "    background-color: none;"
+      "    border: none;"
+      "    font-size: 13px;"
+      "}"
+      "QPushButton:hover {"
+      "    background-color: rgb(218, 42, 42);"
+      "}"
+  );
+  QPushButton* qpbExit = new QPushButton;
+  qpbExit->setFlat(true);
+  qpbExit->setStyleSheet(buttonStyleExit);
+  qpbExit->setToolTip("Close");
+  connect(qpbExit, &QPushButton::clicked, [this]() {this->close();});
+  qpbExit->setFixedSize(QSize(25, 25));
+  qpbExit->setText("✕");
+  hbl->addWidget(qpbExit);
+  this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 
-    AnimatedButton*  qpbBuffer = new AnimatedButton("Copy from buffer (Ctrl+V)",
-                                                    QColor(150,150,150),
-                                                    QColor(42, 130, 218),
-                                                    this);
-    qpbBuffer->setGeometry(190,150,160,30);
-    qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
+  // --- buttons---
+
+  AnimatedButton*  qpbOpen = new AnimatedButton("Open", QColor(150, 150, 150), QColor(42, 130, 218), this);
+  qpbOpen->setGeometry(90, 150, 90, 30);
+  qpbOpen->setOriginalGeometry(qpbOpen->geometry());
 
 
-ui->pushButton_open->setVisible(false);
-ui->pushButton_fromBuffer->setVisible(false);
+  AnimatedButton*  qpbBuffer = new AnimatedButton("Copy from buffer (Ctrl+V)",
+                                                  QColor(150, 150, 150),
+                                                  QColor(42, 130, 218),
+                                                  this);
+  qpbBuffer->setGeometry(190, 150, 160, 30);
+  qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
+
+
+  ui->pushButton_open->setVisible(false);
+  ui->pushButton_fromBuffer->setVisible(false);
 
 
 
-        QObject::connect(qpbOpen, &QPushButton::released,this, &DavisGUI::selectFiles);
+  QObject::connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectFiles);
 
 //        QObject::connect(ui->pushButton_open, &QPushButton::released, [=]() {
 //            animation->setDirection(QAbstractAnimation::Backward);
@@ -160,270 +160,267 @@ ui->pushButton_fromBuffer->setVisible(false);
 
 
 
-    connect(m_copy_paste_action, SIGNAL(triggered()), SLOT(pasteTextAdded()));
+  connect(m_copy_paste_action, SIGNAL(triggered()), SLOT(pasteTextAdded()));
 }
 
 DavisGUI::~DavisGUI() {
-    delete ui;
+  delete ui;
 }
 
-void DavisGUI::show()
-{
-    QMainWindow::show();
-    setMaxStyleWindow(0);
+void DavisGUI::show() {
+  QMainWindow::show();
+  setMaxStyleWindow(0);
 }
 
-void DavisGUI::setMaxStyleWindow(int animDuration)
-{
-    m_isMinStyleWindow = false;
-    ui->label_doc->setVisible(false);
-    ui->label_arrow->setVisible(false);
-    ui->label_graph->setVisible(false);
-    ui->label_text->setVisible(false);
-    //ui->frame_panel->setVisible(false);
+void DavisGUI::setMaxStyleWindow(int animDuration) {
+  m_isMinStyleWindow = false;
+  ui->label_doc->setVisible(false);
+  ui->label_arrow->setVisible(false);
+  ui->label_graph->setVisible(false);
+  ui->label_text->setVisible(false);
+  //ui->frame_panel->setVisible(false);
+  update();
+
+  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+  animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
+  animationFrame->setDuration(animDuration);
+  animationFrame->setStartValue(ui->frame_panel->geometry());
+  animationFrame->setEndValue(QRect(0, 0, 397, 25));
+
+  QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+  animation->setDuration(animDuration); // Длительность анимации в миллисекундах
+  animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
+  // Начальное и конечное значение анимации
+  animation->setStartValue(this->geometry());
+  int xOld = this->geometry().x();
+  int yOld = this->geometry().y();
+  int newWidth = 397;
+  int newHeight = 370;
+  int deltaW = newWidth - this->geometry().width();
+  animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
+  //animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 397, 370)); // Пример конечного размера
+  connect(animation, &QPropertyAnimation::finished, this, [this]() {
+    ui->label_doc->setVisible(true);
+    ui->label_arrow->setVisible(true);
+    ui->label_graph->setVisible(true);
+    ui->label_text->setVisible(true);
+    ui->frame_panel->setVisible(true);
+    ui->label_doc->setGeometry(90, 60, 91, 91);
+    ui->label_arrow->setGeometry(170, 90, 50, 50);
+    ui->label_graph->setGeometry(210, 70, 81, 81);
+    ui->label_text->setGeometry(40, 150, 311, 211);
+    //ui->frame_panel->setGeometry(0,0,397,21);
     update();
+  });
 
-    QPropertyAnimation *animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
-    animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
-    animationFrame->setDuration(animDuration);
-    animationFrame->setStartValue(ui->frame_panel->geometry());
-    animationFrame->setEndValue(QRect(0, 0, 397, 25));
-
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
-    animation->setDuration(animDuration); // Длительность анимации в миллисекундах
-    animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
-    // Начальное и конечное значение анимации
-    animation->setStartValue(this->geometry());
-    int xOld = this->geometry().x();
-    int yOld = this->geometry().y();
-    int newWidth = 397;
-    int newHeight = 370;
-    int deltaW = newWidth - this->geometry().width();
-    animation->setEndValue(QRect(xOld-deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
-    //animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 397, 370)); // Пример конечного размера
-    connect(animation, &QPropertyAnimation::finished, this, [this](){
-        ui->label_doc->setVisible(true);
-        ui->label_arrow->setVisible(true);
-        ui->label_graph->setVisible(true);
-        ui->label_text->setVisible(true);
-        ui->frame_panel->setVisible(true);
-        ui->label_doc->setGeometry(90,60,91,91);
-        ui->label_arrow->setGeometry(170,90,50,50);
-        ui->label_graph->setGeometry(210,70,81,81);
-        ui->label_text->setGeometry(40,150,311,211);
-        //ui->frame_panel->setGeometry(0,0,397,21);
-        update();
-    });
-
-    QParallelAnimationGroup *group = new QParallelAnimationGroup;
-    group->addAnimation(animation);
-    group->addAnimation(animationFrame);
-    group->start();
+  QParallelAnimationGroup* group = new QParallelAnimationGroup;
+  group->addAnimation(animation);
+  group->addAnimation(animationFrame);
+  group->start();
 
 
 
 }
 
-void DavisGUI::setMinStyleWindow(int animDuration)
-{
-    m_isMinStyleWindow = true;
-    ui->label_doc->setVisible(false);
-    ui->label_arrow->setVisible(false);
-    ui->label_graph->setVisible(false);
-    ui->label_text->setVisible(false);
-    //ui->frame_panel->setVisible(false);
+void DavisGUI::setMinStyleWindow(int animDuration) {
+  m_isMinStyleWindow = true;
+  ui->label_doc->setVisible(false);
+  ui->label_arrow->setVisible(false);
+  ui->label_graph->setVisible(false);
+  ui->label_text->setVisible(false);
+  //ui->frame_panel->setVisible(false);
+  update();
+
+  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+  animationFrame->setDuration(animDuration);
+  animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
+  animationFrame->setStartValue(ui->frame_panel->geometry());
+  animationFrame->setEndValue(QRect(0, 0, 159, 25));
+
+  QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+  animation->setDuration(animDuration); // Длительность анимации в миллисекундах
+  animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
+  // Начальное и конечное значение анимации
+  animation->setStartValue(this->geometry());
+
+  int xOld = this->geometry().x();
+  int yOld = this->geometry().y();
+  int newWidth = 159;
+  int newHeight = 137;
+  int deltaW = newWidth - this->geometry().width();
+  animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
+  //    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
+  connect(animation, &QPropertyAnimation::finished, this, [this]() {
+    ui->label_doc->setVisible(true);
+    ui->label_arrow->setVisible(true);
+    ui->label_graph->setVisible(true);
+    ui->label_text->setVisible(true);
+    ui->frame_panel->setVisible(true);
+    ui->label_doc->setGeometry(30, 60, 41, 41);
+    ui->label_arrow->setGeometry(60, 60, 41, 41);
+    ui->label_graph->setGeometry(90, 60, 41, 41);
+    ui->label_text->setGeometry(40, 150, 311, 211);
+    //ui->frame_panel->setGeometry(0,0,159,21);
     update();
-
-    QPropertyAnimation *animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
-    animationFrame->setDuration(animDuration);
-    animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
-    animationFrame->setStartValue(ui->frame_panel->geometry());
-    animationFrame->setEndValue(QRect(0, 0, 159, 25));
-
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
-    animation->setDuration(animDuration); // Длительность анимации в миллисекундах
-    animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
-    // Начальное и конечное значение анимации
-    animation->setStartValue(this->geometry());
-
-    int xOld = this->geometry().x();
-    int yOld = this->geometry().y();
-    int newWidth = 159;
-    int newHeight = 137;
-    int deltaW = newWidth - this->geometry().width();
-    animation->setEndValue(QRect(xOld-deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
-    //    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
-    connect(animation, &QPropertyAnimation::finished, this, [this](){
-        ui->label_doc->setVisible(true);
-        ui->label_arrow->setVisible(true);
-        ui->label_graph->setVisible(true);
-        ui->label_text->setVisible(true);
-        ui->frame_panel->setVisible(true);
-        ui->label_doc->setGeometry(30,60,41,41);
-        ui->label_arrow->setGeometry(60,60,41,41);
-        ui->label_graph->setGeometry(90,60,41,41);
-        ui->label_text->setGeometry(40,150,311,211);
-        //ui->frame_panel->setGeometry(0,0,159,21);
-        update();
-    });
-    QParallelAnimationGroup *group = new QParallelAnimationGroup;
-    group->addAnimation(animation);
-    group->addAnimation(animationFrame);
-    group->start();
+  });
+  QParallelAnimationGroup* group = new QParallelAnimationGroup;
+  group->addAnimation(animation);
+  group->addAnimation(animationFrame);
+  group->start();
 }
 
 void DavisGUI::showAboutWindow() {
-    if (isAboutWindowShowed) {
-        delete aboutWindow;
-    }
-    aboutWindow = new About_window(); //NO LEAK because of Qt::WA_DeleteOnClose
-    connect(aboutWindow, &About_window::about_window_closed, [ = ]() {isAboutWindowShowed = false;});
-    aboutWindow->show();
-    isAboutWindowShowed = true;
+  if (isAboutWindowShowed) {
+    delete aboutWindow;
+  }
+  aboutWindow = new About_window(); //NO LEAK because of Qt::WA_DeleteOnClose
+  connect(aboutWindow, &About_window::about_window_closed, [ = ]() {isAboutWindowShowed = false;});
+  aboutWindow->show();
+  isAboutWindowShowed = true;
 }
 
 void DavisGUI::pasteTextAdded() {
-    QClipboard* clipboard = QApplication::clipboard();
-    QString clipboardText = clipboard->text();
-    qDebug() << clipboardText;
-    QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-    readPlotText(lines);
+  QClipboard* clipboard = QApplication::clipboard();
+  QString clipboardText = clipboard->text();
+  qDebug() << clipboardText;
+  QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
+  readPlotText(lines);
 }
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
-    std::vector<double>lines;
-    std::vector<std::vector<double>> data;
-    char separator;
-    for (int i = 0; i < str_lines.size(); ++i) {
-        std::vector<double>values;
-        auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
-        //qDebug() << "sep result: " << separator << "--->" << res;
-        bool is_one_value = false;
-        std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
-        if (res != dvs::GOOD_SEPARATOR) {
-            if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
-                continue;
-            } else {
-                is_one_value = true;
-            }
-        }
-        if (is_one_value == false) {
-            QStringList str_values = str_lines[i].split(separator);
-            for (int j = 0; j < str_values.size(); ++j) {
-                if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
-                    continue;
-                }
-                values.emplace_back(std::stod(str_values[j].toStdString()));
-            }
-        } else {
-            values.emplace_back(std::stod(str_lines[i].toStdString()));
-        }
-        data.emplace_back(values);
+  std::vector<double>lines;
+  std::vector<std::vector<double>> data;
+  char separator;
+  for (int i = 0; i < str_lines.size(); ++i) {
+    std::vector<double>values;
+    auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
+    //qDebug() << "sep result: " << separator << "--->" << res;
+    bool is_one_value = false;
+    std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
+    if (res != dvs::GOOD_SEPARATOR) {
+      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+        continue;
+      } else {
+        is_one_value = true;
+      }
     }
-
-    if (data.empty()) {
-        qDebug() << "Empty file";
-        return;
-    }
-
-    if (data.size() == 2 || data[0].size() == 2) { //chartXY
-        dv::show(data, "chartXY");
-    } else if (data.size() > 1 && data[0].size() > 1) {
-        if (action_heatmap->isChecked()) {
-            dv::show(data);
-        } else if (action_surface->isChecked()) {
-            dv::Config config;
-            config.typeVisual = dv::VISUALTYPE_SURFACE;
-            dv::show(data, "surface", config);
+    if (is_one_value == false) {
+      QStringList str_values = str_lines[i].split(separator);
+      for (int j = 0; j < str_values.size(); ++j) {
+        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+          continue;
         }
+        values.emplace_back(std::stod(str_values[j].toStdString()));
+      }
     } else {
-        std::vector<double> showVector;
-        if (data.size() > 1 && data[0].size() == 1) {
-            std::vector<double> new_data(data.size());
-            for (size_t i = 0; i < new_data.size(); ++i) {
-                new_data[i] = data[i][0];
-            }
-            showVector = new_data;
-        } else {
-            showVector = data[0];
-        }
-        dv::Config config;
-        config.typeVisual = dv::VISUALTYPE_CHART;
-        dv::show(showVector, "chart", config);
+      values.emplace_back(std::stod(str_lines[i].toStdString()));
     }
+    data.emplace_back(values);
+  }
+
+  if (data.empty()) {
+    qDebug() << "Empty file";
+    return;
+  }
+
+  if (data.size() == 2 || data[0].size() == 2) { //chartXY
+    dv::show(data, "chartXY");
+  } else if (data.size() > 1 && data[0].size() > 1) {
+    if (action_heatmap->isChecked()) {
+      dv::show(data);
+    } else if (action_surface->isChecked()) {
+      dv::Config config;
+      config.typeVisual = dv::VISUALTYPE_SURFACE;
+      dv::show(data, "surface", config);
+    }
+  } else {
+    std::vector<double> showVector;
+    if (data.size() > 1 && data[0].size() == 1) {
+      std::vector<double> new_data(data.size());
+      for (size_t i = 0; i < new_data.size(); ++i) {
+        new_data[i] = data[i][0];
+      }
+      showVector = new_data;
+    } else {
+      showVector = data[0];
+    }
+    dv::Config config;
+    config.typeVisual = dv::VISUALTYPE_CHART;
+    dv::show(showVector, "chart", config);
+  }
 }
 
 QStringList DavisGUI::selectFiles() {
-    QApplication::processEvents();
-    QStringList fileNames = QFileDialog::getOpenFileNames(this,
-                                                          QObject::tr("Open Files"),
-                                                          "",
-                                                          QObject::tr("All Files (*)"));
-    return fileNames;
+  QApplication::processEvents();
+  QStringList fileNames = QFileDialog::getOpenFileNames(this,
+                                                        QObject::tr("Open Files"),
+                                                        "",
+                                                        QObject::tr("All Files (*)"));
+  return fileNames;
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
-    if (event->mimeData()->hasUrls()) {
-        event->acceptProposedAction();
-    } else {
-        qDebug() << "not drop";
-    }
+  if (event->mimeData()->hasUrls()) {
+    event->acceptProposedAction();
+  } else {
+    qDebug() << "not drop";
+  }
 }
 
 void DavisGUI::dropEvent(QDropEvent* event) {
-    QString filePath =  event->mimeData()->urls().first().toLocalFile();
-    QFileInfo info(filePath);
-    qDebug() << "---file path--->" << filePath;
-    if (info.exists()) {
-        qDebug() << "exist";
-        QFile file(filePath);
-        QTextStream ts(&file);
-        ts.setCodec("UTF-8");
-        if (file.open(QIODevice::ReadWrite) == false) {
-            dvs::showReportFileNotFounded();
-            return;
-        };
-        QString line;
-        QStringList str_lines;
-        while (ts.readLineInto(&line)) {
-            str_lines.append(line);
-        }
-        if (str_lines.empty()) {
-            dvs::showReportFileEmpty();
-            return;
-        }
-        file.close();
-        readPlotText(str_lines);
-    } else {
-        qDebug() << "not exist";
-        dvs::showReportFileNotFounded();
+  QString filePath =  event->mimeData()->urls().first().toLocalFile();
+  QFileInfo info(filePath);
+  qDebug() << "---file path--->" << filePath;
+  if (info.exists()) {
+    qDebug() << "exist";
+    QFile file(filePath);
+    QTextStream ts(&file);
+    ts.setCodec("UTF-8");
+    if (file.open(QIODevice::ReadWrite) == false) {
+      dvs::showReportFileNotFounded();
+      return;
+    };
+    QString line;
+    QStringList str_lines;
+    while (ts.readLineInto(&line)) {
+      str_lines.append(line);
     }
+    if (str_lines.empty()) {
+      dvs::showReportFileEmpty();
+      return;
+    }
+    file.close();
+    readPlotText(str_lines);
+  } else {
+    qDebug() << "not exist";
+    dvs::showReportFileNotFounded();
+  }
 }
 
 void DavisGUI::paintEvent(QPaintEvent* event) {
-    const int PADDING = 10;
-    QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING, this->height() - 2 * PADDING - 20);
-    QPainter painter(this);
+  const int PADDING = 10;
+  QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING, this->height() - 2 * PADDING - 20);
+  QPainter painter(this);
 
-    painter.setRenderHint(QPainter::Antialiasing);
-    QPainterPath path;
-    path.addRoundedRect(rectangle, 5, 5);
-    QPen dashpen;
-    dashpen.setStyle(Qt::DashLine);
-    dashpen.setColor(QColor(150, 150, 150));
-    dashpen.setWidth(2);
-    painter.setPen(dashpen);
-    painter.fillPath(path, QColor(60, 60, 60));
-    painter.drawPath(path);
-    painter.end();
-    event->accept();
+  painter.setRenderHint(QPainter::Antialiasing);
+  QPainterPath path;
+  path.addRoundedRect(rectangle, 5, 5);
+  QPen dashpen;
+  dashpen.setStyle(Qt::DashLine);
+  dashpen.setColor(QColor(150, 150, 150));
+  dashpen.setWidth(2);
+  painter.setPen(dashpen);
+  painter.fillPath(path, QColor(60, 60, 60));
+  painter.drawPath(path);
+  painter.end();
+  event->accept();
 }
 
 void DavisGUI::mousePressEvent(QMouseEvent* event) {
-    m_point = event->pos();
+  m_point = event->pos();
 }
 
 void DavisGUI::mouseMoveEvent(QMouseEvent* event) {
-    move(event->globalPos() - m_point);
+  move(event->globalPos() - m_point);
 }
 
