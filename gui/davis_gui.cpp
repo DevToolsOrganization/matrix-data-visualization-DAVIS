@@ -155,7 +155,7 @@ DavisGUI::DavisGUI(QWidget* parent)
 
 
 
-  QObject::connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectFiles);
+  QObject::connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
 
 //        QObject::connect(ui->pushButton_open, &QPushButton::released, [=]() {
 //            animation->setDirection(QAbstractAnimation::Backward);
@@ -409,13 +409,15 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
 
 }
-QStringList DavisGUI::selectFiles() {
+void DavisGUI::selectAndShowFiles() {
   QApplication::processEvents();
   QStringList fileNames = QFileDialog::getOpenFileNames(this,
                                                         QObject::tr("Open Files"),
                                                         "",
                                                         QObject::tr("All Files (*)"));
-  return fileNames;
+
+  visualizeFiles(fileNames);
+
 }
 
 bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
@@ -500,6 +502,8 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
     return true;
 }
 
+
+
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
@@ -508,71 +512,84 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
   }
 }
 
+
 void DavisGUI::dropEvent(QDropEvent* event) {
-  QList<QUrl> file_list = event->mimeData()->urls();
-  QString all_chart_blocks;
-  const QString trace_name = "trace%1";
-  QString all_traces_names;
-  if(file_list.size()>1){
-      QStringList onlySingleChartList;
-      qDebug()<<"file list size: "<<file_list.size();
-      for(int i=0;i<file_list.size();++i){
-      QString outX,outY;
-      QString trace_block = dvs::kHtmlMultiChartBlock;
-      if(isFileContainsSingleChart(file_list[i].toLocalFile(),outX,outY)){
-          //qDebug()<<file_list[i].toLocalFile();
-          all_chart_blocks.append(trace_block.arg(QString::number(i+1),outX,outY));
-          all_traces_names.append(QString(trace_name).arg(i+1));
-          if(i<file_list.size()-1){
-              all_traces_names.append(",");
-          }
-      }
-      }
-      QString multichartPage = dvs::kHtmlMultiChartModel;
-      multichartPage = multichartPage.arg(dvs::kPlotlyJsName,all_chart_blocks,all_traces_names);
-      qDebug()<<multichartPage;
-      dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
-      dvs::openFileBySystem(dvs::kReportPagePath);
-      return;
+  QList<QUrl> file_list_urls = event->mimeData()->urls();
+  QStringList file_list;
+  for (int i = 0; i < file_list_urls.size(); ++i) {
+      file_list.append(file_list_urls[i].toLocalFile());
   }
-  QString filePath =  file_list.first().toLocalFile();
-  QFileInfo info(filePath);
-  if (info.exists()) {
-    QFile file(filePath);
-    QTextStream ts(&file);
-    ts.setCodec("UTF-8");
-    if (file.open(QIODevice::ReadWrite) == false) {
+  visualizeFiles(file_list);
+}
+
+void DavisGUI::visualizeFiles(const QStringList &file_list)
+{
+    if(file_list.isEmpty()){
+        return;
+    }
+    QString all_chart_blocks;
+    const QString trace_name = "trace%1";
+    QString all_traces_names;
+    if(file_list.size()>1){
+        QStringList onlySingleChartList;
+        qDebug()<<"file list size: "<<file_list.size();
+        for(int i=0;i<file_list.size();++i){
+        QString outX,outY;
+        QString trace_block = dvs::kHtmlMultiChartBlock;
+        if(isFileContainsSingleChart(file_list[i],outX,outY)){
+            //qDebug()<<file_list[i].toLocalFile();
+            all_chart_blocks.append(trace_block.arg(QString::number(i+1),outX,outY));
+            all_traces_names.append(QString(trace_name).arg(i+1));
+            if(i<file_list.size()-1){
+                all_traces_names.append(",");
+            }
+        }
+        }
+        QString multichartPage = dvs::kHtmlMultiChartModel;
+        multichartPage = multichartPage.arg(dvs::kPlotlyJsName,all_chart_blocks,all_traces_names);
+        qDebug()<<multichartPage;
+        dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
+        dvs::openFileBySystem(dvs::kReportPagePath);
+        return;
+    }
+    QString filePath =  file_list.first();
+    QFileInfo info(filePath);
+    if (info.exists()) {
+      QFile file(filePath);
+      QTextStream ts(&file);
+      ts.setCodec("UTF-8");
+      if (file.open(QIODevice::ReadWrite) == false) {
+        dvs::showReportFileNotFounded();
+        return;
+      };
+
+      QString suffix = info.suffix();
+      QStringList suffixes = {"jpg","bmp","png","svg","mp4","json"};
+      for(int i=0;i<suffixes.size();++i){
+         if(suffix == suffixes[i]){
+             QProcess process;
+             process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
+             return;
+         }
+      }
+
+      QString line;
+      QStringList str_lines;
+      while (ts.readLineInto(&line)) {
+        str_lines.append(line);
+      }
+      if (str_lines.empty()) {
+        dvs::showReportFileEmpty();
+        return;
+      }
+      file.close();
+      if (checkDateTimeVariant(str_lines) == false) {
+        readPlotText(str_lines);
+      };
+    } else {
+      qDebug() << "not exist";
       dvs::showReportFileNotFounded();
-      return;
-    };
-
-    QString suffix = info.suffix();
-    QStringList suffixes = {"jpg","bmp","png","svg","mp4","json"};
-    for(int i=0;i<suffixes.size();++i){
-       if(suffix == suffixes[i]){
-           QProcess process;
-           process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
-           return;
-       }
     }
-
-    QString line;
-    QStringList str_lines;
-    while (ts.readLineInto(&line)) {
-      str_lines.append(line);
-    }
-    if (str_lines.empty()) {
-      dvs::showReportFileEmpty();
-      return;
-    }
-    file.close();
-    if (checkDateTimeVariant(str_lines) == false) {
-      readPlotText(str_lines);
-    };
-  } else {
-    qDebug() << "not exist";
-    dvs::showReportFileNotFounded();
-  }
 }
 
 void DavisGUI::paintEvent(QPaintEvent* event) {

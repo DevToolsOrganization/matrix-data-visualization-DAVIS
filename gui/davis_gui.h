@@ -21,7 +21,12 @@ class DavisGUI : public QMainWindow {
   void setMaxStyleWindow(int animDuration);
   void setMinStyleWindow(int animDuration);
   void readPlotText(QStringList& str_lines);
-  QStringList selectFiles();
+  void selectAndShowFiles();
+  bool checkDateTimeVariant(const QStringList& lines);
+  bool isFileContainsSingleChart(const QString &pathToFile,
+                                 QString &outX,
+                                 QString &outY);
+  void visualizeFiles(const QStringList& file_list);
 
  private slots:
   void showAboutWindow();
@@ -36,10 +41,7 @@ class DavisGUI : public QMainWindow {
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
   bool m_isMinStyleWindow;
-  bool checkDateTimeVariant(const QStringList& lines);
-  bool isFileContainsSingleChart(const QString &pathToFile,
-                                 QString &outX,
-                                 QString &outY);
+
 
   // QWidget interface
  protected:
