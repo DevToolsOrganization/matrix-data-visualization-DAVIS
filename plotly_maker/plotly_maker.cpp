@@ -340,6 +340,37 @@ void showMatrixSizesAreNotTheSame(int badRow) {
                  text);
 }
 
+void showDateTimeChart(const string& date_time_values,
+                       const vector<double>& yValues) {
+
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  args[ARG_JS_NAME] = kPlotlyJsName;
+  args[ARG_DATE_TIME_VALUES] = date_time_values;
+
+  std::string values;
+  for (size_t i = 0; i < yValues.size(); ++i) {
+    std::string value = std::to_string(yValues[i]);
+    values.append(value);
+    if (i != yValues.size() - 1) {
+      values.append(",");
+    }
+  }
+
+  args[ARG_Y_DATE_TIME_VALUES] = values;
+  make_string(kHtmlDateTimeModel, args, out);
+  saveStringToFile(kReportPagePath, out);
+  openFileBySystem(kReportPagePath);
+
+
+}
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

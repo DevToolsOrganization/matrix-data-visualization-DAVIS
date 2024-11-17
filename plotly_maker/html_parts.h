@@ -32,6 +32,22 @@ enum ARGS_REPORT_PAGE_INDEX {
   ARGS_REPORT_PAGE_SIZE
 };
 
+enum ARGS_DATE_TIME_PAGE_INDEX {
+  ARG_JS_NAME,            //%1
+  ARG_DATE_TIME_VALUES,   //%2
+  ARG_Y_DATE_TIME_VALUES, //%3
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_DATE_TIME_PAGE_SIZE
+};
+
+enum ARGS_MULTI_CHARTS_PAGE {
+  ARG_JS_MC_NAME,
+  ARG_TRACES_BLOCKS,
+  ARG_DATA_OF_TRACES,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_MULTI_CHARTS_PAGE_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -52,6 +68,13 @@ extern const char kWarningJSLibAbsentPage[];
 extern const char kNoFileFoundedPage[];
 
 extern const char kWarningIcon[];
+
+extern const char kHtmlDateTimeModel[];
+
+
+extern const char kHtmlMultiChartBlock[];
+extern const char kHtmlMultiChartModel[];
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

@@ -355,6 +355,79 @@ const char kNoFileFoundedPage[] = R"(<!DOCTYPE html>
 
 extern const char kWarningIcon[] = R"davis_delimeter(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.262 144.407"><path d="M-109.166 7.227a2 2 0 0 0-.406.046c-3.195.03-6.176 1.695-7.785 4.483l-31.25 54.127-31.25 54.127h.002c-3.42 5.922 1.017 13.609 7.855 13.61h125.002c6.839-.001 11.277-7.688 7.857-13.61l-31.25-54.127-31.252-54.127c-1.465-2.539-4.079-4.164-6.978-4.45a2 2 0 0 0-.445-.077h-.004a2.006 2.006 0 0 0-.094-.002z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fff" d="M-109.165 9.227a7.081 7.081 0 0 0-6.46 3.529l-31.25 54.127-31.25 54.127c-2.674 4.631.777 10.609 6.126 10.61h125.002c5.348-.001 8.8-5.979 6.125-10.61l-31.25-54.127-31.252-54.127a7.079 7.079 0 0 0-5.79-3.53h-.001z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path d="M-109.26 11.225a5.073 5.073 0 0 0-4.632 2.53l-31.25 54.128-31.25 54.127c-1.953 3.381.488 7.609 4.393 7.61h125.002c3.905-.001 6.345-4.229 4.392-7.61l-31.25-54.127-31.252-54.127a5.073 5.073 0 0 0-4.152-2.531z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fc0" d="M140.053 125.83H16.209L47.17 72.204l30.961-53.626 30.961 53.626z"/><g transform="translate(.295 2.437) scale(.99073)"><circle cx="78.564" cy="111.117" r="8.817"/><path d="M78.564 42.955a8.817 8.817 0 0 0-8.818 8.816l3.156 37.461a5.662 5.662 0 0 0 11.325 0l3.154-37.46a8.817 8.817 0 0 0-8.817-8.817z"/></g></svg>)davis_delimeter";
 
+
+
+extern const char kHtmlDateTimeModel[] = R"davis_delimeter(
+<head>
+<script src="%1" charset="utf-8"></script>
+</head>
+<body><div style = "display: flex;
+  align-items:center;height:100%; width:100%;background:#dddfd4;
+  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+id="gd"></div></div>
+
+<script>
+
+var data = [
+  {
+    x: [%2],
+    y: [%3],
+    type: 'scatter'
+  }
+];
+
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+
+Plotly.newPlot('gd', data);
+
+</script>
+</body>
+)davis_delimeter";
+
+
+
+extern const char kHtmlMultiChartBlock[] = R"davis_delimeter(
+var trace%1 = {
+  x: [%2],
+  y: [%3],
+  type: 'scatter'
+};
+)davis_delimeter";
+
+
+
+
+extern const char kHtmlMultiChartModel[] = R"davis_delimeter(
+<head>
+<script src="%1" charset="utf-8"></script>
+</head>
+<body><div style = "display: flex;
+  align-items:center;height:100%; width:100%;background:#dddfd4;
+  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+id="gd"></div></div>
+<script>
+
+%2
+
+var data = [%3];
+
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+
+Plotly.newPlot('gd', data);
+
+</script>
+</body>
+)davis_delimeter";
+
+
 // *INDENT-ON*
 
 } // namespace dvs end
@@ -988,6 +1061,37 @@ void showMatrixSizesAreNotTheSame(int badRow) {
   showReportPage("Rows sizes are not the same",
                  kWarningIcon,
                  text);
+}
+
+void showDateTimeChart(const string& date_time_values,
+                       const vector<double>& yValues) {
+
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  args[ARG_JS_NAME] = kPlotlyJsName;
+  args[ARG_DATE_TIME_VALUES] = date_time_values;
+
+  std::string values;
+  for (size_t i = 0; i < yValues.size(); ++i) {
+    std::string value = std::to_string(yValues[i]);
+    values.append(value);
+    if (i != yValues.size() - 1) {
+      values.append(",");
+    }
+  }
+
+  args[ARG_Y_DATE_TIME_VALUES] = values;
+  make_string(kHtmlDateTimeModel, args, out);
+  saveStringToFile(kReportPagePath, out);
+  openFileBySystem(kReportPagePath);
+
+
 }
 
 

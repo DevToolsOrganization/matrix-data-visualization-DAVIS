@@ -25,6 +25,10 @@
 
 
 const int ANIMATION_DURATION = 300;
+#include <QJsonArray>
+#include "json_utils.h"
+#include "QDateTime"
+#include <QProcess>
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -284,7 +288,9 @@ void DavisGUI::pasteTextAdded() {
   QString clipboardText = clipboard->text();
   qDebug() << clipboardText;
   QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-  readPlotText(lines);
+  if (checkDateTimeVariant(lines) == false) {
+    readPlotText(lines);
+  };
 }
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
@@ -319,7 +325,7 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 
   if (data.empty()) {
-    qDebug() << "Empty file";
+    dvs::showReportFileEmpty();
     return;
   }
 
@@ -350,6 +356,59 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 }
 
+bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
+
+  QJsonArray jarr;
+  if(jsn::getJsonArrayFromFile("date_time_formats.json", jarr)==false){
+  jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
+  }
+  qDebug() << jarr;
+  QString dates;
+  std::vector<double> values;
+
+  for (int i = 0; i < lines.size(); ++i) {
+    QString test = lines[i];
+    for (int j = 0; j < jarr.size(); ++j) {
+      int template_time_stamp_size = jarr[j].toString().size();
+      QString template_time_stamp = jarr[j].toString();
+      if (test.size() < template_time_stamp_size + 1) {
+        continue;
+      }
+      QString separator = QString(test[template_time_stamp_size]);
+      QString substr = test.mid(0, template_time_stamp_size);
+      QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
+      if (dt.isValid()) {
+        //2013-10-04 22:23:00
+        qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
+        dates.append("'");
+        dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
+        dates.append("'");
+        if (i < lines.size() - 1) {
+          dates.append(",");
+        }
+
+        auto values_list = test.split(separator);
+        if (values_list.size() != 2) {
+          continue;
+        }
+        double value = values_list[1].toDouble();
+        qDebug()<<value;
+        values.emplace_back(value);
+
+      }
+    }
+  }
+  if (values.size() == 0)
+    return false;
+  qDebug() << "check sizes: " << lines.size() << values.size();
+  if (lines.size() != values.size()) {
+    return false;
+  }
+  dvs::showDateTimeChart(dates.toStdString(), values);
+  return true;
+
+
+}
 QStringList DavisGUI::selectFiles() {
   QApplication::processEvents();
   QStringList fileNames = QFileDialog::getOpenFileNames(this,
@@ -357,6 +416,89 @@ QStringList DavisGUI::selectFiles() {
                                                         "",
                                                         QObject::tr("All Files (*)"));
   return fileNames;
+}
+
+bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
+                                         QString& outX,
+                                         QString& outY)
+{
+    QFile file(pathToFile);
+    QTextStream ts(&file);
+    ts.setCodec("UTF-8");
+    if (file.open(QIODevice::ReadWrite) == false) {
+      return false;
+    };
+    QString line;
+    QStringList str_lines;
+    while (ts.readLineInto(&line)) {
+      str_lines.append(line);
+    }
+    if (str_lines.empty()) {
+      return false;
+    }
+    file.close();
+
+    std::vector<std::vector<double>> data;
+    char separator;
+    for (int i = 0; i < str_lines.size(); ++i) {
+      std::vector<double>values;
+      auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
+      bool is_one_value = false;
+      std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
+      if (res != dvs::GOOD_SEPARATOR) {
+        if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+          continue;
+        } else {
+          is_one_value = true;
+        }
+      }
+      if (is_one_value == false) {
+        QStringList str_values = str_lines[i].split(separator);
+        for (int j = 0; j < str_values.size(); ++j) {
+          if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+            continue;
+          }
+          values.emplace_back(std::stod(str_values[j].toStdString()));
+        }
+      } else {
+        is_one_value = true;
+      }
+    }
+
+
+    if(data.empty())return false;
+
+    for(size_t i=0;i<data.size();++i){
+        if(data[i].size()==1){
+
+        double value = data[i][0];
+        outX.append(QString::number(i+1));
+        if(i<data.size()-1)outX.append(",");
+        outY.append(QString::number(value));
+        if(i<data.size()-1)outY.append(",");
+
+        }else if(data[i].size()==2){
+
+        outX.append(QString::number(data[i][0]));
+        if(i<data.size()-1)outX.append(",");
+        outY.append(QString::number(data[i][1]));
+        if(i<data.size()-1)outY.append(",");
+
+        }else{
+
+
+        for(size_t j=0;j<data[i].size();++j){
+        outX.append(QString::number(j+1));
+        if(j<data[i].size()-1)outX.append(",");
+        outY.append(QString::number(data[i][j]));
+        if(j<data[i].size()-1)outY.append(",");
+        }
+
+        }
+    }
+    qDebug()<<outX;
+    qDebug()<<outY;
+    return true;
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
@@ -368,11 +510,35 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void DavisGUI::dropEvent(QDropEvent* event) {
-  QString filePath =  event->mimeData()->urls().first().toLocalFile();
+  QList<QUrl> file_list = event->mimeData()->urls();
+  QString all_chart_blocks;
+  const QString trace_name = "trace%1";
+  QString all_traces_names;
+  if(file_list.size()>1){
+      QStringList onlySingleChartList;
+      qDebug()<<"file list size: "<<file_list.size();
+      for(int i=0;i<file_list.size();++i){
+      QString outX,outY;
+      QString trace_block = dvs::kHtmlMultiChartBlock;
+      if(isFileContainsSingleChart(file_list[i].toLocalFile(),outX,outY)){
+          //qDebug()<<file_list[i].toLocalFile();
+          all_chart_blocks.append(trace_block.arg(QString::number(i+1),outX,outY));
+          all_traces_names.append(QString(trace_name).arg(i+1));
+          if(i<file_list.size()-1){
+              all_traces_names.append(",");
+          }
+      }
+      }
+      QString multichartPage = dvs::kHtmlMultiChartModel;
+      multichartPage = multichartPage.arg(dvs::kPlotlyJsName,all_chart_blocks,all_traces_names);
+      qDebug()<<multichartPage;
+      dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
+      dvs::openFileBySystem(dvs::kReportPagePath);
+      return;
+  }
+  QString filePath =  file_list.first().toLocalFile();
   QFileInfo info(filePath);
-  qDebug() << "---file path--->" << filePath;
   if (info.exists()) {
-    qDebug() << "exist";
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
@@ -380,6 +546,17 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       dvs::showReportFileNotFounded();
       return;
     };
+
+    QString suffix = info.suffix();
+    QStringList suffixes = {"jpg","bmp","png","svg","mp4","json"};
+    for(int i=0;i<suffixes.size();++i){
+       if(suffix == suffixes[i]){
+           QProcess process;
+           process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
+           return;
+       }
+    }
+
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
@@ -390,7 +567,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
       return;
     }
     file.close();
-    readPlotText(str_lines);
+    if (checkDateTimeVariant(str_lines) == false) {
+      readPlotText(str_lines);
+    };
   } else {
     qDebug() << "not exist";
     dvs::showReportFileNotFounded();
