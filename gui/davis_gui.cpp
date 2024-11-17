@@ -109,8 +109,6 @@ DavisGUI::DavisGUI(QWidget* parent)
     qpbMinim->setText("─");
     hbl->addWidget(qpbMinim);
 
-
-
     QString buttonStyleExit(
                 "QPushButton {"
                 "    background-color: none;"
@@ -134,12 +132,17 @@ DavisGUI::DavisGUI(QWidget* parent)
 
     // --- buttons---
 
-    AnimatedButton*  qpbOpen = new AnimatedButton("Open",this);
+    AnimatedButton*  qpbOpen = new AnimatedButton("Open",QColor(150,150,150), QColor(42, 130, 218),this);
     qpbOpen->setGeometry(90,150,90,30);
+    qpbOpen->setOriginalGeometry(qpbOpen->geometry());
 
 
-    AnimatedButton*  qpbBuffer = new AnimatedButton("Copy from buffer (Ctrl+V)",this);
+    AnimatedButton*  qpbBuffer = new AnimatedButton("Copy from buffer (Ctrl+V)",
+                                                    QColor(150,150,150),
+                                                    QColor(42, 130, 218),
+                                                    this);
     qpbBuffer->setGeometry(190,150,160,30);
+    qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
 
 
 ui->pushButton_open->setVisible(false);
