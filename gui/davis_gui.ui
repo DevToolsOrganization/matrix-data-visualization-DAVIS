@@ -37,10 +37,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>200</y>
-      <width>301</width>
-      <height>161</height>
+      <x>0</x>
+      <y>230</y>
+      <width>391</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -55,7 +55,7 @@
      </font>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#969696;&quot;&gt;drag &amp;amp; drop&lt;br/&gt;text file with numbers &lt;br/&gt;for visualize it's data&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#969696;&quot;&gt;the file must contain 1 or 2 columns&lt;br/&gt;or be a rectangular matrix in csv-like format&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt; color:#969696;&quot;&gt;drag &amp;amp; drop&lt;br/&gt;text file(s) with numbers &lt;br/&gt;for visualize it's data&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_doc">
@@ -166,8 +166,8 @@
    <widget class="QPushButton" name="pushButton_open">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>150</y>
+      <x>70</x>
+      <y>170</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -187,8 +187,8 @@
    <widget class="QPushButton" name="pushButton_fromBuffer">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>150</y>
+      <x>170</x>
+      <y>170</y>
       <width>161</width>
       <height>31</height>
      </rect>

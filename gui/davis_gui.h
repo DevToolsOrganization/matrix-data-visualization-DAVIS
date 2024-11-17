@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "about_window.h"
 #include "QAction"
+#include "animated_button.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -30,7 +31,7 @@ class DavisGUI : public QMainWindow {
 
  private slots:
   void showAboutWindow();
-  void pasteTextAdded();
+  void pasteFromClipboard();
 
  private:
   Ui::DavisGUI* ui;
@@ -41,6 +42,8 @@ class DavisGUI : public QMainWindow {
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
   bool m_isMinStyleWindow;
+  AnimatedButton*  qpbBuffer;
+  AnimatedButton*  qpbOpen;
 
 
   // QWidget interface
@@ -50,5 +53,6 @@ class DavisGUI : public QMainWindow {
   void paintEvent(QPaintEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // DAVISGUI_H
