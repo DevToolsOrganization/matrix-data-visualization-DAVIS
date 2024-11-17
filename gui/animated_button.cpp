@@ -32,13 +32,23 @@ AnimatedButton::AnimatedButton(const QString &text, QColor startColor, QColor en
 }
 
 void AnimatedButton::enterEvent(QEvent *event) {
-    startColorAnimation(m_startColor, m_endColor);
-
+    //startColorAnimation(m_startColor, m_endColor);
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "backgroundColor");
+            animation->setDuration(250);
+            animation->setStartValue(m_startColor);
+            animation->setEndValue(m_endColor);
+            animation->start(QAbstractAnimation::DeleteWhenStopped);
+            QPushButton::enterEvent(event);
     QPushButton::enterEvent(event);
 }
 
 void AnimatedButton::leaveEvent(QEvent *event) {
-    startColorAnimation(m_endColor, m_startColor);
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "backgroundColor");
+    animation->setDuration(250);
+    animation->setStartValue(m_endColor);
+    animation->setEndValue(m_startColor);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+    //startColorAnimation(m_endColor, m_startColor);
     QPushButton::leaveEvent(event);
 }
 
@@ -93,4 +103,13 @@ void AnimatedButton::startColorAnimation(const QColor &startColor, const QColor 
 void AnimatedButton::setOriginalGeometry(const QRect &newOriginalGeometry)
 {
     m_originalGeometry = newOriginalGeometry;
+}
+
+QColor AnimatedButton::backgroundColor() const {
+    return m_backgroundColor;
+}
+
+void AnimatedButton::setBackgroundColor(const QColor &color) {
+    m_backgroundColor = color;
+    setStyleSheet(buttonStyle.arg(color.name()));
 }

@@ -8,11 +8,16 @@
 
 class AnimatedButton : public QPushButton {
     Q_OBJECT
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor)
 
 public:
     AnimatedButton(const QString &text, QColor startColor, QColor endColor, QWidget *parent = nullptr);
 
     void setOriginalGeometry(const QRect &newOriginalGeometry);
+
+    QColor backgroundColor() const;
+
+    void setBackgroundColor(const QColor &color);
 
 protected:
     void enterEvent(QEvent *event) override;
@@ -30,7 +35,7 @@ private:
     QColor m_endColor;
     QRect m_originalGeometry;
 
-
+    QColor m_backgroundColor;
 };
 
 
