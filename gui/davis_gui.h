@@ -24,9 +24,9 @@ class DavisGUI : public QMainWindow {
   void readPlotText(QStringList& str_lines);
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
-  bool isFileContainsSingleChart(const QString &pathToFile,
-                                 QString &outX,
-                                 QString &outY);
+  bool isFileContainsSingleChart(const QString& pathToFile,
+                                 QString& outX,
+                                 QString& outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
 
@@ -54,6 +54,6 @@ class DavisGUI : public QMainWindow {
   void paintEvent(QPaintEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
-  void keyPressEvent(QKeyEvent *event) override;
+  void keyPressEvent(QKeyEvent* event) override;
 };
 #endif // DAVISGUI_H
