@@ -28,6 +28,7 @@ class DavisGUI : public QMainWindow {
                                  QString &outX,
                                  QString &outY);
   void visualizeFiles(const QStringList& file_list);
+  void hideElementsDuringResize();
 
  private slots:
   void showAboutWindow();

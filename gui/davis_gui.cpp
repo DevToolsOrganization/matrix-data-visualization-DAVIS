@@ -135,16 +135,16 @@ DavisGUI::DavisGUI(QWidget* parent)
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 
-    qpbOpen = new AnimatedButton("Open", QColor(150, 150, 150), QColor(42, 130, 218), this);
-    qpbOpen->setGeometry(70, 170, 90, 30);
+    qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
+    qpbOpen->setGeometry(70, 180, 90, 30);
     qpbOpen->setOriginalGeometry(qpbOpen->geometry());
 
 
     qpbBuffer = new AnimatedButton("Copy from buffer or Ctrl+V",
-                                                    QColor(150, 150, 150),
+                                                    QColor(120, 120, 120),
                                                     QColor(42, 130, 218),
                                                     this);
-    qpbBuffer->setGeometry(170, 170, 170, 30);
+    qpbBuffer->setGeometry(170, 180, 170, 30);
     qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
 
     connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
@@ -160,8 +160,10 @@ void DavisGUI::show() {
     setMaxStyleWindow(0);
 }
 
-void DavisGUI::setMaxStyleWindow(int animDuration) {
-    m_isMinStyleWindow = false;
+
+
+
+void DavisGUI::hideElementsDuringResize(){
     ui->label_doc->setVisible(false);
     ui->label_arrow->setVisible(false);
     ui->label_graph->setVisible(false);
@@ -169,17 +171,21 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
     qpbBuffer->setVisible(false);
     qpbOpen->setVisible(false);
     update();
+}
 
+
+
+void DavisGUI::setMaxStyleWindow(int animDuration) {
+    m_isMinStyleWindow = false;
+    hideElementsDuringResize();
     QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
     animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
     animationFrame->setDuration(animDuration);
     animationFrame->setStartValue(ui->frame_panel->geometry());
     animationFrame->setEndValue(QRect(0, 0, 397, 25));
-
     QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(animDuration);
     animation->setEasingCurve(QEasingCurve::InOutQuad);
-    // Начальное и конечное значение анимации
     animation->setStartValue(this->geometry());
     int xOld = this->geometry().x();
     int yOld = this->geometry().y();
@@ -206,41 +212,26 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
     group->addAnimation(animation);
     group->addAnimation(animationFrame);
     group->start();
-
-
-
 }
 
 void DavisGUI::setMinStyleWindow(int animDuration) {
     m_isMinStyleWindow = true;
-    ui->label_doc->setVisible(false);
-    ui->label_arrow->setVisible(false);
-    ui->label_graph->setVisible(false);
-    ui->label_text->setVisible(false);
-    qpbBuffer->setVisible(false);
-    qpbOpen->setVisible(false);
-    //ui->frame_panel->setVisible(false);
-    update();
-
+    hideElementsDuringResize();
     QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
     animationFrame->setDuration(animDuration);
     animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
     animationFrame->setStartValue(ui->frame_panel->geometry());
     animationFrame->setEndValue(QRect(0, 0, 159, 25));
-
     QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
-    animation->setDuration(animDuration); // Длительность анимации в миллисекундах
-    animation->setEasingCurve(QEasingCurve::InOutQuad); // Кривая анимации
-    // Начальное и конечное значение анимации
+    animation->setDuration(animDuration);
+    animation->setEasingCurve(QEasingCurve::InOutQuad);
     animation->setStartValue(this->geometry());
-
     int xOld = this->geometry().x();
     int yOld = this->geometry().y();
     int newWidth = 159;
     int newHeight = 137;
     int deltaW = newWidth - this->geometry().width();
-    animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight)); // Пример конечного размера
-    //    animation->setEndValue(QRect(this->geometry().x(), this->geometry().y(), 159, 137)); // Пример конечного размера
+    animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
     connect(animation, &QPropertyAnimation::finished, this, [this]() {
         ui->label_doc->setVisible(true);
         ui->label_arrow->setVisible(true);
