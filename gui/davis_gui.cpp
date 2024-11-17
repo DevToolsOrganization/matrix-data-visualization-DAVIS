@@ -23,6 +23,7 @@
 #include <QGraphicsColorizeEffect>
 #include "animated_button.h"
 
+
 const int ANIMATION_DURATION = 300;
 
 DavisGUI::DavisGUI(QWidget* parent)
@@ -148,43 +149,9 @@ DavisGUI::DavisGUI(QWidget* parent)
 ui->pushButton_open->setVisible(false);
 ui->pushButton_fromBuffer->setVisible(false);
 
-//    QString buttonStyleOpen(
-//                "QPushButton {"
-//                "    background-color: rgb(200,200,200);" // Цвет фона
-//                "    border: none;" // Без границ
-//                "    color: rgb(53, 53, 53);" // Цвет текста
-//                "    text-align: center;" // Выравнивание текста
-//                "    text-decoration: none;" // Без подчеркивания текста
-//                "    font-size: 13px;" // Размер шрифта
-//                "    border-radius: 8px;" // Закругленные углы
-//                "}"
-//                "QPushButton:hover {"
-//                "    background-color: rgb(42, 130, 218);" // Цвет фона при наведении
-//                "    color: white;" // Цвет текста
-//                "}"
-//                "QPushButton:pressed {"
-//                "    background-color: #45a049;" // Цвет фона при нажатии
-//                "}"
-//                );
-//    ui->pushButton_open->setStyleSheet(buttonStyleOpen);
-//    ui->pushButton_fromBuffer->setStyleSheet(buttonStyleOpen);
 
 
-
-//    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(ui->pushButton_open);
-//        ui->pushButton_open->setGraphicsEffect(effect);
-
-//        QPropertyAnimation *animation = new QPropertyAnimation(effect, "color");
-//        animation->setDuration(300);
-//        animation->setStartValue(QColor(0, 0, 0));
-//        animation->setEndValue(QColor(100, 0, 0));
-
-
-
-//        QObject::connect(ui->pushButton_open, &QPushButton::pressed, [=]() {
-//            animation->setDirection(QAbstractAnimation::Forward);
-//            animation->start();
-//        });
+        QObject::connect(qpbOpen, &QPushButton::released,this, &DavisGUI::selectFiles);
 
 //        QObject::connect(ui->pushButton_open, &QPushButton::released, [=]() {
 //            animation->setDirection(QAbstractAnimation::Backward);
@@ -384,6 +351,15 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
         config.typeVisual = dv::VISUALTYPE_CHART;
         dv::show(showVector, "chart", config);
     }
+}
+
+QStringList DavisGUI::selectFiles() {
+    QApplication::processEvents();
+    QStringList fileNames = QFileDialog::getOpenFileNames(this,
+                                                          QObject::tr("Open Files"),
+                                                          "",
+                                                          QObject::tr("All Files (*)"));
+    return fileNames;
 }
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
