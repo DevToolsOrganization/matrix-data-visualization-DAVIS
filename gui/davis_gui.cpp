@@ -110,6 +110,7 @@ DavisGUI::DavisGUI(QWidget* parent)
     hbl->addWidget(qpbMinim);
 
 
+
     QString buttonStyleExit(
                 "QPushButton {"
                 "    background-color: none;"

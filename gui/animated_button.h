@@ -10,7 +10,7 @@ class AnimatedButton : public QPushButton {
     Q_OBJECT
 
 public:
-    AnimatedButton(const QString &text, QWidget *parent = nullptr);
+    AnimatedButton(const QString &text, QColor &startColor, QColor &endColor, QWidget *parent = nullptr);
 protected:
     void enterEvent(QEvent *event) override;
 
@@ -19,10 +19,10 @@ protected:
 private:
     void startColorAnimation(const QColor &startColor, const QColor &endColor);
 
-    QGraphicsColorizeEffect *effect;
-    QPropertyAnimation *hoverAnimation;
-    QPropertyAnimation *leaveAnimation;
-    QColor m_backgroundColor;
+    QColor m_startColor;
+    QColor m_endColor;
+
+
 };
 
 
