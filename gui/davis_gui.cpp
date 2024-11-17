@@ -461,11 +461,10 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
           values.emplace_back(std::stod(str_values[j].toStdString()));
         }
       } else {
-        is_one_value = true;
+        values.emplace_back(std::stod(str_lines[i].toStdString()));
       }
+      data.emplace_back(values);
     }
-
-
     if(data.empty())return false;
 
     for(size_t i=0;i<data.size();++i){
