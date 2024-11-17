@@ -43,6 +43,8 @@ set(PROJECT_SOURCES
         davis_gui.h
         about_window.h
         about_window.cpp
+        animated_button.h
+        animated_button.cpp
         davis_gui.ui
         about_window.ui
 )

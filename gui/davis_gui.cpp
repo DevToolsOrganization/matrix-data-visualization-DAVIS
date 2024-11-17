@@ -18,6 +18,10 @@
 #include <QClipboard>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <QStateMachine>
+#include <QSignalTransition>
+#include <QGraphicsColorizeEffect>
+#include "animated_button.h"
 
 const int ANIMATION_DURATION = 300;
 
@@ -42,7 +46,6 @@ DavisGUI::DavisGUI(QWidget* parent)
                 );
     QMenu*  menu_root = new QMenu("Menu");
     mb->setStyleSheet(menuStyle);
-    QAction*  action_help = new QAction("About");
     action_surface = new QAction("surface");
     action_surface->setCheckable(true);
     action_heatmap = new QAction("heatmap");
@@ -50,7 +53,6 @@ DavisGUI::DavisGUI(QWidget* parent)
     action_heatmap->setChecked(true);
     connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
     connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
-    connect(action_help, SIGNAL(triggered()), this, SLOT(showAboutWindow()));
 
     QMenu*  menu_view = new QMenu("View");
     menu_view->setStyleSheet(menuStyle);
@@ -59,7 +61,6 @@ DavisGUI::DavisGUI(QWidget* parent)
     mb->setFixedSize(QSize(50, 25));
     //mb->setStyleSheet("background-color:rgb(82,82,82);");
     menu_root->addMenu(menu_view);
-    menu_root->addAction(action_help);
     mb->addMenu(menu_root);
     hbl->addWidget(mb);
     hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -75,6 +76,15 @@ DavisGUI::DavisGUI(QWidget* parent)
                 "    background-color: rgb(42, 130, 218);"
                 "}"
                 );
+    QPushButton* qpbAbout = new QPushButton;
+    qpbAbout->setFlat(true);
+    qpbAbout->setStyleSheet(buttonStyle);
+    qpbAbout->setToolTip("About");
+    connect(qpbAbout, &QPushButton::clicked, this, &DavisGUI::showAboutWindow);
+    qpbAbout->setFixedSize(QSize(25, 25));
+    qpbAbout->setText("?");
+    hbl->addWidget(qpbAbout);
+
     QPushButton* qpbMinMaxSize = new QPushButton;
     qpbMinMaxSize->setFlat(true);
     qpbMinMaxSize->setStyleSheet(buttonStyle);
@@ -99,15 +109,85 @@ DavisGUI::DavisGUI(QWidget* parent)
     qpbMinim->setText("─");
     hbl->addWidget(qpbMinim);
 
+
+    QString buttonStyleExit(
+                "QPushButton {"
+                "    background-color: none;"
+                "    border: none;"
+                "    font-size: 13px;"
+                "}"
+                "QPushButton:hover {"
+                "    background-color: rgb(218, 42, 42);"
+                "}"
+                );
     QPushButton* qpbExit = new QPushButton;
     qpbExit->setFlat(true);
-    qpbExit->setStyleSheet(buttonStyle);
+    qpbExit->setStyleSheet(buttonStyleExit);
     qpbExit->setToolTip("Close");
     connect(qpbExit, &QPushButton::clicked, [this]() {this->close();});
     qpbExit->setFixedSize(QSize(25, 25));
     qpbExit->setText("✕");
     hbl->addWidget(qpbExit);
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+
+    // --- buttons---
+
+    AnimatedButton*  qpbOpen = new AnimatedButton("Open",this);
+    qpbOpen->setGeometry(90,150,90,30);
+
+
+    AnimatedButton*  qpbBuffer = new AnimatedButton("Copy from buffer (Ctrl+V)",this);
+    qpbBuffer->setGeometry(190,150,160,30);
+
+
+ui->pushButton_open->setVisible(false);
+ui->pushButton_fromBuffer->setVisible(false);
+
+//    QString buttonStyleOpen(
+//                "QPushButton {"
+//                "    background-color: rgb(200,200,200);" // Цвет фона
+//                "    border: none;" // Без границ
+//                "    color: rgb(53, 53, 53);" // Цвет текста
+//                "    text-align: center;" // Выравнивание текста
+//                "    text-decoration: none;" // Без подчеркивания текста
+//                "    font-size: 13px;" // Размер шрифта
+//                "    border-radius: 8px;" // Закругленные углы
+//                "}"
+//                "QPushButton:hover {"
+//                "    background-color: rgb(42, 130, 218);" // Цвет фона при наведении
+//                "    color: white;" // Цвет текста
+//                "}"
+//                "QPushButton:pressed {"
+//                "    background-color: #45a049;" // Цвет фона при нажатии
+//                "}"
+//                );
+//    ui->pushButton_open->setStyleSheet(buttonStyleOpen);
+//    ui->pushButton_fromBuffer->setStyleSheet(buttonStyleOpen);
+
+
+
+//    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(ui->pushButton_open);
+//        ui->pushButton_open->setGraphicsEffect(effect);
+
+//        QPropertyAnimation *animation = new QPropertyAnimation(effect, "color");
+//        animation->setDuration(300);
+//        animation->setStartValue(QColor(0, 0, 0));
+//        animation->setEndValue(QColor(100, 0, 0));
+
+
+
+//        QObject::connect(ui->pushButton_open, &QPushButton::pressed, [=]() {
+//            animation->setDirection(QAbstractAnimation::Forward);
+//            animation->start();
+//        });
+
+//        QObject::connect(ui->pushButton_open, &QPushButton::released, [=]() {
+//            animation->setDirection(QAbstractAnimation::Backward);
+//            animation->start();
+//        });
+
+
 
     connect(m_copy_paste_action, SIGNAL(triggered()), SLOT(pasteTextAdded()));
 }
@@ -132,15 +212,11 @@ void DavisGUI::setMaxStyleWindow(int animDuration)
     //ui->frame_panel->setVisible(false);
     update();
 
-
     QPropertyAnimation *animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
     animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
     animationFrame->setDuration(animDuration);
     animationFrame->setStartValue(ui->frame_panel->geometry());
     animationFrame->setEndValue(QRect(0, 0, 397, 25));
-
-
-
 
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(animDuration); // Длительность анимации в миллисекундах
