@@ -24,6 +24,7 @@
 #include <QJsonArray>
 #include "QDateTime"
 #include <QProcess>
+#include <QProgressBar>
 #include "json_utils.h"
 
 
@@ -132,6 +133,28 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbExit->setText("✕");
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+  QProgressBar* progressBar = new QProgressBar(this);
+//   QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget);
+//  layout->addWidget(progressBar);
+
+  progressBar->setGeometry(70, 220, 270, 3);
+  progressBar->setRange(0, 100);
+  progressBar->setValue(50); // Установите текущее значение прогрессбара
+
+  // Установка стиля для прогрессбара
+  progressBar->setStyleSheet(
+      "QProgressBar {"
+      "    border: none;"
+      "    border-radius: 5px;"
+      "    background-color: transparent;"
+      "    height: 2px;" // Устанавливаем высоту прогрессбара
+      "    color: transparent;"
+      "}"
+
+  );
+
+
 
 
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
