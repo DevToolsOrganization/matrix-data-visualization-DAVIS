@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "about_window.h"
 #include "QAction"
+#include "animated_button.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -15,10 +16,23 @@ class DavisGUI : public QMainWindow {
  public:
   DavisGUI(QWidget* parent = nullptr);
   ~DavisGUI();
+  void show();
+
+ private:
+  void setMaxStyleWindow(int animDuration);
+  void setMinStyleWindow(int animDuration);
+  void readPlotText(QStringList& str_lines);
+  void selectAndShowFiles();
+  bool checkDateTimeVariant(const QStringList& lines);
+  bool isFileContainsSingleChart(const QString& pathToFile,
+                                 QString& outX,
+                                 QString& outY);
+  void visualizeFiles(const QStringList& file_list);
+  void hideElementsDuringResize();
 
  private slots:
   void showAboutWindow();
-  void pasteTextAdded();
+  void pasteFromClipboard();
 
  private:
   Ui::DavisGUI* ui;
@@ -28,7 +42,10 @@ class DavisGUI : public QMainWindow {
   About_window* aboutWindow;
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
-  void readPlotText(QStringList& str_lines);
+  bool m_isMinStyleWindow;
+  AnimatedButton*  qpbBuffer;
+  AnimatedButton*  qpbOpen;
+
 
   // QWidget interface
  protected:
@@ -37,5 +54,6 @@ class DavisGUI : public QMainWindow {
   void paintEvent(QPaintEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
 };
 #endif // DAVISGUI_H
