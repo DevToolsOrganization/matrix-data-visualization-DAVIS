@@ -388,13 +388,41 @@ id="gd"></div></div>
 
 var data = [%3];
 
+var layout = {
+  title: {
+    text:'Title'
+  },
+  xaxis: {
+    title: {
+      text: 'X'
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Y'
+    }
+  },
+  scene: {
+    xaxis: {
+      title: 'X',
+    },
+    yaxis: {
+      title: 'Y',
+    },
+    zaxis: {
+      title: '',
+    }
+  }
+};
+
+
 var config = {
   editable: true,
   showLink: true,
   plotlyServerURL: "https://chart-studio.plotly.com"
 };
 
-Plotly.newPlot('gd', data, config);
+Plotly.newPlot('gd', data, layout, config);
 
 </script>
 </body>
