@@ -5,6 +5,7 @@
 #include "about_window.h"
 #include "QAction"
 #include "animated_button.h"
+#include <QJsonObject>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -29,6 +30,10 @@ class DavisGUI : public QMainWindow {
                                  QString& outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
+  void saveSettings(const QString& fileName);
+  QJsonObject loadSettings(const QString& fileName);
+  void applySettings(const QJsonObject& settings);
+
 
  private slots:
   void showAboutWindow();
@@ -45,6 +50,7 @@ class DavisGUI : public QMainWindow {
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
+  QString settingsFilePath;
 
 
   // QWidget interface

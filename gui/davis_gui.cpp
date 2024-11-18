@@ -20,11 +20,11 @@
 #include <QParallelAnimationGroup>
 #include <QStateMachine>
 #include <QSignalTransition>
-#include <QGraphicsColorizeEffect>
 #include <QJsonArray>
 #include "QDateTime"
 #include <QProcess>
 #include "json_utils.h"
+
 
 
 const int ANIMATION_DURATION = 300;
@@ -148,15 +148,26 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
+
+
+// Загрузка настроек
+  settingsFilePath = "settings.json";
+  QJsonObject settings = loadSettings(settingsFilePath);
+  // Применение настроек
+
+  applySettings(settings);
+
+
+
 }
 
 DavisGUI::~DavisGUI() {
+  saveSettings(settingsFilePath);
   delete ui;
 }
 
 void DavisGUI::show() {
   QMainWindow::show();
-  setMaxStyleWindow(0);
 }
 
 void DavisGUI::hideElementsDuringResize() {
@@ -167,6 +178,46 @@ void DavisGUI::hideElementsDuringResize() {
   qpbBuffer->setVisible(false);
   qpbOpen->setVisible(false);
   update();
+}
+
+void DavisGUI::saveSettings(const QString& fileName) {
+  QJsonObject settings;
+  settings["windowPosX"] = pos().x();
+  settings["windowPosY"] = pos().y();
+  settings["isMinStyleWindow"] = m_isMinStyleWindow;
+
+  QJsonDocument doc(settings);
+  QFile file(fileName);
+  if (!file.open(QIODevice::WriteOnly)) {
+    qWarning("Couldn't open save file.");
+    return;
+  }
+  file.write(doc.toJson());
+}
+
+QJsonObject DavisGUI::loadSettings(const QString& fileName) {
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qWarning("Couldn't open save file.");
+    return QJsonObject();
+  }
+  QByteArray saveData = file.readAll();
+  QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+  return loadDoc.object();
+}
+
+void DavisGUI::applySettings(const QJsonObject& settings) {
+
+  m_isMinStyleWindow = settings["isMinStyleWindow"].toBool();
+  qDebug() << m_isMinStyleWindow;
+  if (m_isMinStyleWindow)
+    setMinStyleWindow(0);
+  else
+    setMaxStyleWindow(0);
+  update();
+  int x = settings["windowPosX"].toInt();
+  int y = settings["windowPosY"].toInt();
+  move(x, y);
 }
 
 void DavisGUI::setMaxStyleWindow(int animDuration) {
