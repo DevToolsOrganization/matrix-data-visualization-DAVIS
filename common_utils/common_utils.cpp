@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <set>
+#include <clocale>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -114,6 +115,7 @@ bool get_data_from_file(const string& path,
                         vector<string>& result) {
 
   //TODO different scenarious and sanitizing
+  std::setlocale(LC_ALL, "ru_RU.UTF-8");
   if (!is_file_exists(path)) {
     return false;
   }
@@ -135,6 +137,7 @@ bool get_data_from_file(const string& path,
 
 bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
   outMatrix.clear();
+  std::setlocale(LC_ALL, "ru_RU.UTF-8");
   std::ifstream ifs;
   std::string str;
   ifs.open(path, std::ios::in);
