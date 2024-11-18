@@ -84,7 +84,7 @@ bool createStringLineChartValues(const vector<double>& xValues,
       out_str_values.append(",");
     }
   }
-  out_str_values.append("], mode: 'lines+markers', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  out_str_values.append("], mode: 'lines', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
   return true;
 }
 
