@@ -421,7 +421,7 @@ var config = {
   plotlyServerURL: "https://chart-studio.plotly.com"
 };
 
-Plotly.newPlot('gd', data);
+Plotly.newPlot('gd', data, config);
 
 </script>
 </body>
