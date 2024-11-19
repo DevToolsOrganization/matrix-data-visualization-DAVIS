@@ -27,6 +27,12 @@ bool saveJsonArrayToFile(const QString& path,
                          const QJsonArray& json_object,
                          QJsonDocument::JsonFormat format);
 
+QPair<bool,QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& path,
+                                          QJsonObject& object,
+                                          const QJsonArray& service_keys,
+                                          const QJsonArray& user_keys
+                                          );
+
 } // end namespace jsn
 
 #endif // JSON_UTILS_H

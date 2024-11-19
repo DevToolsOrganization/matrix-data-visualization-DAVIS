@@ -24,7 +24,9 @@
 #include <QJsonArray>
 #include "QDateTime"
 #include <QProcess>
+#include <QJsonObject>
 #include "json_utils.h"
+
 
 
 const int ANIMATION_DURATION = 300;
@@ -33,6 +35,7 @@ const int ANIMATION_DURATION = 300;
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI) {
+  jsn::getJsonArrayFromFile(":/keys.json",service_json_keys);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
   ui->setupUi(this);
@@ -167,6 +170,23 @@ void DavisGUI::hideElementsDuringResize() {
   qpbBuffer->setVisible(false);
   qpbOpen->setVisible(false);
   update();
+}
+
+void DavisGUI::readJsonToPlot(const QString &pathToFile)
+{
+    QJsonObject object_from_file;
+    QJsonArray user_stamp_keys;
+    jsn::getJsonArrayFromFile(":/user_keys_list.json",user_stamp_keys);
+    bool result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
+                                              object_from_file,
+                                              service_json_keys,
+                                              user_stamp_keys).first;
+    if(result){
+        for(int i=0;i<service_json_keys.size();++i){
+            qDebug()<<object_from_file.value(service_json_keys[i].toString()).toVariant();
+        }
+    }
+
 }
 
 void DavisGUI::setMaxStyleWindow(int animDuration) {
@@ -540,13 +560,17 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     };
 
     QString suffix = info.suffix();
-    QStringList suffixes = {"jpg", "bmp", "png", "svg", "mp4", "json"};
+    QStringList suffixes = {"jpg", "bmp", "png", "svg", "mp4"};
     for (int i = 0; i < suffixes.size(); ++i) {
       if (suffix == suffixes[i]) {
         QProcess process;
         process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
         return;
       }
+    }
+    if(suffix == "json"){
+        readJsonToPlot(filePath);
+        return;
     }
 
     QString line;
