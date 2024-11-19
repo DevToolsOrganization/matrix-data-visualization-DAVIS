@@ -551,6 +551,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   QString filePath =  file_list.first();
   QFileInfo info(filePath);
   if (info.exists()) {
+      QTime time;
+      time.start();
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
@@ -585,6 +587,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     file.close();
     if (checkDateTimeVariant(str_lines) == false) {
       readPlotText(str_lines);
+        qDebug()<<"matrix read MAKER: "<<time.elapsed();
     };
   } else {
     qDebug() << "not exist";
