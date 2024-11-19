@@ -26,6 +26,8 @@
 #include <QProcess>
 #include <QProgressBar>
 #include "json_utils.h"
+#include <QTimer>
+#include <QtConcurrent/QtConcurrent>
 
 
 const int ANIMATION_DURATION = 300;
@@ -134,14 +136,21 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
-  QProgressBar* progressBar = new QProgressBar(this);
+  QWidget *wForProgress = new QWidget(this);
+  wForProgress->setGeometry(70, 220, 270, 3);
+wForProgress->setStyleSheet(
+            "background-color: rgb(52,52,52);"
+            );
+
+
+QProgressBar* progressBar = new QProgressBar(wForProgress);
 //   QVBoxLayout *layout = new QVBoxLayout(ui->centralwidget);
 //  layout->addWidget(progressBar);
 
-  progressBar->setGeometry(70, 220, 270, 3);
+  progressBar->setGeometry(0, 0, wForProgress->width()/2, wForProgress->height());
   progressBar->setRange(0, 100);
-  progressBar->setValue(50); // Установите текущее значение прогрессбара
-
+  progressBar->setValue(100); // Установите текущее значение прогрессбара
+m_bar = progressBar;
   // Установка стиля для прогрессбара
   progressBar->setStyleSheet(
       "QProgressBar {"
@@ -153,7 +162,6 @@ DavisGUI::DavisGUI(QWidget* parent)
       "}"
 
   );
-
 
 
 
@@ -193,7 +201,16 @@ void DavisGUI::hideElementsDuringResize() {
 }
 
 void DavisGUI::setMaxStyleWindow(int animDuration) {
-  m_isMinStyleWindow = false;
+    QPropertyAnimation* animationBar = new QPropertyAnimation(m_bar, "geometry");
+       animationBar->setDuration(2500); // Длительность анимации в миллисекундах
+       animationBar->setLoopCount(-1); // Бесконечный цикл
+animationBar->setStartValue(QRect(-m_bar->width(), m_bar->y(), m_bar->width(), m_bar->height()));
+animationBar->setEndValue(QRect(270, m_bar->y(), m_bar->width(), m_bar->height()));
+animationBar->setEasingCurve(QEasingCurve::InOutCubic);
+animationBar->start();
+
+
+    m_isMinStyleWindow = false;
   hideElementsDuringResize();
   QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
   animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
@@ -519,7 +536,9 @@ void DavisGUI::dropEvent(QDropEvent* event) {
   for (int i = 0; i < file_list_urls.size(); ++i) {
     file_list.append(file_list_urls[i].toLocalFile());
   }
-  visualizeFiles(file_list);
+
+  QtConcurrent::run(this, &DavisGUI::visualizeFiles,file_list);
+  //visualizeFiles(file_list);
 }
 
 void DavisGUI::visualizeFiles(const QStringList& file_list) {
