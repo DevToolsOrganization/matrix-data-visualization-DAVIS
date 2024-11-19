@@ -35,7 +35,7 @@ const int ANIMATION_DURATION = 300;
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI) {
-  jsn::getJsonArrayFromFile(":/keys.json",service_json_keys);
+  jsn::getJsonArrayFromFile(":/keys.json", service_json_keys);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
   ui->setupUi(this);
@@ -172,20 +172,19 @@ void DavisGUI::hideElementsDuringResize() {
   update();
 }
 
-void DavisGUI::readJsonToPlot(const QString &pathToFile)
-{
-    QJsonObject object_from_file;
-    QJsonArray user_stamp_keys;
-    jsn::getJsonArrayFromFile(":/user_keys_list.json",user_stamp_keys);
-    bool result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
-                                              object_from_file,
-                                              service_json_keys,
-                                              user_stamp_keys).first;
-    if(result){
-        for(int i=0;i<service_json_keys.size();++i){
-            qDebug()<<object_from_file.value(service_json_keys[i].toString()).toVariant();
-        }
+void DavisGUI::readJsonToPlot(const QString& pathToFile) {
+  QJsonObject object_from_file;
+  QJsonArray user_stamp_keys;
+  jsn::getJsonArrayFromFile(":/user_keys_list.json", user_stamp_keys);
+  bool result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
+                                                          object_from_file,
+                                                          service_json_keys,
+                                                          user_stamp_keys).first;
+  if (result) {
+    for (int i = 0; i < service_json_keys.size(); ++i) {
+      qDebug() << object_from_file.value(service_json_keys[i].toString()).toVariant();
     }
+  }
 
 }
 
@@ -551,8 +550,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   QString filePath =  file_list.first();
   QFileInfo info(filePath);
   if (info.exists()) {
-      QTime time;
-      time.start();
+    QTime time;
+    time.start();
     QFile file(filePath);
     QTextStream ts(&file);
     ts.setCodec("UTF-8");
@@ -570,9 +569,9 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
         return;
       }
     }
-    if(suffix == "json"){
-        readJsonToPlot(filePath);
-        return;
+    if (suffix == "json") {
+      readJsonToPlot(filePath);
+      return;
     }
 
     QString line;
@@ -587,7 +586,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     file.close();
     if (checkDateTimeVariant(str_lines) == false) {
       readPlotText(str_lines);
-        qDebug()<<"matrix read MAKER: "<<time.elapsed();
+      qDebug() << "matrix read MAKER: " << time.elapsed();
     };
   } else {
     qDebug() << "not exist";

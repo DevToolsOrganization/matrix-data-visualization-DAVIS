@@ -18,8 +18,6 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>
-#include <QDebug>
-#include <QTime>
 namespace dvs {
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
@@ -587,9 +585,7 @@ bool get_data_from_file(const string& path,
 }
 
 bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
-    QTime time;
-    time.start();
-    outMatrix.clear();
+  outMatrix.clear();
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
   std::ifstream ifs;
   std::string str;
@@ -613,7 +609,6 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char
     std:: cout << "Unable to open file to read: " << path << std::endl;
     return false;
   }
-    qDebug()<<"read m MAKER: "<<time.elapsed();
 }
 
 vector<string> split(const string& target, char c) {
@@ -796,8 +791,6 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
 
 bool createStringHeatMapValues(const vector<vector<double>>& values,
                                string& str_values) {
-
-
   if (!checkThatSizesAreTheSame(values))
     return false;
   if (!str_values.empty())
@@ -818,7 +811,6 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
     }
   }
   str_values.append(R"(],)");
-
   return true;
 }
 
@@ -893,8 +885,6 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
                                 string& page,
                                 const dv::Config& configuration,
                                 dv::config_visualizationTypes typeVisual) {
-    QTime time;
-    time.start();
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -966,7 +956,6 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   }
 
   make_string(kHtmlModel, args, page);
-  qDebug()<<time.elapsed();
   return true;
 }
 
