@@ -1,17 +1,7 @@
-[
   {
-    "x_values": "x",
-    "y_values": "y"
-  },
-  {
-    "x_values": "waves",
-    "y_values": "ksy"
-  },
-  {
-    "x_values": "nanometers",
-    "y_values": "speyas"
-  },
-  {
-    "matrix_values": "matrix_key"
+    "x_values": ["x","x_values","waves","nanometers"],
+    "y_values": ["y","y_values","ksy","speyas"],
+     "matrix_values": ["matrix_key"]
   }
-]
+ 
+

@@ -28,10 +28,11 @@ bool saveJsonArrayToFile(const QString& path,
                          QJsonDocument::JsonFormat format);
 
 QPair<bool, QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& path,
-                                                              QJsonObject& object,
                                                               const QJsonArray& service_keys,
-                                                              const QJsonArray& user_keys
+                                                              const QJsonObject &user_stamp_keys
                                                              );
+
+QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array);
 
 } // end namespace jsn
 

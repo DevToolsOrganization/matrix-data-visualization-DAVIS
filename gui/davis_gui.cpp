@@ -173,17 +173,28 @@ void DavisGUI::hideElementsDuringResize() {
 }
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
-  QJsonObject object_from_file;
-  QJsonArray user_stamp_keys;
-  jsn::getJsonArrayFromFile(":/user_keys_list.json", user_stamp_keys);
-  bool result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
-                                                          object_from_file,
+  QJsonObject user_stamp_keys;
+  jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+  auto json_object_result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
                                                           service_json_keys,
-                                                          user_stamp_keys).first;
-  if (result) {
-    for (int i = 0; i < service_json_keys.size(); ++i) {
-      qDebug() << object_from_file.value(service_json_keys[i].toString()).toVariant();
-    }
+                                                          user_stamp_keys);
+  if (json_object_result.first) {
+     QJsonObject result_obj = json_object_result.second;
+     QJsonArray x_values = result_obj["x_values"].toArray();
+     QJsonArray y_values = result_obj["y_values"].toArray();
+     QJsonArray matrix_values = result_obj["matrix_values"].toArray();
+
+     auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
+     auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
+     if(x_vector.empty()==false&&y_vector.empty()==false){
+     dv::show(x_vector.toStdVector(),y_vector.toStdVector(),"JSON TEST");
+     }else if(x_vector.empty()==true&&y_vector.empty()==false){
+     dv::show(y_vector.toStdVector(),"JSON TEST");
+     }else if(x_vector.empty()==false&&y_vector.empty()==true){
+     dv::show(x_vector.toStdVector(),"JSON TEST");
+     }
+  }else{
+      qDebug()<<"Check JSON!";
   }
 
 }

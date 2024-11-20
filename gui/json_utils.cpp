@@ -80,49 +80,56 @@ bool saveJsonArrayToFile(const QString& path,
 }
 
 QPair<bool, QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& path,
-                                                              QJsonObject& object,
                                                               const QJsonArray& service_keys,
-                                                              const QJsonArray& user_keys) {
+                                                              const QJsonObject& user_stamp_keys) {
 
-  QJsonObject obj;
-  if (getJsonObjectFromFile(path, obj) == false) {
+  QJsonObject result_object_with_data;
+  QJsonObject user_json_from_file;
+  if (getJsonObjectFromFile(path, user_json_from_file) == false) {
+    qDebug()<<"Open User json object with data error...";
     return {false, QJsonObject()};
   };
-  QStringList keys = obj.keys();
-  qDebug() << "obj keys: " << obj.keys();
+  QStringList user_file_keys_list = user_json_from_file.keys();
+  QStringList user_stamp_keys_list = user_stamp_keys.keys();
 
-  // Check that all user keys are valid
-  for (int i = 0; i < service_keys.size(); ++i) {
-    for (int j = 0; j < user_keys.size(); ++j) {
-      QStringList user_keys_list = user_keys[j].toObject().keys();
-      if (user_keys_list[j].contains(service_keys[j].toString()) == false) {
-        qDebug() << "invalid user key in json.....";
-        return {false, QJsonObject()};
+  // Check that all user stamp keys are valid
+  for (int i = 0; i < user_stamp_keys_list.size(); ++i) {
+      QString check_key = user_stamp_keys_list[i];
+      if(service_keys.contains(QJsonValue(check_key))==false){
+          qDebug()<<"invalid key in the user stamps json"<<check_key;
+          return {false,QJsonObject()};
       }
-    }
   }
 
-  // Check that we have stamp for user json
-  QJsonObject stamp;
-  for (int i = 0; i < user_keys.size(); ++i) {
-    QStringList user_keys_list = user_keys[i].toObject().keys();
-    if (user_keys_list.size() != keys.size())
-      continue;
-    bool result = true;
-    for (int j = 0; j < user_keys_list.size(); ++j) {
-      qDebug() << user_keys_list[j] << keys[i];
-      if (user_keys_list[j].contains(keys[i]) == false) {
-        result = false;
-        break;
-      }
-    }
-    if (result) {
-      qDebug() << "OK ---- JSON POSITIVE RESULT";
-      object = obj;
-      return {true, user_keys[i].toObject()};
-    }
+  // Check that we have keys for user json
+  for(int i=0;i<service_keys.size();++i){
+      auto jarr_custom_keys = user_stamp_keys[service_keys[i].toString()].toArray();
+      for(int j=0;j<jarr_custom_keys.size();++j){
+          auto custom_key = jarr_custom_keys[j].toString();
+          if(user_json_from_file.contains(custom_key)){
+             if(user_json_from_file[custom_key].isArray()){
+             result_object_with_data.insert(service_keys[i].toString(),
+                                            user_json_from_file[custom_key]);
+             break;
+             }
+          }
+      };
   }
-  return {false, QJsonObject()};
+  if(result_object_with_data.isEmpty()){
+      return {false, result_object_with_data};
+  }else
+      return {true, result_object_with_data};
+}
+
+QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array)
+{
+    QVector<double> vector;
+        for (const QJsonValue &value : json_array) {
+            if (value.isDouble()) {
+                vector.append(value.toDouble());
+            }
+        }
+   return vector;
 }
 
 } // end jsn namespace
