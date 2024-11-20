@@ -500,18 +500,24 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
     QSequentialAnimationGroup *group = new QSequentialAnimationGroup(this);
 
     QRect originalGeometry = geometry();
-    int shakeDistance = 10; // Distance to shake
-    int duration = 50; // Duration of each shake step
+    int shakeDistance = 6; // Distance to shake
+    int duration = 70; // Duration of each shake step
 
     for (int i = 0; i < 6; ++i) {
         QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
         animation->setDuration(duration);
-        if (i % 2 == 0) {
-            animation->setStartValue(originalGeometry);
+        if (i % 4 == 0) {
+            animation->setStartValue(originalGeometry.translated(-shakeDistance, 0));
             animation->setEndValue(originalGeometry.translated(shakeDistance, 0));
-        } else {
+        } else if (i % 4 == 1){
             animation->setStartValue(originalGeometry.translated(shakeDistance, 0));
-            animation->setEndValue(originalGeometry);
+            animation->setEndValue(originalGeometry.translated(-shakeDistance, 0));
+        }else if (i % 4 == 2){
+            animation->setStartValue(originalGeometry.translated(0, -shakeDistance));
+            animation->setEndValue(originalGeometry.translated(0, shakeDistance));
+        }else if (i % 4 == 3){
+            animation->setStartValue(originalGeometry.translated(0, shakeDistance));
+            animation->setEndValue(originalGeometry.translated(0, -shakeDistance));
         }
         group->addAnimation(animation);
     }
