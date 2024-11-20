@@ -129,7 +129,31 @@ QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array)
                 vector.append(value.toDouble());
             }
         }
-   return vector;
+        return vector;
 }
+
+std::vector<std::vector<double> > getMatrixFromJsonArray(const QJsonArray& json_array)
+{
+    std::vector<std::vector<double>> matrix;
+
+        for (const QJsonValue& rowValue : json_array) {
+            if (rowValue.isArray()) {
+                QJsonArray rowArray = rowValue.toArray();
+                std::vector<double> row;
+
+                for (const QJsonValue& value : qAsConst(rowArray)) {
+                    if (value.isDouble()) {
+                        row.emplace_back(value.toDouble());
+                    }
+                }
+
+                matrix.emplace_back(row);
+            }
+        }
+
+        return matrix;
+}
+
+
 
 } // end jsn namespace

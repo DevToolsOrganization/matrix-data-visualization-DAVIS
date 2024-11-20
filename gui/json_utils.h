@@ -34,6 +34,8 @@ QPair<bool, QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& pat
 
 QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array);
 
+std::vector<std::vector<double> > getMatrixFromJsonArray(const QJsonArray& json_array);
+
 } // end namespace jsn
 
 #endif // JSON_UTILS_H

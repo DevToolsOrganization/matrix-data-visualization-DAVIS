@@ -186,12 +186,19 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
      auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
      auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
+     auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
+
+     qDebug()<<"MATRIX SIZE: "<<matrix_vector.size();
+
      if(x_vector.empty()==false&&y_vector.empty()==false){
      dv::show(x_vector.toStdVector(),y_vector.toStdVector(),"JSON TEST");
      }else if(x_vector.empty()==true&&y_vector.empty()==false){
      dv::show(y_vector.toStdVector(),"JSON TEST");
      }else if(x_vector.empty()==false&&y_vector.empty()==true){
      dv::show(x_vector.toStdVector(),"JSON TEST");
+     }
+     if(matrix_vector.empty() ==false){
+     dv::show(matrix_vector,"JSON_MATRIX_VECTOR");
      }
   }else{
       qDebug()<<"Check JSON!";
