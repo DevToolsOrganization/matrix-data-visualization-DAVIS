@@ -57,7 +57,5 @@ protected:
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
-
-
 };
 #endif // DAVISGUI_H

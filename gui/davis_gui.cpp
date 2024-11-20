@@ -72,6 +72,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(mb);
   hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
+  ui->label_text->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
 
   QString buttonStyle(
       "QPushButton {"
@@ -495,7 +496,29 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
 
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
-    qDebug()<<"drag";
+
+    QSequentialAnimationGroup *group = new QSequentialAnimationGroup(this);
+
+    QRect originalGeometry = geometry();
+    int shakeDistance = 10; // Distance to shake
+    int duration = 50; // Duration of each shake step
+
+    for (int i = 0; i < 6; ++i) {
+        QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
+        animation->setDuration(duration);
+        if (i % 2 == 0) {
+            animation->setStartValue(originalGeometry);
+            animation->setEndValue(originalGeometry.translated(shakeDistance, 0));
+        } else {
+            animation->setStartValue(originalGeometry.translated(shakeDistance, 0));
+            animation->setEndValue(originalGeometry);
+        }
+        group->addAnimation(animation);
+    }
+
+    group->start(QAbstractAnimation::DeleteWhenStopped);
+
+
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
   } else {
@@ -595,11 +618,14 @@ void DavisGUI::paintEvent(QPaintEvent* event) {
   painter.setRenderHint(QPainter::Antialiasing);
   QPainterPath path;
   path.addRoundedRect(rectangle, 5, 5);
+
   QPen dashpen;
   dashpen.setStyle(Qt::DashLine);
   dashpen.setColor(QColor(150, 150, 150));
   dashpen.setWidth(2);
   painter.setPen(dashpen);
+  painter.fillPath(path, QColor(160, 60, 60));
+  painter.drawPath(path);
   painter.fillPath(path, QColor(60, 60, 60));
   painter.drawPath(path);
   painter.end();
