@@ -28,7 +28,7 @@
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
 #include "json_utils.h"
-#include "cool_progressbar.h"
+
 
 const int ANIMATION_DURATION = 300;
 
@@ -137,7 +137,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
-  coolProgressBar* barCool = new coolProgressBar(QColor(52, 52, 52), QColor(42, 130, 218), 2500, this);
+  barCool = new coolProgressBar(QColor(52, 52, 52), QColor(42, 130, 218), 2500, this);
   barCool->setGeometry(70, 220, 270, 2);
   this->layout()->addWidget(barCool);
   connect(this, &DavisGUI::showProgressBar, barCool, &coolProgressBar::startAnimation);
@@ -156,6 +156,7 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
+  //emit showProgressBar();
 }
 
 DavisGUI::~DavisGUI() {
@@ -174,6 +175,7 @@ void DavisGUI::hideElementsDuringResize() {
   ui->label_text->setVisible(false);
   qpbBuffer->setVisible(false);
   qpbOpen->setVisible(false);
+  barCool->setVisible(false);
   update();
 }
 
@@ -207,6 +209,9 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
     ui->label_arrow->setGeometry(170, 90, 50, 50);
     ui->label_graph->setGeometry(210, 70, 81, 81);
     ui->label_text->setGeometry(0, 230, 391, 111);
+    //barCool->setGeometry(70, 220, 270, 2);
+    barCool->setGeometry(97, 155, 187, 2);
+    //barCool->setVisible(true); // important after barCool->setGeometry, not vice versa
     update();
   });
 
@@ -242,6 +247,8 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
     ui->label_doc->setGeometry(30, 60, 41, 41);
     ui->label_arrow->setGeometry(60, 60, 41, 41);
     ui->label_graph->setGeometry(90, 60, 41, 41);
+    barCool->setGeometry(35, 105, 90, 2);
+    //barCool->setVisible(true);
     update();
   });
   QParallelAnimationGroup* group = new QParallelAnimationGroup;

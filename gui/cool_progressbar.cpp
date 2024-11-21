@@ -62,6 +62,8 @@ void coolProgressBar::paintEvent(QPaintEvent* event) {
 }
 
 void coolProgressBar::showEvent(QShowEvent* event) {
+    qDebug()<<width();
   m_movingSquare->setGeometry(0, 0, width() / 2, height());
+  qDebug()<<"blue - "<<m_movingSquare->geometry();
 }
 

@@ -5,6 +5,7 @@
 #include "about_window.h"
 #include "QAction"
 #include "animated_button.h"
+#include "cool_progressbar.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -57,5 +58,6 @@ class DavisGUI : public QMainWindow {
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
+  coolProgressBar* barCool;
 };
 #endif // DAVISGUI_H
