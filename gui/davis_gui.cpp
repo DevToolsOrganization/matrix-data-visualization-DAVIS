@@ -36,9 +36,9 @@ const int ANIMATION_DURATION = 300;
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI) {
+  ui->setupUi(this);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
-  ui->setupUi(this);
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
   QMenuBar* mb = new QMenuBar;
@@ -156,7 +156,6 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
-  //emit showProgressBar();
 }
 
 DavisGUI::~DavisGUI() {
@@ -209,9 +208,7 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
     ui->label_arrow->setGeometry(170, 90, 50, 50);
     ui->label_graph->setGeometry(210, 70, 81, 81);
     ui->label_text->setGeometry(0, 230, 391, 111);
-    //barCool->setGeometry(70, 220, 270, 2);
     barCool->setGeometry(97, 155, 187, 2);
-    //barCool->setVisible(true); // important after barCool->setGeometry, not vice versa
     update();
   });
 
@@ -248,7 +245,6 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
     ui->label_arrow->setGeometry(60, 60, 41, 41);
     ui->label_graph->setGeometry(90, 60, 41, 41);
     barCool->setGeometry(35, 105, 90, 2);
-    //barCool->setVisible(true);
     update();
   });
   QParallelAnimationGroup* group = new QParallelAnimationGroup;
