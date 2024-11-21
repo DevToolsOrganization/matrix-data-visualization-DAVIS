@@ -183,7 +183,9 @@ void DavisGUI::hideElementsDuringResize() {
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
+  if(jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys)==false){
   jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+  }
   auto json_object_result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
                                                           service_json_keys,
                                                           user_stamp_keys);
