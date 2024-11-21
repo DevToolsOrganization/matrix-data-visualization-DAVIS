@@ -287,6 +287,11 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
     std::vector<double>values;
     auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
     //qDebug() << "sep result: " << separator << "--->" << res;
+
+    if(dvs::MORE_THAN_ONE_SEPARATOR==res)continue;
+    if(dvs::MABE_COMMA_MABE_DOT==res)continue;
+    if(dvs::UNDEFINED_BEHAVIOR==res)continue;
+
     bool is_one_value = false;
     std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
     if (res != dvs::GOOD_SEPARATOR) {
@@ -307,7 +312,9 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
     } else {
       values.emplace_back(std::stod(str_lines[i].toStdString()));
     }
+    if(values.empty()==false){
     data.emplace_back(values);
+    }
   }
 
   if (data.empty()) {
