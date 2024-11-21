@@ -5,6 +5,7 @@
 #include "about_window.h"
 #include "QAction"
 #include "animated_button.h"
+#include "cool_progressbar.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
@@ -13,10 +14,22 @@ QT_END_NAMESPACE
 class DavisGUI : public QMainWindow {
   Q_OBJECT
 
+ signals:
+  void showProgressBar();
+  void hideProgressBar();
+
  public:
   DavisGUI(QWidget* parent = nullptr);
   ~DavisGUI();
   void show();
+
+ protected:
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
+  void paintEvent(QPaintEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
 
  private:
   void setMaxStyleWindow(int animDuration);
@@ -45,15 +58,6 @@ class DavisGUI : public QMainWindow {
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
-
-
-  // QWidget interface
- protected:
-  void dragEnterEvent(QDragEnterEvent* event) override;
-  void dropEvent(QDropEvent* event) override;
-  void paintEvent(QPaintEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void keyPressEvent(QKeyEvent* event) override;
+  coolProgressBar* barCool;
 };
 #endif // DAVISGUI_H

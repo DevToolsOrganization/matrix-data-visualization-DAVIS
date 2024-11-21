@@ -49,6 +49,8 @@ set(PROJECT_SOURCES
         about_window.ui
         json_utils.h
         json_utils.cpp
+        cool_progressbar.h
+        cool_progressbar.cpp
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)

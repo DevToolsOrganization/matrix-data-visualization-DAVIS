@@ -24,6 +24,9 @@
 #include <QJsonArray>
 #include "QDateTime"
 #include <QProcess>
+#include <QProgressBar>
+#include <QTimer>
+#include <QtConcurrent/QtConcurrent>
 #include "json_utils.h"
 
 
@@ -33,9 +36,9 @@ const int ANIMATION_DURATION = 300;
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
   , ui(new Ui::DavisGUI) {
+  ui->setupUi(this);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
-  ui->setupUi(this);
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
   QMenuBar* mb = new QMenuBar;
@@ -69,6 +72,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(mb);
   hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
+  ui->label_text->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
 
   QString buttonStyle(
       "QPushButton {"
@@ -133,11 +137,15 @@ DavisGUI::DavisGUI(QWidget* parent)
   hbl->addWidget(qpbExit);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
+  barCool = new coolProgressBar(QColor(52, 52, 52), QColor(42, 130, 218), 2500, this);
+  barCool->setGeometry(70, 220, 270, 2);
+  this->layout()->addWidget(barCool);
+  connect(this, &DavisGUI::showProgressBar, barCool, &coolProgressBar::startAnimation);
+  connect(this, &DavisGUI::hideProgressBar, barCool, &coolProgressBar::stopAnimation);
 
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
   qpbOpen->setGeometry(70, 180, 90, 30);
   qpbOpen->setOriginalGeometry(qpbOpen->geometry());
-
 
   qpbBuffer = new AnimatedButton("Copy from buffer or Ctrl+V",
                                  QColor(120, 120, 120),
@@ -166,6 +174,7 @@ void DavisGUI::hideElementsDuringResize() {
   ui->label_text->setVisible(false);
   qpbBuffer->setVisible(false);
   qpbOpen->setVisible(false);
+  barCool->setVisible(false);
   update();
 }
 
@@ -199,6 +208,7 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
     ui->label_arrow->setGeometry(170, 90, 50, 50);
     ui->label_graph->setGeometry(210, 70, 81, 81);
     ui->label_text->setGeometry(0, 230, 391, 111);
+    barCool->setGeometry(97, 155, 187, 2);
     update();
   });
 
@@ -234,6 +244,7 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
     ui->label_doc->setGeometry(30, 60, 41, 41);
     ui->label_arrow->setGeometry(60, 60, 41, 41);
     ui->label_graph->setGeometry(90, 60, 41, 41);
+    barCool->setGeometry(35, 105, 90, 2);
     update();
   });
   QParallelAnimationGroup* group = new QParallelAnimationGroup;
@@ -253,16 +264,20 @@ void DavisGUI::showAboutWindow() {
 }
 
 void DavisGUI::pasteFromClipboard() {
-  QClipboard* clipboard = QApplication::clipboard();
-  QString clipboardText = clipboard->text();
-  qDebug() << clipboardText;
-  QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
-  if (checkDateTimeVariant(lines) == false) {
-    readPlotText(lines);
+  auto lambdaFunction =  [this]() {
+    emit showProgressBar();
+    QClipboard* clipboard = QApplication::clipboard();
+    QString clipboardText = clipboard->text();
+    QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
+    if (checkDateTimeVariant(lines) == false) {
+      readPlotText(lines);
+    };
   };
+  QFuture<void> future = QtConcurrent::run(lambdaFunction);
+  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  watcher->setFuture(future);
 }
-
-
 
 void DavisGUI::readPlotText(QStringList& str_lines) {
   std::vector<double>lines;
@@ -381,14 +396,16 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
 }
 void DavisGUI::selectAndShowFiles() {
-  QApplication::processEvents();
+
   QStringList fileNames = QFileDialog::getOpenFileNames(this,
                                                         QObject::tr("Open Files"),
                                                         "",
                                                         QObject::tr("All Files (*)"));
-
-  visualizeFiles(fileNames);
-
+  emit showProgressBar();
+  QFuture<void> future = QtConcurrent::run(this, &DavisGUI::visualizeFiles, fileNames);
+  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  watcher->setFuture(future);
 }
 
 bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
@@ -482,6 +499,35 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
 
 
 void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
+
+  QSequentialAnimationGroup* group = new QSequentialAnimationGroup(this);
+
+  QRect originalGeometry = geometry();
+  int shakeDistance = 6; // Distance to shake
+  int duration = 70; // Duration of each shake step
+
+  for (int i = 0; i < 6; ++i) {
+    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(duration);
+    if (i % 4 == 0) {
+      animation->setStartValue(originalGeometry.translated(-shakeDistance, 0));
+      animation->setEndValue(originalGeometry.translated(shakeDistance, 0));
+    } else if (i % 4 == 1) {
+      animation->setStartValue(originalGeometry.translated(shakeDistance, 0));
+      animation->setEndValue(originalGeometry.translated(-shakeDistance, 0));
+    } else if (i % 4 == 2) {
+      animation->setStartValue(originalGeometry.translated(0, -shakeDistance));
+      animation->setEndValue(originalGeometry.translated(0, shakeDistance));
+    } else if (i % 4 == 3) {
+      animation->setStartValue(originalGeometry.translated(0, shakeDistance));
+      animation->setEndValue(originalGeometry.translated(0, -shakeDistance));
+    }
+    group->addAnimation(animation);
+  }
+
+  group->start(QAbstractAnimation::DeleteWhenStopped);
+
+
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
   } else {
@@ -491,12 +537,17 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 
 
 void DavisGUI::dropEvent(QDropEvent* event) {
+  emit showProgressBar();
   QList<QUrl> file_list_urls = event->mimeData()->urls();
   QStringList file_list;
   for (int i = 0; i < file_list_urls.size(); ++i) {
     file_list.append(file_list_urls[i].toLocalFile());
   }
-  visualizeFiles(file_list);
+
+  QFuture<void> future = QtConcurrent::run(this, &DavisGUI::visualizeFiles, file_list);
+  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  watcher->setFuture(future);
 }
 
 void DavisGUI::visualizeFiles(const QStringList& file_list) {
@@ -576,11 +627,14 @@ void DavisGUI::paintEvent(QPaintEvent* event) {
   painter.setRenderHint(QPainter::Antialiasing);
   QPainterPath path;
   path.addRoundedRect(rectangle, 5, 5);
+
   QPen dashpen;
   dashpen.setStyle(Qt::DashLine);
   dashpen.setColor(QColor(150, 150, 150));
   dashpen.setWidth(2);
   painter.setPen(dashpen);
+  painter.fillPath(path, QColor(160, 60, 60));
+  painter.drawPath(path);
   painter.fillPath(path, QColor(60, 60, 60));
   painter.drawPath(path);
   painter.end();
