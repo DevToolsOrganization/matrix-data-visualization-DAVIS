@@ -368,11 +368,11 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
       dv::Config config;
-      config.chart.title = title.toStdString();
+      config.heatmap.title = title.toStdString();
       dv::show(data,title.toStdString(),config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
-      config.chart.title = title.toStdString();
+      config.surf.title = title.toStdString();
       config.typeVisual = dv::VISUALTYPE_SURFACE;
       dv::show(data, title.toStdString(), config);
     }
