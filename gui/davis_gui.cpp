@@ -318,7 +318,7 @@ void DavisGUI::pasteFromClipboard() {
   watcher->setFuture(future);
 }
 
-void DavisGUI::readPlotText(QStringList& str_lines) {
+void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
   std::vector<double>lines;
   std::vector<std::vector<double>> data;
   char separator;
@@ -355,14 +355,19 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
   }
 
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
-    dv::show(data, "chartXY");
+    dv::Config config;
+    config.chart.title = title.toStdString();
+    dv::show(data, title.toStdString(),config);
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
-      dv::show(data);
+      dv::Config config;
+      config.chart.title = title.toStdString();
+      dv::show(data,title.toStdString(),config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
+      config.chart.title = title.toStdString();
       config.typeVisual = dv::VISUALTYPE_SURFACE;
-      dv::show(data, "surface", config);
+      dv::show(data, title.toStdString(), config);
     }
   } else {
     std::vector<double> showVector;
@@ -377,7 +382,8 @@ void DavisGUI::readPlotText(QStringList& str_lines) {
     }
     dv::Config config;
     config.typeVisual = dv::VISUALTYPE_CHART;
-    dv::show(showVector, "chart", config);
+    config.chart.title = title.toStdString();
+    dv::show(showVector, title.toStdString(), config);
   }
 }
 
@@ -656,7 +662,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     }
     file.close();
     if (checkDateTimeVariant(str_lines) == false) {
-      readPlotText(str_lines);
+      readPlotText(str_lines,info.baseName());
       qDebug() << "matrix read MAKER: " << time.elapsed();
     };
   } else {

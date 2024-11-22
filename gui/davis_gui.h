@@ -35,7 +35,7 @@ class DavisGUI : public QMainWindow {
  private:
   void setMaxStyleWindow(int animDuration);
   void setMinStyleWindow(int animDuration);
-  void readPlotText(QStringList& str_lines);
+  void readPlotText(QStringList& str_lines, QString title = "");
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
