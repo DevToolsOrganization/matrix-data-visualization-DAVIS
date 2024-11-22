@@ -395,7 +395,8 @@ extern const char kHtmlMultiChartBlock[] = R"davis_delimeter(
 var trace%1 = {
   x: [%2],
   y: [%3],
-  type: 'scatter'
+  type: 'scatter',
+  name: '%4'
 };
 )davis_delimeter";
 

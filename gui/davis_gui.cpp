@@ -183,36 +183,36 @@ void DavisGUI::hideElementsDuringResize() {
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
-  if(jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys)==false){
-  jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+  if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
+    jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
   }
   auto json_object_result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
-                                                          service_json_keys,
-                                                          user_stamp_keys);
+                                                                      service_json_keys,
+                                                                      user_stamp_keys);
   if (json_object_result.first) {
-     QJsonObject result_obj = json_object_result.second;
-     QJsonArray x_values = result_obj["x_values"].toArray();
-     QJsonArray y_values = result_obj["y_values"].toArray();
-     QJsonArray matrix_values = result_obj["matrix_values"].toArray();
+    QJsonObject result_obj = json_object_result.second;
+    QJsonArray x_values = result_obj["x_values"].toArray();
+    QJsonArray y_values = result_obj["y_values"].toArray();
+    QJsonArray matrix_values = result_obj["matrix_values"].toArray();
 
-     auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
-     auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
-     auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
+    auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
+    auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
+    auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
 
-     qDebug()<<"MATRIX SIZE: "<<matrix_vector.size();
+    qDebug() << "MATRIX SIZE: " << matrix_vector.size();
 
-     if(x_vector.empty()==false&&y_vector.empty()==false){
-     dv::show(x_vector.toStdVector(),y_vector.toStdVector(),"JSON TEST");
-     }else if(x_vector.empty()==true&&y_vector.empty()==false){
-     dv::show(y_vector.toStdVector(),"JSON TEST");
-     }else if(x_vector.empty()==false&&y_vector.empty()==true){
-     dv::show(x_vector.toStdVector(),"JSON TEST");
-     }
-     if(matrix_vector.empty() ==false){
-     dv::show(matrix_vector,"JSON_MATRIX_VECTOR");
-     }
-  }else{
-      qDebug()<<"Check JSON!";
+    if (x_vector.empty() == false && y_vector.empty() == false) {
+      dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST");
+    } else if (x_vector.empty() == true && y_vector.empty() == false) {
+      dv::show(y_vector.toStdVector(), "JSON TEST");
+    } else if (x_vector.empty() == false && y_vector.empty() == true) {
+      dv::show(x_vector.toStdVector(), "JSON TEST");
+    }
+    if (matrix_vector.empty() == false) {
+      dv::show(matrix_vector, "JSON_MATRIX_VECTOR");
+    }
+  } else {
+    qDebug() << "Check JSON!";
   }
 
 }
@@ -327,9 +327,12 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
     auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
     //qDebug() << "sep result: " << separator << "--->" << res;
 
-    if(dvs::MORE_THAN_ONE_SEPARATOR==res)continue;
-    if(dvs::MABE_COMMA_MABE_DOT==res)continue;
-    if(dvs::UNDEFINED_BEHAVIOR==res)continue;
+    if (dvs::MORE_THAN_ONE_SEPARATOR == res)
+      continue;
+    if (dvs::MABE_COMMA_MABE_DOT == res)
+      continue;
+    if (dvs::UNDEFINED_BEHAVIOR == res)
+      continue;
 
     bool is_one_value = false;
     std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
@@ -351,8 +354,8 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
     } else {
       values.emplace_back(std::stod(str_lines[i].toStdString()));
     }
-    if(values.empty()==false){
-    data.emplace_back(values);
+    if (values.empty() == false) {
+      data.emplace_back(values);
     }
   }
 
@@ -364,12 +367,12 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
     dv::Config config;
     config.chart.title = title.toStdString();
-    dv::show(data, title.toStdString(),config);
+    dv::show(data, title.toStdString(), config);
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
       dv::Config config;
       config.heatmap.title = title.toStdString();
-      dv::show(data,title.toStdString(),config);
+      dv::show(data, title.toStdString(), config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
       config.surf.title = title.toStdString();
@@ -617,7 +620,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       QString trace_block = dvs::kHtmlMultiChartBlock;
       if (isFileContainsSingleChart(file_list[i], outX, outY)) {
         //qDebug()<<file_list[i].toLocalFile();
-        all_chart_blocks.append(trace_block.arg(QString::number(i + 1), outX, outY));
+        QFileInfo fi(file_list[i]);
+        all_chart_blocks.append(trace_block.arg(QString::number(i + 1), outX, outY, fi.baseName()));
         all_traces_names.append(QString(trace_name).arg(i + 1));
         if (i < file_list.size() - 1) {
           all_traces_names.append(",");
@@ -669,7 +673,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     }
     file.close();
     if (checkDateTimeVariant(str_lines) == false) {
-      readPlotText(str_lines,info.baseName());
+      readPlotText(str_lines, info.baseName());
       qDebug() << "matrix read MAKER: " << time.elapsed();
     };
   } else {
