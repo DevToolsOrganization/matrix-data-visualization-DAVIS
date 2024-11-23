@@ -11,7 +11,7 @@
 void applyDark() {
   qApp->setStyle(QStyleFactory::create("Fusion"));
   QPalette darkPalette;
-  QColor gray(230, 230, 230);
+  QColor gray = QColor(230, 230, 230);
   darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
   darkPalette.setColor(QPalette::WindowText, gray);
   darkPalette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
