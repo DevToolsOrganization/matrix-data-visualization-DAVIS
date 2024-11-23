@@ -5,6 +5,7 @@
 #include "about_window.h"
 #include "QAction"
 #include "animated_button.h"
+#include "QJsonArray"
 #include "cool_progressbar.h"
 
 QT_BEGIN_NAMESPACE
@@ -34,7 +35,7 @@ class DavisGUI : public QMainWindow {
  private:
   void setMaxStyleWindow(int animDuration);
   void setMinStyleWindow(int animDuration);
-  void readPlotText(QStringList& str_lines);
+  void readPlotText(QStringList& str_lines, QString title = "");
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
@@ -42,6 +43,7 @@ class DavisGUI : public QMainWindow {
                                  QString& outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
+  void readJsonToPlot(const QString& pathToFile);
 
  private slots:
   void showAboutWindow();
@@ -58,6 +60,8 @@ class DavisGUI : public QMainWindow {
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
+  QJsonArray service_json_keys;
   coolProgressBar* barCool;
+
 };
 #endif // DAVISGUI_H
