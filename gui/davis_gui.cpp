@@ -4,26 +4,24 @@
 #include "../davis_one/davis.h"
 
 #include <QApplication>
-#include "QDragEnterEvent"
-#include "QMimeData"
-#include "QDebug"
-#include "QFileInfo"
-#include "QPainter"
-#include "QMenuBar"
-#include "QHBoxLayout"
-#include "QPushButton"
-#include "QPainterPath"
-#include "QFileDialog"
-#include "QTextStream"
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDebug>
+#include <QFileInfo>
+#include <QPainter>
+#include <QMenuBar>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QPainterPath>
+#include <QFileDialog>
+#include <QTextStream>
 #include <QClipboard>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QStateMachine>
 #include <QSignalTransition>
-#include <QJsonArray>
-#include "QDateTime"
+#include <QDateTime>
 #include <QProcess>
-#include <QJsonObject>
 #include <QProgressBar>
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
@@ -31,9 +29,7 @@
 #include "json_utils.h"
 
 
-
 const int ANIMATION_DURATION = 300;
-
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -160,17 +156,9 @@ DavisGUI::DavisGUI(QWidget* parent)
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
 
-
-// Загрузка настроек
   settingsFilePath = "settings.json";
   QJsonObject settings = loadSettings(settingsFilePath);
-
-  // Применение настроек
-
   applySettings(settings);
-
-
-
 }
 
 DavisGUI::~DavisGUI() {
@@ -199,43 +187,35 @@ void DavisGUI::saveSettings(const QString& fileName) {
   settings["windowPosY"] = pos().y();
   settings["isMinStyleWindow"] = m_isMinStyleWindow;
 
-  QJsonDocument doc(settings);
-  QFile file(fileName);
-  if (!file.open(QIODevice::WriteOnly)) {
-    qWarning("Couldn't open save file.");
-    return;
+  bool isSaved = jsn::saveJsonObjectToFile(fileName, settings);
+  if (!isSaved) {
+    qWarning("Couldn't save settings file.");
   }
-  file.write(doc.toJson());
+  return;
 }
 
 QJsonObject DavisGUI::loadSettings(const QString& fileName) {
-  QFile file(fileName);
-  if (!file.open(QIODevice::ReadOnly)) {
-    qWarning("Couldn't open save file.");
-    QScreen *screen = QGuiApplication::primaryScreen();
+  QJsonObject settings;
+  bool isOpen = jsn::getJsonObjectFromFile(fileName, settings);
+  if (!isOpen) {
+    QScreen* screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     int x = (screenGeometry.width() - width()) / 2;
     int y = (screenGeometry.height() - height()) / 2;
-    QJsonObject settings;
     settings["windowPosX"] = x;
     settings["windowPosY"] = y;
-    settings["isMinStyleWindow"] = false;
-    return settings;
+    settings["isMinStyleWindow"] = false;;
   }
-  QByteArray saveData = file.readAll();
-  QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
-  return loadDoc.object();
+  return settings;
 }
 
 void DavisGUI::applySettings(const QJsonObject& settings) {
-
   m_isMinStyleWindow = settings["isMinStyleWindow"].toBool();
-  qDebug() << m_isMinStyleWindow;
-  if (m_isMinStyleWindow)
+  if (m_isMinStyleWindow) {
     setMinStyleWindow(0);
-  else
+  } else {
     setMaxStyleWindow(0);
-  update();
+  }
   int x = settings["windowPosX"].toInt();
   int y = settings["windowPosY"].toInt();
   move(x, y);

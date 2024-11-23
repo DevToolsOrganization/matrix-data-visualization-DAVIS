@@ -47,7 +47,6 @@ class DavisGUI : public QMainWindow {
   void saveSettings(const QString& fileName);
   QJsonObject loadSettings(const QString& fileName);
   void applySettings(const QJsonObject& settings);
-
   void readJsonToPlot(const QString& pathToFile);
 
  private slots:
