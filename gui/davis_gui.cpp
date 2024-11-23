@@ -143,14 +143,14 @@ DavisGUI::DavisGUI(QWidget* parent)
   connect(this, &DavisGUI::hideProgressBar, barCool, &coolProgressBar::stopAnimation);
 
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
-  qpbOpen->setGeometry(70, 180, 90, 30);
+  qpbOpen->setGeometry(65, 180, 90, 30);
   qpbOpen->setOriginalGeometry(qpbOpen->geometry());
 
   qpbBuffer = new AnimatedButton("Copy from buffer or Ctrl+V",
                                  QColor(120, 120, 120),
                                  QColor(42, 130, 218),
                                  this);
-  qpbBuffer->setGeometry(170, 180, 170, 30);
+  qpbBuffer->setGeometry(165, 180, 170, 30);
   qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
