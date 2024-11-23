@@ -229,6 +229,8 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
   int x = settings["windowPosX"].toInt();
   int y = settings["windowPosY"].toInt();
   move(x, y);
+}
+
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
   if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
