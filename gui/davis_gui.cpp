@@ -27,6 +27,7 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
+#include <QScreen>
 #include "json_utils.h"
 
 
@@ -163,6 +164,7 @@ DavisGUI::DavisGUI(QWidget* parent)
 // Загрузка настроек
   settingsFilePath = "settings.json";
   QJsonObject settings = loadSettings(settingsFilePath);
+
   // Применение настроек
 
   applySettings(settings);
@@ -210,7 +212,15 @@ QJsonObject DavisGUI::loadSettings(const QString& fileName) {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
     qWarning("Couldn't open save file.");
-    return QJsonObject();
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int x = (screenGeometry.width() - width()) / 2;
+    int y = (screenGeometry.height() - height()) / 2;
+    QJsonObject settings;
+    settings["windowPosX"] = x;
+    settings["windowPosY"] = y;
+    settings["isMinStyleWindow"] = false;
+    return settings;
   }
   QByteArray saveData = file.readAll();
   QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
