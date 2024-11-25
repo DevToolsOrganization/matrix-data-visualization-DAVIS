@@ -1,1 +1,2 @@
-IDI_ICON1 ICON DISCARDABLE "res/davis.ico".
+IDI_ICON1 ICON "res/icon/davis32x32.ico"
+IDI_ICON2 ICON "res/icon/davis256x256.ico".
