@@ -51,10 +51,11 @@ set(PROJECT_SOURCES
         json_utils.cpp
         cool_progressbar.h
         cool_progressbar.cpp
+        davis.rc
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)
-
+set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/davis.rc")
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(gui
 

@@ -4,36 +4,32 @@
 #include "../davis_one/davis.h"
 
 #include <QApplication>
-#include "QDragEnterEvent"
-#include "QMimeData"
-#include "QDebug"
-#include "QFileInfo"
-#include "QPainter"
-#include "QMenuBar"
-#include "QHBoxLayout"
-#include "QPushButton"
-#include "QPainterPath"
-#include "QFileDialog"
-#include "QTextStream"
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDebug>
+#include <QFileInfo>
+#include <QPainter>
+#include <QMenuBar>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QPainterPath>
+#include <QFileDialog>
+#include <QTextStream>
 #include <QClipboard>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QStateMachine>
 #include <QSignalTransition>
-#include <QGraphicsColorizeEffect>
-#include <QJsonArray>
-#include "QDateTime"
+#include <QDateTime>
 #include <QProcess>
-#include <QJsonObject>
 #include <QProgressBar>
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
+#include <QScreen>
 #include "json_utils.h"
 
 
-
 const int ANIMATION_DURATION = 300;
-
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -147,27 +143,31 @@ DavisGUI::DavisGUI(QWidget* parent)
   connect(this, &DavisGUI::hideProgressBar, barCool, &coolProgressBar::stopAnimation);
 
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
-  qpbOpen->setGeometry(70, 180, 90, 30);
+  qpbOpen->setGeometry(65, 180, 90, 30);
   qpbOpen->setOriginalGeometry(qpbOpen->geometry());
 
   qpbBuffer = new AnimatedButton("Copy from buffer or Ctrl+V",
                                  QColor(120, 120, 120),
                                  QColor(42, 130, 218),
                                  this);
-  qpbBuffer->setGeometry(170, 180, 170, 30);
+  qpbBuffer->setGeometry(165, 180, 170, 30);
   qpbBuffer->setOriginalGeometry(qpbBuffer->geometry());
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
+
+  settingsFilePath = "settings.json";
+  QJsonObject settings = loadSettings(settingsFilePath);
+  applySettings(settings);
 }
 
 DavisGUI::~DavisGUI() {
+  saveSettings(settingsFilePath);
   delete ui;
 }
 
 void DavisGUI::show() {
   QMainWindow::show();
-  setMaxStyleWindow(0);
 }
 
 void DavisGUI::hideElementsDuringResize() {
@@ -179,6 +179,46 @@ void DavisGUI::hideElementsDuringResize() {
   qpbOpen->setVisible(false);
   barCool->setVisible(false);
   update();
+}
+
+void DavisGUI::saveSettings(const QString& fileName) {
+  QJsonObject settings;
+  settings["windowPosX"] = pos().x();
+  settings["windowPosY"] = pos().y();
+  settings["isMinStyleWindow"] = m_isMinStyleWindow;
+
+  bool isSaved = jsn::saveJsonObjectToFile(fileName, settings);
+  if (!isSaved) {
+    qWarning("Couldn't save settings file.");
+  }
+  return;
+}
+
+QJsonObject DavisGUI::loadSettings(const QString& fileName) {
+  QJsonObject settings;
+  bool isOpen = jsn::getJsonObjectFromFile(fileName, settings);
+  if (!isOpen) {
+    QScreen* screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int x = (screenGeometry.width() - width()) / 2;
+    int y = (screenGeometry.height() - height()) / 2;
+    settings["windowPosX"] = x;
+    settings["windowPosY"] = y;
+    settings["isMinStyleWindow"] = false;;
+  }
+  return settings;
+}
+
+void DavisGUI::applySettings(const QJsonObject& settings) {
+  m_isMinStyleWindow = settings["isMinStyleWindow"].toBool();
+  if (m_isMinStyleWindow) {
+    setMinStyleWindow(0);
+  } else {
+    setMaxStyleWindow(0);
+  }
+  int x = settings["windowPosX"].toInt();
+  int y = settings["windowPosY"].toInt();
+  move(x, y);
 }
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {

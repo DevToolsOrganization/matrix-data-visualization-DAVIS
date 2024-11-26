@@ -5,8 +5,8 @@
 #include "QDebug"
 #include "QUrl"
 #include "QStyleFactory"
-
 #include <QApplication>
+
 
 void applyDark() {
   qApp->setStyle(QStyleFactory::create("Fusion"));

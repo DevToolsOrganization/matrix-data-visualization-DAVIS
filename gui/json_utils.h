@@ -21,11 +21,11 @@ bool getJsonArrayFromFile(const QString& path,
 
 bool saveJsonObjectToFile(const QString& path,
                           const QJsonObject& json_object,
-                          QJsonDocument::JsonFormat format);
+                          QJsonDocument::JsonFormat format = QJsonDocument::Indented);
 
 bool saveJsonArrayToFile(const QString& path,
                          const QJsonArray& json_object,
-                         QJsonDocument::JsonFormat format);
+                         QJsonDocument::JsonFormat format = QJsonDocument::Indented);
 
 QPair<bool, QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& path,
                                                               const QJsonArray& service_keys,
