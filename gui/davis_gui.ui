@@ -166,6 +166,28 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="label_gif">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>400</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(100, 100, 255) ;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label_gif</zorder>
+   <zorder>label_text</zorder>
+   <zorder>label_doc</zorder>
+   <zorder>label_graph</zorder>
+   <zorder>label_arrow</zorder>
+   <zorder>frame_panel</zorder>
   </widget>
  </widget>
  <resources>

@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
 #include <QScreen>
+#include <QMovie>
 #include "json_utils.h"
 
 
@@ -105,10 +106,14 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbMinMaxSize->setToolTip("Full/compact size");
   connect(qpbMinMaxSize, &QPushButton::clicked, [this]() {
     m_isMinStyleWindow = !m_isMinStyleWindow;
-    if (m_isMinStyleWindow)
+    if (m_isMinStyleWindow){
       setMinStyleWindow(ANIMATION_DURATION);
-    else
+      setMinStyleWindowNewYear(ANIMATION_DURATION);
+    }
+    else{
       setMaxStyleWindow(ANIMATION_DURATION);
+      setMaxStyleWindowNewYear(ANIMATION_DURATION);
+    }
   });
   qpbMinMaxSize->setFixedSize(QSize(25, 25));
   qpbMinMaxSize->setText("◰");
@@ -162,6 +167,20 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
+
+
+
+
+
+      QString fileGifPath = ":/res/newYear.gif";
+      QMovie *movie = new QMovie(fileGifPath);
+      ui->label_gif->setMovie(movie);
+      ui->label_gif->setScaledContents(true);
+      movie->start();
+      ui->label_gif->setGeometry(0, 30, 400, 400);
+
+
+
 
   settingsFilePath = "settings.json";
   QJsonObject settings = loadSettings(settingsFilePath);
@@ -304,6 +323,52 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
   group->start();
 }
 
+void DavisGUI::setMaxStyleWindowNewYear(int animDuration)
+{
+    m_isMinStyleWindow = false;
+    hideElementsDuringResize();
+    QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+    animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
+    animationFrame->setDuration(animDuration);
+    animationFrame->setStartValue(ui->frame_panel->geometry());
+    animationFrame->setEndValue(QRect(0, 0, 397, 25));
+    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(animDuration);
+    animation->setEasingCurve(QEasingCurve::InOutQuad);
+    animation->setStartValue(this->geometry());
+    int xOld = this->geometry().x();
+    int yOld = this->geometry().y();
+    int newWidth = 397;
+    int newHeight = 370;
+    int deltaW = newWidth - this->geometry().width();
+    animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
+    connect(animation, &QPropertyAnimation::finished, this, [this, newWidth]() {
+      ui->label_doc->setVisible(false);
+      ui->label_arrow->setVisible(false);
+      ui->label_graph->setVisible(false);
+      ui->label_text->setVisible(false);
+      ui->frame_panel->setVisible(true);
+      qpbBuffer->setVisible(true);
+      qpbOpen->setVisible(true);
+      ui->label_doc->setGeometry(90, 60, 91, 91);
+      ui->label_arrow->setGeometry(170, 90, 50, 50);
+      ui->label_graph->setGeometry(210, 70, 81, 81);
+      ui->label_text->setGeometry(0, 230, 391, 111);
+      barCool->setGeometry(97, 155, 187, 2);
+      ui->label_gif->setGeometry(0, 30, newWidth, newWidth);
+
+      qpbOpen->setGeometry(65, 300, 90, 30);
+      qpbBuffer->setGeometry(165, 300, 170, 30);
+
+      update();
+    });
+
+    QParallelAnimationGroup* group = new QParallelAnimationGroup;
+    group->addAnimation(animation);
+    group->addAnimation(animationFrame);
+    group->start();
+}
+
 void DavisGUI::setMinStyleWindow(int animDuration) {
   m_isMinStyleWindow = true;
   hideElementsDuringResize();
@@ -325,7 +390,7 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   animationFrame->setStartValue(ui->frame_panel->geometry());
   animationFrame->setEndValue(QRect(0, 0, newWidth, 25));
 
-  connect(animation, &QPropertyAnimation::finished, this, [this]() {
+  connect(animation, &QPropertyAnimation::finished, this, [this, newWidth]() {
     ui->label_doc->setVisible(true);
     ui->label_arrow->setVisible(true);
     ui->label_graph->setVisible(true);
@@ -340,6 +405,46 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   group->addAnimation(animation);
   group->addAnimation(animationFrame);
   group->start();
+}
+
+void DavisGUI::setMinStyleWindowNewYear(int animDuration)
+{
+    m_isMinStyleWindow = true;
+    hideElementsDuringResize();
+
+    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(animDuration);
+    animation->setEasingCurve(QEasingCurve::InOutQuad);
+    animation->setStartValue(this->geometry());
+    int xOld = this->geometry().x();
+    int yOld = this->geometry().y();
+    int newWidth = 179;
+    int newHeight = 137;
+    int deltaW = newWidth - this->geometry().width();
+    animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
+
+    QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+    animationFrame->setDuration(animDuration);
+    animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
+    animationFrame->setStartValue(ui->frame_panel->geometry());
+    animationFrame->setEndValue(QRect(0, 0, newWidth, 25));
+
+    connect(animation, &QPropertyAnimation::finished, this, [this, newWidth]() {
+      ui->label_doc->setVisible(false);
+      ui->label_arrow->setVisible(false);
+      ui->label_graph->setVisible(false);
+      ui->frame_panel->setVisible(true);
+      ui->label_doc->setGeometry(40, 60, 41, 41);
+      ui->label_arrow->setGeometry(70, 60, 41, 41);
+      ui->label_graph->setGeometry(100, 60, 41, 41);
+      barCool->setGeometry(45, 105, 90, 2);
+      ui->label_gif->setGeometry(0, 30, newWidth, newWidth);
+      update();
+    });
+    QParallelAnimationGroup* group = new QParallelAnimationGroup;
+    group->addAnimation(animation);
+    group->addAnimation(animationFrame);
+    group->start();
 }
 
 void DavisGUI::showAboutWindow() {

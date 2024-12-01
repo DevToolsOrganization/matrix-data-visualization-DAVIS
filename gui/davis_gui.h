@@ -35,7 +35,9 @@ class DavisGUI : public QMainWindow {
 
  private:
   void setMaxStyleWindow(int animDuration);
+  void setMaxStyleWindowNewYear(int animDuration);
   void setMinStyleWindow(int animDuration);
+  void setMinStyleWindowNewYear(int animDuration);
   void readPlotText(QStringList& str_lines, QString title = "");
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
