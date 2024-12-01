@@ -5,6 +5,7 @@
 #include "about_window.h"
 #include "QAction"
 #include "animated_button.h"
+#include <QJsonObject>
 #include "QJsonArray"
 #include "cool_progressbar.h"
 
@@ -43,6 +44,9 @@ class DavisGUI : public QMainWindow {
                                  QString& outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
+  void saveSettings(const QString& fileName);
+  QJsonObject loadSettings(const QString& fileName);
+  void applySettings(const QJsonObject& settings);
   void readJsonToPlot(const QString& pathToFile);
 
  private slots:
@@ -60,6 +64,7 @@ class DavisGUI : public QMainWindow {
   bool m_isMinStyleWindow;
   AnimatedButton*  qpbBuffer;
   AnimatedButton*  qpbOpen;
+  QString settingsFilePath;
   QJsonArray service_json_keys;
   coolProgressBar* barCool;
 
