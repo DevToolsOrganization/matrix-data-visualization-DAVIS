@@ -44,6 +44,13 @@ DavisGUI::DavisGUI(QWidget* parent)
   m_isMinStyleWindow = false;
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
+
+  QLabel* labelIco = new QLabel;
+  QString davisIconPath = ":/res/icon/D-16x16.png";
+  labelIco->setPixmap(davisIconPath);
+  labelIco->setContentsMargins(10, 0, 0, 0);
+  hbl->addWidget(labelIco);
+
   QMenuBar* mb = new QMenuBar;
   QString menuStyle(
       "QMenuBar {"
@@ -260,30 +267,33 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
 void DavisGUI::setMinStyleWindow(int animDuration) {
   m_isMinStyleWindow = true;
   hideElementsDuringResize();
-  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
-  animationFrame->setDuration(animDuration);
-  animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
-  animationFrame->setStartValue(ui->frame_panel->geometry());
-  animationFrame->setEndValue(QRect(0, 0, 159, 25));
+
   QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
   animation->setDuration(animDuration);
   animation->setEasingCurve(QEasingCurve::InOutQuad);
   animation->setStartValue(this->geometry());
   int xOld = this->geometry().x();
   int yOld = this->geometry().y();
-  int newWidth = 159;
+  int newWidth = 179;
   int newHeight = 137;
   int deltaW = newWidth - this->geometry().width();
   animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
+
+  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+  animationFrame->setDuration(animDuration);
+  animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
+  animationFrame->setStartValue(ui->frame_panel->geometry());
+  animationFrame->setEndValue(QRect(0, 0, newWidth, 25));
+
   connect(animation, &QPropertyAnimation::finished, this, [this]() {
     ui->label_doc->setVisible(true);
     ui->label_arrow->setVisible(true);
     ui->label_graph->setVisible(true);
     ui->frame_panel->setVisible(true);
-    ui->label_doc->setGeometry(30, 60, 41, 41);
-    ui->label_arrow->setGeometry(60, 60, 41, 41);
-    ui->label_graph->setGeometry(90, 60, 41, 41);
-    barCool->setGeometry(35, 105, 90, 2);
+    ui->label_doc->setGeometry(40, 60, 41, 41);
+    ui->label_arrow->setGeometry(70, 60, 41, 41);
+    ui->label_graph->setGeometry(100, 60, 41, 41);
+    barCool->setGeometry(45, 105, 90, 2);
     update();
   });
   QParallelAnimationGroup* group = new QParallelAnimationGroup;
