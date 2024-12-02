@@ -2,16 +2,23 @@
 #define DAVISGUI_H
 
 #include <QMainWindow>
-#include "about_window.h"
-#include "QAction"
-#include "animated_button.h"
+#include <QAction>
 #include <QJsonObject>
-#include "QJsonArray"
+#include <QJsonArray>
+#include <QLabel>
+
 #include "cool_progressbar.h"
+#include "about_window.h"
+#include "animated_button.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
 QT_END_NAMESPACE
+
+
+enum class Skins{DEFAULT, NEWYEAR};
+
+
 
 class DavisGUI : public QMainWindow {
   Q_OBJECT
@@ -38,6 +45,10 @@ class DavisGUI : public QMainWindow {
   void setMaxStyleWindowNewYear(int animDuration);
   void setMinStyleWindow(int animDuration);
   void setMinStyleWindowNewYear(int animDuration);
+  void setGeometryForMaxStyle_defaultSkin();
+  void setGeometryForMinStyle_defaultSkin();
+  void setGeometryForMaxStyle_newYearSkin();
+  void setGeometryForMinStyle_newYearSkin();
   void readPlotText(QStringList& str_lines, QString title = "");
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
@@ -50,6 +61,8 @@ class DavisGUI : public QMainWindow {
   QJsonObject loadSettings(const QString& fileName);
   void applySettings(const QJsonObject& settings);
   void readJsonToPlot(const QString& pathToFile);
+  Skins checkSkin();
+
 
  private slots:
   void showAboutWindow();
@@ -69,6 +82,8 @@ class DavisGUI : public QMainWindow {
   QString settingsFilePath;
   QJsonArray service_json_keys;
   coolProgressBar* barCool;
+  QLabel* label_gif;
+  Skins m_skin;
 
 };
 #endif // DAVISGUI_H
