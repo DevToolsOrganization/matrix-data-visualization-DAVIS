@@ -16,7 +16,7 @@ namespace Ui { class DavisGUI; }
 QT_END_NAMESPACE
 
 
-enum class Skins{DEFAULT, NEWYEAR};
+enum class Skins {DEFAULT, NEWYEAR};
 
 
 

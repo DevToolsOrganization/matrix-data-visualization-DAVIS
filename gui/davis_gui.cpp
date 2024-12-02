@@ -108,10 +108,9 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbMinMaxSize->setToolTip("Full/compact size");
   connect(qpbMinMaxSize, &QPushButton::clicked, [this]() {
     m_isMinStyleWindow = !m_isMinStyleWindow;
-    if (m_isMinStyleWindow){
+    if (m_isMinStyleWindow) {
       setMinStyleWindow(ANIMATION_DURATION);
-    }
-    else{
+    } else {
       setMaxStyleWindow(ANIMATION_DURATION);
     }
   });
@@ -171,7 +170,7 @@ DavisGUI::DavisGUI(QWidget* parent)
 
   // New Year
   QString fileGifPath = ":/res/newYear.gif";
-  QMovie *movie = new QMovie(fileGifPath);
+  QMovie* movie = new QMovie(fileGifPath);
   label_gif = new QLabel(this);
   label_gif->setMovie(movie);
   label_gif->setScaledContents(true);
@@ -282,18 +281,16 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
 }
 
-Skins DavisGUI::checkSkin()
-{
-    Skins skin;
-    QDate currentDate = QDate::currentDate();
-    if ((currentDate.month() == 12 && currentDate.day() >= 15)
-            || (currentDate.month() == 1 && currentDate.day() <= 15) )
-    {
-        skin = Skins::NEWYEAR;
-    } else {
-        skin = Skins::DEFAULT;
-    }
-    return skin;
+Skins DavisGUI::checkSkin() {
+  Skins skin;
+  QDate currentDate = QDate::currentDate();
+  if ((currentDate.month() == 12 && currentDate.day() >= 15)
+      || (currentDate.month() == 1 && currentDate.day() <= 15)) {
+    skin = Skins::NEWYEAR;
+  } else {
+    skin = Skins::DEFAULT;
+  }
+  return skin;
 }
 
 void DavisGUI::setMaxStyleWindow(int animDuration) {
@@ -318,18 +315,18 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
   animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
 
   connect(animation, &QPropertyAnimation::finished, this, [this]() {
-      switch (m_skin) {
+    switch (m_skin) {
       case Skins::DEFAULT:
-          setGeometryForMaxStyle_defaultSkin();
-          break;
+        setGeometryForMaxStyle_defaultSkin();
+        break;
       case Skins::NEWYEAR:
-          setGeometryForMaxStyle_newYearSkin();
-          break;
+        setGeometryForMaxStyle_newYearSkin();
+        break;
       default:
-          setGeometryForMaxStyle_defaultSkin();
-          break;
-      }
-      update();
+        setGeometryForMaxStyle_defaultSkin();
+        break;
+    }
+    update();
   });
 
   QParallelAnimationGroup* group = new QParallelAnimationGroup;
@@ -360,18 +357,18 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   animationFrame->setEndValue(QRect(0, 0, newWidth, 25));
 
   connect(animation, &QPropertyAnimation::finished, this, [this]() {
-      switch (m_skin) {
+    switch (m_skin) {
       case Skins::DEFAULT:
-          setGeometryForMinStyle_defaultSkin();
-          break;
+        setGeometryForMinStyle_defaultSkin();
+        break;
       case Skins::NEWYEAR:
-          setGeometryForMinStyle_newYearSkin();
-          break;
+        setGeometryForMinStyle_newYearSkin();
+        break;
       default:
-          setGeometryForMinStyle_defaultSkin();
-          break;
-      }
-      update();
+        setGeometryForMinStyle_defaultSkin();
+        break;
+    }
+    update();
   });
 
   QParallelAnimationGroup* group = new QParallelAnimationGroup;
@@ -380,66 +377,62 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   group->start();
 }
 
-void DavisGUI::setGeometryForMaxStyle_defaultSkin()
-{
-    label_gif->setVisible(false);
-    ui->label_doc->setVisible(true);
-    ui->label_arrow->setVisible(true);
-    ui->label_graph->setVisible(true);
-    ui->label_text->setVisible(true);
-    ui->frame_panel->setVisible(true);
-    qpbBuffer->setVisible(true);
-    qpbOpen->setVisible(true);
-    ui->label_doc->setGeometry(90, 60, 91, 91);
-    ui->label_arrow->setGeometry(170, 90, 50, 50);
-    ui->label_graph->setGeometry(210, 70, 81, 81);
-    ui->label_text->setGeometry(0, 230, 391, 111);
-    barCool->setGeometry(97, 155, 187, 2);
-    qpbOpen->setGeometry(65, 180, 90, 30);
-    qpbBuffer->setGeometry(165, 180, 170, 30);
+void DavisGUI::setGeometryForMaxStyle_defaultSkin() {
+  label_gif->setVisible(false);
+  ui->label_doc->setVisible(true);
+  ui->label_arrow->setVisible(true);
+  ui->label_graph->setVisible(true);
+  ui->label_text->setVisible(true);
+  ui->frame_panel->setVisible(true);
+  qpbBuffer->setVisible(true);
+  qpbOpen->setVisible(true);
+  ui->label_doc->setGeometry(90, 60, 91, 91);
+  ui->label_arrow->setGeometry(170, 90, 50, 50);
+  ui->label_graph->setGeometry(210, 70, 81, 81);
+  ui->label_text->setGeometry(0, 230, 391, 111);
+  barCool->setGeometry(97, 155, 187, 2);
+  qpbOpen->setGeometry(65, 180, 90, 30);
+  qpbBuffer->setGeometry(165, 180, 170, 30);
 }
 
-void DavisGUI::setGeometryForMinStyle_defaultSkin()
-{
-    label_gif->setVisible(false);
-    ui->label_doc->setVisible(true);
-    ui->label_arrow->setVisible(true);
-    ui->label_graph->setVisible(true);
-    ui->frame_panel->setVisible(true);
-    ui->label_doc->setGeometry(40, 60, 41, 41);
-    ui->label_arrow->setGeometry(70, 60, 41, 41);
-    ui->label_graph->setGeometry(100, 60, 41, 41);
-    barCool->setGeometry(45, 105, 90, 2);
+void DavisGUI::setGeometryForMinStyle_defaultSkin() {
+  label_gif->setVisible(false);
+  ui->label_doc->setVisible(true);
+  ui->label_arrow->setVisible(true);
+  ui->label_graph->setVisible(true);
+  ui->frame_panel->setVisible(true);
+  ui->label_doc->setGeometry(40, 60, 41, 41);
+  ui->label_arrow->setGeometry(70, 60, 41, 41);
+  ui->label_graph->setGeometry(100, 60, 41, 41);
+  barCool->setGeometry(45, 105, 90, 2);
 }
 
-void DavisGUI::setGeometryForMaxStyle_newYearSkin()
-{
-    label_gif->setVisible(true);
-    ui->label_doc->setVisible(false);
-    ui->label_arrow->setVisible(false);
-    ui->label_graph->setVisible(false);
-    ui->label_text->setVisible(false);
-    ui->frame_panel->setVisible(true);
-    qpbBuffer->setVisible(true);
-    qpbOpen->setVisible(true);
-    barCool->setGeometry(97, 367, 187, 2);
-    qpbOpen->setGeometry(65, 335, 90, 30);
-    qpbBuffer->setGeometry(165, 335, 170, 30);
-    label_gif->setGeometry(0, 28, 397, 380);
+void DavisGUI::setGeometryForMaxStyle_newYearSkin() {
+  label_gif->setVisible(true);
+  ui->label_doc->setVisible(false);
+  ui->label_arrow->setVisible(false);
+  ui->label_graph->setVisible(false);
+  ui->label_text->setVisible(false);
+  ui->frame_panel->setVisible(true);
+  qpbBuffer->setVisible(true);
+  qpbOpen->setVisible(true);
+  barCool->setGeometry(97, 367, 187, 2);
+  qpbOpen->setGeometry(65, 335, 90, 30);
+  qpbBuffer->setGeometry(165, 335, 170, 30);
+  label_gif->setGeometry(0, 28, 397, 380);
 }
 
-void DavisGUI::setGeometryForMinStyle_newYearSkin()
-{
-    label_gif->setVisible(true);
-    ui->label_doc->setVisible(false);
-    ui->label_arrow->setVisible(false);
-    ui->label_graph->setVisible(false);
-    ui->frame_panel->setVisible(true);
-    ui->label_doc->setGeometry(40, 60, 41, 41);
-    ui->label_arrow->setGeometry(70, 60, 41, 41);
-    ui->label_graph->setGeometry(100, 60, 41, 41);
-    barCool->setGeometry(45, 105, 90, 2);
-    label_gif->setGeometry(0, 28, 179, 155);
+void DavisGUI::setGeometryForMinStyle_newYearSkin() {
+  label_gif->setVisible(true);
+  ui->label_doc->setVisible(false);
+  ui->label_arrow->setVisible(false);
+  ui->label_graph->setVisible(false);
+  ui->frame_panel->setVisible(true);
+  ui->label_doc->setGeometry(40, 60, 41, 41);
+  ui->label_arrow->setGeometry(70, 60, 41, 41);
+  ui->label_graph->setGeometry(100, 60, 41, 41);
+  barCool->setGeometry(45, 105, 90, 2);
+  label_gif->setGeometry(0, 28, 179, 155);
 }
 
 void DavisGUI::showAboutWindow() {
@@ -865,19 +858,18 @@ void DavisGUI::mouseMoveEvent(QMouseEvent* event) {
 void DavisGUI::keyPressEvent(QKeyEvent* event) {
   if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V) {
     pasteFromClipboard();
-  }else if(event->key() == Qt::Key_1){
-      if(m_skin == Skins::DEFAULT){
-          m_skin = Skins::NEWYEAR;
-      }
-      else{
-          m_skin =  Skins::DEFAULT;
-      }
-      if(m_isMinStyleWindow){
-          setMinStyleWindow(0);
-      }else{
-          setMaxStyleWindow(0);
-      }
-  }else {
+  } else if (event->key() == Qt::Key_1) {
+    if (m_skin == Skins::DEFAULT) {
+      m_skin = Skins::NEWYEAR;
+    } else {
+      m_skin =  Skins::DEFAULT;
+    }
+    if (m_isMinStyleWindow) {
+      setMinStyleWindow(0);
+    } else {
+      setMaxStyleWindow(0);
+    }
+  } else {
     QMainWindow::keyPressEvent(event);
   }
 }
