@@ -42,9 +42,7 @@ class DavisGUI : public QMainWindow {
 
  private:
   void setMaxStyleWindow(int animDuration);
-  void setMaxStyleWindowNewYear(int animDuration);
   void setMinStyleWindow(int animDuration);
-  void setMinStyleWindowNewYear(int animDuration);
   void setGeometryForMaxStyle_defaultSkin();
   void setGeometryForMinStyle_defaultSkin();
   void setGeometryForMaxStyle_newYearSkin();

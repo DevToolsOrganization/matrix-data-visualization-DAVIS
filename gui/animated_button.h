@@ -13,8 +13,6 @@ class AnimatedButton : public QPushButton {
  public:
   AnimatedButton(const QString& text, QColor startColor, QColor endColor, QWidget* parent = nullptr);
 
-  void setOriginalGeometry(const QRect& newOriginalGeometry);
-
   QColor backgroundColor() const;
 
   void setBackgroundColor(const QColor& color);

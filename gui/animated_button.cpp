@@ -43,6 +43,8 @@ void AnimatedButton::leaveEvent(QEvent* event) {
 }
 
 void AnimatedButton::animateButtonPress() {
+
+  m_originalGeometry =  geometry();
   QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
   animation->setDuration(100);
   animation->setStartValue(geometry());
@@ -57,11 +59,6 @@ void AnimatedButton::animateButtonRelease() {
   animation->setStartValue(geometry());
   animation->setEndValue(m_originalGeometry);
   animation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-
-void AnimatedButton::setOriginalGeometry(const QRect& newOriginalGeometry) {
-  m_originalGeometry = newOriginalGeometry;
 }
 
 QColor AnimatedButton::backgroundColor() const {
