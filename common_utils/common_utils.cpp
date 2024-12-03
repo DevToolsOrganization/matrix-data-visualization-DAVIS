@@ -10,7 +10,7 @@
 #include <set>
 #include <clocale>
 #include <cmath>
-//#include <math.h>
+#include <math.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
