@@ -317,6 +317,16 @@ bool is_string_convertable_to_digit(const string& sample) {
   return true;
 }
 
+string nullIfNotFinite(double val) {
+  string plotlyVar;
+  if (std::isfinite(val)) {
+    plotlyVar = std::to_string(val);
+  } else {
+    plotlyVar = "null";
+  }
+  return plotlyVar;
+}
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
