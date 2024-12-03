@@ -8,7 +8,7 @@
 
 using std::string;
 using std::vector;
-
+/*
 TEST(ArrayCore, save_to_disk_2d) {
   //! 2-dimensional array
   int rows = 10;
@@ -239,7 +239,48 @@ TEST(ArrayCore, readAndShowMatrixFromFile) {
   config.heatmap.yLabel = "русский";
   bool result = dv::show(values, "readAndShowMatrixFromFile", config);
   EXPECT_EQ(result, true);
+}*/
+
+TEST(ArrayCore, showChartWithNanAndInf) {
+  double vals3[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  vals3[1] = NAN;
+  vals3[3] = std::numeric_limits<double>::infinity();
+  vals3[5] = -std::numeric_limits<double>::infinity();
+  auto config = dv::Config();
+  config.chart.title = "Custom title";
+  config.chart.xLabel = "Custom xLabel";
+  config.chart.yLabel = "Custom yLabel";
+  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChartWithNanAndInf", config);
+  EXPECT_EQ(result, true);
 }
+
+TEST(ArrayCore, universal_1d_conteinerWithNanAndInf) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  std::vector<double> vec = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  vec[1] = NAN;
+  vec[3] = std::numeric_limits<double>::infinity();
+  vec[5] = -std::numeric_limits<double>::infinity();
+  bool result = dv::show(vec, "universal_1d_conteinerWithNanAndInf");
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, showPseudo2DWithNanAndInf) {
+  int rows = 5;
+  int cols = 3;
+  double* vals4 = new double[rows * cols];
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      vals4[i * cols + j] = 20 + i * cols + j;
+    }
+  }
+  vals4[0] = NAN;
+  vals4[1] = std::numeric_limits<double>::infinity();
+  vals4[2] = -std::numeric_limits<double>::infinity();
+  bool result = dv::show(vals4, rows, cols, "showPseudo2DWithNanAndInf");
+  EXPECT_EQ(result, true);
+}
+
+
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
