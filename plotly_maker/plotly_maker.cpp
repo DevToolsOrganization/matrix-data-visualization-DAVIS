@@ -46,7 +46,7 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
   for (size_t i = 0; i < values.size(); ++i) {
     str_values.append("[");
     for (size_t j = 0; j < values[i].size(); ++j) {
-      str_values.append(std::to_string(values[i][j]));
+      str_values.append(nullIfNotFinite(values[i][j]));
       if (j != values[i].size() - 1) {
         str_values.append(",");
       }
@@ -72,14 +72,14 @@ bool createStringLineChartValues(const vector<double>& xValues,
   }
   out_str_values = R"(var trace = {x: [)";
   for (size_t i = 0; i < xValues.size(); ++i) {
-    out_str_values.append(std::to_string(xValues[i]));
+    out_str_values.append(nullIfNotFinite(xValues[i]));
     if (i != xValues.size() - 1) {
       out_str_values.append(",");
     }
   }
   out_str_values.append("], y: [");
   for (size_t j = 0; j < yValues.size(); ++j) {
-    out_str_values.append(std::to_string(yValues[j]));
+    out_str_values.append(nullIfNotFinite(yValues[j]));
     if (j != yValues.size() - 1) {
       out_str_values.append(",");
     }
