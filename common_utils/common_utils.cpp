@@ -9,6 +9,8 @@
 #include <limits.h>
 #include <set>
 #include <clocale>
+#include <cmath>
+//#include <math.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
