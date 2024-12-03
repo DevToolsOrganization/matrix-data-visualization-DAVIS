@@ -179,7 +179,6 @@ DavisGUI::DavisGUI(QWidget* parent)
   label_gif->lower();
   label_gif->setVisible(false);
 
-
   settingsFilePath = "settings.json";
   QJsonObject settings = loadSettings(settingsFilePath);
   applySettings(settings);
@@ -379,6 +378,7 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
 
 void DavisGUI::setGeometryForMaxStyle_defaultSkin() {
   label_gif->setVisible(false);
+  label_gif->movie()->stop();
   ui->label_doc->setVisible(true);
   ui->label_arrow->setVisible(true);
   ui->label_graph->setVisible(true);
@@ -397,6 +397,7 @@ void DavisGUI::setGeometryForMaxStyle_defaultSkin() {
 
 void DavisGUI::setGeometryForMinStyle_defaultSkin() {
   label_gif->setVisible(false);
+  label_gif->movie()->stop();
   ui->label_doc->setVisible(true);
   ui->label_arrow->setVisible(true);
   ui->label_graph->setVisible(true);
@@ -409,6 +410,7 @@ void DavisGUI::setGeometryForMinStyle_defaultSkin() {
 
 void DavisGUI::setGeometryForMaxStyle_newYearSkin() {
   label_gif->setVisible(true);
+  label_gif->movie()->start();
   ui->label_doc->setVisible(false);
   ui->label_arrow->setVisible(false);
   ui->label_graph->setVisible(false);
@@ -424,6 +426,7 @@ void DavisGUI::setGeometryForMaxStyle_newYearSkin() {
 
 void DavisGUI::setGeometryForMinStyle_newYearSkin() {
   label_gif->setVisible(true);
+  label_gif->movie()->start();
   ui->label_doc->setVisible(false);
   ui->label_arrow->setVisible(false);
   ui->label_graph->setVisible(false);
