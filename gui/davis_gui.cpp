@@ -56,8 +56,13 @@ DavisGUI::DavisGUI(QWidget* parent)
       "    background-color: transparent;"
       "    font-size: 13px;"
       "}"
-      "QMenuBar:hover {"
+      "QMenuBar::item {"
+      "    background-color: transparent;"
+      "    height: 20px;"  // Set a fixed height
+      "}"
+      "QMenuBar::item:selected {"
       "    background-color: rgb(42, 130, 218);"
+      "    height: 20px;"  // Ensure the height remains the same on hover
       "}"
   );
   QMenu*  menu_root = new QMenu("Menu");
