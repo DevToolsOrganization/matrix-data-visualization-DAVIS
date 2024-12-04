@@ -223,21 +223,10 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
-  QJsonArray user_keys_pathes;
 
   if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
   }
-
-  if (jsn::getJsonArrayFromFile("user_keys_level_path_list.json", user_keys_pathes) == false) {
-    jsn::getJsonArrayFromFile(":/user_keys_level_path_list.json", user_keys_pathes);
-  }
-
-  //auto test1 = jsn::getStringListFromJsonArray(user_keys_pathes);
-  //qDebug()<<"TEST SIZE: "<<test1.size();
-
-
-
 
   QJsonValue jv;
   QJsonArray result;
@@ -246,7 +235,7 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
       return;
   };
   jsn::extractAllObjects(jv,result);
-  qDebug()<<"result size:"<<result.size();
+  //qDebug()<<"result all objects size:"<<result.size();
 
   for(int i=0;i<result.size();++i){
   auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
