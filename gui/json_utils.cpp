@@ -79,16 +79,12 @@ bool saveJsonArrayToFile(const QString& path,
     return true;
 }
 
-QPair<bool, QJsonObject> getJsonObjectFromFileIfUserKeysExist(const QString& path,
-                                                              const QJsonArray& service_keys,
-                                                              const QJsonObject& user_stamp_keys) {
+QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& user_json_from_file,
+                                                      const QJsonArray& service_keys,
+                                                      const QJsonObject& user_stamp_keys) {
 
+  if(user_json_from_file.isEmpty())return {false,QJsonObject()};
   QJsonObject result_object_with_data;
-  QJsonObject user_json_from_file;
-  if (getJsonObjectFromFile(path, user_json_from_file) == false) {
-    qDebug() << "Open User json object with data error...";
-    return {false, QJsonObject()};
-  };
   QStringList user_file_keys_list = user_json_from_file.keys();
   QStringList user_stamp_keys_list = user_stamp_keys.keys();
 
@@ -150,6 +146,84 @@ std::vector<std::vector<double> > getMatrixFromJsonArray(const QJsonArray& json_
   }
 
   return matrix;
+}
+
+
+bool getJsonValueFromFile(const QString& path,
+                          QJsonValue& jsonValue) {
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    qDebug() << "File can't be opened!" << path;
+    return false;
+  };
+  QByteArray data = file.readAll();
+  QJsonParseError errorPtr;
+  auto jdoc = QJsonDocument::fromJson(data, &errorPtr);
+  if (jdoc.isEmpty()) {
+    qDebug() << "Json document is empty.";
+    return false;
+  }
+  if (jdoc.isArray()) {
+    jsonValue = jdoc.array();
+  }
+  if (jdoc.isObject()) {
+    jsonValue = jdoc.object();
+  }
+
+  file.close();
+  return true;
+}
+
+QJsonValue getValueByPath(const QJsonValue& obj,
+                          const QStringList& path) {
+  QJsonValue value = obj;
+  for (const QString& key : path) {
+    if (value.isObject()) {
+      value = value.toObject().value(key);
+    } else if (value.isArray()) {
+      bool ok;
+      int index = key.toInt(&ok);
+      if (ok && index >= 0 && index < value.toArray().size()) {
+        value = value.toArray().at(index);
+      } else {
+        return QJsonValue();
+      }
+    } else {
+      return QJsonValue();
+    }
+  }
+  return value;
+}
+
+QVector<QStringList> getStringListFromJsonArray(const QJsonArray& array) {
+  QVector<QStringList> pathes;
+  for (int i = 0; i < array.size(); ++i) {
+    if (array[i].isArray() == false)
+      continue;
+    QStringList list;
+    for (int j = 0; j<array[i].toArray().size(); ++j) {
+    list.append(array[i].toArray()[j].toString());
+    }
+    pathes.push_back(list);
+  }
+  return pathes;
+}
+
+void extractAllObjects(const QJsonValue &value,
+                       QJsonArray &result)
+{
+    if (value.isObject()) {
+           QJsonObject obj = value.toObject();
+           result.append(obj);
+           for (const QString& key : obj.keys()) {
+               extractAllObjects(obj[key], result);
+           }
+       } else if (value.isArray()) {
+           QJsonArray array = value.toArray();
+           for (const QJsonValue& item : array) {
+               extractAllObjects(item, result);
+           }
+       }
 }
 
 
