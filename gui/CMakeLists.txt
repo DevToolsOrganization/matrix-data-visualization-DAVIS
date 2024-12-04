@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(gui LANGUAGES CXX)
+project(dv LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -57,31 +57,31 @@ set(PROJECT_SOURCES
 qt5_add_resources(PROJECT_SOURCES res.qrc)
 set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/davis.rc")
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(gui
+    qt_add_executable(dv
 
         ${PROJECT_SOURCES}
     )
 else()
     if(ANDROID)
-        add_library(gui SHARED
+        add_library(dv SHARED
             ${PROJECT_SOURCES}
         )
     else()
-        add_executable(gui
+        add_executable(dv
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
 #if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-#qt_add_executable(gui
+#qt_add_executable(dv
 # ${PROJECT_SOURCES}
 #    )
 #else()
-#add_executable(gui
+#add_executable(dv
 #    WIN32
 #        ${PROJECT_SOURCES}
 #    )
 #endif()
-target_link_libraries(gui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(gui PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
+target_link_libraries(dv PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(dv PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
