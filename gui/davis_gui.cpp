@@ -866,7 +866,7 @@ void DavisGUI::mouseMoveEvent(QMouseEvent* event) {
 void DavisGUI::keyPressEvent(QKeyEvent* event) {
   if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V) {
     pasteFromClipboard();
-  } else if (event->key() == Qt::Key_1) {
+  } else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_1) {
     if (m_skin == Skins::DEFAULT) {
       m_skin = Skins::NEWYEAR;
     } else {
