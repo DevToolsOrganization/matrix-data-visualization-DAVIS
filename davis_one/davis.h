@@ -234,6 +234,9 @@ int find_separator(const std::string& src,
 //! remove special characters except letters, numbers and '-', '_'. Spaces -> '_'
 string removeSpecialCharacters(const string& s);
 
+//! convert this cases to string "null" for Plotly
+string nullIfNotFinite(double val);
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {

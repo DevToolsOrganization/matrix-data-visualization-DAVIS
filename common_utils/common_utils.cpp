@@ -9,6 +9,8 @@
 #include <limits.h>
 #include <set>
 #include <clocale>
+#include <cmath>
+#include <math.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -315,6 +317,16 @@ bool is_string_convertable_to_digit(const string& sample) {
     return false;
   }
   return true;
+}
+
+string nullIfNotFinite(double val) {
+  string plotlyVar;
+  if (isfinite(val)) {
+    plotlyVar = std::to_string(val);
+  } else {
+    plotlyVar = "null";
+  }
+  return plotlyVar;
 }
 
 
