@@ -8,12 +8,15 @@
 #include <QClipboard>
 #include <QToolTip>
 #include <QTimer>
+#include "version.h"
+
 
 
 About_window::About_window(QWidget* parent) :
   QMainWindow(parent),
   ui(new Ui::about_window) {
   ui->setupUi(this);
+  ui->label_version->setText("Version " + QString(FILE_VERSION_STR)+ " (x64)");
   isMusicPlaying = false;
   clicks = 1;
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);

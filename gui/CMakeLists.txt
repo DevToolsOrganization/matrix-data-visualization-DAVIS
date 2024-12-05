@@ -52,6 +52,7 @@ set(PROJECT_SOURCES
         cool_progressbar.h
         cool_progressbar.cpp
         davis.rc
+        version.h
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)
@@ -71,6 +72,10 @@ else()
             ${PROJECT_SOURCES}
         )
     endif()
+endif()
+
+if(WIN32)
+    target_sources(dv PRIVATE ${CMAKE_BINARY_DIR}/version.rc)
 endif()
 
 #if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
