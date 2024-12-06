@@ -5,6 +5,7 @@
 #include <fstream>
 #include <list>
 #include <array>
+#include <math.h>
 
 using std::string;
 using std::vector;

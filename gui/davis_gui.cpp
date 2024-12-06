@@ -251,12 +251,24 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
+
   if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
   }
-  auto json_object_result = jsn::getJsonObjectFromFileIfUserKeysExist(pathToFile,
-                                                                      service_json_keys,
-                                                                      user_stamp_keys);
+
+  QJsonValue jv;
+  QJsonArray result;
+  if(jsn::getJsonValueFromFile(pathToFile, jv)==false){
+      qDebug()<<"Json open error.....................";
+      return;
+  };
+  jsn::extractAllObjects(jv,result);
+  //qDebug()<<"result all objects size:"<<result.size();
+
+  for(int i=0;i<result.size();++i){
+  auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
+                                                              service_json_keys,
+                                                              user_stamp_keys);
   if (json_object_result.first) {
     QJsonObject result_obj = json_object_result.second;
     QJsonArray x_values = result_obj["x_values"].toArray();
@@ -281,6 +293,8 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
     }
   } else {
     qDebug() << "Check JSON!";
+  }
+
   }
 
 }
