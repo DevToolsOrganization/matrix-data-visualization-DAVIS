@@ -278,6 +278,12 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
 }
 
+bool DavisGUI::mayBeShowMatrixToMatrix(QJsonArray& stamps,
+                                       QJsonObject& obj)
+{
+
+}
+
 void DavisGUI::setMaxStyleWindow(int animDuration) {
   m_isMinStyleWindow = false;
   hideElementsDuringResize();
