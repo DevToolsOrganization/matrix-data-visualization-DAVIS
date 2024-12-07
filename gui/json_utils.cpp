@@ -83,7 +83,8 @@ QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& user_js
                                                       const QJsonArray& service_keys,
                                                       const QJsonObject& user_stamp_keys) {
 
-  if(user_json_from_file.isEmpty())return {false,QJsonObject()};
+  if (user_json_from_file.isEmpty())
+    return {false, QJsonObject()};
   QJsonObject result_object_with_data;
   QStringList user_file_keys_list = user_json_from_file.keys();
   QStringList user_stamp_keys_list = user_stamp_keys.keys();
@@ -201,29 +202,28 @@ QVector<QStringList> getStringListFromJsonArray(const QJsonArray& array) {
     if (array[i].isArray() == false)
       continue;
     QStringList list;
-    for (int j = 0; j<array[i].toArray().size(); ++j) {
-    list.append(array[i].toArray()[j].toString());
+    for (int j = 0; j < array[i].toArray().size(); ++j) {
+      list.append(array[i].toArray()[j].toString());
     }
     pathes.push_back(list);
   }
   return pathes;
 }
 
-void extractAllObjects(const QJsonValue &value,
-                       QJsonArray &result)
-{
-    if (value.isObject()) {
-           QJsonObject obj = value.toObject();
-           result.append(obj);
-           for (const QString& key : obj.keys()) {
-               extractAllObjects(obj[key], result);
-           }
-       } else if (value.isArray()) {
-           QJsonArray array = value.toArray();
-           for (const QJsonValue& item : array) {
-               extractAllObjects(item, result);
-           }
-       }
+void extractAllObjects(const QJsonValue& value,
+                       QJsonArray& result) {
+  if (value.isObject()) {
+    QJsonObject obj = value.toObject();
+    result.append(obj);
+    for (const QString& key : obj.keys()) {
+      extractAllObjects(obj[key], result);
+    }
+  } else if (value.isArray()) {
+    QJsonArray array = value.toArray();
+    for (const QJsonValue& item : array) {
+      extractAllObjects(item, result);
+    }
+  }
 }
 
 

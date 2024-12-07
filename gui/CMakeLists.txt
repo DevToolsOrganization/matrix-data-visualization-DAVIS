@@ -75,7 +75,7 @@ else()
 endif()
 
 if(WIN32)
-    target_sources(dv PRIVATE ${CMAKE_BINARY_DIR}/version.rc)
+    target_sources(dv PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/version.rc")
 endif()
 
 #if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
