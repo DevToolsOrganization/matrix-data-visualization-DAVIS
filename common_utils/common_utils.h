@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <stdint.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -62,6 +63,11 @@ string removeSpecialCharacters(const string& s);
 
 //! convert this cases to string "null" for Plotly
 string nullIfNotFinite(double val);
+
+//! convert vec to string, separated by ","
+string vectorToString(const vector<double>& vec);
+
+string makeUniqueDavisHtmlName();
 
 //! save to disk vector<T> data
 template <typename T>

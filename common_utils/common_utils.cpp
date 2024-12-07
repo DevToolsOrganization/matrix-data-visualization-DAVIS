@@ -11,6 +11,7 @@
 #include <clocale>
 #include <cmath>
 #include <math.h>
+#include <random>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -327,6 +328,25 @@ string nullIfNotFinite(double val) {
     plotlyVar = "null";
   }
   return plotlyVar;
+}
+
+string vectorToString(const vector<double>& vec) {
+  std::ostringstream oss;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    if (i != 0) {
+      oss << ",";
+    }
+    oss << vec[i];
+  }
+  return oss.str();
+}
+
+string makeUniqueDavisHtmlName() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(1, 1e9);
+  int random_number = dis(gen);
+  return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
 }
 
 

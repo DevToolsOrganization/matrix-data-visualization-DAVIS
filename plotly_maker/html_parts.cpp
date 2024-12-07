@@ -391,24 +391,24 @@ var data = [%3];
 
 var layout = {
   title: {
-    text:'Title'
+    text:'%4'
   },
   xaxis: {
     title: {
-      text: 'X'
+      text: '%5'
     },
   },
   yaxis: {
     title: {
-      text: 'Y'
+      text: '%6'
     }
   },
   scene: {
     xaxis: {
-      title: 'X',
+      title: '%5',
     },
     yaxis: {
-      title: 'Y',
+      title: '%6',
     },
     zaxis: {
       title: '',
