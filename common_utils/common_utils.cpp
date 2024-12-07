@@ -324,6 +324,7 @@ string nullIfNotFinite(double val) {
   string plotlyVar;
   if (isfinite(val)) {
     plotlyVar = std::to_string(val);
+    std::replace(plotlyVar.begin(), plotlyVar.end(), ',', '.');
   } else {
     plotlyVar = "null";
   }

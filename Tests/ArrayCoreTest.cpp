@@ -283,7 +283,6 @@ TEST(ArrayCore, showPseudo2DWithNanAndInf) {
   EXPECT_EQ(result, true);
 }
 
-
 TEST(ArrayCore, show3ChartsWithHoldOn) {
 
   vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
