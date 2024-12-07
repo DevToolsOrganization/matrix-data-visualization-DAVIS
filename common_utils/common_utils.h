@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <stdint.h>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
