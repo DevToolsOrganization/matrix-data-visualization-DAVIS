@@ -34,7 +34,7 @@ bool saveJsonArrayToFile(const QString& path,
 QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& path,
                                                       const QJsonArray& service_keys,
                                                       const QJsonObject& user_stamp_keys
-                                                             );
+                                                     );
 
 QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array);
 

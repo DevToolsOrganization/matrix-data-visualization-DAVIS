@@ -258,42 +258,42 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
   QJsonValue jv;
   QJsonArray result;
-  if(jsn::getJsonValueFromFile(pathToFile, jv)==false){
-      qDebug()<<"Json open error.....................";
-      return;
+  if (jsn::getJsonValueFromFile(pathToFile, jv) == false) {
+    qDebug() << "Json open error.....................";
+    return;
   };
-  jsn::extractAllObjects(jv,result);
+  jsn::extractAllObjects(jv, result);
   //qDebug()<<"result all objects size:"<<result.size();
 
-  for(int i=0;i<result.size();++i){
-  auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
-                                                              service_json_keys,
-                                                              user_stamp_keys);
-  if (json_object_result.first) {
-    QJsonObject result_obj = json_object_result.second;
-    QJsonArray x_values = result_obj["x_values"].toArray();
-    QJsonArray y_values = result_obj["y_values"].toArray();
-    QJsonArray matrix_values = result_obj["matrix_values"].toArray();
+  for (int i = 0; i < result.size(); ++i) {
+    auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
+                                                                service_json_keys,
+                                                                user_stamp_keys);
+    if (json_object_result.first) {
+      QJsonObject result_obj = json_object_result.second;
+      QJsonArray x_values = result_obj["x_values"].toArray();
+      QJsonArray y_values = result_obj["y_values"].toArray();
+      QJsonArray matrix_values = result_obj["matrix_values"].toArray();
 
-    auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
-    auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
-    auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
+      auto x_vector = jsn::getVectorDoubleFromJsonArray(x_values);
+      auto y_vector = jsn::getVectorDoubleFromJsonArray(y_values);
+      auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
 
-    qDebug() << "MATRIX SIZE: " << matrix_vector.size();
+      qDebug() << "MATRIX SIZE: " << matrix_vector.size();
 
-    if (x_vector.empty() == false && y_vector.empty() == false) {
-      dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST");
-    } else if (x_vector.empty() == true && y_vector.empty() == false) {
-      dv::show(y_vector.toStdVector(), "JSON TEST");
-    } else if (x_vector.empty() == false && y_vector.empty() == true) {
-      dv::show(x_vector.toStdVector(), "JSON TEST");
+      if (x_vector.empty() == false && y_vector.empty() == false) {
+        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST");
+      } else if (x_vector.empty() == true && y_vector.empty() == false) {
+        dv::show(y_vector.toStdVector(), "JSON TEST");
+      } else if (x_vector.empty() == false && y_vector.empty() == true) {
+        dv::show(x_vector.toStdVector(), "JSON TEST");
+      }
+      if (matrix_vector.empty() == false) {
+        dv::show(matrix_vector, "JSON_MATRIX_VECTOR");
+      }
+    } else {
+      qDebug() << "Check JSON!";
     }
-    if (matrix_vector.empty() == false) {
-      dv::show(matrix_vector, "JSON_MATRIX_VECTOR");
-    }
-  } else {
-    qDebug() << "Check JSON!";
-  }
 
   }
 
