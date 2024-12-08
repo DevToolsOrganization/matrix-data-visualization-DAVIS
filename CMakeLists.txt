@@ -35,7 +35,11 @@ add_executable(${projectName} main.cpp cxxopts.hpp ${RESOURCES})
 target_link_libraries(${projectName} "ArrayCore")
 target_link_libraries("davis_launcher" "PlotlyMaker" "CommonUtils")
 
-
+##### NOT WORKING #####
+#add_custom_command(TARGET ${projectName}
+#    POST_BUILD
+#    COMMAND cmd /c "${CMAKE_SOURCE_DIR}/!Format + one_header.bat"
+#    COMMENT "Running post-build script")
 
 
 
