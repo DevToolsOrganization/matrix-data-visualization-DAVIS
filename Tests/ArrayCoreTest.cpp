@@ -326,6 +326,31 @@ TEST(ArrayCore, show2ChartsWithHoldOnCustomSettings) {
   EXPECT_EQ(v1 && v2, true);
 }
 
+TEST(ArrayCore, testMyltiplyHoldOnOff) {
+
+  vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
+  vector<double> vec2 = {3, 4, 5, 6, 7};
+
+  dv::holdOn();
+  bool v1 = dv::show(vec1, "titleHoldOn1");
+  bool v2 = dv::show(vec1, "titleHoldOn2");
+  dv::holdOff();
+
+  dv::holdOff();
+  dv::holdOn();
+  dv::holdOn();
+  dv::holdOff();
+
+  dv::show(vec1, "titleSoloGraph");
+
+  dv::holdOn();
+  dv::show(vec1, "titleHoldOn3");
+  dv::show(vec1, "titleHoldOn4");
+  dv::holdOff();
+
+  EXPECT_EQ(v1 && v2, true);
+}
+
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();

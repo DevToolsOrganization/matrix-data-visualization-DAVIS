@@ -774,6 +774,7 @@ string nullIfNotFinite(double val) {
   string plotlyVar;
   if (isfinite(val)) {
     plotlyVar = std::to_string(val);
+    std::replace(plotlyVar.begin(), plotlyVar.end(), ',', '.');
   } else {
     plotlyVar = "null";
   }
@@ -796,7 +797,7 @@ string makeUniqueDavisHtmlName() {
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(1, 1e9);
   int random_number = dis(gen);
-  return dvs::kAppName + std::to_string(random_number);
+  return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
 }
 
 
@@ -1190,7 +1191,6 @@ vector<string> allChartBlocks = {};
 
 namespace dv {
 
-
 void holdOn() {
   dvs::isHold = true;
   dvs::allChartBlocks.clear();
@@ -1199,6 +1199,9 @@ void holdOn() {
 
 void holdOff(const Config& configuration) {
   dvs::isHold = false;
+  if (dvs::allChartBlocks.empty()) {
+    return;
+  }
   string allTracesNames_str;
   string allChartBlocks_str;
   const string trace_name_part = "trace";
@@ -1217,16 +1220,11 @@ void holdOff(const Config& configuration) {
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
-  string htmlFullName = dvs::kOutFolderName + dvs::makeUniqueDavisHtmlName() + ".html";
+  string htmlFullName = dvs::makeUniqueDavisHtmlName();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
   dvs::openFileBySystem(htmlFullName);
   dvs::allChartBlocks.clear();
 }
-
-
-
-
-
 
 
 

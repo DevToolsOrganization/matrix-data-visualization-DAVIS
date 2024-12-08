@@ -24,6 +24,9 @@ void holdOn() {
 
 void holdOff(const Config& configuration) {
   dvs::isHold = false;
+  if (dvs::allChartBlocks.empty()) {
+    return;
+  }
   string allTracesNames_str;
   string allChartBlocks_str;
   const string trace_name_part = "trace";
