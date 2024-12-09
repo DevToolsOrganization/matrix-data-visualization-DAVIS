@@ -13,5 +13,6 @@
         <file>keys.json</file>
         <file>user_keys_list.json</file>
         <file>res/icon/D-16x16.png</file>
+        <file>res/newYear.gif</file>
     </qresource>
 </RCC>
