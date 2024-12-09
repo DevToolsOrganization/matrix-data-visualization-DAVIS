@@ -288,8 +288,8 @@ TEST(ArrayCore, show3ChartsWithHoldOn) {
   vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
   vector<double> vec2 = {2, 4, 6, 8, 10};
   dv::holdOn();
-  bool v1 = dv::show(vec1, "titleHoldOn1");
-  bool v2 = dv::show(vec2, "titleHoldOn2");
+  bool v1 = dv::show(vec1, "chart 1");
+  bool v2 = dv::show(vec2, "chart 2");
 
   vector<vector<double>> values;
   vector<double> vecX = {5, 20, 21, 22, 50};
@@ -300,7 +300,7 @@ TEST(ArrayCore, show3ChartsWithHoldOn) {
   config.chart.title = "ChartXY";
   config.chart.xLabel = "xLabel";
   config.chart.yLabel = "yLabel";
-  bool v3 = dv::show(values, "showChartXY_ContainerOfContainers", config);
+  bool v3 = dv::show(values, "chart 3", config);
 
   dv::holdOff();
 
