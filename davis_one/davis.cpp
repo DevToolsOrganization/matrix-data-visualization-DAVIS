@@ -9,10 +9,12 @@
 #include "davis.h"
 
 #include <clocale>
+#include <cmath>
 #include <ctype.h>
 #include <fstream>
 #include <iostream>
 #include <limits.h>
+#include <math.h>
 #include <numeric>
 #include <set>
 #include <sstream>
@@ -769,7 +771,7 @@ bool is_string_convertable_to_digit(const string& sample) {
 
 string nullIfNotFinite(double val) {
   string plotlyVar;
-  if (std::isfinite(val)) {
+  if (isfinite(val)) {
     plotlyVar = std::to_string(val);
   } else {
     plotlyVar = "null";
