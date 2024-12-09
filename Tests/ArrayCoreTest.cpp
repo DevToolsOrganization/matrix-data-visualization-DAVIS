@@ -2,6 +2,7 @@
 #include "plotly_maker/plotly_maker.h"
 #include "array_core/array_core.h"
 #include "common_utils/common_utils.h"
+#include "array_core/multi_plot.h"
 #include <fstream>
 #include <list>
 #include <array>
@@ -280,6 +281,74 @@ TEST(ArrayCore, showPseudo2DWithNanAndInf) {
   vals4[7] = -std::numeric_limits<double>::infinity();
   bool result = dv::show(vals4, rows, cols, "showPseudo2DWithNanAndInf");
   EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, show3ChartsWithHoldOn) {
+
+  vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
+  vector<double> vec2 = {2, 4, 6, 8, 10};
+  dv::holdOn();
+  bool v1 = dv::show(vec1, "titleHoldOn1");
+  bool v2 = dv::show(vec2, "titleHoldOn2");
+
+  vector<vector<double>> values;
+  vector<double> vecX = {5, 20, 21, 22, 50};
+  vector<double> vecY = {1, 2, 3, 4, 5};
+  values.emplace_back(vecX);
+  values.emplace_back(vecY);
+  auto config = dv::Config();
+  config.chart.title = "ChartXY";
+  config.chart.xLabel = "xLabel";
+  config.chart.yLabel = "yLabel";
+  bool v3 = dv::show(values, "showChartXY_ContainerOfContainers", config);
+
+  dv::holdOff();
+
+  EXPECT_EQ(v1 && v2 && v3, true);
+}
+
+TEST(ArrayCore, show2ChartsWithHoldOnCustomSettings) {
+  int size = 10;
+  int* vals = new int[size];
+  for (int i = 0; i < size; ++i) {
+    vals[i] = i;
+  }
+  vector<double> vec2 = {2, 4, 6, 8, 10};
+  dv::holdOn();
+  bool v1 = dv::show(vals, size, "line1");
+  bool v2 = dv::show(vec2, "line2");
+
+  auto config = dv::Config();
+  config.chart.title = "Custom title";
+  config.chart.xLabel = "Custom xLabel";
+  config.chart.yLabel = "Custom yLabel";
+  dv::holdOff(config);
+  EXPECT_EQ(v1 && v2, true);
+}
+
+TEST(ArrayCore, testMyltiplyHoldOnOff) {
+
+  vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
+  vector<double> vec2 = {3, 4, 5, 6, 7};
+
+  dv::holdOn();
+  bool v1 = dv::show(vec1, "titleHoldOn1");
+  bool v2 = dv::show(vec1, "titleHoldOn2");
+  dv::holdOff();
+
+  dv::holdOff();
+  dv::holdOn();
+  dv::holdOn();
+  dv::holdOff();
+
+  dv::show(vec1, "titleSoloGraph");
+
+  dv::holdOn();
+  dv::show(vec1, "titleHoldOn3");
+  dv::show(vec1, "titleHoldOn4");
+  dv::holdOff();
+
+  EXPECT_EQ(v1 && v2, true);
 }
 
 int main(int argc, char* argv[]) {

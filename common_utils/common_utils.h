@@ -64,6 +64,11 @@ string removeSpecialCharacters(const string& s);
 //! convert this cases to string "null" for Plotly
 string nullIfNotFinite(double val);
 
+//! convert vec to string, separated by ","
+string vectorToString(const vector<double>& vec);
+
+string makeUniqueDavisHtmlName();
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
