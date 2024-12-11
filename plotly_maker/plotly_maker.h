@@ -50,6 +50,9 @@ void showMatrixSizesAreNotTheSame(int badRow);
 void showDateTimeChart(const string& date_time_values,
                        const vector<double>& yValues);
 
+void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
+void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

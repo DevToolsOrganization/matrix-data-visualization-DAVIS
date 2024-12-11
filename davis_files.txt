@@ -7,4 +7,6 @@ common_utils/common_utils.h
 common_utils/common_utils.cpp
 plotly_maker/plotly_maker.h
 plotly_maker/plotly_maker.cpp
+array_core/multi_plot.h
+array_core/multi_plot.cpp
 array_core/array_core.h

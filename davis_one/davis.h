@@ -14,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <stdint.h>
 #include <string>
 #include <vector>
 namespace dvs {
@@ -237,6 +238,11 @@ string removeSpecialCharacters(const string& s);
 //! convert this cases to string "null" for Plotly
 string nullIfNotFinite(double val);
 
+//! convert vec to string, separated by ","
+string vectorToString(const vector<double>& vec);
+
+string makeUniqueDavisHtmlName();
+
 //! save to disk vector<T> data
 template <typename T>
 bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
@@ -361,16 +367,41 @@ void showMatrixSizesAreNotTheSame(int badRow);
 void showDateTimeChart(const string& date_time_values,
                        const vector<double>& yValues);
 
+void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
+void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
+
 
 } // namespace dvs end
 
+namespace dvs {
+
+extern bool isHold;
+extern vector<string> allChartBlocks;
+
+
+} // namespace dvs end
+
+namespace dv {
+
+
+//! it shows, that we want to start accumulate chart graphs for showing
+//! them all at one html in one axes
+void holdOn();
+
+//! finish creation of html page with multi pages
+void holdOff(const Config& configuration = Config());
+
+
+
+
+} // namespace dv end
 namespace dv {
 
 using std::vector;
 using std::string;
 
 
-//! 2-dimensional array
+//! (matrix) 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
           const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
@@ -379,7 +410,7 @@ template <typename T>
 bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
           const configSaveToDisk& configuration = configSaveToDisk());
 
-//! 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
+//! (matrix) 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
           const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
@@ -388,14 +419,14 @@ template <typename T>
 bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
           const configSaveToDisk& configuration = configSaveToDisk());
 
-//! 1-dimensional array
+//! (chart) 1-dimensional array
 template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
 
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
-//! 1-dimensional container
+//! (chart) 1-dimensional container
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
@@ -407,7 +438,7 @@ template<typename C,
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
-//! Two 1-dimensional container for X-Y plots
+//! (chart) Two 1-dimensional container for X-Y plot
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
@@ -419,7 +450,7 @@ template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00
 bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
-//! 2-dimensional container
+//! (chart / matrix) 2-dimensional container
 template<typename C,
          typename E = std::decay_t<decltype(*begin(std::declval<C>()))>,
          typename T = std::decay_t<decltype(*begin(std::declval<E>()))>,
@@ -500,8 +531,14 @@ bool show(const T* data, uint64_t count, const string& htmlPageName, const Confi
   vector<double> dblRow(data, data + count);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_CHART)
-    res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+      configuration.typeVisual == VISUALTYPE_CHART) {
+    if (!dvs::isHold) {
+      res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+    } else {
+      dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
+      res = true;
+    }
+  }
   return res;
 }
 
@@ -517,8 +554,14 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
   vector<double> dblRow = dvs::vecFromTemplate<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_CHART)
-    res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+      configuration.typeVisual == VISUALTYPE_CHART) {
+    if (!dvs::isHold) {
+      res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+    } else {
+      dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
+      res = true;
+    }
+  }
   return res;
 }
 
@@ -536,7 +579,14 @@ bool show(C const& containerX, C const& containerY, const string& htmlPageName, 
   }
   vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
   vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
-  bool res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+
+  bool res = false;
+  if (!dvs::isHold) {
+    res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+  } else {
+    dvs::addTraceBlockToGlobal(dblRowX, dblRowY, htmlPageName);
+    res = true;
+  }
   return res;
 }
 
@@ -573,17 +623,23 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
        configuration.typeVisual == VISUALTYPE_CHART) &&
       (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
+    vector<double> xVals;
+    vector<double> yVals;
     if (size1 == 2) {
-      res = dvs::showLineChartInBrowser(vecVecDbl[0], vecVecDbl[1], htmlPageName, configuration);
+      xVals = vecVecDbl[0];
+      yVals = vecVecDbl[1];
     } else if (size2 == 2) {
-      vector<double> xVals;
-      vector<double> yVals;
       xVals.reserve(size1);
       for (int i = 0; i < size1; ++i) {
         xVals.emplace_back(vecVecDbl[i][0]);
         yVals.emplace_back(vecVecDbl[i][1]);
       }
+    }
+    if (!dvs::isHold) {
       res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName, configuration);
+    } else {
+      dvs::addTraceBlockToGlobal(xVals, yVals, htmlPageName);
+      res = true;
     }
   } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
              configuration.typeVisual == VISUALTYPE_HEATMAP) {

@@ -16,6 +16,7 @@
 #include <limits.h>
 #include <math.h>
 #include <numeric>
+#include <random>
 #include <set>
 #include <sstream>
 #include <sys/stat.h>
@@ -421,24 +422,24 @@ var data = [%3];
 
 var layout = {
   title: {
-    text:'Title'
+    text:'%4'
   },
   xaxis: {
     title: {
-      text: 'X'
+      text: '%5'
     },
   },
   yaxis: {
     title: {
-      text: 'Y'
+      text: '%6'
     }
   },
   scene: {
     xaxis: {
-      title: 'X',
+      title: '%5',
     },
     yaxis: {
-      title: 'Y',
+      title: '%6',
     },
     zaxis: {
       title: '',
@@ -773,10 +774,30 @@ string nullIfNotFinite(double val) {
   string plotlyVar;
   if (isfinite(val)) {
     plotlyVar = std::to_string(val);
+    std::replace(plotlyVar.begin(), plotlyVar.end(), ',', '.');
   } else {
     plotlyVar = "null";
   }
   return plotlyVar;
+}
+
+string vectorToString(const vector<double>& vec) {
+  std::ostringstream oss;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    if (i != 0) {
+      oss << ",";
+    }
+    oss << vec[i];
+  }
+  return oss.str();
+}
+
+string makeUniqueDavisHtmlName() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(1, 1e9);
+  int random_number = dis(gen);
+  return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
 }
 
 
@@ -1138,6 +1159,74 @@ void showDateTimeChart(const string& date_time_values,
 
 }
 
+void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName) {
+  vector<double> xValues(yValues.size());
+  std::iota(std::begin(xValues), std::end(xValues), 0);  // Fill with 0, 1, 2...
+  addTraceBlockToGlobal(xValues, yValues, traceName);
+}
+
+void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName) {
+  string trace_block = dvs::kHtmlMultiChartBlock;
+  int trace_i = 1 + dvs::allChartBlocks.size();
+  string str_numTrace = std::to_string(trace_i);
+  string str_values_x = vectorToString(xValues);
+  string str_values_y = vectorToString(yValues);
+
+  vector<string> args = {str_numTrace, str_values_x, str_values_y, traceName};
+  string filled_trace_block = "";
+  make_string(trace_block, args, filled_trace_block);
+  dvs::allChartBlocks.emplace_back(filled_trace_block);
+}
+
 
 } // namespace dvs end
 
+namespace dvs {
+
+bool isHold = false;
+vector<string> allChartBlocks = {};
+
+
+} // namespace dvs end
+
+namespace dv {
+
+void holdOn() {
+  dvs::isHold = true;
+  dvs::allChartBlocks.clear();
+
+}
+
+void holdOff(const Config& configuration) {
+  dvs::isHold = false;
+  if (dvs::allChartBlocks.empty()) {
+    return;
+  }
+  string allTracesNames_str;
+  string allChartBlocks_str;
+  const string trace_name_part = "trace";
+  for (int i = 0; i < dvs::allChartBlocks.size(); ++i) {
+    string str_numTrace = std::to_string(i + 1);
+    string filled_trace_name_part = trace_name_part + str_numTrace;
+    if (i < dvs::allChartBlocks.size() - 1) {
+      filled_trace_name_part.append(",");
+    }
+    allTracesNames_str.append(filled_trace_name_part);
+    allChartBlocks_str.append(dvs::allChartBlocks[i]);
+  }
+  vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
+                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel
+                        };
+  string multichartPage = dvs::kHtmlMultiChartModel;
+  string filled_multichartPage = "";
+  dvs::make_string(multichartPage, args, filled_multichartPage);
+  string htmlFullName = dvs::makeUniqueDavisHtmlName();
+  dvs::saveStringToFile(htmlFullName, filled_multichartPage);
+  dvs::openFileBySystem(htmlFullName);
+  dvs::allChartBlocks.clear();
+}
+
+
+
+
+} // namespace dv end

@@ -13,7 +13,7 @@
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 #include "plotly_maker.h"
-
+#include "array_core/multi_plot.h"
 
 namespace dvs {
 //#START_GRAB_TO_DVS_NAMESPACE
@@ -369,6 +369,25 @@ void showDateTimeChart(const string& date_time_values,
   openFileBySystem(kReportPagePath);
 
 
+}
+
+void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName) {
+  vector<double> xValues(yValues.size());
+  std::iota(std::begin(xValues), std::end(xValues), 0);  // Fill with 0, 1, 2...
+  addTraceBlockToGlobal(xValues, yValues, traceName);
+}
+
+void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName) {
+  string trace_block = dvs::kHtmlMultiChartBlock;
+  int trace_i = 1 + dvs::allChartBlocks.size();
+  string str_numTrace = std::to_string(trace_i);
+  string str_values_x = vectorToString(xValues);
+  string str_values_y = vectorToString(yValues);
+
+  vector<string> args = {str_numTrace, str_values_x, str_values_y, traceName};
+  string filled_trace_block = "";
+  make_string(trace_block, args, filled_trace_block);
+  dvs::allChartBlocks.emplace_back(filled_trace_block);
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
