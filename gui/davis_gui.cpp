@@ -251,9 +251,18 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   QJsonObject user_stamp_keys;
+  QJsonArray matrix_to_matrix_stamps;
 
   if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+  }
+
+  if(user_stamp_keys.keys().contains("matrix_to_matrix")){
+      matrix_to_matrix_stamps = user_stamp_keys.value("matrix_to_matrix").toArray();
+  }else{
+     QJsonObject user_stamp_keys;
+     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+     matrix_to_matrix_stamps = user_stamp_keys.value("matrix_to_matrix").toArray();
   }
 
   QJsonValue jv;
@@ -266,9 +275,57 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
   //qDebug()<<"result all objects size:"<<result.size();
 
   for (int i = 0; i < result.size(); ++i) {
-    auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
+
+   //Проверяем является ли объект MATRIX TO MATRIX типом
+   //qDebug()<<"MATRIX TO MATRIX: "<<matrix_to_matrix_stamps;
+   for(int j=0; j<matrix_to_matrix_stamps.size(); ++j){
+   auto obj = result[i].toObject();
+   QStringList check_keys;
+
+   check_keys<<matrix_to_matrix_stamps[j].toObject().value("attribute_key").toString();
+   check_keys<<matrix_to_matrix_stamps[j].toObject().value("x_values").toString();
+   check_keys<<matrix_to_matrix_stamps[j].toObject().value("y_values").toString();
+
+   bool is_matrix_to_matrix_result = jsn::isObjectMatrixToMatrixType(
+               check_keys,
+               obj
+               );
+   //qDebug()<<matrix_to_matrix_stamps[j].toObject().keys();
+   if(is_matrix_to_matrix_result){
+    if(check_keys.size()!=3){
+        qDebug()<<"********************** MATRIX TO MATRIX KEYS EXCEPTION ***************************";
+        continue;
+    };
+    qDebug()<<"MATRIX_TO_MATRIX_PROCESS.......";
+    // 0 - atr metadata
+    // 1 - x array of arrays values
+    // 2 - y array  of arrays values
+    auto attr_arr = obj.value(check_keys[0]).toArray();
+    auto x_arr = obj.value(check_keys[1]).toArray();
+    auto y_arr = obj.value(check_keys[2]).toArray();
+    if(x_arr.size()!=y_arr.size()){
+        qDebug()<<"********************** MATRIX TO MATRIX ARRAY ARRAY SIZES EXCEPTION ***************************";
+        continue;
+    };
+    for(int k=0;k<x_arr.size();++k){
+        auto attr = attr_arr[k].toObject();
+        auto x_vals = jsn::getVectorDoubleFromJsonArray(x_arr[k].toArray()).toStdVector();
+        auto y_vals = jsn::getVectorDoubleFromJsonArray(y_arr[k].toArray()).toStdVector();
+        dv::Config conf;
+        conf.chart.yLabel = attr.value("type").toString().toStdString();
+        conf.chart.title = attr.value("instrument").toString().toStdString();
+
+        dv::show(x_vals,y_vals,QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss_zz").toStdString(),conf);
+    }
+    return;// выход если это был MATRIX_TO_MATRIX_TYPE
+   }
+   }
+
+   auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
                                                                 service_json_keys,
                                                                 user_stamp_keys);
+
+
     if (json_object_result.first) {
       QJsonObject result_obj = json_object_result.second;
       QJsonArray x_values = result_obj["x_values"].toArray();

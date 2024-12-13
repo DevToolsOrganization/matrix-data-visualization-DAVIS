@@ -5,10 +5,7 @@
      
     "matrix_to_matrix":[
      {
-      "root_key":"spectral_data",
-      "attribute_key":"attribures",
-      "attribute_legend_key":"instrument",
-      "attribute_merge_key":"type",
+      "attribute_key":"attributes",
       "x_values":"waves",
       "y_values":"values"
      }
