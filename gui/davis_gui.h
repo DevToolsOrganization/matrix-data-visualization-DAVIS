@@ -59,6 +59,8 @@ class DavisGUI : public QMainWindow {
   QJsonObject loadSettings(const QString& fileName);
   void applySettings(const QJsonObject& settings);
   void readJsonToPlot(const QString& pathToFile);
+  bool mayBeShowMatrixToMatrix(QJsonArray &stamps,
+                               QJsonObject& obj);
   Skins checkSkin();
 
 

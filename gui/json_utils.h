@@ -50,6 +50,8 @@ QVector<QStringList> getStringListFromJsonArray(const QJsonArray& array);
 
 void extractAllObjects(const QJsonValue& value, QJsonArray& result);
 
+bool isObjectMatrixToMatrixType(const QStringList& keys, QJsonObject& object);
+
 
 } // end namespace jsn
 

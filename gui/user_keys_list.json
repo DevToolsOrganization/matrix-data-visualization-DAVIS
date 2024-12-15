@@ -1,7 +1,16 @@
   {
     "x_values": ["x","x_values","waves","nanometers"],
     "y_values": ["y","y_values","ksy","speyas"],
-     "matrix_values": ["matrix_key"]
+     "matrix_values": ["matrix_key"],
+     
+    "matrix_to_matrix":[
+     {
+      "attribute_key":"attributes",
+      "x_values":"waves",
+      "y_values":"values"
+     }
+    ]
+   
   }
  
 
