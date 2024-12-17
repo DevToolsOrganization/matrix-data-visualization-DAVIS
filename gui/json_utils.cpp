@@ -227,16 +227,16 @@ void extractAllObjects(const QJsonValue& value,
 }
 
 bool isObjectMatrixToMatrixType(const QStringList& keys,
-                                QJsonObject& object)
-{
-    QStringList object_keys = object.keys();
-    qDebug()<<"Проверочные Ключи: "<<keys;
-    qDebug()<<"Ключи объекта"<<object_keys;
-    for(int i=0;i<keys.size();++i){
-        if(object_keys.contains(keys[i]))continue;
-        return false;
-    }
-    return true;
+                                QJsonObject& object) {
+  QStringList object_keys = object.keys();
+  qDebug() << "Проверочные Ключи: " << keys;
+  qDebug() << "Ключи объекта" << object_keys;
+  for (int i = 0; i < keys.size(); ++i) {
+    if (object_keys.contains(keys[i]))
+      continue;
+    return false;
+  }
+  return true;
 }
 
 

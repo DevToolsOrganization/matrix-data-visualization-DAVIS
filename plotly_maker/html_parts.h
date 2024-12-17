@@ -48,6 +48,15 @@ enum ARGS_MULTI_CHARTS_PAGE {
   ARGS_MULTI_CHARTS_PAGE_SIZE
 };
 
+enum ARGS_CLOUD_OF_POINTS_PAGE {
+  ARG_JS_COF_NAME,
+  ARG_X_CLOUD_OF_POINTS,
+  ARG_Y_CLOUD_OF_POINTS,
+  ARG_COLOR_CLOUD_OF_POINTS,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_CLOUD_OF_POINTS_PAGE_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -74,6 +83,7 @@ extern const char kHtmlDateTimeModel[];
 
 extern const char kHtmlMultiChartBlock[];
 extern const char kHtmlMultiChartModel[];
+extern const char kHtmlCloudOfPoints[];
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }

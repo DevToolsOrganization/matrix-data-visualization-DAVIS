@@ -156,6 +156,15 @@ enum ARGS_MULTI_CHARTS_PAGE {
   ARGS_MULTI_CHARTS_PAGE_SIZE
 };
 
+enum ARGS_CLOUD_OF_POINTS_PAGE {
+  ARG_JS_COF_NAME,
+  ARG_X_CLOUD_OF_POINTS,
+  ARG_Y_CLOUD_OF_POINTS,
+  ARG_COLOR_CLOUD_OF_POINTS,
+  // ADD NEW ENUM BEFORE THIS COMMENT
+  ARGS_CLOUD_OF_POINTS_PAGE_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -182,6 +191,7 @@ extern const char kHtmlDateTimeModel[];
 
 extern const char kHtmlMultiChartBlock[];
 extern const char kHtmlMultiChartModel[];
+extern const char kHtmlCloudOfPoints[];
 
 
 } // namespace dvs end
@@ -369,6 +379,10 @@ void showDateTimeChart(const string& date_time_values,
 
 void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
 void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
+
+void showCloudOfPointsChart(const vector<double>& xValues,
+                            const vector<double>& yValues,
+                            const vector<double>& colorValues);
 
 
 } // namespace dvs end

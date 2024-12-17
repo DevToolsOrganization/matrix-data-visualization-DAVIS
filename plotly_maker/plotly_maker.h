@@ -53,6 +53,10 @@ void showDateTimeChart(const string& date_time_values,
 void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
 void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
 
+void showCloudOfPointsChart(const vector<double>& xValues,
+                            const vector<double>& yValues,
+                            const vector<double>& colorValues);
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

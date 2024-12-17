@@ -390,6 +390,26 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
   dvs::allChartBlocks.emplace_back(filled_trace_block);
 }
 
+void showCloudOfPointsChart(const vector<double>& xValues,
+                            const vector<double>& yValues,
+                            const vector<double>& colorValues) {
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  args[ARG_JS_COF_NAME] = kPlotlyJsName;
+  args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
+  args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
+  args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  make_string(kHtmlCloudOfPoints, args, out);
+  saveStringToFile(kReportPagePath, out);
+  openFileBySystem(kReportPagePath);
+}
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
