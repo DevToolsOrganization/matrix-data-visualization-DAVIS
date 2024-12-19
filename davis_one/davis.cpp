@@ -480,7 +480,9 @@ mode: 'markers',
 
   marker: {
     size: 10,
-    color:[%4]
+    color:[%4],
+    colorbar:{},
+    colorscale: ''
   }
 };
 var data = [trace];

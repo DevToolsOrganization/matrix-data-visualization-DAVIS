@@ -694,7 +694,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   if (lines.size() != values.size()) {
     return false;
   }
-  if (force.empty()==false) {
+  if (force.empty() == false) {
     dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force);
     return true;
   }
@@ -918,7 +918,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
-      if(line.isEmpty())continue;
+      if (line.isEmpty())
+        continue;
       str_lines.append(line);
     }
     if (str_lines.empty()) {
