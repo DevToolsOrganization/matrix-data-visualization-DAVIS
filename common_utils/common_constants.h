@@ -10,6 +10,7 @@ extern const char kPlotlyJsResourcePath[];
 extern const char kPlotlyJsWorkPath[];
 extern const char kWarningPagePath[];
 extern const char kReportPagePath[];
+extern const char kCloudPagePath[];
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

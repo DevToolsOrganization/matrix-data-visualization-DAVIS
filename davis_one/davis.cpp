@@ -29,6 +29,7 @@ const char kPlotlyJsName[] = "plotly-2.32.0.min.js";
 const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.32.0.min.js";
 const char kWarningPagePath[] = "./davis_htmls/warning_js_absent.html";
 const char kReportPagePath[] = "./davis_htmls/report.html";
+const char kCloudPagePath[] = "./davis_htmls/cloud_of_points.html";
 
 } // namespace dvs end
 
@@ -459,6 +460,48 @@ Plotly.newPlot('gd', data, layout, config);
 </script>
 </body>
 )davis_delimeter";
+
+
+
+extern const char kHtmlCloudOfPoints[] = R"davis_delimeter(
+
+<head>
+<script src="%1" charset="utf-8"></script>
+</head>
+<body><div style = "display: flex;
+  align-items:center;height:100%; width:100%;background:#dddfd4;
+  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+id="gd"></div></div>
+<script>
+var trace = {
+x:[%2],
+y:[%3],
+mode: 'markers',
+
+  marker: {
+    size: 10,
+    color:[%4],
+    colorbar:{},
+    colorscale: ''
+  }
+};
+var data = [trace];
+
+var config = {
+  editable: true,
+  showLink: true,
+  plotlyServerURL: "https://chart-studio.plotly.com"
+};
+
+var layout = {};
+
+Plotly.newPlot('gd', data,layout,config);
+</script>
+</body>
+
+)davis_delimeter";
+
+
 
 
 // *INDENT-ON*
@@ -1176,6 +1219,46 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
   string filled_trace_block = "";
   make_string(trace_block, args, filled_trace_block);
   dvs::allChartBlocks.emplace_back(filled_trace_block);
+}
+
+void showCloudOfPointsChart(const vector<double>& xValues,
+                            const vector<double>& yValues,
+                            const vector<double>& colorValues) {
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  args[ARG_JS_COF_NAME] = kPlotlyJsName;
+  args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
+  args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
+  args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  make_string(kHtmlCloudOfPoints, args, out);
+  saveStringToFile(kCloudPagePath, out);
+  openFileBySystem(kCloudPagePath);
+}
+
+void showCloudOfPointsChartStr(const std::string& xValues,
+                               const vector<double>& yValues,
+                               const vector<double>& colorValues) {
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  args[ARG_JS_COF_NAME] = kPlotlyJsName;
+  args[ARG_X_CLOUD_OF_POINTS] = xValues;
+  args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
+  args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  make_string(kHtmlCloudOfPoints, args, out);
+  saveStringToFile(kCloudPagePath, out);
+  openFileBySystem(kCloudPagePath);
 }
 
 
