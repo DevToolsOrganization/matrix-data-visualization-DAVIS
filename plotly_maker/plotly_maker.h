@@ -57,6 +57,11 @@ void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
                             const vector<double>& colorValues);
 
+
+void showCloudOfPointsChartStr(const string& xValues,
+                               const vector<double>& yValues,
+                               const vector<double>& colorValues);
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

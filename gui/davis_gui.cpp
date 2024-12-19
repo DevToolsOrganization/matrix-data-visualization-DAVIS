@@ -649,6 +649,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   qDebug() << jarr;
   QString dates;
   std::vector<double> values;
+  std::vector<double> force;
 
   for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
@@ -663,7 +664,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
       QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
       if (dt.isValid()) {
         //2013-10-04 22:23:00
-        qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
+        //qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
         dates.append("'");
         dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
         dates.append("'");
@@ -672,12 +673,17 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
         }
 
         auto values_list = test.split(separator);
-        if (values_list.size() != 2) {
+        if (values_list.size() < 2 || values_list.size() > 3) {
           continue;
         }
         double value = values_list[1].toDouble();
-        qDebug() << value;
+        //qDebug() << value;
         values.emplace_back(value);
+        if (values_list.size() == 3) {
+          double value = values_list[2].toDouble();
+          //qDebug() << value;
+          force.emplace_back(value);
+        }
 
       }
     }
@@ -687,6 +693,10 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   qDebug() << "check sizes: " << lines.size() << values.size();
   if (lines.size() != values.size()) {
     return false;
+  }
+  if (force.empty()==false) {
+    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force);
+    return true;
   }
   dvs::showDateTimeChart(dates.toStdString(), values);
   return true;
@@ -908,6 +918,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
+      if(line.isEmpty())continue;
       str_lines.append(line);
     }
     if (str_lines.empty()) {

@@ -9,5 +9,6 @@ const char kPlotlyJsName[] = "plotly-2.32.0.min.js";
 const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.32.0.min.js";
 const char kWarningPagePath[] = "./davis_htmls/warning_js_absent.html";
 const char kReportPagePath[] = "./davis_htmls/report.html";
+const char kCloudPagePath[] = "./davis_htmls/cloud_of_points.html";
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }

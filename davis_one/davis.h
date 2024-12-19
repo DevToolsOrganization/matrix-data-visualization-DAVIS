@@ -25,6 +25,7 @@ extern const char kPlotlyJsResourcePath[];
 extern const char kPlotlyJsWorkPath[];
 extern const char kWarningPagePath[];
 extern const char kReportPagePath[];
+extern const char kCloudPagePath[];
 
 } // namespace dvs end
 
@@ -383,6 +384,11 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
                             const vector<double>& colorValues);
+
+
+void showCloudOfPointsChartStr(const string& xValues,
+                               const vector<double>& yValues,
+                               const vector<double>& colorValues);
 
 
 } // namespace dvs end
