@@ -71,10 +71,10 @@ string makeUniqueDavisHtmlName();
 
 //! sometimes std::to_string reurn str with ',' as separator what is wrong
 template <typename T>
-string toStringDotSeparator(T data){
-    string str = std::to_string(data);
-    std::replace(str.begin(), str.end(), ',', '.');
-    return str;
+string toStringDotSeparator(T data) {
+  string str = std::to_string(data);
+  std::replace(str.begin(), str.end(), ',', '.');
+  return str;
 }
 
 //! save to disk vector<T> data

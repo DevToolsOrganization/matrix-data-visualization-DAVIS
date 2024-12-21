@@ -153,7 +153,7 @@ TEST(ArrayCore, showHeatMap1) {
   bool result = dv::show(values, "showHeatMap_gray", config);
   EXPECT_EQ(result, true);
 }
-/*
+
 TEST(ArrayCore, showSurface) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
@@ -354,7 +354,7 @@ TEST(ArrayCore, testMyltiplyHoldOnOff) {
 
   EXPECT_EQ(v1 && v2, true);
 }
-*/
+
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();

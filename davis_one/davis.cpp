@@ -42,7 +42,7 @@ R"(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%11:99%; aspect-ratio: %9/%10;"
 id="gd"></div></div>
 <script>
 %1
@@ -368,7 +368,7 @@ extern const char kHtmlDateTimeModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%6:99%; aspect-ratio: %4/%5;"
 id="gd"></div></div>
 
 <script>
@@ -413,7 +413,7 @@ extern const char kHtmlMultiChartModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%9:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
 <script>
 
@@ -470,7 +470,7 @@ extern const char kHtmlCloudOfPoints[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%7:99%; aspect-ratio: %5/%6;"
 id="gd"></div></div>
 <script>
 var trace = {
@@ -1010,24 +1010,39 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       break;
   }
   switch (typeVisual) {
-    case dv::VISUALTYPE_HEATMAP:
+    case dv::VISUALTYPE_HEATMAP: {
       args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       args[ARG_TITLE] = configuration.heatmap.title;
       args[ARG_TITLE_X] = configuration.heatmap.xLabel;
       args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
+      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
+      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
+      string paramWH;
+      if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
+        paramWH = "width";
+      } else {
+        paramWH = "height";
+      }
+      args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
       break;
-    case dv::VISUALTYPE_SURFACE:
+    }
+    case dv::VISUALTYPE_SURFACE: {
       args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
       args[ARG_TITLE] = configuration.surf.title;
       args[ARG_TITLE_X] = configuration.surf.xLabel;
       args[ARG_TITLE_Y] = configuration.surf.yLabel;
       args[ARG_TITLE_Z] = configuration.surf.zLabel;
+      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.surf.aspectRatioWidth);
+      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.surf.aspectRatioHeight);
+      string paramWH;
+      if (configuration.surf.aspectRatioWidth > configuration.surf.aspectRatioHeight) {
+        paramWH = "width";
+      } else {
+        paramWH = "height";
+      }
+      args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
       break;
-    case dv::VISUALTYPE_CHART:
-      args[ARG_TITLE] = configuration.chart.title;
-      args[ARG_TITLE_X] = configuration.chart.xLabel;
-      args[ARG_TITLE_Y] = configuration.chart.yLabel;
-      break;
+    }
     default:
       break;
   }
@@ -1069,6 +1084,15 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
   args[ARG_TITLE_Y] = configuration.chart.yLabel;
+  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
+  string paramWH;
+  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+    paramWH = "width";
+  } else {
+    paramWH = "height";
+  }
+  args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
@@ -1195,6 +1219,18 @@ void showDateTimeChart(const string& date_time_values,
   }
 
   args[ARG_Y_DATE_TIME_VALUES] = values;
+  args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  /*
+  string paramWH;
+  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
+    paramWH = "width";
+  }else{
+    paramWH = "height";
+  }
+  */
+  string paramWH = "height";
+  args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlDateTimeModel, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
@@ -1236,6 +1272,18 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
+  /*
+  string paramWH;
+  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
+    paramWH = "width";
+  }else{
+    paramWH = "height";
+  }
+  */
+  string paramWH = "height";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
   openFileBySystem(kCloudPagePath);
@@ -1256,6 +1304,18 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_X_CLOUD_OF_POINTS] = xValues;
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
+  /*
+  string paramWH;
+  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
+    paramWH = "width";
+  }else{
+    paramWH = "height";
+  }
+  */
+  string paramWH = "height";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
   openFileBySystem(kCloudPagePath);
@@ -1297,8 +1357,17 @@ void holdOff(const Config& configuration) {
     allTracesNames_str.append(filled_trace_name_part);
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
+  string paramWH;
+  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+    paramWH = "width";
+  } else {
+    paramWH = "height";
+  }
   vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
-                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel
+                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
+                         dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
+                         dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
+                         paramWH
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";

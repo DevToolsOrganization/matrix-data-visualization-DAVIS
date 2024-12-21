@@ -31,7 +31,7 @@ struct commonSettings {
     xLabel("X"),
     yLabel("Y"),
     aspectRatioWidth(1),
-    aspectRatioHeight(1){}
+    aspectRatioHeight(1) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;

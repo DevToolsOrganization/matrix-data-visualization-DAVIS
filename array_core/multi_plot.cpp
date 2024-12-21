@@ -39,10 +39,17 @@ void holdOff(const Config& configuration) {
     allTracesNames_str.append(filled_trace_name_part);
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
+  string paramWH;
+  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+    paramWH = "width";
+  } else {
+    paramWH = "height";
+  }
   vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
                          configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
-                         dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight)
+                         dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
+                         paramWH
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";

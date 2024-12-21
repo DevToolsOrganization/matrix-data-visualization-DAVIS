@@ -179,8 +179,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       break;
   }
   switch (typeVisual) {
-    case dv::VISUALTYPE_HEATMAP:
-    {
+    case dv::VISUALTYPE_HEATMAP: {
       args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
       args[ARG_TITLE] = configuration.heatmap.title;
       args[ARG_TITLE_X] = configuration.heatmap.xLabel;
@@ -188,16 +187,15 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
       args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
       string paramWH;
-      if(configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight){
+      if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
         paramWH = "width";
-      }else{
+      } else {
         paramWH = "height";
       }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
       break;
     }
-    case dv::VISUALTYPE_SURFACE:
-    {
+    case dv::VISUALTYPE_SURFACE: {
       args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
       args[ARG_TITLE] = configuration.surf.title;
       args[ARG_TITLE_X] = configuration.surf.xLabel;
@@ -206,9 +204,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.surf.aspectRatioWidth);
       args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.surf.aspectRatioHeight);
       string paramWH;
-      if(configuration.surf.aspectRatioWidth > configuration.surf.aspectRatioHeight){
+      if (configuration.surf.aspectRatioWidth > configuration.surf.aspectRatioHeight) {
         paramWH = "width";
-      }else{
+      } else {
         paramWH = "height";
       }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
@@ -258,9 +256,9 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
   args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
   string paramWH;
-  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
+  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
     paramWH = "width";
-  }else{
+  } else {
     paramWH = "height";
   }
   args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
