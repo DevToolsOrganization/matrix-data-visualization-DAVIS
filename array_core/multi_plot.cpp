@@ -40,7 +40,9 @@ void holdOff(const Config& configuration) {
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
   vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
-                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel
+                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
+                         dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
+                         dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight)
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";

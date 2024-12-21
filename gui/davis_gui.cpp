@@ -882,7 +882,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       }
     }
     QString multichartPage = dvs::kHtmlMultiChartModel;
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y");
+    multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y",
+                                        QString::number(1), QString::number(1));
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);

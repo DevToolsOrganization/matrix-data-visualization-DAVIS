@@ -184,6 +184,8 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_TITLE] = configuration.heatmap.title;
       args[ARG_TITLE_X] = configuration.heatmap.xLabel;
       args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
+      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
+      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
       break;
     case dv::VISUALTYPE_SURFACE:
       args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
@@ -191,11 +193,15 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_TITLE_X] = configuration.surf.xLabel;
       args[ARG_TITLE_Y] = configuration.surf.yLabel;
       args[ARG_TITLE_Z] = configuration.surf.zLabel;
+      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.surf.aspectRatioWidth);
+      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.surf.aspectRatioHeight);
       break;
-    case dv::VISUALTYPE_CHART:
+    case dv::VISUALTYPE_CHART: //probably this case is unnecessary
       args[ARG_TITLE] = configuration.chart.title;
       args[ARG_TITLE_X] = configuration.chart.xLabel;
       args[ARG_TITLE_Y] = configuration.chart.yLabel;
+      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
+      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
       break;
     default:
       break;
@@ -238,6 +244,8 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
   args[ARG_TITLE_Y] = configuration.chart.yLabel;
+  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
@@ -364,6 +372,8 @@ void showDateTimeChart(const string& date_time_values,
   }
 
   args[ARG_Y_DATE_TIME_VALUES] = values;
+  args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
   make_string(kHtmlDateTimeModel, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
@@ -405,6 +415,8 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
   openFileBySystem(kCloudPagePath);
@@ -425,6 +437,8 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_X_CLOUD_OF_POINTS] = xValues;
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
   openFileBySystem(kCloudPagePath);
