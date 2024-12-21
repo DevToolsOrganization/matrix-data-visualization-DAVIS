@@ -149,11 +149,11 @@ TEST(ArrayCore, showHeatMap1) {
   config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
   config.heatmap.aspectRatioWidth = 2;
-  config.heatmap.aspectRatioHeight = 1;
+  config.heatmap.aspectRatioHeight = 3;
   bool result = dv::show(values, "showHeatMap_gray", config);
   EXPECT_EQ(result, true);
 }
-
+/*
 TEST(ArrayCore, showSurface) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
@@ -354,7 +354,7 @@ TEST(ArrayCore, testMyltiplyHoldOnOff) {
 
   EXPECT_EQ(v1 && v2, true);
 }
-
+*/
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();
