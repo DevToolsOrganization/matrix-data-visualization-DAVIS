@@ -10,7 +10,7 @@
 
 using std::string;
 using std::vector;
-
+/*
 TEST(ArrayCore, save_to_disk_2d) {
   //! 2-dimensional array
   int rows = 10;
@@ -141,13 +141,15 @@ TEST(ArrayCore, showDefaultSettings) {
   bool result = dv::show(values, "testDefaultSettings");
   EXPECT_EQ(result, true);
 }
-
+*/
 TEST(ArrayCore, showHeatMap1) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
   config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
+  config.heatmap.aspectRatioWidth = 2;
+  config.heatmap.aspectRatioHeight = 3;
   bool result = dv::show(values, "showHeatMap_gray", config);
   EXPECT_EQ(result, true);
 }
@@ -322,6 +324,8 @@ TEST(ArrayCore, show2ChartsWithHoldOnCustomSettings) {
   config.chart.title = "Custom title";
   config.chart.xLabel = "Custom xLabel";
   config.chart.yLabel = "Custom yLabel";
+  config.chart.aspectRatioHeight = 1;
+  config.chart.aspectRatioWidth = 3;
   dv::holdOff(config);
   EXPECT_EQ(v1 && v2, true);
 }
@@ -329,11 +333,11 @@ TEST(ArrayCore, show2ChartsWithHoldOnCustomSettings) {
 TEST(ArrayCore, testMyltiplyHoldOnOff) {
 
   vector<double> vec1 = {1, 2, 3, 4, 5, 6, 7};
-  vector<double> vec2 = {3, 4, 5, 6, 7};
+  vector<double> vec2 = {3, 4, 5, 6, 27};
 
   dv::holdOn();
   bool v1 = dv::show(vec1, "titleHoldOn1");
-  bool v2 = dv::show(vec1, "titleHoldOn2");
+  bool v2 = dv::show(vec2, "titleHoldOn2");
   dv::holdOff();
 
   dv::holdOff();

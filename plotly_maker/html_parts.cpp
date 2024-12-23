@@ -10,7 +10,7 @@ R"(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%11:99%; aspect-ratio: %9/%10;"
 id="gd"></div></div>
 <script>
 %1
@@ -336,7 +336,7 @@ extern const char kHtmlDateTimeModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%6:99%; aspect-ratio: %4/%5;"
 id="gd"></div></div>
 
 <script>
@@ -381,7 +381,7 @@ extern const char kHtmlMultiChartModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%9:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
 <script>
 
@@ -438,7 +438,7 @@ extern const char kHtmlCloudOfPoints[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="height:95%; aspect-ratio: 1/1;"
+  justify-content: center;"><div style="%7:99%; aspect-ratio: %5/%6;"
 id="gd"></div></div>
 <script>
 var trace = {

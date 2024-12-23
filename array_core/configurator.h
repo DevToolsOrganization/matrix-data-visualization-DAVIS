@@ -29,11 +29,15 @@ enum config_colorscales {
 struct commonSettings {
   commonSettings():
     xLabel("X"),
-    yLabel("Y") {}
+    yLabel("Y"),
+    aspectRatioWidth(1),
+    aspectRatioHeight(1) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
+  double aspectRatioWidth;
+  double aspectRatioHeight;
 };
 
 struct chartSettings : public commonSettings {

@@ -889,8 +889,17 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
         }
       }
     }
+    double aspectW = 1;
+    double aspectH = 1;
+    QString paramWH;
+    if (aspectW > aspectH) {
+      paramWH = "width";
+    } else {
+      paramWH = "height";
+    }
     QString multichartPage = dvs::kHtmlMultiChartModel;
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y");
+    multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y",
+                                        QString::number(aspectW), QString::number(aspectH), paramWH);
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);

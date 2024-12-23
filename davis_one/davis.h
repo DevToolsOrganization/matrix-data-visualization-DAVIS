@@ -55,11 +55,15 @@ enum config_colorscales {
 struct commonSettings {
   commonSettings():
     xLabel("X"),
-    yLabel("Y") {}
+    yLabel("Y"),
+    aspectRatioWidth(1),
+    aspectRatioHeight(1) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
+  double aspectRatioWidth;
+  double aspectRatioHeight;
 };
 
 struct chartSettings : public commonSettings {
@@ -121,6 +125,9 @@ enum ARGS_INDEX {
   ARG_TITLE_Y,    //%6
   ARG_TITLE_Z,    //%7
   ARG_JS_VER,     //%8
+  ARG_ASPECT_RATIO_WIDTH,     //%9
+  ARG_ASPECT_RATIO_HEIGHT,     //%10
+  ARG_ASPECT_WIDTH_OR_HEIGHT, //11 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };
@@ -145,14 +152,26 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_JS_NAME,            //%1
   ARG_DATE_TIME_VALUES,   //%2
   ARG_Y_DATE_TIME_VALUES, //%3
+  ARG_DATE_TIME_ASPECT_RATIO_WIDTH,     //%4
+  ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%5
+  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%6 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
 
+// currently don't used
 enum ARGS_MULTI_CHARTS_PAGE {
   ARG_JS_MC_NAME,
   ARG_TRACES_BLOCKS,
   ARG_DATA_OF_TRACES,
+  something1,
+  something2,
+  something3,
+  ARG_MC_DATE_TIME_ASPECT_RATIO_WIDTH,     //%7
+  ARG_MC_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%8
+  ARG_MC_DATE_ASPECT_WIDTH_OR_HEIGHT, //%9 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_MULTI_CHARTS_PAGE_SIZE
 };
@@ -162,6 +181,9 @@ enum ARGS_CLOUD_OF_POINTS_PAGE {
   ARG_X_CLOUD_OF_POINTS,
   ARG_Y_CLOUD_OF_POINTS,
   ARG_COLOR_CLOUD_OF_POINTS,
+  ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH,     //%5
+  ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT,     //%6
+  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT, //7 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_CLOUD_OF_POINTS_PAGE_SIZE
 };
@@ -253,6 +275,14 @@ string nullIfNotFinite(double val);
 string vectorToString(const vector<double>& vec);
 
 string makeUniqueDavisHtmlName();
+
+//! sometimes std::to_string reurn str with ',' as separator what is wrong
+template <typename T>
+string toStringDotSeparator(T data) {
+  string str = std::to_string(data);
+  std::replace(str.begin(), str.end(), ',', '.');
+  return str;
+}
 
 //! save to disk vector<T> data
 template <typename T>
