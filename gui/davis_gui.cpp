@@ -673,6 +673,14 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
         }
 
         auto values_list = test.split(separator);
+        //Clear empty values
+        for(int ch =0;ch<values_list.size();++ch){
+            if(values_list[ch].isEmpty()){
+               values_list.removeAt(ch);
+            }
+        }
+
+
         if (values_list.size() < 2 || values_list.size() > 3) {
           continue;
         }
@@ -691,9 +699,9 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   if (values.size() == 0)
     return false;
   qDebug() << "check sizes: " << lines.size() << values.size();
-  if (lines.size() != values.size()) {
+  /*if (lines.size() != values.size()) {
     return false;
-  }
+  }*/
   if (force.empty() == false) {
     dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force);
     return true;
