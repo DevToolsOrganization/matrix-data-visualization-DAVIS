@@ -31,13 +31,15 @@ struct commonSettings {
     xLabel("X"),
     yLabel("Y"),
     aspectRatioWidth(1),
-    aspectRatioHeight(1) {}
+    aspectRatioHeight(1),
+    isAutoScale(false) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
-  double aspectRatioWidth;
-  double aspectRatioHeight;
+  double aspectRatioWidth; // use it for user scale if isAutoScale = false
+  double aspectRatioHeight;// use it for user scale if isAutoScale = false
+  bool isAutoScale; //true - plot fits to  browser window, false - square plot
 };
 
 struct chartSettings : public commonSettings {

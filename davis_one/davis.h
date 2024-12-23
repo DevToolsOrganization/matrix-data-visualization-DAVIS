@@ -57,13 +57,15 @@ struct commonSettings {
     xLabel("X"),
     yLabel("Y"),
     aspectRatioWidth(1),
-    aspectRatioHeight(1) {}
+    aspectRatioHeight(1),
+    isAutoScale(false) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
-  double aspectRatioWidth;
-  double aspectRatioHeight;
+  double aspectRatioWidth; // use it for user scale if isAutoScale = false
+  double aspectRatioHeight;// use it for user scale if isAutoScale = false
+  bool isAutoScale; //true - plot fits to  browser window, false - square plot
 };
 
 struct chartSettings : public commonSettings {
@@ -127,7 +129,8 @@ enum ARGS_INDEX {
   ARG_JS_VER,     //%8
   ARG_ASPECT_RATIO_WIDTH,     //%9
   ARG_ASPECT_RATIO_HEIGHT,     //%10
-  ARG_ASPECT_WIDTH_OR_HEIGHT, //11 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_ASPECT_WIDTH_OR_HEIGHT, //%11 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%12 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };
@@ -155,6 +158,7 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_DATE_TIME_ASPECT_RATIO_WIDTH,     //%4
   ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%5
   ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%6 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%7 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
 
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
@@ -171,6 +175,7 @@ enum ARGS_MULTI_CHARTS_PAGE {
   ARG_MC_DATE_TIME_ASPECT_RATIO_WIDTH,     //%7
   ARG_MC_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%8
   ARG_MC_DATE_ASPECT_WIDTH_OR_HEIGHT, //%9 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_MC_DATE_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%10 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
 
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_MULTI_CHARTS_PAGE_SIZE
@@ -184,6 +189,8 @@ enum ARGS_CLOUD_OF_POINTS_PAGE {
   ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH,     //%5
   ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT,     //%6
   ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT, //7 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%8 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
+
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_CLOUD_OF_POINTS_PAGE_SIZE
 };
@@ -406,19 +413,22 @@ void showReportFileEmpty();
 void showMatrixSizesAreNotTheSame(int badRow);
 
 void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues);
+                       const vector<double>& yValues,
+                       bool isAutoScale);
 
 void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
 void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
-                            const vector<double>& colorValues);
+                            const vector<double>& colorValues,
+                            bool isAutoScale);
 
 
 void showCloudOfPointsChartStr(const string& xValues,
                                const vector<double>& yValues,
-                               const vector<double>& colorValues);
+                               const vector<double>& colorValues,
+                               bool isAutoScale);
 
 
 } // namespace dvs end

@@ -45,11 +45,21 @@ void holdOff(const Config& configuration) {
   } else {
     paramWH = "height";
   }
+  string paramWHsecond;
+  if (configuration.chart.isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
   vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
                          configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH
+                         paramWH, paramWHsecond
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";

@@ -65,8 +65,11 @@ DavisGUI::DavisGUI(QWidget* parent)
       "    height: 20px;"  // Ensure the height remains the same on hover
       "}"
   );
-  QMenu*  menu_root = new QMenu("Menu");
   mb->setStyleSheet(menuStyle);
+  mb->setFixedSize(QSize(50, 25));
+  QMenu*  menu_root = new QMenu("Menu");
+  QMenu*  menu_matrix_view = new QMenu("Matrix as");
+  menu_root->addMenu(menu_matrix_view);
   action_surface = new QAction("surface");
   action_surface->setCheckable(true);
   action_heatmap = new QAction("heatmap");
@@ -74,14 +77,14 @@ DavisGUI::DavisGUI(QWidget* parent)
   action_heatmap->setChecked(true);
   connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
   connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
+  menu_matrix_view->setStyleSheet(menuStyle);
+  menu_matrix_view->addAction(action_surface);
+  menu_matrix_view->addAction(action_heatmap);
 
-  QMenu*  menu_view = new QMenu("View");
-  menu_view->setStyleSheet(menuStyle);
-  menu_view->addAction(action_surface);
-  menu_view->addAction(action_heatmap);
-  mb->setFixedSize(QSize(50, 25));
-  //mb->setStyleSheet("background-color:rgb(82,82,82);");
-  menu_root->addMenu(menu_view);
+  action_fitPlotToAllWindow = new QAction("fit graph to all window");
+  action_fitPlotToAllWindow->setCheckable(true);
+  menu_root->addAction(action_fitPlotToAllWindow);
+
   mb->addMenu(menu_root);
   hbl->addWidget(mb);
   hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -314,7 +317,7 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
           dv::Config conf;
           conf.chart.yLabel = attr.value("type").toString().toStdString();
           conf.chart.title = attr.value("instrument").toString().toStdString();
-
+          conf.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
           dv::show(x_vals, y_vals, QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss_zz").toStdString(), conf);
         }
         return;// выход если это был MATRIX_TO_MATRIX_TYPE
@@ -337,16 +340,19 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
       auto matrix_vector = jsn::getMatrixFromJsonArray(matrix_values);
 
       qDebug() << "MATRIX SIZE: " << matrix_vector.size();
-
+      dv::Config conf;
+      conf.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
+      conf.heatmap.isAutoScale = conf.chart.isAutoScale;
+      conf.surf.isAutoScale = conf.chart.isAutoScale;
       if (x_vector.empty() == false && y_vector.empty() == false) {
-        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST");
+        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST", conf);
       } else if (x_vector.empty() == true && y_vector.empty() == false) {
-        dv::show(y_vector.toStdVector(), "JSON TEST");
+        dv::show(y_vector.toStdVector(), "JSON TEST", conf);
       } else if (x_vector.empty() == false && y_vector.empty() == true) {
-        dv::show(x_vector.toStdVector(), "JSON TEST");
+        dv::show(x_vector.toStdVector(), "JSON TEST", conf);
       }
       if (matrix_vector.empty() == false) {
-        dv::show(matrix_vector, "JSON_MATRIX_VECTOR");
+        dv::show(matrix_vector, "JSON_MATRIX_VECTOR", conf);
       }
     } else {
       qDebug() << "Check JSON!";
@@ -602,7 +608,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
       y[i] = data[i][1];
       color[i] = data[i][2];
     }
-    dvs::showCloudOfPointsChart(x, y, color);
+    dvs::showCloudOfPointsChart(x, y, color, action_fitPlotToAllWindow->isChecked());
     return;
   }
 
@@ -610,15 +616,18 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
     dv::Config config;
     config.chart.title = title.toStdString();
+    config.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
     dv::show(data, title.toStdString(), config);
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
       dv::Config config;
       config.heatmap.title = title.toStdString();
+      config.heatmap.isAutoScale = action_fitPlotToAllWindow->isChecked();
       dv::show(data, title.toStdString(), config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
       config.surf.title = title.toStdString();
+      config.surf.isAutoScale = action_fitPlotToAllWindow->isChecked();
       config.typeVisual = dv::VISUALTYPE_SURFACE;
       dv::show(data, title.toStdString(), config);
     }
@@ -636,6 +645,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
     dv::Config config;
     config.typeVisual = dv::VISUALTYPE_CHART;
     config.chart.title = title.toStdString();
+    config.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
     dv::show(showVector, title.toStdString(), config);
   }
 }
@@ -674,10 +684,10 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
         auto values_list = test.split(separator);
         //Clear empty values
-        for(int ch =0;ch<values_list.size();++ch){
-            if(values_list[ch].isEmpty()){
-               values_list.removeAt(ch);
-            }
+        for (int ch = 0; ch < values_list.size(); ++ch) {
+          if (values_list[ch].isEmpty()) {
+            values_list.removeAt(ch);
+          }
         }
 
 
@@ -703,10 +713,10 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
     return false;
   }*/
   if (force.empty() == false) {
-    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force);
+    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToAllWindow->isChecked());
     return true;
   }
-  dvs::showDateTimeChart(dates.toStdString(), values);
+  dvs::showDateTimeChart(dates.toStdString(), values, action_fitPlotToAllWindow->isChecked());
   return true;
 
 
@@ -897,9 +907,19 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     } else {
       paramWH = "height";
     }
+    QString paramWHsecond;
+    if (action_fitPlotToAllWindow->isChecked()) {
+      if (paramWH == "width") {
+        paramWHsecond = "height";
+      } else if (paramWH == "height") {
+        paramWHsecond = "width";
+      }
+    } else {
+      paramWHsecond = paramWH;
+    }
     QString multichartPage = dvs::kHtmlMultiChartModel;
     multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y",
-                                        QString::number(aspectW), QString::number(aspectH), paramWH);
+                                        QString::number(aspectW), QString::number(aspectH), paramWH, paramWHsecond);
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);
