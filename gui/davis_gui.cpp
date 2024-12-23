@@ -81,7 +81,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   menu_matrix_view->addAction(action_surface);
   menu_matrix_view->addAction(action_heatmap);
 
-  action_fitPlotToAllWindow = new QAction("fit graph to all window");
+  action_fitPlotToAllWindow = new QAction("Graph fit to window");
   action_fitPlotToAllWindow->setCheckable(true);
   menu_root->addAction(action_fitPlotToAllWindow);
 
