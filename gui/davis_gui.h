@@ -73,6 +73,7 @@ class DavisGUI : public QMainWindow {
   QPoint m_point;
   QAction*  action_surface;
   QAction*  action_heatmap;
+  QAction*  action_fitPlotToAllWindow;
   About_window* aboutWindow;
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;

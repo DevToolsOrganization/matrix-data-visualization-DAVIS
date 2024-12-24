@@ -42,7 +42,7 @@ R"(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="%11:99%; aspect-ratio: %9/%10;"
+  justify-content: center;"><div style="%11:99%; %12:99%; aspect-ratio: %9/%10;"
 id="gd"></div></div>
 <script>
 %1
@@ -368,7 +368,7 @@ extern const char kHtmlDateTimeModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="%6:99%; aspect-ratio: %4/%5;"
+  justify-content: center;"><div style="%6:99%; %7:99%; aspect-ratio: %4/%5;"
 id="gd"></div></div>
 
 <script>
@@ -413,7 +413,7 @@ extern const char kHtmlMultiChartModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="%9:99%; aspect-ratio: %7/%8;"
+  justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
 <script>
 
@@ -470,7 +470,7 @@ extern const char kHtmlCloudOfPoints[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="%7:99%; aspect-ratio: %5/%6;"
+  justify-content: center;"><div style="%7:99%; %8:99%; aspect-ratio: %5/%6;"
 id="gd"></div></div>
 <script>
 var trace = {
@@ -1023,7 +1023,18 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       } else {
         paramWH = "height";
       }
+      string paramWHsecond;
+      if (configuration.heatmap.isAutoScale) {
+        if (paramWH == "width") {
+          paramWHsecond = "height";
+        } else if (paramWH == "height") {
+          paramWHsecond = "width";
+        }
+      } else {
+        paramWHsecond = paramWH;
+      }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+      args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
       break;
     }
     case dv::VISUALTYPE_SURFACE: {
@@ -1040,7 +1051,18 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       } else {
         paramWH = "height";
       }
+      string paramWHsecond;
+      if (configuration.surf.isAutoScale) {
+        if (paramWH == "width") {
+          paramWHsecond = "height";
+        } else if (paramWH == "height") {
+          paramWHsecond = "width";
+        }
+      } else {
+        paramWHsecond = paramWH;
+      }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+      args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
       break;
     }
     default:
@@ -1092,7 +1114,18 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   } else {
     paramWH = "height";
   }
+  string paramWHsecond;
+  if (configuration.chart.isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
   args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
@@ -1196,7 +1229,8 @@ void showMatrixSizesAreNotTheSame(int badRow) {
 }
 
 void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues) {
+                       const vector<double>& yValues,
+                       bool isAutoScale) {
 
   string out;
   string davis_dir;
@@ -1230,7 +1264,18 @@ void showDateTimeChart(const string& date_time_values,
   }
   */
   string paramWH = "height";
+  string paramWHsecond;
+  if (isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   make_string(kHtmlDateTimeModel, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
@@ -1259,7 +1304,8 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
-                            const vector<double>& colorValues) {
+                            const vector<double>& colorValues,
+                            bool isAutoScale) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -1283,6 +1329,17 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   }
   */
   string paramWH = "height";
+  string paramWHsecond;
+  if (isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
@@ -1291,7 +1348,8 @@ void showCloudOfPointsChart(const vector<double>& xValues,
 
 void showCloudOfPointsChartStr(const std::string& xValues,
                                const vector<double>& yValues,
-                               const vector<double>& colorValues) {
+                               const vector<double>& colorValues,
+                               bool isAutoScale) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -1315,6 +1373,17 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   }
   */
   string paramWH = "height";
+  string paramWHsecond;
+  if (isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
@@ -1363,11 +1432,21 @@ void holdOff(const Config& configuration) {
   } else {
     paramWH = "height";
   }
+  string paramWHsecond;
+  if (configuration.chart.isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
   vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
                          configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH
+                         paramWH, paramWHsecond
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
