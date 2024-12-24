@@ -336,7 +336,7 @@ const char kHtmlDateTimeModel[] = R"davis_delimeter(
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
-  justify-content: center;"><div style="%6:99%; %7:99%; aspect-ratio: %4/%5;"
+  justify-content: center;"><div style="%5:99%; %6:99%; aspect-ratio: %3/%4;"
 id="gd"></div></div>
 
 <script>
