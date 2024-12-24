@@ -48,19 +48,22 @@ void showReportFileEmpty();
 void showMatrixSizesAreNotTheSame(int badRow);
 
 void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues);
+                       const vector<double>& yValues,
+                       bool isAutoScale);
 
 void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
 void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
-                            const vector<double>& colorValues);
+                            const vector<double>& colorValues,
+                            bool isAutoScale);
 
 
 void showCloudOfPointsChartStr(const string& xValues,
                                const vector<double>& yValues,
-                               const vector<double>& colorValues);
+                               const vector<double>& colorValues,
+                               bool isAutoScale);
 
 void showDateTimeMultichart(const string& date_time_values,
                             const vector<vector<double>>& yValues);

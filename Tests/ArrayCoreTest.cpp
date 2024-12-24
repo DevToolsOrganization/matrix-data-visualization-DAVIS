@@ -10,7 +10,7 @@
 
 using std::string;
 using std::vector;
-/*
+
 TEST(ArrayCore, save_to_disk_2d) {
   //! 2-dimensional array
   int rows = 10;
@@ -141,8 +141,8 @@ TEST(ArrayCore, showDefaultSettings) {
   bool result = dv::show(values, "testDefaultSettings");
   EXPECT_EQ(result, true);
 }
-*/
-TEST(ArrayCore, showHeatMap1) {
+
+TEST(ArrayCore, showHeatMap1_customAspectRatio) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
@@ -151,6 +151,17 @@ TEST(ArrayCore, showHeatMap1) {
   config.heatmap.aspectRatioWidth = 2;
   config.heatmap.aspectRatioHeight = 3;
   bool result = dv::show(values, "showHeatMap_gray", config);
+  EXPECT_EQ(result, true);
+}
+
+TEST(ArrayCore, showHeatMap1_AutoScale) {
+  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
+  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  auto config = dv::Config();
+  config.heatmap.title = "Black & White TEST MATRIX";
+  config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
+  config.heatmap.isAutoScale = true;
+  bool result = dv::show(values, "showHeatMap_AutoScale", config);
   EXPECT_EQ(result, true);
 }
 
