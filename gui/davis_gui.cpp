@@ -650,6 +650,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   QString dates;
   std::vector<double> values;
   std::vector<double> force;
+  std::vector<std::vector<double>> multicharts;
 
   for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
@@ -674,16 +675,24 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
         auto values_list = test.split(separator);
         //Clear empty values
-        for(int ch =0;ch<values_list.size();++ch){
-            if(values_list[ch].isEmpty()){
-               values_list.removeAt(ch);
-            }
+        for (int ch = 0; ch < values_list.size(); ++ch) {
+          if (values_list[ch].isEmpty()) {
+            values_list.removeAt(ch);
+          }
         }
 
 
-        if (values_list.size() < 2 || values_list.size() > 3) {
+        if (values_list.size() < 2) {
           continue;
         }
+        if (values_list.size() > 3) {
+          std::vector<double> temp(values_list.size()-1);
+          for (int j = 1; j < values_list.size(); ++j) {
+            temp[j-1] = values_list[j].toDouble();
+          }
+          multicharts.push_back(temp);
+        }
+
         double value = values_list[1].toDouble();
         //qDebug() << value;
         values.emplace_back(value);
@@ -696,6 +705,13 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
       }
     }
   }
+
+  if (multicharts.empty() == false) {
+    dvs::transponeMatrix(multicharts);
+    dvs::showDateTimeMultichart(dates.toStdString(), multicharts);
+    return true;
+  }
+
   if (values.size() == 0)
     return false;
   qDebug() << "check sizes: " << lines.size() << values.size();

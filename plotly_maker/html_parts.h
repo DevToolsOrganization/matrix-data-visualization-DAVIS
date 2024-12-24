@@ -36,12 +36,11 @@ enum ARGS_REPORT_PAGE_INDEX {
 };
 
 enum ARGS_DATE_TIME_PAGE_INDEX {
-  ARG_JS_NAME,            //%1
-  ARG_DATE_TIME_VALUES,   //%2
-  ARG_Y_DATE_TIME_VALUES, //%3
-  ARG_DATE_TIME_ASPECT_RATIO_WIDTH,     //%4
-  ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%5
-  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%6 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_JS_NAME,                          //%1
+  ARG_DATE_TIME_VALUES_BLOCK,           //%2
+  ARG_DATE_TIME_ASPECT_RATIO_WIDTH,     //%3
+  ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,    //%4
+  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%5 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
 
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
@@ -75,6 +74,12 @@ enum ARGS_CLOUD_OF_POINTS_PAGE {
   ARGS_CLOUD_OF_POINTS_PAGE_SIZE
 };
 
+enum ARGS_SIMPLE_DATA_BLOCK {
+  ARG_SIMPLE_DATA_X,
+  ARG_SIMPLE_DATA_Y,
+  ARGS_SIMPLE_DATA_BLOCK_SIZE
+};
+
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -102,6 +107,8 @@ extern const char kHtmlDateTimeModel[];
 extern const char kHtmlMultiChartBlock[];
 extern const char kHtmlMultiChartModel[];
 extern const char kHtmlCloudOfPoints[];
+
+extern const char kHtmlSimpleDataBlock[];
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }

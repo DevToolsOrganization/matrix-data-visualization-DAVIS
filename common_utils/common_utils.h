@@ -158,6 +158,9 @@ vector<G> vecFromTemplate(const C& container) {
 bool is_string_convertable_to_digit(const string& sample);
 
 
+void transponeMatrix(std::vector<std::vector<double>>& matrix);
+
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

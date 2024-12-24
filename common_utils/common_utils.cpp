@@ -350,6 +350,23 @@ string makeUniqueDavisHtmlName() {
   return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
 }
 
+void transponeMatrix(std::vector<std::vector<double> >& matrix) {
+
+  if (matrix.empty())
+    return;
+
+  size_t rows = matrix.size();
+  size_t cols = matrix[0].size();
+  vector<vector<double>> transposed(cols, vector<double>(rows));
+
+  for (size_t i = 0; i < rows; ++i) {
+    for (size_t j = 0; j < cols; ++j) {
+      transposed[j][i] = matrix[i][j];
+    }
+  }
+  matrix = std::move(transposed);
+}
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

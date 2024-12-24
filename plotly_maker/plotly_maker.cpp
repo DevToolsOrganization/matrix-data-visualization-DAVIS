@@ -376,18 +376,16 @@ void showDateTimeChart(const string& date_time_values,
 #endif
   vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
-  args[ARG_DATE_TIME_VALUES] = date_time_values;
 
-  std::string values;
-  for (size_t i = 0; i < yValues.size(); ++i) {
-    std::string value = std::to_string(yValues[i]);
-    values.append(value);
-    if (i != yValues.size() - 1) {
-      values.append(",");
-    }
-  }
+  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  std::string simpleData_yValues = vectorToString(yValues);
+  args_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+  std::string data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_block, data_values_block);
 
-  args[ARG_Y_DATE_TIME_VALUES] = values;
+
+  args[ARG_DATE_TIME_VALUES_BLOCK] = data_values_block;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
   /*
@@ -488,6 +486,44 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   make_string(kHtmlCloudOfPoints, args, out);
   saveStringToFile(kCloudPagePath, out);
   openFileBySystem(kCloudPagePath);
+}
+
+void showDateTimeMultichart(const std::string& date_time_values,
+                            const vector<vector<double>>& yValues) {
+  string out;
+  string davis_dir;
+#ifdef _WIN32
+  davis_dir = "\\davis_htmls";
+#elif __linux__
+  davis_dir = "/davis_htmls";
+#endif
+  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  args[ARG_JS_NAME] = kPlotlyJsName;
+
+
+  std::string all_data = "";
+  for (int i = 0; i < yValues.size(); ++i) {
+    vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+    std::string simpleData_yValues = vectorToString(yValues[i]);
+    args_block[ARG_SIMPLE_DATA_X] = date_time_values;
+    args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+    std::string data_values_block;
+    make_string(kHtmlSimpleDataBlock, args_block, data_values_block);
+    all_data.append(data_values_block);
+    if (i != yValues.size() - 1) {
+      all_data.append(",");
+    }
+  }
+
+  args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
+  args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
+  args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+
+  string paramWH = "height";
+  args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  make_string(kHtmlDateTimeModel, args, out);
+  saveStringToFile(kReportPagePath, out);
+  openFileBySystem(kReportPagePath);
 }
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
