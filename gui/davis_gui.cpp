@@ -686,9 +686,9 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
           continue;
         }
         if (values_list.size() > 3) {
-          std::vector<double> temp(values_list.size()-1);
+          std::vector<double> temp(values_list.size() - 1);
           for (int j = 1; j < values_list.size(); ++j) {
-            temp[j-1] = values_list[j].toDouble();
+            temp[j - 1] = values_list[j].toDouble();
           }
           multicharts.push_back(temp);
         }
