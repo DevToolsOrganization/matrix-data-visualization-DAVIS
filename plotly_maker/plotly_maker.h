@@ -65,6 +65,10 @@ void showCloudOfPointsChartStr(const string& xValues,
                                const vector<double>& colorValues,
                                bool isAutoScale);
 
+void showDateTimeMultichart(const string& date_time_values,
+                            const vector<vector<double>>& yValues,
+                            bool isAutoScale);
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 

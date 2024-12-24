@@ -660,6 +660,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   QString dates;
   std::vector<double> values;
   std::vector<double> force;
+  std::vector<std::vector<double>> multicharts;
 
   for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
@@ -691,9 +692,17 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
         }
 
 
-        if (values_list.size() < 2 || values_list.size() > 3) {
+        if (values_list.size() < 2) {
           continue;
         }
+        if (values_list.size() > 3) {
+          std::vector<double> temp(values_list.size() - 1);
+          for (int j = 1; j < values_list.size(); ++j) {
+            temp[j - 1] = values_list[j].toDouble();
+          }
+          multicharts.push_back(temp);
+        }
+
         double value = values_list[1].toDouble();
         //qDebug() << value;
         values.emplace_back(value);
@@ -706,6 +715,13 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
       }
     }
   }
+
+  if (multicharts.empty() == false) {
+    dvs::transponeMatrix(multicharts);
+    dvs::showDateTimeMultichart(dates.toStdString(), multicharts, action_fitPlotToAllWindow->isChecked());
+    return true;
+  }
+
   if (values.size() == 0)
     return false;
   qDebug() << "check sizes: " << lines.size() << values.size();
@@ -918,8 +934,16 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       paramWHsecond = paramWH;
     }
     QString multichartPage = dvs::kHtmlMultiChartModel;
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName, all_chart_blocks, all_traces_names, "", "X", "Y",
-                                        QString::number(aspectW), QString::number(aspectH), paramWH, paramWHsecond);
+    multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
+                     .arg(all_chart_blocks)
+                     .arg(all_traces_names)
+                     .arg("")
+                     .arg("X")
+                     .arg("Y")
+                     .arg(QString::number(aspectW))
+                     .arg(QString::number(aspectH))
+                     .arg(paramWH)
+                     .arg(paramWHsecond);
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);
