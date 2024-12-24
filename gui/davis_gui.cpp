@@ -934,18 +934,6 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       paramWHsecond = paramWH;
     }
     QString multichartPage = dvs::kHtmlMultiChartModel;
-<<<<<<< Updated upstream
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName,
-                                        all_chart_blocks,
-                                        all_traces_names,
-                                        "",
-                                        "X",
-                                        "Y",
-                                        QString::number(aspectW),
-                                        QString::number(aspectH),
-                                        //paramWH,
-                                        paramWHsecond);
-=======
     multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
                                        .arg( all_chart_blocks)
                                         .arg(all_traces_names)
@@ -956,7 +944,6 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
                                         .arg(QString::number(aspectH))
                                         .arg(paramWH)
                                         .arg(paramWHsecond);
->>>>>>> Stashed changes
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);
