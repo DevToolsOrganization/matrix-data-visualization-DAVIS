@@ -558,7 +558,8 @@ void showCloudOfPointsChartStr(const std::string& xValues,
 }
 
 void showDateTimeMultichart(const std::string& date_time_values,
-                            const vector<vector<double>>& yValues) {
+                            const vector<vector<double>>& yValues,
+                            bool isAutoScale) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -589,7 +590,19 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
 
   string paramWH = "height";
+  string paramWHsecond;
+  if (isAutoScale) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
+
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   make_string(kHtmlDateTimeModel, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);

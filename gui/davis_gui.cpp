@@ -718,7 +718,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   if (multicharts.empty() == false) {
     dvs::transponeMatrix(multicharts);
-    dvs::showDateTimeMultichart(dates.toStdString(), multicharts);
+    dvs::showDateTimeMultichart(dates.toStdString(), multicharts, action_fitPlotToAllWindow->isChecked());
     return true;
   }
 
@@ -935,15 +935,15 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     }
     QString multichartPage = dvs::kHtmlMultiChartModel;
     multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
-                                       .arg( all_chart_blocks)
-                                        .arg(all_traces_names)
-                                        .arg("")
-                                        .arg("X")
-                                        .arg("Y")
-                                        .arg(QString::number(aspectW))
-                                        .arg(QString::number(aspectH))
-                                        .arg(paramWH)
-                                        .arg(paramWHsecond);
+                     .arg(all_chart_blocks)
+                     .arg(all_traces_names)
+                     .arg("")
+                     .arg("X")
+                     .arg("Y")
+                     .arg(QString::number(aspectW))
+                     .arg(QString::number(aspectH))
+                     .arg(paramWH)
+                     .arg(paramWHsecond);
     qDebug() << multichartPage;
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);
