@@ -164,7 +164,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
   //qpbOpen->setGeometry(65, 180, 90, 30);
 
-  qpbBuffer = new AnimatedButton("Copy from buffer or Ctrl+V",
+  qpbBuffer = new AnimatedButton("Past from clipboard (Ctrl+V)",
                                  QColor(120, 120, 120),
                                  QColor(42, 130, 218),
                                  this);
