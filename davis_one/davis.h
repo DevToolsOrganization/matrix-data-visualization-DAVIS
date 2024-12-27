@@ -58,14 +58,14 @@ struct commonSettings {
     yLabel("Y"),
     aspectRatioWidth(1),
     aspectRatioHeight(1),
-    isAutoScale(false) {}
+    isFitPlotToWindow(false) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
-  double aspectRatioWidth; // use it for user scale if isAutoScale = false
-  double aspectRatioHeight;// use it for user scale if isAutoScale = false
-  bool isAutoScale; //true - plot fits to  browser window, false - square plot
+  double aspectRatioWidth; // use it for user scale if isFitPlotToWindow = false
+  double aspectRatioHeight;// use it for user scale if isFitPlotToWindow = false
+  bool isFitPlotToWindow; //true - plot fits to  browser window, false - square plot
 };
 
 struct chartSettings : public commonSettings {
@@ -432,7 +432,7 @@ void showMatrixSizesAreNotTheSame(int badRow);
 
 void showDateTimeChart(const string& date_time_values,
                        const vector<double>& yValues,
-                       bool isAutoScale);
+                       bool isFitPlotToWindow);
 
 void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
 void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
@@ -440,17 +440,17 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
                             const vector<double>& colorValues,
-                            bool isAutoScale);
+                            bool isFitPlotToWindow);
 
 
 void showCloudOfPointsChartStr(const string& xValues,
                                const vector<double>& yValues,
                                const vector<double>& colorValues,
-                               bool isAutoScale);
+                               bool isFitPlotToWindow);
 
 void showDateTimeMultichart(const string& date_time_values,
                             const vector<vector<double>>& yValues,
-                            bool isAutoScale);
+                            bool isFitPlotToWindow);
 
 
 } // namespace dvs end

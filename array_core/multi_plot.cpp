@@ -46,7 +46,7 @@ void holdOff(const Config& configuration) {
     paramWH = "height";
   }
   string paramWHsecond;
-  if (configuration.chart.isAutoScale) {
+  if (configuration.chart.isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {

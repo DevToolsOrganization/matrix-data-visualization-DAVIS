@@ -317,7 +317,7 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
           dv::Config conf;
           conf.chart.yLabel = attr.value("type").toString().toStdString();
           conf.chart.title = attr.value("instrument").toString().toStdString();
-          conf.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
+          conf.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
           dv::show(x_vals, y_vals, QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss_zz").toStdString(), conf);
         }
         return;// выход если это был MATRIX_TO_MATRIX_TYPE
@@ -341,9 +341,9 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
       qDebug() << "MATRIX SIZE: " << matrix_vector.size();
       dv::Config conf;
-      conf.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
-      conf.heatmap.isAutoScale = conf.chart.isAutoScale;
-      conf.surf.isAutoScale = conf.chart.isAutoScale;
+      conf.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
+      conf.heatmap.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
+      conf.surf.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
       if (x_vector.empty() == false && y_vector.empty() == false) {
         dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST", conf);
       } else if (x_vector.empty() == true && y_vector.empty() == false) {
@@ -616,18 +616,18 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
     dv::Config config;
     config.chart.title = title.toStdString();
-    config.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
+    config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
     dv::show(data, title.toStdString(), config);
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
       dv::Config config;
       config.heatmap.title = title.toStdString();
-      config.heatmap.isAutoScale = action_fitPlotToAllWindow->isChecked();
+      config.heatmap.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
       dv::show(data, title.toStdString(), config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
       config.surf.title = title.toStdString();
-      config.surf.isAutoScale = action_fitPlotToAllWindow->isChecked();
+      config.surf.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
       config.typeVisual = dv::VISUALTYPE_SURFACE;
       dv::show(data, title.toStdString(), config);
     }
@@ -645,7 +645,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
     dv::Config config;
     config.typeVisual = dv::VISUALTYPE_CHART;
     config.chart.title = title.toStdString();
-    config.chart.isAutoScale = action_fitPlotToAllWindow->isChecked();
+    config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
     dv::show(showVector, title.toStdString(), config);
   }
 }

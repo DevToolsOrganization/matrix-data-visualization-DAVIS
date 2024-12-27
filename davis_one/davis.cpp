@@ -1109,7 +1109,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
         paramWH = "height";
       }
       string paramWHsecond;
-      if (configuration.heatmap.isAutoScale) {
+      if (configuration.heatmap.isFitPlotToWindow) {
         if (paramWH == "width") {
           paramWHsecond = "height";
         } else if (paramWH == "height") {
@@ -1137,7 +1137,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
         paramWH = "height";
       }
       string paramWHsecond;
-      if (configuration.surf.isAutoScale) {
+      if (configuration.surf.isFitPlotToWindow) {
         if (paramWH == "width") {
           paramWHsecond = "height";
         } else if (paramWH == "height") {
@@ -1200,7 +1200,7 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
     paramWH = "height";
   }
   string paramWHsecond;
-  if (configuration.chart.isAutoScale) {
+  if (configuration.chart.isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {
@@ -1318,7 +1318,7 @@ void showMatrixSizesAreNotTheSame(int badRow) {
 
 void showDateTimeChart(const string& date_time_values,
                        const vector<double>& yValues,
-                       bool isAutoScale) {
+                       bool isFitPlotToWindow) {
 
   string out;
   string davis_dir;
@@ -1351,7 +1351,7 @@ void showDateTimeChart(const string& date_time_values,
   */
   string paramWH = "height";
   string paramWHsecond;
-  if (isAutoScale) {
+  if (isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {
@@ -1391,7 +1391,7 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
 void showCloudOfPointsChart(const vector<double>& xValues,
                             const vector<double>& yValues,
                             const vector<double>& colorValues,
-                            bool isAutoScale) {
+                            bool isFitPlotToWindow) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -1416,7 +1416,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   */
   string paramWH = "height";
   string paramWHsecond;
-  if (isAutoScale) {
+  if (isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {
@@ -1435,7 +1435,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
 void showCloudOfPointsChartStr(const std::string& xValues,
                                const vector<double>& yValues,
                                const vector<double>& colorValues,
-                               bool isAutoScale) {
+                               bool isFitPlotToWindow) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -1460,7 +1460,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   */
   string paramWH = "height";
   string paramWHsecond;
-  if (isAutoScale) {
+  if (isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {
@@ -1478,7 +1478,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
 
 void showDateTimeMultichart(const std::string& date_time_values,
                             const vector<vector<double>>& yValues,
-                            bool isAutoScale) {
+                            bool isFitPlotToWindow) {
   string out;
   string davis_dir;
 #ifdef _WIN32
@@ -1510,7 +1510,7 @@ void showDateTimeMultichart(const std::string& date_time_values,
 
   string paramWH = "height";
   string paramWHsecond;
-  if (isAutoScale) {
+  if (isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {
@@ -1570,7 +1570,7 @@ void holdOff(const Config& configuration) {
     paramWH = "height";
   }
   string paramWHsecond;
-  if (configuration.chart.isAutoScale) {
+  if (configuration.chart.isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
     } else if (paramWH == "height") {

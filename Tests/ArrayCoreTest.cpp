@@ -160,7 +160,7 @@ TEST(ArrayCore, showHeatMap1_AutoScale) {
   auto config = dv::Config();
   config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
-  config.heatmap.isAutoScale = true;
+  config.heatmap.isFitPlotToWindow = true;
   bool result = dv::show(values, "showHeatMap_AutoScale", config);
   EXPECT_EQ(result, true);
 }
