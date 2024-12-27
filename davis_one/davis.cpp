@@ -39,15 +39,18 @@ namespace dvs {
 R"(
 <head>
 <script src="./%8" charset="utf-8"></script>
+%13
 </head>
 <body><div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%11:99%; %12:99%; aspect-ratio: %9/%10;"
 id="gd"></div></div>
+%14
 <script>
 %1
 %2
 %3
+%15
 var layout = {
   title: {
     text:'%4'
@@ -407,7 +410,8 @@ const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
 </head>
-<body><div style = "display: flex;
+<body>
+<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
@@ -503,6 +507,70 @@ const char kHtmlSimpleDataBlock[]= R"davis_delimeter({
     type: 'scatter'
   })davis_delimeter";
 
+
+const char kHtmlComboboxStyleBlock[] = R"davis_delimeter(
+<style>
+        #dropdown {
+                        position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            width: 50px;
+            height: 30px;
+            background: no-repeat center;
+            background-size: contain;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            font-size: 16px;
+            color:transparent;
+        }
+
+        #dropdown option {
+            background: white;
+            color: black;
+        }
+    </style>
+)davis_delimeter";
+
+const char kHtmlComboboxSelectBlock[] =R"davis_delimeter(
+    <select id="dropdown" onchange="updateBackground(this)">
+        <option value="image1" data-image="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 11.261'><path d='M0 0h171.373v11.261H0z'/></svg>">line</option>
+        <option value="image2" data-image="<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 50'><g transform='translate(-20.762 -48.999)'><path d='M20.762 68.268h171.373v11.261H20.762z'/><circle cx='107.49' cy='73.999' r='25'/></g></svg>">line + point</option>
+        <option value="3.svg" data-image="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 50'><circle cx='107.49' cy='73.999' r='25' transform='translate(-20.762 -48.999)'/></svg>">point</option>
+    </select>
+)davis_delimeter";
+
+
+const char kHtmlComboboxUpdateFooBlock[] = R"davis_delimeter(
+function updateBackground(select) {
+
+            var selectedImage = select.options[select.selectedIndex].getAttribute('data-image');
+            select.style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(selectedImage) + '")';
+            var selectedOption = select.options[select.selectedIndex].text;
+            switch (selectedOption) {
+            case 'line':
+            trace.mode='lines';
+            break;
+            case 'line + point':
+            trace.mode='lines+markers';
+            break;
+            case 'point':
+            trace.mode='markers';
+            break;
+            default: console.log('uknown option');
+            }
+            Plotly.newPlot('gd', data, layout, config);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdown = document.getElementById('dropdown');
+            updateBackground(dropdown);
+        });
+)davis_delimeter";
 
 // *INDENT-ON*
 
@@ -1143,6 +1211,9 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   }
   args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+  args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
+  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();

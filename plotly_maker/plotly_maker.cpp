@@ -295,6 +295,9 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   }
   args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+  args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
+  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();

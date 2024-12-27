@@ -16,6 +16,9 @@ enum ARGS_INDEX {
   ARG_ASPECT_RATIO_HEIGHT,     //%10
   ARG_ASPECT_WIDTH_OR_HEIGHT, //%11 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
   ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%12 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
+  ARG_POINT_LINE_SWITCHER_STYLE,      //%13
+  ARG_POINT_LINE_SWITCHER_SELECT,     //%14
+  ARG_POINT_LINE_SWITCHER_UPDATE_FOO, //%15
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };
@@ -43,7 +46,9 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,    //%4
   ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%5 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
   ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%6 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
-
+  ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE,      //%7
+  ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT,     //%8
+  ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO, //%9
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -114,6 +119,9 @@ extern const char kHtmlMultiChartModel[];
 extern const char kHtmlCloudOfPoints[];
 
 extern const char kHtmlSimpleDataBlock[];
+extern const char kHtmlComboboxStyleBlock[];
+extern const char kHtmlComboboxSelectBlock[];
+extern const char kHtmlComboboxUpdateFooBlock[];
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
