@@ -40,6 +40,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   ui->setupUi(this);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
+  m_isUseCustomSkins = false;
   m_skin = checkSkin();
   this->setAcceptDrops(true);
   QHBoxLayout* hbl = ui->horizontalLayout_menu;
@@ -81,9 +82,26 @@ DavisGUI::DavisGUI(QWidget* parent)
   menu_matrix_view->addAction(action_surface);
   menu_matrix_view->addAction(action_heatmap);
 
-  action_fitPlotToAllWindow = new QAction("Graph fit to window");
+  action_fitPlotToAllWindow = new QAction("Fit graph to window");
   action_fitPlotToAllWindow->setCheckable(true);
   menu_root->addAction(action_fitPlotToAllWindow);
+
+  action_holidaysSkins = new QAction("Holidays custom skins");
+  action_holidaysSkins->setCheckable(true);
+  menu_root->addAction(action_holidaysSkins);
+  connect(action_holidaysSkins, &QAction::triggered, [this]() {
+    m_isUseCustomSkins = action_holidaysSkins->isChecked();
+    Skins skin = m_skin;
+    m_skin = checkSkin();
+    if (m_skin == skin) {
+      return;
+    }
+    if (m_isMinStyleWindow) {
+      setMinStyleWindow(0);
+    } else {
+      setMaxStyleWindow(0);
+    }
+  });
 
   mb->addMenu(menu_root);
   hbl->addWidget(mb);
@@ -162,19 +180,13 @@ DavisGUI::DavisGUI(QWidget* parent)
   connect(this, &DavisGUI::hideProgressBar, barCool, &coolProgressBar::stopAnimation);
 
   qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
-  //qpbOpen->setGeometry(65, 180, 90, 30);
-
   qpbBuffer = new AnimatedButton("Past from clipboard (Ctrl+V)",
                                  QColor(120, 120, 120),
                                  QColor(42, 130, 218),
                                  this);
-  //qpbBuffer->setGeometry(165, 180, 170, 30);
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
   connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
-
-
-
 
   // New Year
   QString fileGifPath = ":/res/newYear.gif";
@@ -369,6 +381,9 @@ bool DavisGUI::mayBeShowMatrixToMatrix(QJsonArray& stamps,
 }
 
 Skins DavisGUI::checkSkin() {
+  if (!m_isUseCustomSkins) {
+    return Skins::DEFAULT;
+  }
   Skins skin;
   QDate currentDate = QDate::currentDate();
   if ((currentDate.month() == 12 && currentDate.day() >= 15)
@@ -1031,17 +1046,6 @@ void DavisGUI::mouseMoveEvent(QMouseEvent* event) {
 void DavisGUI::keyPressEvent(QKeyEvent* event) {
   if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V) {
     pasteFromClipboard();
-  } else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_1) {
-    if (m_skin == Skins::DEFAULT) {
-      m_skin = Skins::NEWYEAR;
-    } else {
-      m_skin =  Skins::DEFAULT;
-    }
-    if (m_isMinStyleWindow) {
-      setMinStyleWindow(0);
-    } else {
-      setMaxStyleWindow(0);
-    }
   } else {
     QMainWindow::keyPressEvent(event);
   }

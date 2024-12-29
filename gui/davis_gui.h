@@ -76,6 +76,7 @@ class DavisGUI : public QMainWindow {
   QAction*  action_surface;
   QAction*  action_heatmap;
   QAction*  action_fitPlotToAllWindow;
+  QAction*  action_holidaysSkins;
   About_window* aboutWindow;
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;
@@ -86,6 +87,7 @@ class DavisGUI : public QMainWindow {
   QJsonArray service_json_keys;
   coolProgressBar* barCool;
   QLabel* label_gif;
+  bool m_isUseCustomSkins;
   Skins m_skin;
 
 };
