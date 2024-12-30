@@ -547,23 +547,25 @@ const char kHtmlComboboxSelectBlock[] =R"davis_delimeter(
 
 const char kHtmlComboboxUpdateFooBlock[] = R"davis_delimeter(
 function updateBackground(select) {
-
             var selectedImage = select.options[select.selectedIndex].getAttribute('data-image');
             select.style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(selectedImage) + '")';
             var selectedOption = select.options[select.selectedIndex].text;
+            for(let i=0;i<data.length;++i){
+            var obj = data[i];
             switch (selectedOption) {
             case 'line':
-            trace.mode='lines';
+            obj.mode='lines';
             break;
             case 'line + point':
-            trace.mode='lines+markers';
+            obj.mode='lines+markers';
             break;
             case 'point':
-            trace.mode='markers';
+            obj.mode='markers';
             break;
             default: console.log('uknown option');
             }
-            Plotly.newPlot('gd', data, layout, config);
+           }
+           Plotly.newPlot('gd', data, layout, config);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
