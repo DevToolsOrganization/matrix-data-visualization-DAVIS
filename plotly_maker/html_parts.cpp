@@ -336,8 +336,11 @@ const char kWarningIcon[] = R"davis_delimeter(<svg xmlns="http://www.w3.org/2000
 const char kHtmlDateTimeModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
+%7
 </head>
-<body><div style = "display: flex;
+<body>
+%8
+<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%5:99%; %6:99%; aspect-ratio: %3/%4;"
 id="gd"></div></div>
@@ -347,7 +350,7 @@ id="gd"></div></div>
 var data = [
 %2
 ];
-
+%9
 var config = {
   editable: true,
   showLink: true,
@@ -366,7 +369,7 @@ const char kHtmlMultiChartBlock[] = R"davis_delimeter(
 var trace%1 = {
   x: [%2],
   y: [%3],
-  type: 'scatter',
+  mode: 'lines',
   name: '%4'
 };
 )davis_delimeter";
@@ -377,8 +380,10 @@ var trace%1 = {
 const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
+%11
 </head>
 <body>
+%12
 <div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
@@ -388,7 +393,7 @@ id="gd"></div></div>
 %2
 
 var data = [%3];
-
+%13
 var layout = {
   title: {
     text:'%4'
@@ -472,7 +477,7 @@ Plotly.newPlot('gd', data,layout,config);
 const char kHtmlSimpleDataBlock[]= R"davis_delimeter({
     x: [%1],
     y: [%2],
-    type: 'scatter'
+    mode: 'lines'
   })davis_delimeter";
 
 
@@ -515,23 +520,25 @@ const char kHtmlComboboxSelectBlock[] =R"davis_delimeter(
 
 const char kHtmlComboboxUpdateFooBlock[] = R"davis_delimeter(
 function updateBackground(select) {
-
             var selectedImage = select.options[select.selectedIndex].getAttribute('data-image');
             select.style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(selectedImage) + '")';
             var selectedOption = select.options[select.selectedIndex].text;
+            for(let i=0;i<data.length;++i){
+            var obj = data[i];
             switch (selectedOption) {
             case 'line':
-            trace.mode='lines';
+            obj.mode='lines';
             break;
             case 'line + point':
-            trace.mode='lines+markers';
+            obj.mode='lines+markers';
             break;
             case 'point':
-            trace.mode='markers';
+            obj.mode='markers';
             break;
             default: console.log('uknown option');
             }
-            Plotly.newPlot('gd', data, layout, config);
+           }
+           Plotly.newPlot('gd', data);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
