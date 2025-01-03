@@ -5,7 +5,8 @@ import os
 
 LICENSE_HEADER = """/* Copyright (c) 2024 The DevTools Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the MIT licence.
- * https://github.com/DevToolsOrganization*/
+ * https://github.com/DevToolsOrganization/matrix-data-visualization-DAVIS
+ */
 """
 GENERATED_INFO_HEADER = """
 
