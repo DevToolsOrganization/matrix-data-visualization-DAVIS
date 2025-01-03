@@ -380,8 +380,10 @@ var trace%1 = {
 const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
+%11
 </head>
 <body>
+%12
 <div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
@@ -391,7 +393,7 @@ id="gd"></div></div>
 %2
 
 var data = [%3];
-
+%13
 var layout = {
   title: {
     text:'%4'

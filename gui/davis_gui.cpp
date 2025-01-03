@@ -679,7 +679,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
-    test.replace("'","");
+    test.replace("'", "");
     for (int j = 0; j < jarr.size(); ++j) {
       int template_time_stamp_size = jarr[j].toString().size();
       QString template_time_stamp = jarr[j].toString();
@@ -922,7 +922,6 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       QString outX, outY;
       QString trace_block = dvs::kHtmlMultiChartBlock;
       if (isFileContainsSingleChart(file_list[i], outX, outY)) {
-        //qDebug()<<file_list[i].toLocalFile();
         QFileInfo fi(file_list[i]);
         all_chart_blocks.append(trace_block.arg(QString::number(i + 1), outX, outY, fi.baseName()));
         all_traces_names.append(QString(trace_name).arg(i + 1));
@@ -959,8 +958,11 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
                      .arg(QString::number(aspectW))
                      .arg(QString::number(aspectH))
                      .arg(paramWH)
-                     .arg(paramWHsecond);
-    qDebug() << multichartPage;
+                     .arg(paramWHsecond)
+                     .arg(dvs::kHtmlComboboxStyleBlock)
+                     .arg(dvs::kHtmlComboboxSelectBlock)
+                     .arg(dvs::kHtmlComboboxUpdateFooBlock);
+
     dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
     dvs::openFileBySystem(dvs::kReportPagePath);
     return;
