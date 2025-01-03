@@ -679,6 +679,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   for (int i = 0; i < lines.size(); ++i) {
     QString test = lines[i];
+    test.replace("'","");
     for (int j = 0; j < jarr.size(); ++j) {
       int template_time_stamp_size = jarr[j].toString().size();
       QString template_time_stamp = jarr[j].toString();

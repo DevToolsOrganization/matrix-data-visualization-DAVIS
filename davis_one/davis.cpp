@@ -368,8 +368,11 @@ const char kWarningIcon[] = R"davis_delimeter(<svg xmlns="http://www.w3.org/2000
 const char kHtmlDateTimeModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
+%7
 </head>
-<body><div style = "display: flex;
+<body>
+%8
+<div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%5:99%; %6:99%; aspect-ratio: %3/%4;"
 id="gd"></div></div>
@@ -379,7 +382,7 @@ id="gd"></div></div>
 var data = [
 %2
 ];
-
+%9
 var config = {
   editable: true,
   showLink: true,
@@ -565,7 +568,7 @@ function updateBackground(select) {
             default: console.log('uknown option');
             }
            }
-           Plotly.newPlot('gd', data, layout, config);
+           Plotly.newPlot('gd', data);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1505,7 +1508,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
       all_data.append(",");
     }
   }
-
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
