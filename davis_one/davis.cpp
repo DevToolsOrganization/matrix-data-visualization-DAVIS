@@ -398,7 +398,7 @@ const char kHtmlMultiChartBlock[] = R"davis_delimeter(
 var trace%1 = {
   x: [%2],
   y: [%3],
-  type: 'scatter',
+  mode: 'lines',
   name: '%4'
 };
 )davis_delimeter";
@@ -504,7 +504,7 @@ Plotly.newPlot('gd', data,layout,config);
 const char kHtmlSimpleDataBlock[]= R"davis_delimeter({
     x: [%1],
     y: [%2],
-    type: 'scatter'
+    mode: 'lines'
   })davis_delimeter";
 
 
