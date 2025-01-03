@@ -425,6 +425,9 @@ void showDateTimeChart(const string& date_time_values,
   args[ARG_DATE_TIME_VALUES_BLOCK] = data_values_block;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   /*
   string paramWH;
   if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){

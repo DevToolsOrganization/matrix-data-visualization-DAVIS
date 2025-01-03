@@ -753,6 +753,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
 
 }
+
 void DavisGUI::selectAndShowFiles() {
 
   QStringList fileNames = QFileDialog::getOpenFileNames(this,
