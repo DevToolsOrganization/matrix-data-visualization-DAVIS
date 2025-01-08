@@ -125,6 +125,9 @@ extern const char kHtmlComboboxStyleBlock[];
 extern const char kHtmlComboboxSelectBlock[];
 extern const char kHtmlComboboxUpdateFooBlock[];
 
+extern const char kHtmlComboboxSelectSurfaceMatrixBlock[];
+extern const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[];
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

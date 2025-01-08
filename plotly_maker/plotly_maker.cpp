@@ -204,6 +204,9 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
       args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+      args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+      args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
+      args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
       break;
     }
     case dv::VISUALTYPE_SURFACE: {
