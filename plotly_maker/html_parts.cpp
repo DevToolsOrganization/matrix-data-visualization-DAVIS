@@ -18,7 +18,6 @@ id="gd"></div></div>
 %1
 %2
 %3
-%15
 var layout = {
   title: {
     text:'%4'
@@ -51,6 +50,7 @@ var config = {
   plotlyServerURL: "https://chart-studio.plotly.com"
 };
 Plotly.newPlot('gd', data, layout, config);
+%15
 </script>
 </body>
 )";
@@ -539,6 +539,40 @@ function updateBackground(select) {
             }
            }
            Plotly.newPlot('gd', data);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdown = document.getElementById('dropdown');
+            updateBackground(dropdown);
+        });
+)davis_delimeter";
+
+
+const char kHtmlComboboxSelectSurfaceMatrixBlock[]=R"davis_delimeter(
+    <select id="dropdown" onchange="updateBackground(this)">
+        <option value="matrix_image" data-image="<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width='60mm'   height='60mm'   viewBox='0 0 60 60'   version='1.1'   id='svg1'   inkscape:export-filename='matrix.svg'   inkscape:export-xdpi='96'   inkscape:export-ydpi='96'   xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'   xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'   xmlns='http://www.w3.org/2000/svg'   xmlns:svg='http://www.w3.org/2000/svg'>  <sodipodi:namedview     id='namedview1'     pagecolor='#ffffff'     bordercolor='#000000'     borderopacity='0.25'     inkscape:showpageshadow='2'     inkscape:pageopacity='0.0'     inkscape:pagecheckerboard='0'     inkscape:deskcolor='#d1d1d1'     inkscape:document-units='mm'     inkscape:zoom='0.73139029'     inkscape:cx='118.26791'     inkscape:cy='428.63571'     inkscape:window-width='1920'     inkscape:window-height='1017'     inkscape:window-x='1912'     inkscape:window-y='-8'     inkscape:window-maximized='1'     inkscape:current-layer='layer1' />  <defs     id='defs1' />  <g     inkscape:label='Слой 1'     inkscape:groupmode='layer'     id='layer1'>    <rect       style='fill:#ff2a2a;stroke-width:0.264583'       id='rect1'       width='30'       height='30'       x='0'       y='0' />    <rect       style='fill:#ffff00;stroke-width:0.264583'       id='rect2'       width='30'       height='30'       x='30'       y='0' />    <rect       style='fill:#ff00ff;stroke-width:0.264583'       id='rect3'       width='30'       height='30'       x='30'       y='30' />    <rect       style='fill:#00ffff;stroke-width:0.264583'       id='rect4'       width='30'       height='30'       x='0'       y='30' />  </g></svg>">matrix</option>
+        <option value="surface_image" data-image="<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width='48.685608mm'   height='57.444851mm'   viewBox='0 0 48.685608 57.444851'   version='1.1'   id='svg1'   inkscape:export-filename='matrix.svg'   inkscape:export-xdpi='96'   inkscape:export-ydpi='96'   xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'   xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'   xmlns='http://www.w3.org/2000/svg'   xmlns:svg='http://www.w3.org/2000/svg'>  <sodipodi:namedview     id='namedview1'     pagecolor='#ffffff'     bordercolor='#000000'     borderopacity='0.25'     inkscape:showpageshadow='2'     inkscape:pageopacity='0.0'     inkscape:pagecheckerboard='0'     inkscape:deskcolor='#d1d1d1'     inkscape:document-units='mm'     inkscape:zoom='0.73139029'     inkscape:cx='118.26791'     inkscape:cy='428.63571'     inkscape:window-width='1920'     inkscape:window-height='1017'     inkscape:window-x='1912'     inkscape:window-y='-8'     inkscape:window-maximized='1'     inkscape:current-layer='layer1' />  <defs     id='defs1' />  <g     inkscape:label='Слой 1'     inkscape:groupmode='layer'     id='layer1'     transform='translate(-5.1280656,-1.0459301)'>    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='M 15.257176,8.9730377 5.1280653,39.450809 24.934094,46.052817 Z'       id='path8' />    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='M 39.107412,1.0459301 21.435214,27.86359 38.857644,39.366818 Z'       id='path12' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='M 15.259243,8.9749767 33.254436,35.200199 24.753217,45.962379 Z'       id='path9'       sodipodi:nodetypes='cccc' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='m 39.108907,1.048338 10.594434,29.989119 -10.997004,8.19519 z'       id='path13'       sodipodi:nodetypes='cccc' />    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='m 53.813674,29.791115 -31.459079,6.466818 4.185507,20.453528 z'       id='path10' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='M 53.813028,29.793875 40.098917,58.49078 26.527985,56.509598 Z'       id='path11'       sodipodi:nodetypes='cccc' />  </g></svg>">surface</option>
+    </select>
+)davis_delimeter";
+
+const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[]=R"davis_delimeter(
+function updateBackground(select) {
+            var selectedImage = select.options[select.selectedIndex].getAttribute('data-image');
+            select.style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(selectedImage) + '")';
+            var selectedOption = select.options[select.selectedIndex].text;
+
+            switch (selectedOption) {
+            case 'matrix':
+            data[0].type='heatmap';
+            console.log('heatmap');
+            break;
+            case 'surface':
+            data[0].type='surface';
+            console.log('surface');
+            break;
+            default: console.log('uknown option');
+            }
+           Plotly.newPlot('gd', data, layout, config);
         }
 
         document.addEventListener('DOMContentLoaded', function() {

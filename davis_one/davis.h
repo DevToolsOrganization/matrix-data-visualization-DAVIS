@@ -241,6 +241,9 @@ extern const char kHtmlComboboxStyleBlock[];
 extern const char kHtmlComboboxSelectBlock[];
 extern const char kHtmlComboboxUpdateFooBlock[];
 
+extern const char kHtmlComboboxSelectSurfaceMatrixBlock[];
+extern const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[];
+
 
 } // namespace dvs end
 
