@@ -9,10 +9,13 @@
 
 #include "davis.h"
 
+#include <chrono>
 #include <clocale>
 #include <cmath>
+#include <ctime>
 #include <ctype.h>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <limits.h>
 #include <math.h>
@@ -946,11 +949,19 @@ string vectorToString(const vector<double>& vec) {
 }
 
 string makeUniqueDavisHtmlName() {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(1, 1e9);
-  int random_number = dis(gen);
-  return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
+
+  string davis_dir;
+  davis_dir = "./davis_htmls/";
+  auto now = std::chrono::system_clock::now();
+  auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+  auto in_time_t = std::chrono::system_clock::to_time_t(now);
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d_%H_%M_%S");
+  ss << '_' << std::setfill('0')
+     << std::setw(3)
+     << milliseconds.count() << ".html";
+  davis_dir.append(ss.str());
+  return davis_dir;
 }
 
 void transponeMatrix(std::vector<std::vector<double> >& matrix) {
@@ -1366,12 +1377,6 @@ void showDateTimeChart(const string& date_time_values,
                        bool isFitPlotToWindow) {
 
   string out;
-  string davis_dir;
-#ifdef _WIN32
-  davis_dir = "\\davis_htmls";
-#elif __linux__
-  davis_dir = "/davis_htmls";
-#endif
   vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
 
@@ -1389,14 +1394,7 @@ void showDateTimeChart(const string& date_time_values,
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
-  /*
-  string paramWH;
-  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
-    paramWH = "width";
-  }else{
-    paramWH = "height";
-  }
-  */
+
   string paramWH = "height";
   string paramWHsecond;
   if (isFitPlotToWindow) {
@@ -1411,8 +1409,9 @@ void showDateTimeChart(const string& date_time_values,
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   make_string(kHtmlDateTimeModel, args, out);
-  saveStringToFile(kReportPagePath, out);
-  openFileBySystem(kReportPagePath);
+  auto unique_path = dvs::makeUniqueDavisHtmlName();
+  saveStringToFile(unique_path, out);
+  openFileBySystem(unique_path);
 
 
 }
@@ -1442,11 +1441,6 @@ void showCloudOfPointsChart(const vector<double>& xValues,
                             bool isFitPlotToWindow) {
   string out;
   string davis_dir;
-#ifdef _WIN32
-  davis_dir = "\\davis_htmls";
-#elif __linux__
-  davis_dir = "/davis_htmls";
-#endif
   vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
@@ -1454,14 +1448,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
   args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
-  /*
-  string paramWH;
-  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
-    paramWH = "width";
-  }else{
-    paramWH = "height";
-  }
-  */
+
   string paramWH = "height";
   string paramWHsecond;
   if (isFitPlotToWindow) {
@@ -1476,8 +1463,9 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
-  saveStringToFile(kCloudPagePath, out);
-  openFileBySystem(kCloudPagePath);
+  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  saveStringToFile(unique_file_name, out);
+  openFileBySystem(unique_file_name);
 }
 
 void showCloudOfPointsChartStr(const std::string& xValues,
@@ -1485,12 +1473,6 @@ void showCloudOfPointsChartStr(const std::string& xValues,
                                const vector<double>& colorValues,
                                bool isFitPlotToWindow) {
   string out;
-  string davis_dir;
-#ifdef _WIN32
-  davis_dir = "\\davis_htmls";
-#elif __linux__
-  davis_dir = "/davis_htmls";
-#endif
   vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = xValues;
@@ -1498,14 +1480,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_COLOR_CLOUD_OF_POINTS] = vectorToString(colorValues);
   args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT] = "1";
-  /*
-  string paramWH;
-  if(configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight){
-    paramWH = "width";
-  }else{
-    paramWH = "height";
-  }
-  */
+
   string paramWH = "height";
   string paramWHsecond;
   if (isFitPlotToWindow) {
@@ -1520,20 +1495,15 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   make_string(kHtmlCloudOfPoints, args, out);
-  saveStringToFile(kCloudPagePath, out);
-  openFileBySystem(kCloudPagePath);
+  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  saveStringToFile(unique_file_name, out);
+  openFileBySystem(unique_file_name);
 }
 
 void showDateTimeMultichart(const std::string& date_time_values,
                             const vector<vector<double>>& yValues,
                             bool isFitPlotToWindow) {
   string out;
-  string davis_dir;
-#ifdef _WIN32
-  davis_dir = "\\davis_htmls";
-#elif __linux__
-  davis_dir = "/davis_htmls";
-#endif
   vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
 
@@ -1573,8 +1543,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   make_string(kHtmlDateTimeModel, args, out);
-  saveStringToFile(kReportPagePath, out);
-  openFileBySystem(kReportPagePath);
+  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  saveStringToFile(unique_file_name, out);
+  openFileBySystem(unique_file_name);
 }
 
 
@@ -1633,7 +1604,10 @@ void holdOff(const Config& configuration) {
                          configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH, paramWHsecond
+                         paramWH, paramWHsecond,
+                         dvs::kHtmlComboboxStyleBlock,
+                         dvs::kHtmlComboboxSelectBlock,
+                         dvs::kHtmlComboboxUpdateFooBlock
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";

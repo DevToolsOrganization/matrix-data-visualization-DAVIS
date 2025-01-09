@@ -964,8 +964,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
                      .arg(dvs::kHtmlComboboxSelectBlock)
                      .arg(dvs::kHtmlComboboxUpdateFooBlock);
 
-    dvs::saveStringToFile(dvs::kReportPagePath, multichartPage.toStdString());
-    dvs::openFileBySystem(dvs::kReportPagePath);
+    dvs::saveStringToFile(dvs::makeUniqueDavisHtmlName(), multichartPage.toStdString());
+    dvs::openFileBySystem(dvs::makeUniqueDavisHtmlName());
     return;
   }
   QString filePath =  file_list.first();

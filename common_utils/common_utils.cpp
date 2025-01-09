@@ -12,6 +12,9 @@
 #include <cmath>
 #include <math.h>
 #include <random>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -343,11 +346,19 @@ string vectorToString(const vector<double>& vec) {
 }
 
 string makeUniqueDavisHtmlName() {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(1, 1e9);
-  int random_number = dis(gen);
-  return string(dvs::kOutFolderName) + dvs::kAppName + std::to_string(random_number) + ".html";
+
+  string davis_dir;
+  davis_dir = "./davis_htmls/";
+  auto now = std::chrono::system_clock::now();
+  auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+  auto in_time_t = std::chrono::system_clock::to_time_t(now);
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d_%H_%M_%S");
+  ss << '_' << std::setfill('0')
+     << std::setw(3)
+     << milliseconds.count() << ".html";
+  davis_dir.append(ss.str());
+  return davis_dir;
 }
 
 void transponeMatrix(std::vector<std::vector<double> >& matrix) {
