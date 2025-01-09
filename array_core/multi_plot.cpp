@@ -59,7 +59,10 @@ void holdOff(const Config& configuration) {
                          configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH, paramWHsecond
+                         paramWH, paramWHsecond,
+                         dvs::kHtmlComboboxStyleBlock,
+                         dvs::kHtmlComboboxSelectBlock,
+                         dvs::kHtmlComboboxUpdateFooBlock
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
