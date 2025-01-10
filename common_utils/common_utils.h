@@ -4,6 +4,7 @@
 //#START_GRAB_TO_INCLUDES_LIST
 #include <string>
 #include <vector>
+#include <iterator>
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -142,7 +143,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
 //! convert any container to std::vector with G type
 template<typename G,
          typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>>>
 vector<G> vecFromTemplate(const C& container) {
   vector<G> vec(container.size());
