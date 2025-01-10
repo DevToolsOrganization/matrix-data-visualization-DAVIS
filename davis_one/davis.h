@@ -493,7 +493,7 @@ using std::string;
 //! (matrix) 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+          const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
 bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
@@ -502,7 +502,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
 //! (matrix) 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+          const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
 bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
@@ -510,7 +510,7 @@ bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filen
 
 //! (chart) 1-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
@@ -519,7 +519,7 @@ bool save(const T* data, uint64_t count, const string& filename, const configSav
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
          typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
-bool show(C const& container, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+bool show(C const& container, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
          typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
@@ -531,7 +531,7 @@ bool save(C const& container, const string& filename, const configSaveToDisk& co
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
          typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
-bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
          typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
@@ -544,7 +544,7 @@ template<typename C,
          typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
          typename T = std::decay_t<decltype(*std::begin(std::declval<E>()))>,
          typename = std::enable_if_t<std::is_convertible_v<T, double>> >
-bool show(C const& container_of_containers, const string& htmlPageName = dvs::kAppName, const Config& configuration = Config());
+bool show(C const& container_of_containers, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
          typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
