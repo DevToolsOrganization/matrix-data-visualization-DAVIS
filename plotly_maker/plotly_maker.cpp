@@ -207,6 +207,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
       args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
       args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
+      args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
       break;
     }
     case dv::VISUALTYPE_SURFACE: {
@@ -235,6 +236,7 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       }
       args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
       args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+      args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
       break;
     }
     default:
@@ -301,6 +303,7 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+  args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlModel, args, page);
   string pageName;
   mayBeCreateJsWorkingFolder();
@@ -439,6 +442,7 @@ void showDateTimeChart(const string& date_time_values,
   }
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_DATE_TIME_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlDateTimeModel, args, out);
   auto unique_path = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_path, out);
@@ -493,6 +497,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   }
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
   auto unique_file_name = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_file_name, out);
@@ -525,6 +530,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   }
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
   auto unique_file_name = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_file_name, out);
@@ -573,6 +579,7 @@ void showDateTimeMultichart(const std::string& date_time_values,
 
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_DATE_TIME_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlDateTimeModel, args, out);
   auto unique_file_name = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_file_name, out);

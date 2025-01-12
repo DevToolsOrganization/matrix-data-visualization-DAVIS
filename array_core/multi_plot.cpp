@@ -55,14 +55,20 @@ void holdOff(const Config& configuration) {
   } else {
     paramWHsecond = paramWH;
   }
-  vector<string> args = {dvs::kPlotlyJsName, allChartBlocks_str, allTracesNames_str,
-                         configuration.chart.title, configuration.chart.xLabel, configuration.chart.yLabel,
+  vector<string> args = {dvs::kPlotlyJsName,
+                         allChartBlocks_str,
+                         allTracesNames_str,
+                         configuration.chart.title,
+                         configuration.chart.xLabel,
+                         configuration.chart.yLabel,
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
                          dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH, paramWHsecond,
+                         paramWH,
+                         paramWHsecond,
                          dvs::kHtmlComboboxStyleBlock,
                          dvs::kHtmlComboboxSelectBlock,
-                         dvs::kHtmlComboboxUpdateFooBlock
+                         dvs::kHtmlComboboxUpdateFooBlock,
+                         dvs::kHtmlDavisLogoHyperlinkBlock
                         };
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
