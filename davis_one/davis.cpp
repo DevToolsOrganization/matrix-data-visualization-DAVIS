@@ -525,15 +525,8 @@ const char kHtmlSimpleDataBlock[]= R"davis_delimeter({
 
 const char kHtmlComboboxStyleBlock[] = R"davis_delimeter(
 <style>
-        .davis_hyperlink {
-                  position: fixed;
-                  top: 10px;
-                  left: 20px;
-                  z-index: 1000;
-              }
-
         #dropdown {
-                        position: fixed;
+            position: fixed;
             top: 70px;
             left: 20px;
             z-index: 1000;
@@ -631,7 +624,10 @@ function updateBackground(select) {
 )davis_delimeter";
 
 extern const char kHtmlDavisLogoHyperlinkBlock[] = R"davis_delimeter(
-<a href="https://devtoolsorganization.github.io/matrix-data-visualization-DAVIS/#/" class="davis_hyperlink"
+<a href="https://devtoolsorganization.github.io/matrix-data-visualization-DAVIS/#/" style = " position: fixed;
+                                                                                                 top: 10px;
+                                                                                                 left: 20px;
+                                                                                                 z-index: 1000;"
     target="_blank" title="about DAVIS">
     <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="200" height="50" version="1.1"
         style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
