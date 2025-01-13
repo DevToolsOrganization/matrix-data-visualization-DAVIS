@@ -962,7 +962,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
                      .arg(paramWHsecond)
                      .arg(dvs::kHtmlComboboxStyleBlock)
                      .arg(dvs::kHtmlComboboxSelectBlock)
-                     .arg(dvs::kHtmlComboboxUpdateFooBlock);
+                     .arg(dvs::kHtmlComboboxUpdateFooBlock)
+                     .arg(dvs::kHtmlDavisLogoHyperlinkBlock);
 
     dvs::saveStringToFile(dvs::makeUniqueDavisHtmlName(), multichartPage.toStdString());
     dvs::openFileBySystem(dvs::makeUniqueDavisHtmlName());
