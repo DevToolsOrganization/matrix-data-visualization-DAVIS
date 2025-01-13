@@ -374,16 +374,18 @@ const char kHtmlDateTimeModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
 %7
+%11
 </head>
 <body>
 %8
+
 <div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%5:99%; %6:99%; aspect-ratio: %3/%4;"
 id="gd"></div></div>
 
 %10
-
+%12
 <script>
 
 var data = [
@@ -397,7 +399,7 @@ var config = {
 };
 
 Plotly.newPlot('gd', data);
-
+%13
 </script>
 </body>
 )davis_delimeter";
@@ -470,7 +472,6 @@ var config = {
 };
 
 Plotly.newPlot('gd', data, layout, config);
-
 </script>
 </body>
 )davis_delimeter";
@@ -698,6 +699,58 @@ extern const char kHtmlDavisLogoHyperlinkBlock[] = R"davis_delimeter(
 )davis_delimeter";
 
 
+const char kAverageButtonStyleBlock[] = R"davis_delimeter(
+<style>
+        .toggle-button {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-button::before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background-color: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-button.active {
+            background-color: #4caf50;
+        }
+        .toggle-button.active::before {
+            transform: translateX(30px);
+        }
+        .state-text {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+</style>
+)davis_delimeter";
+
+const char kAverageButtonDivBlock[] = R"davis_delimeter(
+<div class="toggle-button" id="toggleButton"></div>
+    <div class="state-text" id="stateText">Average: OFF</div>
+)davis_delimeter";
+
+
+const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
+ const toggleButton = document.getElementById('toggleButton');
+        const stateText = document.getElementById('stateText');
+
+        toggleButton.addEventListener('click', () => {
+            toggleButton.classList.toggle('active');
+            const isActive = toggleButton.classList.contains('active');
+            stateText.textContent = `Average: ${isActive ? 'ON' : 'OFF'}`;
+            console.log('Toggle button state:', isActive);
+        });
+)davis_delimeter";
 
 // *INDENT-ON*
 
@@ -1615,6 +1668,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  args[ARG_MC_AVERAGE_BUTTON_STYLE] = kAverageButtonStyleBlock;
+  args[ARG_MC_AVERAGE_BUTTON_DIV] = kAverageButtonDivBlock;
+  args[ARG_MC_AVERAGE_BUTTON_JS] = kAverageButtonJsFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;

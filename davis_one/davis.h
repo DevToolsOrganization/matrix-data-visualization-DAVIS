@@ -168,6 +168,9 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT,     //%8
   ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO, //%9
   ARG_DATE_TIME_DAVIS_LOGO, //%10
+  ARG_MC_AVERAGE_BUTTON_STYLE,//%11
+  ARG_MC_AVERAGE_BUTTON_DIV,//%12
+  ARG_MC_AVERAGE_BUTTON_JS,//%13
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -249,6 +252,10 @@ extern const char kHtmlComboboxSelectSurfaceMatrixBlock[];
 extern const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[];
 
 extern const char kHtmlDavisLogoHyperlinkBlock[];
+
+extern const char kAverageButtonStyleBlock[];
+extern const char kAverageButtonDivBlock[];
+extern const char kAverageButtonJsFooBlock[];
 
 } // namespace dvs end
 

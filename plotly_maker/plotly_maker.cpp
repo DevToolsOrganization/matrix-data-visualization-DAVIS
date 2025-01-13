@@ -564,6 +564,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  args[ARG_MC_AVERAGE_BUTTON_STYLE] = kAverageButtonStyleBlock;
+  args[ARG_MC_AVERAGE_BUTTON_DIV] = kAverageButtonDivBlock;
+  args[ARG_MC_AVERAGE_BUTTON_JS] = kAverageButtonJsFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;
