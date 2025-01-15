@@ -54,6 +54,7 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_MC_AVERAGE_BUTTON_STYLE,//%11
   ARG_MC_AVERAGE_BUTTON_DIV,//%12
   ARG_MC_AVERAGE_BUTTON_JS,//%13
+  ARG_DATE_TIME_AVERAGE_VALUES_BLOCK,//%14
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -139,6 +140,7 @@ extern const char kHtmlDavisLogoHyperlinkBlock[];
 extern const char kAverageButtonStyleBlock[];
 extern const char kAverageButtonDivBlock[];
 extern const char kAverageButtonJsFooBlock[];
+extern const char kAverageErrorDataBlock[];
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }
 

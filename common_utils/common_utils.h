@@ -10,6 +10,8 @@
 #include <fstream>
 #include <algorithm>
 #include <stdint.h>
+#include <numeric>
+#include <stdexcept>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -161,6 +163,7 @@ bool is_string_convertable_to_digit(const string& sample);
 
 void transponeMatrix(std::vector<std::vector<double>>& matrix);
 
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

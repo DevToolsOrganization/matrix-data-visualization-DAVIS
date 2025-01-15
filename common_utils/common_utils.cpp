@@ -378,6 +378,34 @@ void transponeMatrix(std::vector<std::vector<double> >& matrix) {
   matrix = std::move(transposed);
 }
 
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+
+  if (vectors.empty()) {
+    throw std::invalid_argument("Input vector of vectors is empty.");
+  }
+
+  size_t vectorSize = vectors[0].size();
+  for (const auto& vec : vectors) {
+    if (vec.size() != vectorSize) {
+      throw std::invalid_argument("All vectors must have the same size.");
+    }
+  }
+
+  std::vector<double> averageVector(vectorSize, 0.0);
+  for (const auto& vec : vectors) {
+    for (size_t i = 0; i < vectorSize; ++i) {
+      averageVector[i] += vec[i];
+    }
+  }
+
+  for (double& value : averageVector) {
+    value /= vectors.size();
+  }
+
+  return averageVector;
+
+}
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

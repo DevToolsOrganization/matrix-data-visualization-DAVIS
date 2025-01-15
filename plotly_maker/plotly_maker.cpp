@@ -545,8 +545,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_JS_NAME] = kPlotlyJsName;
 
 
+
   std::string all_data = "";
-  for (int i = 0; i < yValues.size(); ++i) {
+  for (size_t i = 0; i < yValues.size(); ++i) {
     vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
@@ -558,6 +559,16 @@ void showDateTimeMultichart(const std::string& date_time_values,
       all_data.append(",");
     }
   }
+  auto average_values = calculateAverageVector(yValues);
+  std::string average_values_str = "";
+  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  std::string simpleData_yValues = vectorToString(average_values);
+  args_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+  std::string average_data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_block, average_data_values_block);
+  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = average_data_values_block;
+
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;

@@ -351,7 +351,10 @@ id="gd"></div></div>
 %10
 %12
 <script>
-
+var temp = [];
+var average = [
+%14
+];
 var data = [
 %2
 ];
@@ -712,8 +715,21 @@ const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
             toggleButton.classList.toggle('active');
             const isActive = toggleButton.classList.contains('active');
             stateText.textContent = `Average: ${isActive ? 'ON' : 'OFF'}`;
+            if(isActive){temp = data; data = average;}else{data = temp;};
+            Plotly.newPlot('gd', data);
             console.log('Toggle button state:', isActive);
         });
+)davis_delimeter";
+
+
+const char kAverageErrorDataBlock[] = R"davis_delimeter(
+    x: [%1],
+    y: [%2],
+    type: 'scatter',
+    fill: "tozerox",
+    fillcolor: "rgba(231,107,243,0.2)",
+    line: {color: "transparent"},
+    showlegend: false
 )davis_delimeter";
 
 // *INDENT-ON*

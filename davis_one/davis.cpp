@@ -387,7 +387,10 @@ id="gd"></div></div>
 %10
 %12
 <script>
-
+var temp = [];
+var average = [
+%14
+];
 var data = [
 %2
 ];
@@ -748,8 +751,21 @@ const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
             toggleButton.classList.toggle('active');
             const isActive = toggleButton.classList.contains('active');
             stateText.textContent = `Average: ${isActive ? 'ON' : 'OFF'}`;
+            if(isActive){temp = data; data = average;}else{data = temp;};
+            Plotly.newPlot('gd', data);
             console.log('Toggle button state:', isActive);
         });
+)davis_delimeter";
+
+
+const char kAverageErrorDataBlock[] = R"davis_delimeter(
+    x: [%1],
+    y: [%2],
+    type: 'scatter',
+    fill: "tozerox",
+    fillcolor: "rgba(231,107,243,0.2)",
+    line: {color: "transparent"},
+    showlegend: false
 )davis_delimeter";
 
 // *INDENT-ON*
@@ -1114,6 +1130,34 @@ void transponeMatrix(std::vector<std::vector<double> >& matrix) {
     }
   }
   matrix = std::move(transposed);
+}
+
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+
+  if (vectors.empty()) {
+    throw std::invalid_argument("Input vector of vectors is empty.");
+  }
+
+  size_t vectorSize = vectors[0].size();
+  for (const auto& vec : vectors) {
+    if (vec.size() != vectorSize) {
+      throw std::invalid_argument("All vectors must have the same size.");
+    }
+  }
+
+  std::vector<double> averageVector(vectorSize, 0.0);
+  for (const auto& vec : vectors) {
+    for (size_t i = 0; i < vectorSize; ++i) {
+      averageVector[i] += vec[i];
+    }
+  }
+
+  for (double& value : averageVector) {
+    value /= vectors.size();
+  }
+
+  return averageVector;
+
 }
 
 
@@ -1649,8 +1693,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_JS_NAME] = kPlotlyJsName;
 
 
+
   std::string all_data = "";
-  for (int i = 0; i < yValues.size(); ++i) {
+  for (size_t i = 0; i < yValues.size(); ++i) {
     vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
@@ -1662,6 +1707,16 @@ void showDateTimeMultichart(const std::string& date_time_values,
       all_data.append(",");
     }
   }
+  auto average_values = calculateAverageVector(yValues);
+  std::string average_values_str = "";
+  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  std::string simpleData_yValues = vectorToString(average_values);
+  args_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+  std::string average_data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_block, average_data_values_block);
+  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = average_data_values_block;
+
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;

@@ -16,6 +16,8 @@
 #include <iterator>
 #include <map>
 #include <memory>
+#include <numeric>
+#include <stdexcept>
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -171,6 +173,7 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_MC_AVERAGE_BUTTON_STYLE,//%11
   ARG_MC_AVERAGE_BUTTON_DIV,//%12
   ARG_MC_AVERAGE_BUTTON_JS,//%13
+  ARG_DATE_TIME_AVERAGE_VALUES_BLOCK,//%14
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -256,6 +259,7 @@ extern const char kHtmlDavisLogoHyperlinkBlock[];
 extern const char kAverageButtonStyleBlock[];
 extern const char kAverageButtonDivBlock[];
 extern const char kAverageButtonJsFooBlock[];
+extern const char kAverageErrorDataBlock[];
 
 } // namespace dvs end
 
@@ -407,6 +411,7 @@ bool is_string_convertable_to_digit(const string& sample);
 
 void transponeMatrix(std::vector<std::vector<double>>& matrix);
 
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
 
 
 } // namespace dvs end
