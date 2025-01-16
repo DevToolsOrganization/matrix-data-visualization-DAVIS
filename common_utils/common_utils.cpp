@@ -407,5 +407,38 @@ vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
 }
 
 
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data) {
+
+  std::vector<double> stddev(mean.size(), 0.0);
+  int n = data.size();
+  for (const auto& vec : data) {
+    for (size_t i = 0; i < vec.size(); ++i) {
+      double diff = vec[i] - mean[i];
+      stddev[i] += diff * diff;
+    }
+  }
+  for (size_t i = 0; i < stddev.size(); ++i) {
+    stddev[i] = std::sqrt(stddev[i] / n);
+  }
+  return stddev;
+}
+
+std::string reverseString(const std::string& input) {
+  std::string reversed = input;
+  std::reverse(reversed.begin(), reversed.end());
+  return reversed;
+}
+
+vector<double> doubleAndReverse(const vector<double>& input) {
+  vector<double> result = input;
+  vector<double> reversed(input.rbegin(), input.rend());
+  for (auto& val : reversed) {
+    val = -val;
+  }
+  result.insert(result.end(), reversed.begin(), reversed.end());
+  return result;
+}
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs

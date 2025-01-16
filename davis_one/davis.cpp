@@ -1161,6 +1161,39 @@ vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
 }
 
 
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data) {
+
+  std::vector<double> stddev(mean.size(), 0.0);
+  int n = data.size();
+  for (const auto& vec : data) {
+    for (size_t i = 0; i < vec.size(); ++i) {
+      double diff = vec[i] - mean[i];
+      stddev[i] += diff * diff;
+    }
+  }
+  for (size_t i = 0; i < stddev.size(); ++i) {
+    stddev[i] = std::sqrt(stddev[i] / n);
+  }
+  return stddev;
+}
+
+std::string reverseString(const std::string& input) {
+  std::string reversed = input;
+  std::reverse(reversed.begin(), reversed.end());
+  return reversed;
+}
+
+vector<double> doubleAndReverse(const vector<double>& input) {
+  vector<double> result = input;
+  vector<double> reversed(input.rbegin(), input.rend());
+  for (auto& val : reversed) {
+    val = -val;
+  }
+  result.insert(result.end(), reversed.begin(), reversed.end());
+  return result;
+}
+
 
 } // namespace dvs end
 
@@ -1708,13 +1741,21 @@ void showDateTimeMultichart(const std::string& date_time_values,
     }
   }
   auto average_values = calculateAverageVector(yValues);
+  auto deviation_values = calculateStandardDeviation(average_values, yValues);
+
+  auto reversed_date_time_data = reverseString(date_time_values);
+  auto polygon_date_time = date_time_values;
+  polygon_date_time.append(",");
+  polygon_date_time.append(reversed_date_time_data);
+  auto polygon_deviation_values = doubleAndReverse(deviation_values);
+
   std::string average_values_str = "";
   vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
-  std::string simpleData_yValues = vectorToString(average_values);
-  args_block[ARG_SIMPLE_DATA_X] = date_time_values;
-  args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+  std::string simpleData_yValues = vectorToString(deviation_values);
+  args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
+  args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
   std::string average_data_values_block;
-  make_string(kHtmlSimpleDataBlock, args_block, average_data_values_block);
+  make_string(kAverageErrorDataBlock, args_block, average_data_values_block);
   args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = average_data_values_block;
 
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;

@@ -560,13 +560,21 @@ void showDateTimeMultichart(const std::string& date_time_values,
     }
   }
   auto average_values = calculateAverageVector(yValues);
+  auto deviation_values = calculateStandardDeviation(average_values, yValues);
+
+  auto reversed_date_time_data = reverseString(date_time_values);
+  auto polygon_date_time = date_time_values;
+  polygon_date_time.append(",");
+  polygon_date_time.append(reversed_date_time_data);
+  auto polygon_deviation_values = doubleAndReverse(deviation_values);
+
   std::string average_values_str = "";
   vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
-  std::string simpleData_yValues = vectorToString(average_values);
-  args_block[ARG_SIMPLE_DATA_X] = date_time_values;
-  args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
+  std::string simpleData_yValues = vectorToString(deviation_values);
+  args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
+  args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
   std::string average_data_values_block;
-  make_string(kHtmlSimpleDataBlock, args_block, average_data_values_block);
+  make_string(kAverageErrorDataBlock, args_block, average_data_values_block);
   args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = average_data_values_block;
 
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;

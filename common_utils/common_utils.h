@@ -165,6 +165,15 @@ void transponeMatrix(std::vector<std::vector<double>>& matrix);
 
 vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
 
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data);
+
+vector<double> doubleAndReverse(const vector<double>& input);
+
+
+std::string reverseString(const std::string& input);
+
+
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
 
