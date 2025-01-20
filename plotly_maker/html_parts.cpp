@@ -722,7 +722,7 @@ const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
 )davis_delimeter";
 
 
-const char kAverageErrorDataBlock[] = R"davis_delimeter(
+const char kAverageErrorDataBlock[] = R"davis_delimeter({
     x: [%1],
     y: [%2],
     type: 'scatter',
@@ -730,6 +730,7 @@ const char kAverageErrorDataBlock[] = R"davis_delimeter(
     fillcolor: "rgba(231,107,243,0.2)",
     line: {color: "transparent"},
     showlegend: false
+}
 )davis_delimeter";
 
 // *INDENT-ON*

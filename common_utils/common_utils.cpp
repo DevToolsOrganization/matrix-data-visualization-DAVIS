@@ -425,10 +425,28 @@ vector<double> calculateStandardDeviation(const vector<double>& mean,
 }
 
 std::string reverseString(const std::string& input) {
-  std::string reversed = input;
-  std::reverse(reversed.begin(), reversed.end());
-  return reversed;
+
+  std::stringstream ss(input);
+  std::string item;
+  std::vector<std::string> elements;
+
+  while (std::getline(ss, item, ',')) {
+    elements.push_back(item);
+  }
+
+  std::reverse(elements.begin(), elements.end());
+
+  std::string result;
+  for (size_t i = 0; i < elements.size(); ++i) {
+    result += elements[i];
+    if (i < elements.size() - 1) {
+      result += ',';
+    }
+  }
+
+  return result;
 }
+
 
 vector<double> doubleAndReverse(const vector<double>& input) {
   vector<double> result = input;
