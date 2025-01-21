@@ -375,11 +375,6 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 }
 
 
-bool DavisGUI::mayBeShowMatrixToMatrix(QJsonArray& stamps,
-                                       QJsonObject& obj) {
-  return false;
-}
-
 Skins DavisGUI::checkSkin() {
   if (!m_isUseCustomSkins) {
     return Skins::DEFAULT;
