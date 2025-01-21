@@ -39,7 +39,7 @@ bool saveStringToFile(const string& file_name,
 
 void mayBeCreateJsWorkingFolder();
 
-void sleepMs(unsigned long milisec);
+void sleepMicroSec(unsigned long microsec);
 
 void openPlotlyHtml(const string& file_name);
 

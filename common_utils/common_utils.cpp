@@ -15,6 +15,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <thread>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -87,11 +88,11 @@ void openPlotlyHtml(const string& file_name) {
   openFileBySystem(file_name);
 }
 
-void sleepMs(unsigned long milisec) {
+void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
-  Sleep(milisec);
+  std::this_thread::sleep_for(std::chrono::microseconds(microsec));
 #elif __linux__
-  usleep(milisec * 1000);
+  usleep(microsec);
 #endif
 }
 
@@ -346,7 +347,7 @@ string vectorToString(const vector<double>& vec) {
 }
 
 string makeUniqueDavisHtmlName() {
-
+  sleepMicroSec(1);
   string davis_dir;
   davis_dir = "./davis_htmls/";
   auto now = std::chrono::system_clock::now();
