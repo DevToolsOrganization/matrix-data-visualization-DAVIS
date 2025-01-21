@@ -451,14 +451,13 @@ std::string reverseString(const std::string& input) {
 vector<double> doubleAndReverse(const vector<double>& input,
                                 const vector<double>& mean) {
 
-  vector<double> result = input;
+  vector<double> result(input.size(), 0);
+  vector<double> minus_result = input;
   for (size_t i = 0; i < result.size(); ++i) {
-    result[i] += mean[i];
+    result[i] += mean[i] + input[i];
+    minus_result[i] = mean[i] - input[i];
   }
-  vector<double> reversed(input.rbegin(), input.rend());
-  for (auto& val : reversed) {
-    val = -val;
-  }
+  vector<double> reversed(minus_result.rbegin(), minus_result.rend());
   result.insert(result.end(), reversed.begin(), reversed.end());
   return result;
 }
