@@ -416,7 +416,7 @@ vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
 vector<double> calculateStandardDeviation(const vector<double>& mean,
                                           const vector<vector<double>>& data);
 
-vector<double> doubleAndReverse(const vector<double>& input);
+vector<double> doubleAndReverse(const vector<double>& input, const vector<double>& mean);
 
 
 std::string reverseString(const std::string& input);

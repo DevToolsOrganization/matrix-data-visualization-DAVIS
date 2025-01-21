@@ -448,8 +448,13 @@ std::string reverseString(const std::string& input) {
 }
 
 
-vector<double> doubleAndReverse(const vector<double>& input) {
+vector<double> doubleAndReverse(const vector<double>& input,
+                                const vector<double>& mean) {
+
   vector<double> result = input;
+  for (size_t i = 0; i < result.size(); ++i) {
+    result[i] += mean[i];
+  }
   vector<double> reversed(input.rbegin(), input.rend());
   for (auto& val : reversed) {
     val = -val;

@@ -1203,8 +1203,13 @@ std::string reverseString(const std::string& input) {
 }
 
 
-vector<double> doubleAndReverse(const vector<double>& input) {
+vector<double> doubleAndReverse(const vector<double>& input,
+                                const vector<double>& mean) {
+
   vector<double> result = input;
+  for (size_t i = 0; i < result.size(); ++i) {
+    result[i] += mean[i];
+  }
   vector<double> reversed(input.rbegin(), input.rend());
   for (auto& val : reversed) {
     val = -val;
@@ -1766,16 +1771,34 @@ void showDateTimeMultichart(const std::string& date_time_values,
   auto polygon_date_time = date_time_values;
   polygon_date_time.append(",");
   polygon_date_time.append(reversed_date_time_data);
-  auto polygon_deviation_values = doubleAndReverse(deviation_values);
+  auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
 
-  std::string average_values_str = "";
+
+
+
+
+
   vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(deviation_values);
   args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
   args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
+  std::string average_error_data_values_block;
+  make_string(kAverageErrorDataBlock, args_block, average_error_data_values_block);
+
+  std::string average_values_str = vectorToString(average_values);
+  vector<string>args_aver_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  args_aver_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_aver_block[ARG_SIMPLE_DATA_Y] = average_values_str;
   std::string average_data_values_block;
-  make_string(kAverageErrorDataBlock, args_block, average_data_values_block);
-  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = average_data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_aver_block, average_data_values_block);
+
+
+  auto all_aver_block = average_error_data_values_block;
+  all_aver_block.append(",");
+  all_aver_block.append(average_data_values_block);
+
+
+  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = all_aver_block;
 
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
