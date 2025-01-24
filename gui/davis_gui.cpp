@@ -30,7 +30,9 @@
 #include <QMovie>
 #include "json_utils.h"
 
-
+using std::string;
+using std::vector;
+using namespace dvs;
 const int ANIMATION_DURATION = 300;
 
 DavisGUI::DavisGUI(QWidget* parent)
@@ -944,8 +946,39 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     } else {
       paramWHsecond = paramWH;
     }
-    QString multichartPage = dvs::kHtmlMultiChartModel;
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
+    std::string multichartPage = dvs::kHtmlMultiChartModel;
+
+
+    string out;
+    vector<string>args {ARGS_MULTI_CHARTS_PAGE_SIZE, ""};
+    args[ARG_JS_MC_NAME] = kPlotlyJsName;
+
+    args[ARG_TRACES_BLOCKS] = all_traces_names.toStdString();
+    args[ARG_DATA_OF_TRACES] = all_chart_blocks.toStdString();
+    args[ARG_MC_AVERAGE_BUTTON_STYLE] = kAverageButtonStyleBlock;
+    args[ARG_MC_AVERAGE_BUTTON_DIV] = kAverageButtonDivBlock;
+    args[ARG_MC_AVERAGE_BUTTON_JS] = kAverageButtonJsFooBlock;
+    args[ARG_MC_AVERAGE_VALUES_BLOCK] = "";
+
+    //args[ARG_MC_ASPECT_RATIO_WIDTH] = "1";
+    //args[ARG_MC_ASPECT_RATIO_HEIGHT] = "1";
+    args[ARG_MC_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+    args[ARG_MC_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
+    args[ARG_MC_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+    args[ARG_MC_ASPECT_WIDTH_OR_HEIGHT] = paramWH.toStdString();
+    args[ARG_MC_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond.toStdString();
+    args[ARG_MC_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
+    make_string(kHtmlDateTimeModel, args, out);
+    auto unique_path = dvs::makeUniqueDavisHtmlName();
+    saveStringToFile(unique_path, out);
+    openFileBySystem(unique_path);
+
+
+
+
+
+
+    /*multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
                      .arg(all_chart_blocks)
                      .arg(all_traces_names)
                      .arg("")
@@ -960,8 +993,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
                      .arg(dvs::kHtmlComboboxUpdateFooBlock)
                      .arg(dvs::kHtmlDavisLogoHyperlinkBlock);
     auto unique_file_name = dvs::makeUniqueDavisHtmlName();
-    dvs::saveStringToFile(unique_file_name, multichartPage.toStdString());
-    dvs::openFileBySystem(unique_file_name);
+    dvs::saveStringToFile(unique_file_name, multichartPage);
+    dvs::openFileBySystem(unique_file_name);*/
     return;
   }
   QString filePath =  file_list.first();

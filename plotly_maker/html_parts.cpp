@@ -389,6 +389,7 @@ const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
 %11
+%15
 </head>
 <body>
 %14
@@ -397,11 +398,14 @@ const char kHtmlMultiChartModel[] = R"davis_delimeter(
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
-
+%16
 <script>
 
 %2
-
+var temp = [];
+var average = [
+%18
+];
 var data = [%3];
 %13
 var layout = {
@@ -439,6 +443,8 @@ var config = {
 };
 
 Plotly.newPlot('gd', data, layout, config);
+
+%17
 </script>
 </body>
 )davis_delimeter";
