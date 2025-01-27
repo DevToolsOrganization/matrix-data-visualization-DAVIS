@@ -545,8 +545,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_JS_NAME] = kPlotlyJsName;
 
 
+
   std::string all_data = "";
-  for (int i = 0; i < yValues.size(); ++i) {
+  for (size_t i = 0; i < yValues.size(); ++i) {
     vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
@@ -558,12 +559,51 @@ void showDateTimeMultichart(const std::string& date_time_values,
       all_data.append(",");
     }
   }
+  auto average_values = calculateAverageVector(yValues);
+  auto deviation_values = calculateStandardDeviation(average_values, yValues);
+
+  auto reversed_date_time_data = reverseString(date_time_values);
+  auto polygon_date_time = date_time_values;
+  polygon_date_time.append(",");
+  polygon_date_time.append(reversed_date_time_data);
+  auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
+
+
+
+
+
+
+  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  std::string simpleData_yValues = vectorToString(deviation_values);
+  args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
+  args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
+  std::string average_error_data_values_block;
+  make_string(kAverageErrorDataBlock, args_block, average_error_data_values_block);
+
+  std::string average_values_str = vectorToString(average_values);
+  vector<string>args_aver_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  args_aver_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_aver_block[ARG_SIMPLE_DATA_Y] = average_values_str;
+  std::string average_data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_aver_block, average_data_values_block);
+
+
+  auto all_aver_block = average_error_data_values_block;
+  all_aver_block.append(",");
+  all_aver_block.append(average_data_values_block);
+
+
+  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = all_aver_block;
+
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_STYLE] = kAverageButtonStyleBlock;
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_DIV] = kAverageButtonDivBlock;
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_JS] = kAverageButtonJsFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;

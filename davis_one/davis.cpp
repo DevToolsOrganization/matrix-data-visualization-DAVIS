@@ -24,6 +24,7 @@
 #include <set>
 #include <sstream>
 #include <sys/stat.h>
+#include <thread>
 #include <vector>
 namespace dvs {
 const char kAppName[] = "davis";
@@ -374,18 +375,23 @@ const char kHtmlDateTimeModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
 %7
+%11
 </head>
 <body>
 %8
+
 <div style = "display: flex;
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%5:99%; %6:99%; aspect-ratio: %3/%4;"
 id="gd"></div></div>
 
 %10
-
+%12
 <script>
-
+var temp = [];
+var average = [
+%14
+];
 var data = [
 %2
 ];
@@ -397,7 +403,7 @@ var config = {
 };
 
 Plotly.newPlot('gd', data);
-
+%13
 </script>
 </body>
 )davis_delimeter";
@@ -420,6 +426,7 @@ const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
 <script src="%1" charset="utf-8"></script>
 %11
+%15
 </head>
 <body>
 %14
@@ -428,11 +435,14 @@ const char kHtmlMultiChartModel[] = R"davis_delimeter(
   align-items:center;height:100%; width:100%;background:#dddfd4;
   justify-content: center;"><div style="%9:99%; %10:99%; aspect-ratio: %7/%8;"
 id="gd"></div></div>
-
+%16
 <script>
 
 %2
-
+var temp = [];
+var average = [
+%18
+];
 var data = [%3];
 %13
 var layout = {
@@ -471,6 +481,7 @@ var config = {
 
 Plotly.newPlot('gd', data, layout, config);
 
+%17
 </script>
 </body>
 )davis_delimeter";
@@ -698,6 +709,72 @@ extern const char kHtmlDavisLogoHyperlinkBlock[] = R"davis_delimeter(
 )davis_delimeter";
 
 
+const char kAverageButtonStyleBlock[] = R"davis_delimeter(
+<style>
+        .toggle-button {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-button::before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background-color: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-button.active {
+            background-color: #4caf50;
+        }
+        .toggle-button.active::before {
+            transform: translateX(30px);
+        }
+        .state-text {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+</style>
+)davis_delimeter";
+
+const char kAverageButtonDivBlock[] = R"davis_delimeter(
+<div class="toggle-button" id="toggleButton"></div>
+    <div class="state-text" id="stateText">Average: OFF</div>
+)davis_delimeter";
+
+
+const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
+ const toggleButton = document.getElementById('toggleButton');
+        const stateText = document.getElementById('stateText');
+
+        toggleButton.addEventListener('click', () => {
+            toggleButton.classList.toggle('active');
+            const isActive = toggleButton.classList.contains('active');
+            stateText.textContent = `Average: ${isActive ? 'ON' : 'OFF'}`;
+            if(isActive){temp = data; data = average;}else{data = temp;};
+            Plotly.newPlot('gd', data);
+            console.log('Toggle button state:', isActive);
+        });
+)davis_delimeter";
+
+
+const char kAverageErrorDataBlock[] = R"davis_delimeter({
+    x: [%1],
+    y: [%2],
+    type: 'scatter',
+    fill: "tozerox",
+    fillcolor: "rgba(231,107,243,0.2)",
+    line: {color: "transparent"},
+    showlegend: false
+}
+)davis_delimeter";
 
 // *INDENT-ON*
 
@@ -772,11 +849,11 @@ void openPlotlyHtml(const string& file_name) {
   openFileBySystem(file_name);
 }
 
-void sleepMs(unsigned long milisec) {
+void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
-  Sleep(milisec);
+  std::this_thread::sleep_for(std::chrono::microseconds(microsec));
 #elif __linux__
-  usleep(milisec * 1000);
+  usleep(microsec);
 #endif
 }
 
@@ -1031,7 +1108,7 @@ string vectorToString(const vector<double>& vec) {
 }
 
 string makeUniqueDavisHtmlName() {
-
+  sleepMicroSec(1);
   string davis_dir;
   davis_dir = "./davis_htmls/";
   auto now = std::chrono::system_clock::now();
@@ -1063,6 +1140,89 @@ void transponeMatrix(std::vector<std::vector<double> >& matrix) {
   matrix = std::move(transposed);
 }
 
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+
+  if (vectors.empty()) {
+    throw std::invalid_argument("Input vector of vectors is empty.");
+  }
+
+  size_t vectorSize = vectors[0].size();
+  for (const auto& vec : vectors) {
+    if (vec.size() != vectorSize) {
+      throw std::invalid_argument("All vectors must have the same size.");
+    }
+  }
+
+  std::vector<double> averageVector(vectorSize, 0.0);
+  for (const auto& vec : vectors) {
+    for (size_t i = 0; i < vectorSize; ++i) {
+      averageVector[i] += vec[i];
+    }
+  }
+
+  for (double& value : averageVector) {
+    value /= vectors.size();
+  }
+
+  return averageVector;
+
+}
+
+
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data) {
+
+  std::vector<double> stddev(mean.size(), 0.0);
+  int n = data.size();
+  for (const auto& vec : data) {
+    for (size_t i = 0; i < vec.size(); ++i) {
+      double diff = vec[i] - mean[i];
+      stddev[i] += diff * diff;
+    }
+  }
+  for (size_t i = 0; i < stddev.size(); ++i) {
+    stddev[i] = std::sqrt(stddev[i] / n);
+  }
+  return stddev;
+}
+
+std::string reverseString(const std::string& input) {
+
+  std::stringstream ss(input);
+  std::string item;
+  std::vector<std::string> elements;
+
+  while (std::getline(ss, item, ',')) {
+    elements.push_back(item);
+  }
+
+  std::reverse(elements.begin(), elements.end());
+
+  std::string result;
+  for (size_t i = 0; i < elements.size(); ++i) {
+    result += elements[i];
+    if (i < elements.size() - 1) {
+      result += ',';
+    }
+  }
+
+  return result;
+}
+
+
+vector<double> doubleAndReverse(const vector<double>& input,
+                                const vector<double>& mean) {
+
+  vector<double> result(input.size(), 0);
+  vector<double> minus_result = input;
+  for (size_t i = 0; i < result.size(); ++i) {
+    result[i] += mean[i] + input[i];
+    minus_result[i] = mean[i] - input[i];
+  }
+  vector<double> reversed(minus_result.rbegin(), minus_result.rend());
+  result.insert(result.end(), reversed.begin(), reversed.end());
+  return result;
+}
 
 
 } // namespace dvs end
@@ -1596,8 +1756,9 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_JS_NAME] = kPlotlyJsName;
 
 
+
   std::string all_data = "";
-  for (int i = 0; i < yValues.size(); ++i) {
+  for (size_t i = 0; i < yValues.size(); ++i) {
     vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
@@ -1609,12 +1770,51 @@ void showDateTimeMultichart(const std::string& date_time_values,
       all_data.append(",");
     }
   }
+  auto average_values = calculateAverageVector(yValues);
+  auto deviation_values = calculateStandardDeviation(average_values, yValues);
+
+  auto reversed_date_time_data = reverseString(date_time_values);
+  auto polygon_date_time = date_time_values;
+  polygon_date_time.append(",");
+  polygon_date_time.append(reversed_date_time_data);
+  auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
+
+
+
+
+
+
+  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  std::string simpleData_yValues = vectorToString(deviation_values);
+  args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
+  args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
+  std::string average_error_data_values_block;
+  make_string(kAverageErrorDataBlock, args_block, average_error_data_values_block);
+
+  std::string average_values_str = vectorToString(average_values);
+  vector<string>args_aver_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  args_aver_block[ARG_SIMPLE_DATA_X] = date_time_values;
+  args_aver_block[ARG_SIMPLE_DATA_Y] = average_values_str;
+  std::string average_data_values_block;
+  make_string(kHtmlSimpleDataBlock, args_aver_block, average_data_values_block);
+
+
+  auto all_aver_block = average_error_data_values_block;
+  all_aver_block.append(",");
+  all_aver_block.append(average_data_values_block);
+
+
+  args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = all_aver_block;
+
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_STYLE] = kAverageButtonStyleBlock;
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_DIV] = kAverageButtonDivBlock;
+  args[ARG_DATE_TIME_AVERAGE_BUTTON_JS] = kAverageButtonJsFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;

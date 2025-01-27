@@ -30,7 +30,9 @@
 #include <QMovie>
 #include "json_utils.h"
 
-
+using std::string;
+using std::vector;
+using namespace dvs;
 const int ANIMATION_DURATION = 300;
 
 DavisGUI::DavisGUI(QWidget* parent)
@@ -374,11 +376,6 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
 }
 
-
-bool DavisGUI::mayBeShowMatrixToMatrix(QJsonArray& stamps,
-                                       QJsonObject& obj) {
-  return false;
-}
 
 Skins DavisGUI::checkSkin() {
   if (!m_isUseCustomSkins) {
@@ -741,9 +738,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   if (values.size() == 0)
     return false;
   qDebug() << "check sizes: " << lines.size() << values.size();
-  /*if (lines.size() != values.size()) {
-    return false;
-  }*/
+
   if (force.empty() == false) {
     dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToAllWindow->isChecked());
     return true;
@@ -768,8 +763,8 @@ void DavisGUI::selectAndShowFiles() {
 }
 
 bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
-                                         QString& outX,
-                                         QString& outY) {
+                                         std::vector<double>& outX,
+                                         std::vector<double>& outY) {
   QFile file(pathToFile);
   QTextStream ts(&file);
   ts.setCodec("UTF-8");
@@ -820,38 +815,25 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
     if (data[i].size() == 1) {
 
       double value = data[i][0];
-      outX.append(QString::number(i + 1));
-      if (i < data.size() - 1)
-        outX.append(",");
-      outY.append(QString::number(value));
-      if (i < data.size() - 1)
-        outY.append(",");
+      outX.push_back(i + 1);
+      outY.push_back(value);
 
     } else if (data[i].size() == 2) {
 
-      outX.append(QString::number(data[i][0]));
-      if (i < data.size() - 1)
-        outX.append(",");
-      outY.append(QString::number(data[i][1]));
-      if (i < data.size() - 1)
-        outY.append(",");
+      outX.push_back(data[i][0]);
+      outY.push_back(data[i][1]);
 
     } else {
 
-
       for (size_t j = 0; j < data[i].size(); ++j) {
-        outX.append(QString::number(j + 1));
-        if (j < data[i].size() - 1)
-          outX.append(",");
-        outY.append(QString::number(data[i][j]));
-        if (j < data[i].size() - 1)
-          outY.append(",");
+        outX.push_back(j + 1);
+        outY.push_back(data[i][j]);
       }
 
     }
   }
-  qDebug() << outX;
-  qDebug() << outY;
+  //qDebug() << outX;
+  //qDebug() << outY;
   return true;
 }
 
@@ -919,54 +901,18 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   if (file_list.size() > 1) {
     QStringList onlySingleChartList;
     qDebug() << "file list size: " << file_list.size();
+    std::vector<std::vector<double>> data;
+    std::vector<double> x_values;
     for (int i = 0; i < file_list.size(); ++i) {
-      QString outX, outY;
-      QString trace_block = dvs::kHtmlMultiChartBlock;
-      if (isFileContainsSingleChart(file_list[i], outX, outY)) {
-        QFileInfo fi(file_list[i]);
-        all_chart_blocks.append(trace_block.arg(QString::number(i + 1), outX, outY, fi.baseName()));
-        all_traces_names.append(QString(trace_name).arg(i + 1));
-        if (i < file_list.size() - 1) {
-          all_traces_names.append(",");
-        }
-      }
-    }
-    double aspectW = 1;
-    double aspectH = 1;
-    QString paramWH;
-    if (aspectW > aspectH) {
-      paramWH = "width";
-    } else {
-      paramWH = "height";
-    }
-    QString paramWHsecond;
-    if (action_fitPlotToAllWindow->isChecked()) {
-      if (paramWH == "width") {
-        paramWHsecond = "height";
-      } else if (paramWH == "height") {
-        paramWHsecond = "width";
-      }
-    } else {
-      paramWHsecond = paramWH;
-    }
-    QString multichartPage = dvs::kHtmlMultiChartModel;
-    multichartPage = multichartPage.arg(dvs::kPlotlyJsName)
-                     .arg(all_chart_blocks)
-                     .arg(all_traces_names)
-                     .arg("")
-                     .arg("X")
-                     .arg("Y")
-                     .arg(QString::number(aspectW))
-                     .arg(QString::number(aspectH))
-                     .arg(paramWH)
-                     .arg(paramWHsecond)
-                     .arg(dvs::kHtmlComboboxStyleBlock)
-                     .arg(dvs::kHtmlComboboxSelectBlock)
-                     .arg(dvs::kHtmlComboboxUpdateFooBlock)
-                     .arg(dvs::kHtmlDavisLogoHyperlinkBlock);
+      std::vector<double> outX, outY;
+      if(isFileContainsSingleChart(file_list[i], outX, outY)){
+          //dv::show(outX,outY);
+          if(i==0)x_values = outX;
+          data.push_back(outY);
+      };
 
-    dvs::saveStringToFile(dvs::makeUniqueDavisHtmlName(), multichartPage.toStdString());
-    dvs::openFileBySystem(dvs::makeUniqueDavisHtmlName());
+    }
+    dvs::showDateTimeMultichart(dvs::vectorToString(x_values),data,true);
     return;
   }
   QString filePath =  file_list.first();

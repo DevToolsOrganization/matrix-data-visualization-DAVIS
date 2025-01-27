@@ -10,6 +10,8 @@
 #include <fstream>
 #include <algorithm>
 #include <stdint.h>
+#include <numeric>
+#include <stdexcept>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -37,7 +39,7 @@ bool saveStringToFile(const string& file_name,
 
 void mayBeCreateJsWorkingFolder();
 
-void sleepMs(unsigned long milisec);
+void sleepMicroSec(unsigned long microsec);
 
 void openPlotlyHtml(const string& file_name);
 
@@ -160,6 +162,16 @@ bool is_string_convertable_to_digit(const string& sample);
 
 
 void transponeMatrix(std::vector<std::vector<double>>& matrix);
+
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
+
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data);
+
+vector<double> doubleAndReverse(const vector<double>& input, const vector<double>& mean);
+
+
+std::string reverseString(const std::string& input);
 
 
 //#STOP_GRAB_TO_DVS_NAMESPACE

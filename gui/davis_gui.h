@@ -51,16 +51,14 @@ class DavisGUI : public QMainWindow {
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
-                                 QString& outX,
-                                 QString& outY);
+                                 std::vector<double> &outX,
+                                 std::vector<double> &outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
   void saveSettings(const QString& fileName);
   QJsonObject loadSettings(const QString& fileName);
   void applySettings(const QJsonObject& settings);
   void readJsonToPlot(const QString& pathToFile);
-  bool mayBeShowMatrixToMatrix(QJsonArray& stamps,
-                               QJsonObject& obj);
   void matrixAnalyzer(std::vector<std::vector<double>>& matrix,
                       const bool isRow);
   Skins checkSkin();

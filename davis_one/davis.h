@@ -16,6 +16,8 @@
 #include <iterator>
 #include <map>
 #include <memory>
+#include <numeric>
+#include <stdexcept>
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -168,6 +170,10 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT,     //%8
   ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO, //%9
   ARG_DATE_TIME_DAVIS_LOGO, //%10
+  ARG_DATE_TIME_AVERAGE_BUTTON_STYLE,//%11
+  ARG_DATE_TIME_AVERAGE_BUTTON_DIV,//%12
+  ARG_DATE_TIME_AVERAGE_BUTTON_JS,//%13
+  ARG_DATE_TIME_AVERAGE_VALUES_BLOCK,//%14
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -180,14 +186,18 @@ enum ARGS_MULTI_CHARTS_PAGE {
   something1,
   something2,
   something3,
-  ARG_MC_DATE_TIME_ASPECT_RATIO_WIDTH,     //%7
-  ARG_MC_DATE_TIME_ASPECT_RATIO_HEIGHT,     //%8
-  ARG_MC_DATE_ASPECT_WIDTH_OR_HEIGHT, //%9 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
-  ARG_MC_DATE_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%10 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
+  ARG_MC_ASPECT_RATIO_WIDTH,     //%7
+  ARG_MC_ASPECT_RATIO_HEIGHT,     //%8
+  ARG_MC_ASPECT_WIDTH_OR_HEIGHT, //%9 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_MC_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%10 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
   ARG_MC_POINT_LINE_SWITCHER_STYLE,      //%11
-  ARG_MC_TIME_POINT_LINE_SWITCHER_SELECT,     //%12
-  ARG_MC_TIME_POINT_LINE_SWITCHER_UPDATE_FOO, //%13
-  ARG_MC_TIME_DAVIS_LOGO, //%14
+  ARG_MC_POINT_LINE_SWITCHER_SELECT,     //%12
+  ARG_MC_POINT_LINE_SWITCHER_UPDATE_FOO, //%13
+  ARG_MC_DAVIS_LOGO, //%14
+  ARG_MC_AVERAGE_BUTTON_STYLE,//%15
+  ARG_MC_AVERAGE_BUTTON_DIV,//%16
+  ARG_MC_AVERAGE_BUTTON_JS,//%17
+  ARG_MC_AVERAGE_VALUES_BLOCK,//%18
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_MULTI_CHARTS_PAGE_SIZE
 };
@@ -250,6 +260,11 @@ extern const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[];
 
 extern const char kHtmlDavisLogoHyperlinkBlock[];
 
+extern const char kAverageButtonStyleBlock[];
+extern const char kAverageButtonDivBlock[];
+extern const char kAverageButtonJsFooBlock[];
+extern const char kAverageErrorDataBlock[];
+
 } // namespace dvs end
 
 namespace dvs {
@@ -276,7 +291,7 @@ bool saveStringToFile(const string& file_name,
 
 void mayBeCreateJsWorkingFolder();
 
-void sleepMs(unsigned long milisec);
+void sleepMicroSec(unsigned long microsec);
 
 void openPlotlyHtml(const string& file_name);
 
@@ -399,6 +414,16 @@ bool is_string_convertable_to_digit(const string& sample);
 
 
 void transponeMatrix(std::vector<std::vector<double>>& matrix);
+
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
+
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data);
+
+vector<double> doubleAndReverse(const vector<double>& input, const vector<double>& mean);
+
+
+std::string reverseString(const std::string& input);
 
 
 

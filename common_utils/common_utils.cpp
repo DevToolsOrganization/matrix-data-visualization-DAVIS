@@ -15,6 +15,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <thread>
 //#STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
@@ -87,11 +88,11 @@ void openPlotlyHtml(const string& file_name) {
   openFileBySystem(file_name);
 }
 
-void sleepMs(unsigned long milisec) {
+void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
-  Sleep(milisec);
+  std::this_thread::sleep_for(std::chrono::microseconds(microsec));
 #elif __linux__
-  usleep(milisec * 1000);
+  usleep(microsec);
 #endif
 }
 
@@ -346,7 +347,7 @@ string vectorToString(const vector<double>& vec) {
 }
 
 string makeUniqueDavisHtmlName() {
-
+  sleepMicroSec(1);
   string davis_dir;
   davis_dir = "./davis_htmls/";
   auto now = std::chrono::system_clock::now();
@@ -378,6 +379,89 @@ void transponeMatrix(std::vector<std::vector<double> >& matrix) {
   matrix = std::move(transposed);
 }
 
+vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+
+  if (vectors.empty()) {
+    throw std::invalid_argument("Input vector of vectors is empty.");
+  }
+
+  size_t vectorSize = vectors[0].size();
+  for (const auto& vec : vectors) {
+    if (vec.size() != vectorSize) {
+      throw std::invalid_argument("All vectors must have the same size.");
+    }
+  }
+
+  std::vector<double> averageVector(vectorSize, 0.0);
+  for (const auto& vec : vectors) {
+    for (size_t i = 0; i < vectorSize; ++i) {
+      averageVector[i] += vec[i];
+    }
+  }
+
+  for (double& value : averageVector) {
+    value /= vectors.size();
+  }
+
+  return averageVector;
+
+}
+
+
+vector<double> calculateStandardDeviation(const vector<double>& mean,
+                                          const vector<vector<double>>& data) {
+
+  std::vector<double> stddev(mean.size(), 0.0);
+  int n = data.size();
+  for (const auto& vec : data) {
+    for (size_t i = 0; i < vec.size(); ++i) {
+      double diff = vec[i] - mean[i];
+      stddev[i] += diff * diff;
+    }
+  }
+  for (size_t i = 0; i < stddev.size(); ++i) {
+    stddev[i] = std::sqrt(stddev[i] / n);
+  }
+  return stddev;
+}
+
+std::string reverseString(const std::string& input) {
+
+  std::stringstream ss(input);
+  std::string item;
+  std::vector<std::string> elements;
+
+  while (std::getline(ss, item, ',')) {
+    elements.push_back(item);
+  }
+
+  std::reverse(elements.begin(), elements.end());
+
+  std::string result;
+  for (size_t i = 0; i < elements.size(); ++i) {
+    result += elements[i];
+    if (i < elements.size() - 1) {
+      result += ',';
+    }
+  }
+
+  return result;
+}
+
+
+vector<double> doubleAndReverse(const vector<double>& input,
+                                const vector<double>& mean) {
+
+  vector<double> result(input.size(), 0);
+  vector<double> minus_result = input;
+  for (size_t i = 0; i < result.size(); ++i) {
+    result[i] += mean[i] + input[i];
+    minus_result[i] = mean[i] - input[i];
+  }
+  vector<double> reversed(minus_result.rbegin(), minus_result.rend());
+  result.insert(result.end(), reversed.begin(), reversed.end());
+  return result;
+}
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
