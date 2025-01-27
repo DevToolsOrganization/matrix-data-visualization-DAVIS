@@ -51,8 +51,8 @@ class DavisGUI : public QMainWindow {
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
-                                 QString& outX,
-                                 QString& outY);
+                                 std::vector<double> &outX,
+                                 std::vector<double> &outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
   void saveSettings(const QString& fileName);
