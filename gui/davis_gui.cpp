@@ -738,9 +738,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   if (values.size() == 0)
     return false;
   qDebug() << "check sizes: " << lines.size() << values.size();
-  /*if (lines.size() != values.size()) {
-    return false;
-  }*/
+
   if (force.empty() == false) {
     dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToAllWindow->isChecked());
     return true;
