@@ -51,8 +51,8 @@ class DavisGUI : public QMainWindow {
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
-                                 std::vector<double> &outX,
-                                 std::vector<double> &outY);
+                                 std::vector<double>& outX,
+                                 std::vector<double>& outY);
   void visualizeFiles(const QStringList& file_list);
   void hideElementsDuringResize();
   void saveSettings(const QString& fileName);
@@ -62,6 +62,13 @@ class DavisGUI : public QMainWindow {
   void matrixAnalyzer(std::vector<std::vector<double>>& matrix,
                       const bool isRow);
   Skins checkSkin();
+  bool getDateTimeData(const QStringList& lines,
+                       QString& dates,
+                       std::vector<double>& values,
+                       std::vector<double>& force,
+                       std::vector<std::vector<double>>& multicharts);
+
+  QStringList getLinesFromFile(const QString& pathToFile);
 
 
  private slots:
