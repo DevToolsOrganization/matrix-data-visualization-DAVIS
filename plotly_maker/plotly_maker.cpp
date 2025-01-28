@@ -499,7 +499,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }
@@ -532,7 +532,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }
@@ -567,11 +567,6 @@ void showDateTimeMultichart(const std::string& date_time_values,
   polygon_date_time.append(",");
   polygon_date_time.append(reversed_date_time_data);
   auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
-
-
-
-
-
 
   vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(deviation_values);
@@ -621,7 +616,7 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_DATE_TIME_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlDateTimeModel, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }

@@ -1110,8 +1110,7 @@ string vectorToString(const vector<double>& vec) {
 
 string makeUniqueDavisHtmlName() {
   sleepMicroSec(1);
-  string davis_dir;
-  davis_dir = "./davis_htmls/";
+
   auto now = std::chrono::system_clock::now();
   auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
   auto in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -1119,10 +1118,15 @@ string makeUniqueDavisHtmlName() {
   ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d_%H_%M_%S");
   ss << '_' << std::setfill('0')
      << std::setw(3)
-     << milliseconds.count() << ".html";
-  davis_dir.append(ss.str());
-  return davis_dir;
+     << milliseconds.count();
+  return ss.str();
 }
+
+std::string makeUniqueDavisHtmlRelativePath() {
+  string name = makeUniqueDavisHtmlName();
+  return std::string("./").append(kOutFolderName).append(name).append(".html");
+}
+
 
 void transponeMatrix(std::vector<std::vector<double> >& matrix) {
 
@@ -1224,6 +1228,8 @@ vector<double> doubleAndReverse(const vector<double>& input,
   result.insert(result.end(), reversed.begin(), reversed.end());
   return result;
 }
+
+
 
 
 } // namespace dvs end
@@ -1711,7 +1717,7 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }
@@ -1744,7 +1750,7 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }
@@ -1779,11 +1785,6 @@ void showDateTimeMultichart(const std::string& date_time_values,
   polygon_date_time.append(",");
   polygon_date_time.append(reversed_date_time_data);
   auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
-
-
-
-
-
 
   vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(deviation_values);
@@ -1833,7 +1834,7 @@ void showDateTimeMultichart(const std::string& date_time_values,
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_DATE_TIME_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlDateTimeModel, args, out);
-  auto unique_file_name = dvs::makeUniqueDavisHtmlName();
+  auto unique_file_name = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_file_name, out);
   openFileBySystem(unique_file_name);
 }
@@ -1908,7 +1909,7 @@ void holdOff(const Config& configuration) {
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
-  string htmlFullName = dvs::makeUniqueDavisHtmlName();
+  string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
   dvs::openFileBySystem(htmlFullName);
   dvs::allChartBlocks.clear();

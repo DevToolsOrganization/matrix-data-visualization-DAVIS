@@ -1,7 +1,7 @@
 #include "davis_gui.h"
 #include "./ui_davis_gui.h"
-
 #include "../davis_one/davis.h"
+
 
 #include <QApplication>
 #include <QDragEnterEvent>
@@ -267,6 +267,8 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
 }
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
+  QFileInfo fileInfo(pathToFile);
+  QString jsonName = fileInfo.fileName();
   QJsonObject user_stamp_keys;
   QJsonArray matrix_to_matrix_stamps;
 
@@ -332,7 +334,7 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
           conf.chart.yLabel = attr.value("type").toString().toStdString();
           conf.chart.title = attr.value("instrument").toString().toStdString();
           conf.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-          dv::show(x_vals, y_vals, QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss_zz").toStdString(), conf);
+          dv::show(x_vals, y_vals, dvs::makeUniqueDavisHtmlName(), conf);
         }
         return;// выход если это был MATRIX_TO_MATRIX_TYPE
       }
@@ -359,14 +361,14 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
       conf.heatmap.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
       conf.surf.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
       if (x_vector.empty() == false && y_vector.empty() == false) {
-        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), "JSON TEST", conf);
+        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
       } else if (x_vector.empty() == true && y_vector.empty() == false) {
-        dv::show(y_vector.toStdVector(), "JSON TEST", conf);
+        dv::show(y_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
       } else if (x_vector.empty() == false && y_vector.empty() == true) {
-        dv::show(x_vector.toStdVector(), "JSON TEST", conf);
+        dv::show(x_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
       }
       if (matrix_vector.empty() == false) {
-        dv::show(matrix_vector, "JSON_MATRIX_VECTOR", conf);
+        dv::show(matrix_vector, dvs::makeUniqueDavisHtmlName(), conf);
       }
     } else {
       qDebug() << "Check JSON!";
@@ -641,7 +643,8 @@ void DavisGUI::pasteFromClipboard() {
   watcher->setFuture(future);
 }
 
-void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
+void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
+  qDebug() << "dvs::makeUniqueDavisHtmlName() << " << QString::fromStdString(dvs::makeUniqueDavisHtmlName());
   std::vector<double>lines;
   std::vector<std::vector<double>> data;
   char separator;
@@ -704,21 +707,21 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
 
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
     dv::Config config;
-    config.chart.title = title.toStdString();
+    config.chart.title = titleTopOfPlotly.toStdString();
     config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-    dv::show(data, title.toStdString(), config);
+    dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
   } else if (data.size() > 1 && data[0].size() > 1) {
     if (action_heatmap->isChecked()) {
       dv::Config config;
-      config.heatmap.title = title.toStdString();
+      config.heatmap.title = titleTopOfPlotly.toStdString();
       config.heatmap.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-      dv::show(data, title.toStdString(), config);
+      dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
     } else if (action_surface->isChecked()) {
       dv::Config config;
-      config.surf.title = title.toStdString();
+      config.surf.title = titleTopOfPlotly.toStdString();
       config.surf.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
       config.typeVisual = dv::VISUALTYPE_SURFACE;
-      dv::show(data, title.toStdString(), config);
+      dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
     }
   } else {
     std::vector<double> showVector;
@@ -733,9 +736,9 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
     }
     dv::Config config;
     config.typeVisual = dv::VISUALTYPE_CHART;
-    config.chart.title = title.toStdString();
+    config.chart.title = titleTopOfPlotly.toStdString();
     config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-    dv::show(showVector, title.toStdString(), config);
+    dv::show(showVector, dvs::makeUniqueDavisHtmlName(), config);
   }
 }
 
@@ -908,6 +911,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       std::vector<double> values;
       std::vector<double> force;
       std::vector<std::vector<double>> multicharts;
+      qDebug() << "we are here";
       lines = getLinesFromFile(file_list[i]);
 
       getDateTimeData(lines, dates, values, force, multicharts);
@@ -917,7 +921,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       }
     }
     if (dates_list.isEmpty() == false) {
-      dvs::showDateTimeMultichart(dates_list[0].toStdString(), all_values, true);
+      dvs::showDateTimeMultichart(dates_list[0].toStdString(), all_values, action_fitPlotToAllWindow->isChecked());
       return;
     }
 
@@ -932,7 +936,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
         data.push_back(outY);
       };
     }
-    dvs::showDateTimeMultichart(dvs::vectorToString(x_values), data, true);
+    dvs::showDateTimeMultichart(dvs::vectorToString(x_values), data, action_fitPlotToAllWindow->isChecked());
     return;
   }
   QString filePath =  file_list.first();

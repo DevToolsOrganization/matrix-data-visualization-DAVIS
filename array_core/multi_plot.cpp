@@ -73,7 +73,7 @@ void holdOff(const Config& configuration) {
   string multichartPage = dvs::kHtmlMultiChartModel;
   string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
-  string htmlFullName = dvs::makeUniqueDavisHtmlName();
+  string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
   dvs::openFileBySystem(htmlFullName);
   dvs::allChartBlocks.clear();

@@ -348,8 +348,7 @@ string vectorToString(const vector<double>& vec) {
 
 string makeUniqueDavisHtmlName() {
   sleepMicroSec(1);
-  string davis_dir;
-  davis_dir = "./davis_htmls/";
+
   auto now = std::chrono::system_clock::now();
   auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
   auto in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -357,10 +356,15 @@ string makeUniqueDavisHtmlName() {
   ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d_%H_%M_%S");
   ss << '_' << std::setfill('0')
      << std::setw(3)
-     << milliseconds.count() << ".html";
-  davis_dir.append(ss.str());
-  return davis_dir;
+     << milliseconds.count();
+  return ss.str();
 }
+
+std::string makeUniqueDavisHtmlRelativePath() {
+  string name = makeUniqueDavisHtmlName();
+  return std::string("./").append(kOutFolderName).append(name).append(".html");
+}
+
 
 void transponeMatrix(std::vector<std::vector<double> >& matrix) {
 
@@ -462,6 +466,8 @@ vector<double> doubleAndReverse(const vector<double>& input,
   result.insert(result.end(), reversed.begin(), reversed.end());
   return result;
 }
+
+
 
 //#STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
