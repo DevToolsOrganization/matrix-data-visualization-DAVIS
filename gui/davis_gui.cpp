@@ -895,22 +895,16 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   if (file_list.isEmpty()) {
     return;
   }
-  QString all_chart_blocks;
-  const QString trace_name = "trace%1";
-  QString all_traces_names;
+
   if (file_list.size() > 1) {
-    QStringList onlySingleChartList;
-    qDebug() << "file list size: " << file_list.size();
     std::vector<std::vector<double>> data;
     std::vector<double> x_values;
     for (int i = 0; i < file_list.size(); ++i) {
       std::vector<double> outX, outY;
       if(isFileContainsSingleChart(file_list[i], outX, outY)){
-          //dv::show(outX,outY);
           if(i==0)x_values = outX;
           data.push_back(outY);
       };
-
     }
     dvs::showDateTimeMultichart(dvs::vectorToString(x_values),data,true);
     return;
