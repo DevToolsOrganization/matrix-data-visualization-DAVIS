@@ -392,6 +392,83 @@ Skins DavisGUI::checkSkin() {
   return skin;
 }
 
+bool DavisGUI::getDateTimeData(const QStringList& lines,
+                               QString& dates,
+                               std::vector<double>& values,
+                               std::vector<double>& force,
+                               std::vector<std::vector<double>>& multicharts) {
+  QJsonArray jarr;
+  if (jsn::getJsonArrayFromFile("date_time_formats.json", jarr) == false) {
+    jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
+  }
+
+  for (int i = 0; i < lines.size(); ++i) {
+    QString test = lines[i];
+    test.replace("'", "");
+    for (int j = 0; j < jarr.size(); ++j) {
+      int template_time_stamp_size = jarr[j].toString().size();
+      QString template_time_stamp = jarr[j].toString();
+      if (test.size() < template_time_stamp_size + 1) {
+        continue;
+      }
+      QString separator = QString(test[template_time_stamp_size]);
+      QString substr = test.mid(0, template_time_stamp_size);
+      QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
+      if (dt.isValid()) {
+        dates.append("'");
+        dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
+        dates.append("'");
+        if (i < lines.size() - 1) {
+          dates.append(",");
+        }
+        auto values_list = test.split(separator);
+        //Clear empty values
+        for (int ch = 0; ch < values_list.size(); ++ch) {
+          if (values_list[ch].isEmpty()) {
+            values_list.removeAt(ch);
+          }
+        }
+        if (values_list.size() < 2) {
+          continue;
+        }
+        if (values_list.size() > 3) {
+          std::vector<double> temp(values_list.size() - 1);
+          for (int j = 1; j < values_list.size(); ++j) {
+            temp[j - 1] = values_list[j].toDouble();
+          }
+          multicharts.push_back(temp);
+        }
+        double value = values_list[1].toDouble();
+        values.emplace_back(value);
+        if (values_list.size() == 3) {
+          double value = values_list[2].toDouble();
+          force.emplace_back(value);
+        }
+      }
+    }
+  }
+  return true;
+}
+
+QStringList DavisGUI::getLinesFromFile(const QString& pathToFile) {
+  QFile file(pathToFile);
+  QTextStream ts(&file);
+  ts.setCodec("UTF-8");
+  if (file.open(QIODevice::ReadWrite) == false) {
+    return QStringList();
+  };
+  QString line;
+  QStringList str_lines;
+  while (ts.readLineInto(&line)) {
+    str_lines.append(line);
+  }
+  if (str_lines.empty()) {
+    return QStringList();
+  }
+  file.close();
+  return str_lines;
+}
+
 void DavisGUI::setMaxStyleWindow(int animDuration) {
   m_isMinStyleWindow = false;
   hideElementsDuringResize();
@@ -664,70 +741,12 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString title) {
 
 bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
-  QJsonArray jarr;
-  if (jsn::getJsonArrayFromFile("date_time_formats.json", jarr) == false) {
-    jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
-  }
-  qDebug() << jarr;
+
   QString dates;
   std::vector<double> values;
   std::vector<double> force;
   std::vector<std::vector<double>> multicharts;
-
-  for (int i = 0; i < lines.size(); ++i) {
-    QString test = lines[i];
-    test.replace("'", "");
-    for (int j = 0; j < jarr.size(); ++j) {
-      int template_time_stamp_size = jarr[j].toString().size();
-      QString template_time_stamp = jarr[j].toString();
-      if (test.size() < template_time_stamp_size + 1) {
-        continue;
-      }
-      QString separator = QString(test[template_time_stamp_size]);
-      QString substr = test.mid(0, template_time_stamp_size);
-      QDateTime dt = QDateTime::fromString(substr, template_time_stamp);
-      if (dt.isValid()) {
-        //2013-10-04 22:23:00
-        //qDebug() << dt.toString("yyyy-MM-dd hh:mm:ss");
-        dates.append("'");
-        dates.append(dt.toString("yyyy-MM-dd hh:mm:ss"));
-        dates.append("'");
-        if (i < lines.size() - 1) {
-          dates.append(",");
-        }
-
-        auto values_list = test.split(separator);
-        //Clear empty values
-        for (int ch = 0; ch < values_list.size(); ++ch) {
-          if (values_list[ch].isEmpty()) {
-            values_list.removeAt(ch);
-          }
-        }
-
-
-        if (values_list.size() < 2) {
-          continue;
-        }
-        if (values_list.size() > 3) {
-          std::vector<double> temp(values_list.size() - 1);
-          for (int j = 1; j < values_list.size(); ++j) {
-            temp[j - 1] = values_list[j].toDouble();
-          }
-          multicharts.push_back(temp);
-        }
-
-        double value = values_list[1].toDouble();
-        //qDebug() << value;
-        values.emplace_back(value);
-        if (values_list.size() == 3) {
-          double value = values_list[2].toDouble();
-          //qDebug() << value;
-          force.emplace_back(value);
-        }
-
-      }
-    }
-  }
+  getDateTimeData(lines, dates, values, force, multicharts);
 
   if (multicharts.empty() == false) {
     dvs::transponeMatrix(multicharts);
@@ -737,7 +756,6 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   if (values.size() == 0)
     return false;
-  qDebug() << "check sizes: " << lines.size() << values.size();
 
   if (force.empty() == false) {
     dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToAllWindow->isChecked());
@@ -745,7 +763,6 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
   }
   dvs::showDateTimeChart(dates.toStdString(), values, action_fitPlotToAllWindow->isChecked());
   return true;
-
 
 }
 
@@ -765,21 +782,9 @@ void DavisGUI::selectAndShowFiles() {
 bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
                                          std::vector<double>& outX,
                                          std::vector<double>& outY) {
-  QFile file(pathToFile);
-  QTextStream ts(&file);
-  ts.setCodec("UTF-8");
-  if (file.open(QIODevice::ReadWrite) == false) {
-    return false;
-  };
-  QString line;
-  QStringList str_lines;
-  while (ts.readLineInto(&line)) {
-    str_lines.append(line);
-  }
-  if (str_lines.empty()) {
-    return false;
-  }
-  file.close();
+
+  QStringList str_lines = getLinesFromFile(pathToFile);
+
 
   std::vector<std::vector<double>> data;
   char separator;
@@ -832,8 +837,6 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
 
     }
   }
-  //qDebug() << outX;
-  //qDebug() << outY;
   return true;
 }
 
@@ -897,16 +900,39 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   }
 
   if (file_list.size() > 1) {
+    QVector<QString> dates_list;
+    std::vector<std::vector<double>> all_values;
+    for (int i = 0; i < file_list.size(); ++i) {
+      QStringList lines;
+      QString dates;
+      std::vector<double> values;
+      std::vector<double> force;
+      std::vector<std::vector<double>> multicharts;
+      lines = getLinesFromFile(file_list[i]);
+
+      getDateTimeData(lines, dates, values, force, multicharts);
+      if (dates.isEmpty() == false) {
+        dates_list.append(dates);
+        all_values.emplace_back(values);
+      }
+    }
+    if (dates_list.isEmpty() == false) {
+      dvs::showDateTimeMultichart(dates_list[0].toStdString(), all_values, true);
+      return;
+    }
+
+
     std::vector<std::vector<double>> data;
     std::vector<double> x_values;
     for (int i = 0; i < file_list.size(); ++i) {
       std::vector<double> outX, outY;
-      if(isFileContainsSingleChart(file_list[i], outX, outY)){
-          if(i==0)x_values = outX;
-          data.push_back(outY);
+      if (isFileContainsSingleChart(file_list[i], outX, outY)) {
+        if (i == 0)
+          x_values = outX;
+        data.push_back(outY);
       };
     }
-    dvs::showDateTimeMultichart(dvs::vectorToString(x_values),data,true);
+    dvs::showDateTimeMultichart(dvs::vectorToString(x_values), data, true);
     return;
   }
   QString filePath =  file_list.first();
