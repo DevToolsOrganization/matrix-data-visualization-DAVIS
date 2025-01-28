@@ -43,6 +43,7 @@ namespace dvs {
     const char kHtmlModel[] =
 R"(
 <head>
+  <title>DAVIS</title>
   <script src="./%8" charset="utf-8"></script>
   %13
 </head>
