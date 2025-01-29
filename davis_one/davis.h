@@ -178,30 +178,6 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARGS_DATE_TIME_PAGE_SIZE
 };
 
-// currently don't used
-enum ARGS_MULTI_CHARTS_PAGE {
-  ARG_JS_MC_NAME,
-  ARG_TRACES_BLOCKS,
-  ARG_DATA_OF_TRACES,
-  something1,
-  something2,
-  something3,
-  ARG_MC_ASPECT_RATIO_WIDTH,     //%7
-  ARG_MC_ASPECT_RATIO_HEIGHT,     //%8
-  ARG_MC_ASPECT_WIDTH_OR_HEIGHT, //%9 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
-  ARG_MC_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%10 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
-  ARG_MC_POINT_LINE_SWITCHER_STYLE,      //%11
-  ARG_MC_POINT_LINE_SWITCHER_SELECT,     //%12
-  ARG_MC_POINT_LINE_SWITCHER_UPDATE_FOO, //%13
-  ARG_MC_DAVIS_LOGO, //%14
-  ARG_MC_AVERAGE_BUTTON_STYLE,//%15
-  ARG_MC_AVERAGE_BUTTON_DIV,//%16
-  ARG_MC_AVERAGE_BUTTON_JS,//%17
-  ARG_MC_AVERAGE_VALUES_BLOCK,//%18
-  // ADD NEW ENUM BEFORE THIS COMMENT
-  ARGS_MULTI_CHARTS_PAGE_SIZE
-};
-
 enum ARGS_CLOUD_OF_POINTS_PAGE {
   ARG_JS_COF_NAME,
   ARG_X_CLOUD_OF_POINTS,
@@ -488,9 +464,9 @@ void showCloudOfPointsChartStr(const string& xValues,
                                const vector<double>& colorValues,
                                bool isFitPlotToWindow);
 
-void showDateTimeMultichart(const string& date_time_values,
-                            const vector<vector<double>>& yValues,
-                            bool isFitPlotToWindow);
+void showMultiChart(const string& date_time_values,
+                    const vector<vector<double>>& yValues,
+                    bool isFitPlotToWindow);
 
 
 } // namespace dvs end

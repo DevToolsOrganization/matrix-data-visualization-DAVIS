@@ -753,7 +753,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   if (multicharts.empty() == false) {
     dvs::transponeMatrix(multicharts);
-    dvs::showDateTimeMultichart(dates.toStdString(), multicharts, action_fitPlotToAllWindow->isChecked());
+    dvs::showMultiChart(dates.toStdString(), multicharts, action_fitPlotToAllWindow->isChecked());
     return true;
   }
 
@@ -921,7 +921,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       }
     }
     if (dates_list.isEmpty() == false) {
-      dvs::showDateTimeMultichart(dates_list[0].toStdString(), all_values, action_fitPlotToAllWindow->isChecked());
+      dvs::showMultiChart(dates_list[0].toStdString(), all_values, action_fitPlotToAllWindow->isChecked());
       return;
     }
 
@@ -936,7 +936,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
         data.push_back(outY);
       };
     }
-    dvs::showDateTimeMultichart(dvs::vectorToString(x_values), data, action_fitPlotToAllWindow->isChecked());
+    dvs::showMultiChart(dvs::vectorToString(x_values), data, action_fitPlotToAllWindow->isChecked());
     return;
   }
   QString filePath =  file_list.first();

@@ -1755,9 +1755,9 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   openFileBySystem(unique_file_name);
 }
 
-void showDateTimeMultichart(const std::string& date_time_values,
-                            const vector<vector<double>>& yValues,
-                            bool isFitPlotToWindow) {
+void showMultiChart(const std::string& date_time_values,
+                    const vector<vector<double>>& yValues,
+                    bool isFitPlotToWindow) {
   string out;
   vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
