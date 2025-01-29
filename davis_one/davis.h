@@ -322,7 +322,11 @@ string nullIfNotFinite(double val);
 //! convert vec to string, separated by ","
 string vectorToString(const vector<double>& vec);
 
+//! only name
 string makeUniqueDavisHtmlName();
+
+//! folder + name + .html
+string makeUniqueDavisHtmlRelativePath();
 
 //! sometimes std::to_string reurn str with ',' as separator what is wrong
 template <typename T>

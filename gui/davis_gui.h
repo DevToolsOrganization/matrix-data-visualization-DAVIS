@@ -11,6 +11,7 @@
 #include "about_window.h"
 #include "animated_button.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class DavisGUI; }
 QT_END_NAMESPACE
@@ -47,7 +48,7 @@ class DavisGUI : public QMainWindow {
   void setGeometryForMinStyle_defaultSkin();
   void setGeometryForMaxStyle_newYearSkin();
   void setGeometryForMinStyle_newYearSkin();
-  void readPlotText(QStringList& str_lines, QString title = "");
+  void readPlotText(QStringList& str_lines, QString titleTopOfPlotly = "");
   void selectAndShowFiles();
   bool checkDateTimeVariant(const QStringList& lines);
   bool isFileContainsSingleChart(const QString& pathToFile,
@@ -69,7 +70,6 @@ class DavisGUI : public QMainWindow {
                        std::vector<std::vector<double>>& multicharts);
 
   QStringList getLinesFromFile(const QString& pathToFile);
-
 
  private slots:
   void showAboutWindow();
