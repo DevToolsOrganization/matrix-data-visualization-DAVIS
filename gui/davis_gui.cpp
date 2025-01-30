@@ -941,6 +941,28 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   }
   QString filePath =  file_list.first();
   QFileInfo info(filePath);
+
+  QString suffix = info.suffix();
+  QStringList suffixes = {"jpg", "bmp", "png", "svg", "mp4"};
+  for (int i = 0; i < suffixes.size(); ++i) {
+    if (suffix == suffixes[i]) {
+      QProcess process;
+      process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
+      return;
+    }
+  }
+  if (suffix == "json") {
+    readJsonToPlot(filePath);
+    return;
+  }
+  if (suffix == "bin") {
+    if (info.size() == 4177936) {
+      std::vector<std::vector<uint8_t>> data = dvs::readBinaryFile<uint8_t>(filePath.toLatin1().data(), 2044);
+      dv::show(data);
+    }
+    return;
+  }
+
   if (info.exists()) {
     QTime time;
     time.start();
@@ -952,19 +974,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       return;
     };
 
-    QString suffix = info.suffix();
-    QStringList suffixes = {"jpg", "bmp", "png", "svg", "mp4"};
-    for (int i = 0; i < suffixes.size(); ++i) {
-      if (suffix == suffixes[i]) {
-        QProcess process;
-        process.startDetached("cmd.exe", QStringList() << "/C" << filePath);
-        return;
-      }
-    }
-    if (suffix == "json") {
-      readJsonToPlot(filePath);
-      return;
-    }
+
 
     QString line;
     QStringList str_lines;

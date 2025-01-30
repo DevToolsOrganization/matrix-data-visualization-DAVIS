@@ -20,6 +20,7 @@
 #include <stdexcept>
 #include <stdint.h>
 #include <string>
+#include <typeinfo>
 #include <vector>
 namespace dvs {
 extern const char kAppName[];
@@ -359,8 +360,8 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
   } else {
     size_t rows = vecVec.size();
     size_t cols = vecVec.at(0).size();
-    for (int i = 0; i < rows; ++i) {
-      for (int j = 0; j < cols; ++j) {
+    for (size_t i = 0; i < rows; ++i) {
+      for (size_t j = 0; j < cols; ++j) {
         double val = vecVec.at(i).at(j);
         fout << val;
         if (j < cols - 1) { // we dont need sep at row end
@@ -405,6 +406,31 @@ vector<double> doubleAndReverse(const vector<double>& input, const vector<double
 
 std::string reverseString(const std::string& input);
 
+
+template <typename T>
+std::vector<std::vector<T>> readBinaryFile(const std::string& filePath,
+                                           size_t rowLength) {
+  std::ifstream file(filePath, std::ios::binary);
+  if (!file) {
+    throw std::runtime_error("Cannot open file");
+  }
+
+  std::vector<std::vector<T>> data;
+  std::vector<T> row(rowLength);
+
+  while (file.read(reinterpret_cast<char*>(row.data()), rowLength * sizeof(T))) {
+    data.push_back(row);
+  }
+
+  // Handle the last row if it's not fully filled
+  if (file.gcount() > 0) {
+    row.resize(file.gcount() / sizeof(T));
+    data.push_back(row);
+  }
+
+  file.close();
+  return data;
+}
 
 
 } // namespace dvs end
