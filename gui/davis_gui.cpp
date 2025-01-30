@@ -471,6 +471,11 @@ QStringList DavisGUI::getLinesFromFile(const QString& pathToFile) {
   return str_lines;
 }
 
+bool DavisGUI::mayBeShowBIN(const QString &path)
+{
+
+}
+
 void DavisGUI::setMaxStyleWindow(int animDuration) {
   m_isMinStyleWindow = false;
   hideElementsDuringResize();
@@ -956,6 +961,8 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
     return;
   }
   if (suffix == "bin") {
+    QJsonArray bins;
+    jsn::getJsonArrayFromFile(":/bin.json",bins);
     if (info.size() == 4177936) {
       std::vector<std::vector<uint8_t>> data = dvs::readBinaryFile<uint8_t>(filePath.toLatin1().data(), 2044);
       dv::show(data);

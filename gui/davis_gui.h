@@ -20,7 +20,6 @@ QT_END_NAMESPACE
 enum class Skins {DEFAULT, NEWYEAR};
 
 
-
 class DavisGUI : public QMainWindow {
   Q_OBJECT
 
@@ -70,6 +69,7 @@ class DavisGUI : public QMainWindow {
                        std::vector<std::vector<double>>& multicharts);
 
   QStringList getLinesFromFile(const QString& pathToFile);
+  bool mayBeShowBIN(const QString& path);
 
  private slots:
   void showAboutWindow();
