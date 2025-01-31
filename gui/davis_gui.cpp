@@ -488,6 +488,27 @@ bool DavisGUI::mayBeShowBIN(const QString& path) {
       } else if (data_type == "uint16") {
         std::vector<std::vector<uint16_t>> data = dvs::readBinaryFile<uint16_t>(path.toLatin1().data(), numbers_in_line);
         dv::show(data);
+      } else if (data_type == "uint32") {
+        std::vector<std::vector<uint32_t>> data = dvs::readBinaryFile<uint32_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "uint64") {
+        std::vector<std::vector<int64_t>> data = dvs::readBinaryFile<int64_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "int8") {
+        std::vector<std::vector<int8_t>> data = dvs::readBinaryFile<int8_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "int16") {
+        std::vector<std::vector<int16_t>> data = dvs::readBinaryFile<int16_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "int32") {
+        std::vector<std::vector<int32_t>> data = dvs::readBinaryFile<int32_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "float32") {
+        std::vector<std::vector<float_t>> data = dvs::readBinaryFile<float_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
+      } else if (data_type == "float64") {
+        std::vector<std::vector<double_t>> data = dvs::readBinaryFile<double_t>(path.toLatin1().data(), numbers_in_line);
+        dv::show(data);
       }
       return true;
     }
