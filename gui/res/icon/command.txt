@@ -1,1 +1,0 @@
-magick D-16x16.png D-32x32.png D-48x48.png D-64x64.png D-128x128.png D-256x256.png davis.ico
