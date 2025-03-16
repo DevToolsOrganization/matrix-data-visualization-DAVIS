@@ -56,11 +56,11 @@ config.typeVisual = dv::VISUALTYPE_HEATMAP;
 
 
 ```cpp
-config.surf.colorSc = dv::COLORSCALE_THERMAL;
-config.surf.title = "Custom title";            
-config.surf.xLabel = "Custom xLabel";          
-config.surf.yLabel = "Custom yLabel";          
-config.surf.zLabel = "Custom zLabel";  
+config.heatmap.colorSc = dv::COLORSCALE_THERMAL;
+config.heatmap.title = "Custom title";            
+config.heatmap.xLabel = "Custom xLabel";          
+config.heatmap.yLabel = "Custom yLabel";          
+config.heatmap.zLabel = "Custom zLabel";  
 ```
 
 4. Pass it to `dv::show(...)`;
