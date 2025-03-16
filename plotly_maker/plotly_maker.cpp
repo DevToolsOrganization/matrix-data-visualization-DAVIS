@@ -88,29 +88,6 @@ bool createStringLineChartValues(const vector<double>& xValues,
   return true;
 }
 
-
-
-inline bool heatmap_and_surface(const vector<vector<double>>& values,
-                                const string& title,
-                                const dv::Config& configuration,
-                                dv::config_visualizationTypes typeVisual) {
-  string page;
-  if (!createHtmlPageWithPlotlyJS(values, page, configuration, typeVisual)) {
-    return false;
-  }
-  string pageName;
-  mayBeCreateJsWorkingFolder();
-  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
-  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
-  saveStringToFile(pageName, page);
-  if (isPlotlyScriptExists()) {
-    openPlotlyHtml(pageName);
-  } else {
-    showWarningJsAbsentPage();
-  }
-  return true;// TODO handle different exceptions
-};
-
 bool getMatrixValuesFromString(const string& in_values,
                                vector<vector<double>>& out_values) {
   istringstream f_lines(in_values);
@@ -127,10 +104,9 @@ bool getMatrixValuesFromString(const string& in_values,
   return true;
 };
 
-bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
-                                string& page,
-                                const dv::Config& configuration,
-                                dv::config_visualizationTypes typeVisual) {
+bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
+                           string& page,
+                           const dv::Config& configuration) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -139,13 +115,37 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
   createStringHeatMapValues(values, str_values);
   args[ARG_VALUES] = str_values;
   args[ARG_JS_VER] = kPlotlyJsName;
+  args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
+  args[ARG_TITLE] = configuration.heatmap.title;
+  args[ARG_TITLE_X] = configuration.heatmap.xLabel;
+  args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
+  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
+  string paramWH;
+  if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
+    paramWH = "width";
+  } else {
+    paramWH = "height";
+  }
+  string paramWHsecond;
+  if (configuration.heatmap.isFitPlotToWindow) {
+    if (paramWH == "width") {
+      paramWHsecond = "height";
+    } else if (paramWH == "height") {
+      paramWHsecond = "width";
+    }
+  } else {
+    paramWHsecond = paramWH;
+  }
+  args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
+  args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
+  args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
+  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
+  args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
+
   dv::config_colorscales clrScale;
-  if (typeVisual == dv::VISUALTYPE_HEATMAP)
-    clrScale = configuration.heatmap.colorSc;
-  else if (typeVisual == dv::VISUALTYPE_SURFACE)
-    clrScale = configuration.surf.colorSc;
-  else
-    return false;
+  clrScale = configuration.heatmap.colorSc;
   switch (clrScale) {
     case dv::config_colorscales::COLORSCALE_DEFAULT:
       args[ARG_COLOR_MAP] = kColorMapDefaultPart;
@@ -178,70 +178,6 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
       args[ARG_COLOR_MAP] = kColorMapPortlandPart;
       break;
   }
-  switch (typeVisual) {
-    case dv::VISUALTYPE_HEATMAP: {
-      args[ARG_MATRIX_TYPE] = kHeatMapTypePart;
-      args[ARG_TITLE] = configuration.heatmap.title;
-      args[ARG_TITLE_X] = configuration.heatmap.xLabel;
-      args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
-      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
-      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
-      string paramWH;
-      if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
-        paramWH = "width";
-      } else {
-        paramWH = "height";
-      }
-      string paramWHsecond;
-      if (configuration.heatmap.isFitPlotToWindow) {
-        if (paramWH == "width") {
-          paramWHsecond = "height";
-        } else if (paramWH == "height") {
-          paramWHsecond = "width";
-        }
-      } else {
-        paramWHsecond = paramWH;
-      }
-      args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
-      args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
-      args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
-      args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
-      args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
-      args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
-      break;
-    }
-    case dv::VISUALTYPE_SURFACE: {
-      args[ARG_MATRIX_TYPE] = kSurfaceTypePart;
-      args[ARG_TITLE] = configuration.surf.title;
-      args[ARG_TITLE_X] = configuration.surf.xLabel;
-      args[ARG_TITLE_Y] = configuration.surf.yLabel;
-      args[ARG_TITLE_Z] = configuration.surf.zLabel;
-      args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.surf.aspectRatioWidth);
-      args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.surf.aspectRatioHeight);
-      string paramWH;
-      if (configuration.surf.aspectRatioWidth > configuration.surf.aspectRatioHeight) {
-        paramWH = "width";
-      } else {
-        paramWH = "height";
-      }
-      string paramWHsecond;
-      if (configuration.surf.isFitPlotToWindow) {
-        if (paramWH == "width") {
-          paramWHsecond = "height";
-        } else if (paramWH == "height") {
-          paramWHsecond = "width";
-        }
-      } else {
-        paramWHsecond = paramWH;
-      }
-      args[ARG_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
-      args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
-      args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
-      break;
-    }
-    default:
-      break;
-  }
 
   make_string(kHtmlModel, args, page);
   return true;
@@ -249,7 +185,21 @@ bool createHtmlPageWithPlotlyJS(const std::vector<std::vector<double>>& values,
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values,
                           const string& title, const dv::Config& configuration) {
-  return heatmap_and_surface(values, title, configuration, dv::VISUALTYPE_HEATMAP);
+  string page;
+  if (!createHtmlPageHeatmap(values, page, configuration)) {
+    return false;
+  }
+  string pageName;
+  mayBeCreateJsWorkingFolder();
+  string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
+  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
+  saveStringToFile(pageName, page);
+  if (isPlotlyScriptExists()) {
+    openPlotlyHtml(pageName);
+  } else {
+    showWarningJsAbsentPage();
+  }
+  return true;// TODO handle different exceptions
 }
 
 bool showHeatMapInBrowser(const string& values,
@@ -329,19 +279,6 @@ bool showLineChartInBrowser(const string& values,
   showLineChartInBrowser(vals, title, configuration);
   return true;
 };
-
-bool showSurfaceInBrowser(const vector<vector<double>>& values,
-                          const string& title, const dv::Config& configuration) {
-  return heatmap_and_surface(values, title, configuration, dv::VISUALTYPE_SURFACE);
-}
-
-bool showSurfaceInBrowser(const string& values,
-                          const string& title, const dv::Config& configuration) {
-  vector<vector<double>>surface_values;
-  getMatrixValuesFromString(values, surface_values);
-  showSurfaceInBrowser(surface_values, title, configuration);
-  return true;
-}
 
 void showWarningJsAbsentPage() {
   string out;

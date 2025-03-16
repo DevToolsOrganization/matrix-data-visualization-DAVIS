@@ -8,8 +8,7 @@ namespace dv {
 enum config_visualizationTypes {
   VISUALTYPE_AUTO, //if user not forces some specific type it will be recognized by context
   VISUALTYPE_CHART,
-  VISUALTYPE_HEATMAP,
-  VISUALTYPE_SURFACE
+  VISUALTYPE_HEATMAP
 };
 
 enum config_colorscales {
@@ -52,14 +51,6 @@ struct heatMapSettings : public commonSettings {
   config_colorscales colorSc;
 };
 
-struct surfaceSettings : public commonSettings {
-  surfaceSettings():
-    colorSc(config_colorscales::COLORSCALE_DEFAULT),
-    zLabel("Z") {}
-  config_colorscales colorSc;
-  std::string zLabel;
-};
-
 
 struct Config {
   Config():
@@ -67,13 +58,10 @@ struct Config {
   void reset() {
     chart = chartSettings();
     heatmap = heatMapSettings();
-    surf = surfaceSettings();
   }
 
   chartSettings chart;
   heatMapSettings heatmap;
-  surfaceSettings surf;
-
   config_visualizationTypes typeVisual;
 };
 

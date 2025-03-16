@@ -137,14 +137,6 @@ colorbar: {
 }
 }];)";
 
-    const char kSurfaceTypePart[]=R"(
-type: 'surface',
-hovertemplate: 'x:%{x} <br>y:%{y} <br>z:%{z:.}<extra></extra>',
-colorbar: {
-  title: ""
-}
-}];)";
-
 const char kWarningJSLibAbsentPage[] = R"(
 <html>
 <head>

@@ -17,27 +17,19 @@ using std::vector;
 using std::istringstream;
 
 
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                string& page,
-                                const dv::Config& configuration,
-                                dv::config_visualizationTypes typeVisual);
+bool createHtmlPageHeatmap(const vector<vector<double>>& values,
+                           string& page,
+                           const dv::Config& configuration);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
-
 bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
 bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
                             const string& title, const dv::Config& configuration);
-
 bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
-
-bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
-
 void showWarningJsAbsentPage();
-
 
 void showReportPage(const string& page, const string& title, const string& svg, const string& description);
 

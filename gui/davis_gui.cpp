@@ -71,23 +71,10 @@ DavisGUI::DavisGUI(QWidget* parent)
   mb->setStyleSheet(menuStyle);
   mb->setFixedSize(QSize(50, 25));
   QMenu*  menu_root = new QMenu("Menu");
-  QMenu*  menu_matrix_view = new QMenu("Matrix as");
-  menu_root->addMenu(menu_matrix_view);
-  action_surface = new QAction("surface");
-  action_surface->setCheckable(true);
-  action_heatmap = new QAction("heatmap");
-  action_heatmap->setCheckable(true);
-  action_heatmap->setChecked(true);
-  connect(action_heatmap, &QAction::triggered, [this]() {action_surface->setChecked(false);});
-  connect(action_surface, &QAction::triggered, [this]() {action_heatmap->setChecked(false);});
-  menu_matrix_view->setStyleSheet(menuStyle);
-  menu_matrix_view->addAction(action_surface);
-  menu_matrix_view->addAction(action_heatmap);
 
-  action_fitPlotToAllWindow = new QAction("Fit graph to window");
-  action_fitPlotToAllWindow->setCheckable(true);
-  menu_root->addAction(action_fitPlotToAllWindow);
-
+  action_fitPlotToBrowserWindow = new QAction("Fit graph to window");
+  action_fitPlotToBrowserWindow->setCheckable(true);
+  menu_root->addAction(action_fitPlotToBrowserWindow);
   action_holidaysSkins = new QAction("Holidays custom skins");
   action_holidaysSkins->setCheckable(true);
   menu_root->addAction(action_holidaysSkins);
@@ -231,7 +218,8 @@ void DavisGUI::saveSettings(const QString& fileName) {
   settings["windowPosX"] = pos().x();
   settings["windowPosY"] = pos().y();
   settings["isMinStyleWindow"] = m_isMinStyleWindow;
-
+  settings["isUseCustomSkins"] = m_isUseCustomSkins;
+  settings["isFitGraphToWindow"] = action_fitPlotToBrowserWindow->isChecked();
   bool isSaved = jsn::saveJsonObjectToFile(fileName, settings);
   if (!isSaved) {
     qWarning("Couldn't save settings file.");
@@ -249,7 +237,9 @@ QJsonObject DavisGUI::loadSettings(const QString& fileName) {
     int y = (screenGeometry.height() - height()) / 2;
     settings["windowPosX"] = x;
     settings["windowPosY"] = y;
-    settings["isMinStyleWindow"] = false;;
+    settings["isMinStyleWindow"] = false;
+    settings["isUseCustomSkins"] = false;
+    settings["isFitGraphToWindow"] = false;
   }
   return settings;
 }
@@ -264,6 +254,8 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
   int x = settings["windowPosX"].toInt();
   int y = settings["windowPosY"].toInt();
   move(x, y);
+  action_fitPlotToBrowserWindow->setChecked(settings["isFitGraphToWindow"].toBool());
+  action_holidaysSkins->setChecked(settings["isUseCustomSkins"].toBool());
 }
 
 void DavisGUI::readJsonToPlot(const QString& pathToFile) {
@@ -333,7 +325,7 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
           dv::Config conf;
           conf.chart.yLabel = attr.value("type").toString().toStdString();
           conf.chart.title = attr.value("instrument").toString().toStdString();
-          conf.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
+          conf.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
           dv::show(x_vals, y_vals, dvs::makeUniqueDavisHtmlName(), conf);
         }
         return;// выход если это был MATRIX_TO_MATRIX_TYPE
@@ -357,9 +349,8 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
 
       qDebug() << "MATRIX SIZE: " << matrix_vector.size();
       dv::Config conf;
-      conf.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
+      conf.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
       conf.heatmap.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
-      conf.surf.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
       if (x_vector.empty() == false && y_vector.empty() == false) {
         dv::show(x_vector.toStdVector(), y_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
       } else if (x_vector.empty() == true && y_vector.empty() == false) {
@@ -748,7 +739,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
       y[i] = data[i][1];
       color[i] = data[i][2];
     }
-    dvs::showCloudOfPointsChart(x, y, color, action_fitPlotToAllWindow->isChecked());
+    dvs::showCloudOfPointsChart(x, y, color, action_fitPlotToBrowserWindow->isChecked());
     return;
   }
 
@@ -756,21 +747,13 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
   if (data.size() == 2 || data[0].size() == 2) { //chartXY
     dv::Config config;
     config.chart.title = titleTopOfPlotly.toStdString();
-    config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
+    config.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
     dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
   } else if (data.size() > 1 && data[0].size() > 1) {
-    if (action_heatmap->isChecked()) {
-      dv::Config config;
-      config.heatmap.title = titleTopOfPlotly.toStdString();
-      config.heatmap.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-      dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
-    } else if (action_surface->isChecked()) {
-      dv::Config config;
-      config.surf.title = titleTopOfPlotly.toStdString();
-      config.surf.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
-      config.typeVisual = dv::VISUALTYPE_SURFACE;
-      dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
-    }
+    dv::Config config;
+    config.heatmap.title = titleTopOfPlotly.toStdString();
+    config.heatmap.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
+    dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
   } else {
     std::vector<double> showVector;
     if (data.size() > 1 && data[0].size() == 1) {
@@ -785,7 +768,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
     dv::Config config;
     config.typeVisual = dv::VISUALTYPE_CHART;
     config.chart.title = titleTopOfPlotly.toStdString();
-    config.chart.isFitPlotToWindow = action_fitPlotToAllWindow->isChecked();
+    config.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
     dv::show(showVector, dvs::makeUniqueDavisHtmlName(), config);
   }
 }
@@ -801,7 +784,7 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   if (multicharts.empty() == false) {
     dvs::transponeMatrix(multicharts);
-    dvs::showMultiChart(dates.toStdString(), multicharts, action_fitPlotToAllWindow->isChecked());
+    dvs::showMultiChart(dates.toStdString(), multicharts, action_fitPlotToBrowserWindow->isChecked());
     return true;
   }
 
@@ -809,10 +792,10 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
     return false;
 
   if (force.empty() == false) {
-    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToAllWindow->isChecked());
+    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToBrowserWindow->isChecked());
     return true;
   }
-  dvs::showDateTimeChart(dates.toStdString(), values, action_fitPlotToAllWindow->isChecked());
+  dvs::showDateTimeChart(dates.toStdString(), values, action_fitPlotToBrowserWindow->isChecked());
   return true;
 
 }
@@ -969,7 +952,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       }
     }
     if (dates_list.isEmpty() == false) {
-      dvs::showMultiChart(dates_list[0].toStdString(), all_values, action_fitPlotToAllWindow->isChecked());
+      dvs::showMultiChart(dates_list[0].toStdString(), all_values, action_fitPlotToBrowserWindow->isChecked());
       return;
     }
 
@@ -984,7 +967,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
         data.push_back(outY);
       };
     }
-    dvs::showMultiChart(dvs::vectorToString(x_values), data, action_fitPlotToAllWindow->isChecked());
+    dvs::showMultiChart(dvs::vectorToString(x_values), data, action_fitPlotToBrowserWindow->isChecked());
     return;
   }
   QString filePath =  file_list.first();
