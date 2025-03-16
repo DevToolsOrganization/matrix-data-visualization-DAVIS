@@ -26,17 +26,22 @@ dv::show(vals, rows, cols);  // pass varible and dimensions of 2d array
 ```cpp
 #include "davis.h"
 
-//it possible and std::list<std::vector<double>> values = ...
-//                std::vector<std::list<double>> values = ...
+//you can use different containers: std::list<std::vector<double>> values = ...
+//                                  std::vector<std::list<double>> values = ...
 std::vector<std::vector<double>> values = {{30.3, 40, 98, 76} 
                                          , {99, 45, 20, 1}
                                          , {5, 56, 93, 25}
                                          , {45, 23, 90, 2}};
- auto config = dv::Config();
- config.typeVisual = dv::VISUALTYPE_SURFACE;              // select surface visual mode           
- config.surf.colorSc = dv::COLORSCALE_THERMAL;                   // change colorscale
+ auto config = dv::Config();       
+ config.heatmap.colorSc = dv::COLORSCALE_THERMAL;                // change colorscale
  bool result = dv::show(values, "testSurfacePage", config);      // pass 2d data, html page name, configuration structure
 ```
+Change visual type at top left corner of opened browser page
+
+<img src="_media//example2_settingSurf.png">
+
+and heatmap image will be redrawed as surface
+
 <img src="_media//example2.png" width="500">
 
 

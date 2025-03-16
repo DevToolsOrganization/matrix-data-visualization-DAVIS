@@ -44,7 +44,7 @@ auto config = dv::Config();
 
 2. Change it's type (or leave it default, so it will be `VISUALTYPE_AUTO`) 
 ```cpp
-config.typeVisual = dv::VISUALTYPE_SURFACE;
+config.typeVisual = dv::VISUALTYPE_HEATMAP;
 ```
 
 3. Change fields of neaded visualisation type
@@ -53,7 +53,7 @@ config.typeVisual = dv::VISUALTYPE_SURFACE;
 | ------------ | ------------ |
 |chart       |for chart settings|
 |heatmap     |for heatmap settings |
-|surf        |for surface settings|
+
 
 ```cpp
 config.surf.colorSc = dv::COLORSCALE_THERMAL;
@@ -70,7 +70,7 @@ dv::show(yourData, "yourName", config);
 
 > [!attention]
 > While filling config fields be sure you are tunning correct visualisation type, i.e. if you want to show
-> data as **surface**  fill  **config.surface** fields but not **config.heatmap**
+> data as **heatmap**  fill  **config.heatmap** fields but not **config.chart**
 
 
 ### Multi chart
