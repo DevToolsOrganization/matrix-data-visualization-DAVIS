@@ -94,7 +94,6 @@ extern const char kColorMapElectricPart[];
 extern const char kColorMapPortlandPart[];
 
 extern const char kHeatMapTypePart[];
-extern const char kSurfaceTypePart[];
 extern const char kWarningJSLibAbsentPage[];
 extern const char kNoFileFoundedPage[];
 

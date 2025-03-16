@@ -9,7 +9,7 @@ TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
   std::string str_page = "test_page";
   auto config = dv::Config();
   config.typeVisual = dv::VISUALTYPE_HEATMAP;
-  bool result = dvs::createHtmlPageWithPlotlyJS(testValues, str_page, config, dv::VISUALTYPE_HEATMAP);
+  bool result = dvs::createHtmlPageHeatmap(testValues, str_page, config);
   std::ofstream out("example.html");
   if (out.is_open()) {
     out << str_page.c_str();
@@ -45,15 +45,6 @@ TEST(PlotlyMaker, ShowSunnyHeatMapHtmlPageTest) {
   auto config = dv::Config();
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_SUNNY;
   bool result = dvs::showHeatMapInBrowser(testValues, str_page, config);
-  EXPECT_EQ(result, true);
-}
-
-TEST(PlotlyMaker, ShowThermalSurfaceHtmlPageTest) {
-  std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
-  std::string str_page = "ThermalSurfacePage";
-  auto config = dv::Config();
-  config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
-  bool result = dvs::showSurfaceInBrowser(testValues, str_page, config);
   EXPECT_EQ(result, true);
 }
 

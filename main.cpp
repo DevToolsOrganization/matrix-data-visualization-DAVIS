@@ -17,7 +17,6 @@ int main(int argc, char* argv[]) {
          ("h,help", "davis commands")
          ("l,linechart", "linechart values", cxxopts::value<std::string>())
          ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
-         ("s,surface", "surface values", cxxopts::value<std::string>())
          ("f,file", "path to input file", cxxopts::value<std::string>())
          ("t,charttype", "chart type", cxxopts::value<std::string>())
          ;
@@ -44,11 +43,6 @@ int main(int argc, char* argv[]) {
     auto data = result["heatmap"].as<std::string>();
     config.typeVisual = dv::VISUALTYPE_HEATMAP;
     dvs::showHeatMapInBrowser(data, "comand_line_heatmap", config);
-    return EXIT_SUCCESS;
-  } else if (result.count("surface")) {
-    config.typeVisual = dv::VISUALTYPE_SURFACE;
-    auto data = result["surface"].as<std::string>();
-    dvs::showSurfaceInBrowser(data, "comand_line_surface", config);
     return EXIT_SUCCESS;
   } else if (result.count("file")) {
     auto data_path = result["file"].as<std::string>();

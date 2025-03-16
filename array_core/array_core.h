@@ -93,10 +93,9 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   }
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP)
+      configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  else if (configuration.typeVisual == VISUALTYPE_SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  }
   return res;
 }
 
@@ -122,10 +121,9 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
   }
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP)
+      configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  else if (configuration.typeVisual == VISUALTYPE_SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  }
   return res;
 }
 
@@ -260,8 +258,6 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
              configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  } else if (configuration.typeVisual == VISUALTYPE_SURFACE) {
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   }
   return res;
 }

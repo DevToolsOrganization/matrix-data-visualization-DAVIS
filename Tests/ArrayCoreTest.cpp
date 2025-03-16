@@ -129,10 +129,7 @@ TEST(ArrayCore, configurator) {
   config.heatmap.title = "Тестовая матрица";
   config.heatmap.colorSc = dv::COLORSCALE_YlGnBu;
   bool result1 = dv::show(values, "HeatMap", config);
-  config.typeVisual = dv::VISUALTYPE_SURFACE;
-  config.surf.title = "This is Surface!!!";
-  bool result2 = dv::show(values, "Surface", config);
-  EXPECT_EQ(result1 && result2, true);
+  EXPECT_EQ(result1, true);
 }
 
 TEST(ArrayCore, showDefaultSettings) {
@@ -162,20 +159,6 @@ TEST(ArrayCore, showHeatMap1_AutoScale) {
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
   config.heatmap.isFitPlotToWindow = true;
   bool result = dv::show(values, "showHeatMap_AutoScale", config);
-  EXPECT_EQ(result, true);
-}
-
-TEST(ArrayCore, showSurface) {
-  EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
-  auto config = dv::Config();
-  config.typeVisual = dv::VISUALTYPE_SURFACE;
-  config.surf.xLabel = "xLabel from Settings";
-  config.surf.yLabel = "yLabel from Settings";
-  config.surf.zLabel = "zLabel from Settings";
-  config.surf.title = "Title from Settings";
-  config.surf.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
-  bool result = dv::show(values, "showSurface", config);
   EXPECT_EQ(result, true);
 }
 
@@ -360,7 +343,7 @@ TEST(ArrayCore, testMyltiplyHoldOnOff) {
 
   dv::holdOn();
   dv::show(vec1, "titleHoldOn3");
-  dv::show(vec1, "titleHoldOn4");
+  dv::show(vec2, "titleHoldOn4");
   dv::holdOff();
 
   EXPECT_EQ(v1 && v2, true);

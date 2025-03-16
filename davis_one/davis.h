@@ -39,8 +39,7 @@ namespace dv {
 enum config_visualizationTypes {
   VISUALTYPE_AUTO, //if user not forces some specific type it will be recognized by context
   VISUALTYPE_CHART,
-  VISUALTYPE_HEATMAP,
-  VISUALTYPE_SURFACE
+  VISUALTYPE_HEATMAP
 };
 
 enum config_colorscales {
@@ -83,14 +82,6 @@ struct heatMapSettings : public commonSettings {
   config_colorscales colorSc;
 };
 
-struct surfaceSettings : public commonSettings {
-  surfaceSettings():
-    colorSc(config_colorscales::COLORSCALE_DEFAULT),
-    zLabel("Z") {}
-  config_colorscales colorSc;
-  std::string zLabel;
-};
-
 
 struct Config {
   Config():
@@ -98,13 +89,10 @@ struct Config {
   void reset() {
     chart = chartSettings();
     heatmap = heatMapSettings();
-    surf = surfaceSettings();
   }
 
   chartSettings chart;
   heatMapSettings heatmap;
-  surfaceSettings surf;
-
   config_visualizationTypes typeVisual;
 };
 
@@ -214,7 +202,6 @@ extern const char kColorMapElectricPart[];
 extern const char kColorMapPortlandPart[];
 
 extern const char kHeatMapTypePart[];
-extern const char kSurfaceTypePart[];
 extern const char kWarningJSLibAbsentPage[];
 extern const char kNoFileFoundedPage[];
 
@@ -442,27 +429,19 @@ using std::vector;
 using std::istringstream;
 
 
-bool createHtmlPageWithPlotlyJS(const vector<vector<double>>& values,
-                                string& page,
-                                const dv::Config& configuration,
-                                dv::config_visualizationTypes typeVisual);
+bool createHtmlPageHeatmap(const vector<vector<double>>& values,
+                           string& page,
+                           const dv::Config& configuration);
 
 bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
-
 bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
 bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
 bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
                             const string& title, const dv::Config& configuration);
-
 bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
 
-bool showSurfaceInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
-
-bool showSurfaceInBrowser(const string& values, const string& title, const dv::Config& configuration);
-
 void showWarningJsAbsentPage();
-
 
 void showReportPage(const string& page, const string& title, const string& svg, const string& description);
 
@@ -601,10 +580,9 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   }
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP)
+      configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  else if (configuration.typeVisual == VISUALTYPE_SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  }
   return res;
 }
 
@@ -630,10 +608,9 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
   }
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP)
+      configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  else if (configuration.typeVisual == VISUALTYPE_SURFACE)
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
+  }
   return res;
 }
 
@@ -768,8 +745,6 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
              configuration.typeVisual == VISUALTYPE_HEATMAP) {
     res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  } else if (configuration.typeVisual == VISUALTYPE_SURFACE) {
-    res = dvs::showSurfaceInBrowser(vecVecDbl, htmlPageName, configuration);
   }
   return res;
 }

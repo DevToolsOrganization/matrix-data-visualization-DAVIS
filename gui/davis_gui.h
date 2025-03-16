@@ -80,7 +80,7 @@ class DavisGUI : public QMainWindow {
   QPoint m_point;
   QAction*  action_surface;
   QAction*  action_heatmap;
-  QAction*  action_fitPlotToAllWindow;
+  QAction*  action_fitPlotToBrowserWindow;
   QAction*  action_holidaysSkins;
   About_window* aboutWindow;
   bool isAboutWindowShowed;
@@ -94,6 +94,7 @@ class DavisGUI : public QMainWindow {
   QLabel* label_gif;
   bool m_isUseCustomSkins;
   Skins m_skin;
+  bool m_isFitGraphToWindow;
 
 };
 #endif // DAVISGUI_H
