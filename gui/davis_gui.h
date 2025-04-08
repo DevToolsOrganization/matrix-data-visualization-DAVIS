@@ -34,11 +34,14 @@ class DavisGUI : public QMainWindow {
 
  protected:
   void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
   void dropEvent(QDropEvent* event) override;
   void paintEvent(QPaintEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
+  void enterEvent(QEvent* event) override;
+  void leaveEvent(QEvent* event) override;
 
  private:
   void setMaxStyleWindow(int animDuration);
@@ -70,6 +73,8 @@ class DavisGUI : public QMainWindow {
 
   QStringList getLinesFromFile(const QString& pathToFile);
   bool mayBeShowBIN(const QString& path);
+  void setFullOpacity();
+  void setSemiOpacity();
 
  private slots:
   void showAboutWindow();
@@ -95,6 +100,6 @@ class DavisGUI : public QMainWindow {
   bool m_isUseCustomSkins;
   Skins m_skin;
   bool m_isFitGraphToWindow;
-
+  QPropertyAnimation* animationOpacity;
 };
 #endif // DAVISGUI_H

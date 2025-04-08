@@ -34,6 +34,7 @@ using std::string;
 using std::vector;
 using namespace dvs;
 const int ANIMATION_DURATION = 300;
+const double OPACITY_IF_NOT_ACTIVE = 0.5;
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
@@ -191,6 +192,9 @@ DavisGUI::DavisGUI(QWidget* parent)
   settingsFilePath = "settings.json";
   QJsonObject settings = loadSettings(settingsFilePath);
   applySettings(settings);
+  animationOpacity = new QPropertyAnimation(this, "windowOpacity");
+  animationOpacity->setDuration(ANIMATION_DURATION); // Длительность анимации в миллисекундах
+  animationOpacity->setEasingCurve(QEasingCurve::InOutQuad); // Задаем плавность кривой
 }
 
 DavisGUI::~DavisGUI() {
@@ -513,7 +517,7 @@ bool DavisGUI::mayBeShowBIN(const QString& path) {
 void DavisGUI::setMaxStyleWindow(int animDuration) {
   m_isMinStyleWindow = false;
   hideElementsDuringResize();
-
+  setWindowOpacity(1);
   QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
   animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
   animationFrame->setDuration(animDuration);
@@ -555,7 +559,7 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
 void DavisGUI::setMinStyleWindow(int animDuration) {
   m_isMinStyleWindow = true;
   hideElementsDuringResize();
-
+  setWindowOpacity(OPACITY_IF_NOT_ACTIVE);
   QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
   animation->setDuration(animDuration);
   animation->setEasingCurve(QEasingCurve::InOutQuad);
@@ -905,11 +909,18 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
 
   group->start(QAbstractAnimation::DeleteWhenStopped);
 
-
+  setFullOpacity();
   if (event->mimeData()->hasUrls()) {
     event->acceptProposedAction();
   } else {
     qDebug() << "not drop";
+  }
+
+}
+
+void DavisGUI::dragLeaveEvent(QDragLeaveEvent* event) {
+  if (m_isMinStyleWindow) {
+    setSemiOpacity();
   }
 }
 
@@ -1063,5 +1074,33 @@ void DavisGUI::keyPressEvent(QKeyEvent* event) {
   } else {
     QMainWindow::keyPressEvent(event);
   }
+}
+
+void DavisGUI::setFullOpacity() {
+  if (m_isMinStyleWindow) {
+    animationOpacity->stop();
+    animationOpacity->setStartValue(windowOpacity());
+    animationOpacity->setEndValue(1.0); // Непрозрачное окно
+    animationOpacity->start();
+  }
+}
+
+void DavisGUI::enterEvent(QEvent* event) {
+  setFullOpacity();
+  QMainWindow::enterEvent(event);
+}
+
+void DavisGUI::setSemiOpacity() {
+  if (m_isMinStyleWindow) {
+    animationOpacity->stop();
+    animationOpacity->setStartValue(windowOpacity());
+    animationOpacity->setEndValue(OPACITY_IF_NOT_ACTIVE); // Полупрозрачное окно
+    animationOpacity->start();
+  }
+}
+
+void DavisGUI::leaveEvent(QEvent* event) {
+  setSemiOpacity();
+  QMainWindow::leaveEvent(event);
 }
 
