@@ -52,9 +52,9 @@ and heatmap image will be redrawed as surface
 
 int vals[] = {2, 6, 4, -34, 56, 33, 2, 15 };
 auto config = dv::Config();
-config.heatmap.title = "Custom title";            // change default settings to custom for heatmap
-config.heatmap.xLabel = "Custom xLabel";          // change default settings to custom for heatmap
-config.heatmap.yLabel = "Custom yLabel";          // change default settings to custom for heatmap
+config.chart.title = "Custom title";            // change default settings to custom for chart
+config.chart.xLabel = "Custom xLabel";          // change default settings to custom for chart
+config.chart.yLabel = "Custom yLabel";          // change default settings to custom for chart
 bool result = dv::show(vals, sizeof(vals) / sizeof(vals[0]), "htmlPageName", config);
 ```
 <img src="_media//example3.png" width="500">
