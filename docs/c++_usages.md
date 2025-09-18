@@ -1,7 +1,7 @@
 # 💻 Usages
 All you need is just include "davis.h" and use it's functions from `dv::` namespace
 
-## show(...) function
+## 1. show(...) function
 There is one template overload function to visualize different types of data:
 
 <img src="_media/dv_show.png" width="1110">
@@ -34,7 +34,7 @@ or template container with  type `C`:
  dv::show(vals, sizeof(vals) / sizeof(vals[0]), "example2");
 ```
 
-### Configuration
+### 1.1. Configuration
 Data vizuailisation can be tunned with using custom configuration object `dv::Config`.
 
 1. Create `dv::Config` object;
@@ -73,7 +73,7 @@ dv::show(yourData, "yourName", config);
 > data as **heatmap**  fill  **config.heatmap** fields but not **config.chart**
 
 
-### Multi chart
+### 1.2. Multi chart
 Sometimes you may need to plot multiple graphs on the same axes.
 Put any number of functions `dv::show(...)` that plot data as graphs between  `dv::holdOn()` and `dv::holdOff()`
 You can also pass `dv::Config()` to `dv::holdOff()` to customize axes labels and title
@@ -85,13 +85,13 @@ dv::holdOff();
 ```
 
 
-## save(...) function
+## 2. save(...) function
 There is one template overload function for saving different types of data as text files:
 <img src="_media/dv_save.png" width="1110">
 
 Supported data types are identical to described for [show(...) function](#show-function)
 
-### Configuration
+### 2.1. Configuration
 Data saving can be tunned with using custom configuration object `dv::configSaveToDisk`.
 
 | Name of field | Description  | Default value  |
