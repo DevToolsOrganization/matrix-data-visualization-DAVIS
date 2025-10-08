@@ -347,22 +347,23 @@ string vectorToString(const vector<double>& vec) {
 }
 
 std::string makeUniqueDavisHtmlName() {
-    sleepMicroSec(1);
-    using namespace std::chrono;
-    auto now = system_clock::now();
-    auto ms_since_epoch = duration_cast<milliseconds>(now.time_since_epoch()).count();
-    int ms = static_cast<int>(ms_since_epoch % 1000);
-    std::time_t in_time_t = system_clock::to_time_t(now);
-    std::tm tm{};
+  sleepMicroSec(1);
+  using namespace std::chrono;
+  auto now = system_clock::now();
+  auto ms_since_epoch = duration_cast<milliseconds>(now.time_since_epoch()).count();
+  int ms = static_cast<int>(ms_since_epoch % 1000);
+  std::time_t in_time_t = system_clock::to_time_t(now);
+  std::tm tm{};
 #if defined(_MSC_VER)
-    localtime_s(&tm, &in_time_t);
+  localtime_s(&tm, &in_time_t);
 #else
-    if (std::tm* p = std::localtime(&in_time_t)) tm = *p;
+  if (std::tm* p = std::localtime(&in_time_t))
+    tm = *p;
 #endif
-    std::ostringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%d_%H_%M_%S")
-       << '_' << std::setfill('0') << std::setw(3) << ms;
-    return ss.str();
+  std::ostringstream ss;
+  ss << std::put_time(&tm, "%Y-%m-%d_%H_%M_%S")
+     << '_' << std::setfill('0') << std::setw(3) << ms;
+  return ss.str();
 }
 
 std::string makeUniqueDavisHtmlRelativePath() {
