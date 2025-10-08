@@ -42,41 +42,49 @@ bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::makeU
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
-//! (chart) 1-dimensional container
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+//! +(chart) 1-dimensional container
+template<typename C,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool show(C const& container, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
-//! (chart) Two 1-dimensional container for X-Y plot
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
-bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+//! +(chart) Two 1-dimensional container for X-Y plot
+template<typename C1,
+         typename C2,
+         typename T1 = typename std::decay<decltype(*std::begin(std::declval<C1>()))>::type,
+         typename T2 = typename std::decay<decltype(*std::begin(std::declval<C2>()))>::type,
+         typename Enable = typename std::enable_if<
+             std::is_convertible<T1, double>::value && std::is_convertible<T2, double>::value>::type>
+bool show(C1 const& containerX, C2 const& containerY, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
-bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+template<typename C1,
+         typename C2,
+         typename T1 = typename std::decay<decltype(*std::begin(std::declval<C1>()))>::type,
+         typename T2 = typename std::decay<decltype(*std::begin(std::declval<C2>()))>::type,
+         typename Enable = typename std::enable_if<
+             std::is_convertible<T1, double>::value && std::is_convertible<T2, double>::value>::type>
+bool save(C1 const& containerX, C2 const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
 //! (chart / matrix) 2-dimensional container
 template<typename C,
-         typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<E>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+         typename Enable = typename std::enable_if<
+             std::is_convertible<T, double>::value>::type>
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
-         typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<E>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+         typename Enable = typename std::enable_if<
+             std::is_convertible<T, double>::value>::type>
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 // ***********************************
@@ -85,193 +93,193 @@ bool save(C const& container_of_containers, const string& filename, const config
 
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
-  vecVecDbl.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
-    vecVecDbl.emplace_back(dblRow);
-  }
-  bool res = false;
-  if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP) {
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  }
-  return res;
+    vector<vector<double>> vecVecDbl;
+    vecVecDbl.reserve(arrRows);
+    for (uint64_t i = 0; i < arrRows; ++i) {
+        vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
+        vecVecDbl.emplace_back(dblRow);
+    }
+    bool res = false;
+    if (configuration.typeVisual == VISUALTYPE_AUTO ||
+            configuration.typeVisual == VISUALTYPE_HEATMAP) {
+        res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+    }
+    return res;
 }
 
 template <typename T>
 bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename, const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
-  vecVec.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<T> row(&data[i][0], &data[i][0] + arrCols);
-    vecVec.emplace_back(row);
-  }
-  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-  return res;
+    vector<vector<T>> vecVec;
+    vecVec.reserve(arrRows);
+    for (uint64_t i = 0; i < arrRows; ++i) {
+        vector<T> row(&data[i][0], &data[i][0] + arrCols);
+        vecVec.emplace_back(row);
+    }
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+    return res;
 }
 
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
-  vecVecDbl.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<double> dblRow(&data[i * arrCols], &data[i * arrCols] + arrCols);
-    vecVecDbl.emplace_back(dblRow);
-  }
-  bool res = false;
-  if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_HEATMAP) {
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  }
-  return res;
+    vector<vector<double>> vecVecDbl;
+    vecVecDbl.reserve(arrRows);
+    for (uint64_t i = 0; i < arrRows; ++i) {
+        vector<double> dblRow(&data[i * arrCols], &data[i * arrCols] + arrCols);
+        vecVecDbl.emplace_back(dblRow);
+    }
+    bool res = false;
+    if (configuration.typeVisual == VISUALTYPE_AUTO ||
+            configuration.typeVisual == VISUALTYPE_HEATMAP) {
+        res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+    }
+    return res;
 }
 
 template <typename T>
 bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
           const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
-  vecVec.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
-    vecVec.emplace_back(row);
-  }
-  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-  return res;
+    vector<vector<T>> vecVec;
+    vecVec.reserve(arrRows);
+    for (uint64_t i = 0; i < arrRows; ++i) {
+        vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
+        vecVec.emplace_back(row);
+    }
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+    return res;
 }
 
 template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow(data, data + count);
-  bool res = false;
-  if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_CHART) {
-    if (!dvs::isHold) {
-      res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
-    } else {
-      dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
-      res = true;
+    vector<double> dblRow(data, data + count);
+    bool res = false;
+    if (configuration.typeVisual == VISUALTYPE_AUTO ||
+            configuration.typeVisual == VISUALTYPE_CHART) {
+        if (!dvs::isHold) {
+            res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+        } else {
+            dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
+            res = true;
+        }
     }
-  }
-  return res;
+    return res;
 }
 
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row(data, data + count);
-  bool res = dvs::saveVec<T>(row, filename, configuration);
-  return res;
+    vector<T> row(data, data + count);
+    bool res = dvs::saveVec<T>(row, filename, configuration);
+    return res;
 }
 
 template<typename C, typename T, typename>
 bool show(C const& container, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow = dvs::vecFromTemplate<double>(container);
-  bool res = false;
-  if (configuration.typeVisual == VISUALTYPE_AUTO ||
-      configuration.typeVisual == VISUALTYPE_CHART) {
-    if (!dvs::isHold) {
-      res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
-    } else {
-      dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
-      res = true;
+    vector<double> dblRow = dvs::vecFromTemplate<double>(container);
+    bool res = false;
+    if (configuration.typeVisual == VISUALTYPE_AUTO ||
+            configuration.typeVisual == VISUALTYPE_CHART) {
+        if (!dvs::isHold) {
+            res = dvs::showLineChartInBrowser(dblRow, htmlPageName, configuration);
+        } else {
+            dvs::addTraceBlockToGlobal(dblRow, htmlPageName);
+            res = true;
+        }
     }
-  }
-  return res;
+    return res;
 }
 
 template<typename C, typename T, typename>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row = dvs::vecFromTemplate<T>(container);
-  bool res = dvs::saveVec<T>(row, filename, configuration);
-  return res;
+    vector<T> row = dvs::vecFromTemplate<T>(container);
+    bool res = dvs::saveVec<T>(row, filename, configuration);
+    return res;
 }
 
-template<typename C, typename T, typename>
-bool show(C const& containerX, C const& containerY, const string& htmlPageName, const Config& configuration) {
-  if (containerX.size() != containerY.size()) {
-    return false;
-  }
-  vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
-  vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
+template<typename C1, typename C2, typename T, typename>
+bool show(C1 const& containerX, C2 const& containerY, const string& htmlPageName, const Config& configuration) {
+    if (containerX.size() != containerY.size()) {
+        return false;
+    }
+    vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
+    vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
 
-  bool res = false;
-  if (!dvs::isHold) {
-    res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
-  } else {
-    dvs::addTraceBlockToGlobal(dblRowX, dblRowY, htmlPageName);
-    res = true;
-  }
-  return res;
+    bool res = false;
+    if (!dvs::isHold) {
+        res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+    } else {
+        dvs::addTraceBlockToGlobal(dblRowX, dblRowY, htmlPageName);
+        res = true;
+    }
+    return res;
 }
 
-template<typename C, typename T, typename>
-bool save(C const& containerX, C const& containerY,  const string& filename, const configSaveToDisk& configuration) {
-  if (containerX.size() != containerY.size()) {
-    return false;
-  }
-  vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
-  vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
-  vector<vector<T>> vecVec;
-  vecVec.emplace_back(rowX);
-  vecVec.emplace_back(rowY);
-  configSaveToDisk newConf = configuration;
-  newConf.isTranspose = !configuration.isTranspose;
-  bool res = dvs::saveVecVec<T>(vecVec, filename, newConf);
-  return res;
+template<typename C1, typename C2, typename T, typename>
+bool save(C1 const& containerX, C2 const& containerY,  const string& filename, const configSaveToDisk& configuration) {
+    if (containerX.size() != containerY.size()) {
+        return false;
+    }
+    vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
+    vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
+    vector<vector<T>> vecVec;
+    vecVec.emplace_back(rowX);
+    vecVec.emplace_back(rowY);
+    configSaveToDisk newConf = configuration;
+    newConf.isTranspose = !configuration.isTranspose;
+    bool res = dvs::saveVecVec<T>(vecVec, filename, newConf);
+    return res;
 }
 
 template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
-  vecVecDbl.reserve(container_of_containers.size());
-  for (auto row : container_of_containers) {
-    vector<double> dblRow = dvs::vecFromTemplate<double>(row);
-    vecVecDbl.emplace_back(dblRow);
-  }
-  bool res = false;
-  size_t size1 = vecVecDbl.size();
-  size_t size2 = 0;
-  if (!vecVecDbl.empty()) {
-    size2 = vecVecDbl[0].size();
-  }
-  if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
-       configuration.typeVisual == VISUALTYPE_CHART) &&
-      (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
-    vector<double> xVals;
-    vector<double> yVals;
-    if (size1 == 2) {
-      xVals = vecVecDbl[0];
-      yVals = vecVecDbl[1];
-    } else if (size2 == 2) {
-      xVals.reserve(size1);
-      for (int i = 0; i < size1; ++i) {
-        xVals.emplace_back(vecVecDbl[i][0]);
-        yVals.emplace_back(vecVecDbl[i][1]);
-      }
+    vector<vector<double>> vecVecDbl;
+    vecVecDbl.reserve(container_of_containers.size());
+    for (auto row : container_of_containers) {
+        vector<double> dblRow = dvs::vecFromTemplate<double>(row);
+        vecVecDbl.emplace_back(dblRow);
     }
-    if (!dvs::isHold) {
-      res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName, configuration);
-    } else {
-      dvs::addTraceBlockToGlobal(xVals, yVals, htmlPageName);
-      res = true;
+    bool res = false;
+    size_t size1 = vecVecDbl.size();
+    size_t size2 = 0;
+    if (!vecVecDbl.empty()) {
+        size2 = vecVecDbl[0].size();
     }
-  } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
-             configuration.typeVisual == VISUALTYPE_HEATMAP) {
-    res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
-  }
-  return res;
+    if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
+         configuration.typeVisual == VISUALTYPE_CHART) &&
+            (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
+        vector<double> xVals;
+        vector<double> yVals;
+        if (size1 == 2) {
+            xVals = vecVecDbl[0];
+            yVals = vecVecDbl[1];
+        } else if (size2 == 2) {
+            xVals.reserve(size1);
+            for (int i = 0; i < size1; ++i) {
+                xVals.emplace_back(vecVecDbl[i][0]);
+                yVals.emplace_back(vecVecDbl[i][1]);
+            }
+        }
+        if (!dvs::isHold) {
+            res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName, configuration);
+        } else {
+            dvs::addTraceBlockToGlobal(xVals, yVals, htmlPageName);
+            res = true;
+        }
+    } else if (configuration.typeVisual == VISUALTYPE_AUTO ||
+               configuration.typeVisual == VISUALTYPE_HEATMAP) {
+        res = dvs::showHeatMapInBrowser(vecVecDbl, htmlPageName, configuration);
+    }
+    return res;
 }
 
 template<typename C, typename E, typename T, typename >
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
-  vecVec.reserve(container_of_containers.size());
-  for (auto row : container_of_containers) {
-    vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
-    vecVec.emplace_back(rowTemp);
-  }
-  bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
-  return res;
+    vector<vector<T>> vecVec;
+    vecVec.reserve(container_of_containers.size());
+    for (auto row : container_of_containers) {
+        vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
+        vecVec.emplace_back(rowTemp);
+    }
+    bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
+    return res;
 }
 
 //#STOP_GRAB_TO_DV_NAMESPACE
