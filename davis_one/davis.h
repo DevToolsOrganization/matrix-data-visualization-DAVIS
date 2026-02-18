@@ -364,15 +364,14 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
 
 //! convert any container to std::vector with G type
 template<typename G,
-         typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>>>
-vector<G> vecFromTemplate(const C& container) {
-  vector<G> vec(container.size());
-  uint64_t i = 0;
-  for (auto v : container) {
-    vec[i] = static_cast<G>(v);
-    ++i;
+         typename C, //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, G>::value>::type>
+std::vector<G> vecFromTemplate(const C& container) {
+  std::vector<G> vec;
+  vec.reserve(static_cast<size_t>(std::distance(std::begin(container), std::end(container))));
+  for (auto const& v : container) {
+    vec.push_back(static_cast<G>(v));
   }
   return vec;
 }
@@ -396,7 +395,7 @@ std::string reverseString(const std::string& input);
 
 template <typename T>
 std::vector<std::vector<T>> readBinaryFile(const std::string& filePath,
-                                           size_t rowLength) {
+size_t rowLength) {
   std::ifstream file(filePath, std::ios::binary);
   if (!file) {
     throw std::runtime_error("Cannot open file");
@@ -529,42 +528,43 @@ bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::makeU
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
-//! (chart) 1-dimensional container
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+//! +(chart) 1-dimensional container
+template<typename C,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool show(C const& container, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
-//! (chart) Two 1-dimensional container for X-Y plot
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+//! +(chart) Two 1-dimensional container for X-Y plot
+template<typename C,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
-template<typename C,    //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+template<typename C,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
 //! (chart / matrix) 2-dimensional container
 template<typename C,
-         typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<E>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool show(C const& container_of_containers, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
-         typename E = std::decay_t<decltype(*std::begin(std::declval<C>()))>,
-         typename T = std::decay_t<decltype(*std::begin(std::declval<E>()))>,
-         typename = std::enable_if_t<std::is_convertible_v<T, double>> >
+         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+
 
 // ***********************************
 // template functions implementations:
@@ -691,7 +691,7 @@ bool show(C const& containerX, C const& containerY, const string& htmlPageName, 
   return res;
 }
 
-template<typename C, typename T, typename>
+template<typename C, typename T, typename Enable>
 bool save(C const& containerX, C const& containerY,  const string& filename, const configSaveToDisk& configuration) {
   if (containerX.size() != containerY.size()) {
     return false;
@@ -749,7 +749,7 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   return res;
 }
 
-template<typename C, typename E, typename T, typename >
+template<typename C, typename E, typename T, typename Enable>
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
   vector<vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
