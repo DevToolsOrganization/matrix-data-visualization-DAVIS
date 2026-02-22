@@ -10,6 +10,7 @@
 #include "configurator.h"
 #include "multi_plot.h"
 
+
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
 
@@ -86,12 +87,12 @@ bool save(C const& container_of_containers, const string& filename, const config
 
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
-  vecVecDbl.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<double> dblRow(&data[i][0], &data[i][0] + arrCols);
-    vecVecDbl.emplace_back(dblRow);
-  }
+  if (data == nullptr || arrRows == 0 || arrCols == 0)
+    return false;
+
+  std::vector<std::vector<T>> vecVecDbl =
+                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
+
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -102,24 +103,19 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
 
 template <typename T>
 bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename, const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
-  vecVec.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<T> row(&data[i][0], &data[i][0] + arrCols);
-    vecVec.emplace_back(row);
-  }
+  if (data == nullptr || arrRows == 0 || arrCols == 0)
+    return false;
+  std::vector<std::vector<T>> vecVec =
+                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
 
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
-  vecVecDbl.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<double> dblRow(&data[i * arrCols], &data[i * arrCols] + arrCols);
-    vecVecDbl.emplace_back(dblRow);
-  }
+  if (data == nullptr || arrRows == 0 || arrCols == 0)
+    return false;
+  std::vector<std::vector<T>> vecVecDbl = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -131,19 +127,18 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
 template <typename T>
 bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
           const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
-  vecVec.reserve(arrRows);
-  for (uint64_t i = 0; i < arrRows; ++i) {
-    vector<T> row(&data[i * arrCols], &data[i * arrCols] + arrCols);
-    vecVec.emplace_back(row);
-  }
+  if (data == nullptr || arrRows == 0 || arrCols == 0)
+    return false;
+  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
 
 template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow(data, data + count);
+  if (data == nullptr || count == 0)
+    return false;
+  std::vector<double> dblRow = dvs::makeVecFrom1D(data, count);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART) {
@@ -159,7 +154,9 @@ bool show(const T* data, uint64_t count, const string& htmlPageName, const Confi
 
 template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row(data, data + count);
+  if (data == nullptr || count == 0)
+    return false;
+  std::vector<T> row = dvs::makeVecFrom1D(data, count);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }

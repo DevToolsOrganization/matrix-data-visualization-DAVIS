@@ -161,9 +161,38 @@ std::vector<G> vecFromTemplate(const C& container) {
   return vec;
 }
 
+template <typename T>
+inline std::vector<std::vector<double>> makeVecVecFromRowPtr(const T* const* data,
+                                                             uint64_t rows,
+uint64_t cols) {
+  std::vector<std::vector<double>> res;
+  res.reserve(rows);
+  for (uint64_t i = 0; i < rows; ++i) {
+    const T* rowPtr = data[i];
+    res.emplace_back(rowPtr, rowPtr + cols);
+  }
+  return res;
+}
+
+template <typename T>
+inline std::vector<std::vector<T>> makeVecVecFromFlat(const T* data,
+                                                      uint64_t rows,
+uint64_t cols) {
+  std::vector<std::vector<T>> res;
+  res.reserve(rows);
+  for (uint64_t i = 0; i < rows; ++i) {
+    const T* rowPtr = data + i * cols;
+    res.emplace_back(rowPtr, rowPtr + cols);
+  }
+  return res;
+}
+
+template <typename T>
+inline std::vector<T> makeVecFrom1D(const T* data, uint64_t count) {
+  return std::vector<T>(data, data + count);
+}
 
 bool is_string_convertable_to_digit(const string& sample);
-
 
 void transponeMatrix(std::vector<std::vector<double>>& matrix);
 
