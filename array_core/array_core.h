@@ -160,7 +160,7 @@ bool save(const T* data, uint64_t count, const std::string& filename, const conf
 
 template<typename C, typename T, typename>
 bool show(C const& container, const std::string& htmlPageName, const Config& configuration) {
-  std::vector<double> dblRow = dvs::vecFromTemplate<double>(container);
+  std::vector<double> dblRow = dvs::makeVecFromContainer<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART) {
@@ -176,7 +176,7 @@ bool show(C const& container, const std::string& htmlPageName, const Config& con
 
 template<typename C, typename T, typename>
 bool save(C const& container, const std::string& filename, const configSaveToDisk& configuration) {
-  std::vector<T> row = dvs::vecFromTemplate<T>(container);
+  std::vector<T> row = dvs::makeVecFromContainer<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
@@ -186,8 +186,8 @@ bool show(C const& containerX, C const& containerY, const std::string& htmlPageN
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  std::vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
-  std::vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
+  std::vector<double> dblRowX = dvs::makeVecFromContainer<double>(containerX);
+  std::vector<double> dblRowY = dvs::makeVecFromContainer<double>(containerY);
 
   bool res = false;
   if (!dvs::isHold) {
@@ -204,8 +204,8 @@ bool save(C const& containerX, C const& containerY,  const std::string& filename
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  std::vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
-  std::vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
+  std::vector<T> rowX = dvs::makeVecFromContainer<T>(containerX);
+  std::vector<T> rowY = dvs::makeVecFromContainer<T>(containerY);
   std::vector<std::vector<T>> vecVec;
   vecVec.emplace_back(rowX);
   vecVec.emplace_back(rowY);
@@ -220,7 +220,7 @@ bool show(C const& container_of_containers, const std::string& htmlPageName, con
   std::vector<std::vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
-    std::vector<double> dblRow = dvs::vecFromTemplate<double>(row);
+    std::vector<double> dblRow = dvs::makeVecFromContainer<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
@@ -262,7 +262,7 @@ bool save(C const& container_of_containers, const std::string& filename, const c
   std::vector<std::vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
-    std::vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
+    std::vector<T> rowTemp = dvs::makeVecFromContainer<T>(row);
     vecVec.emplace_back(rowTemp);
   }
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
