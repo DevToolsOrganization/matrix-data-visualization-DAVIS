@@ -1780,7 +1780,7 @@ void showMultiChart(const std::string& date_time_values,
 namespace dvs {
 
 bool isHold = false;
-vector<string> allChartBlocks = {};
+std::vector<std::string> allChartBlocks = {};
 
 
 } // namespace dvs end
@@ -1798,25 +1798,25 @@ void holdOff(const Config& configuration) {
   if (dvs::allChartBlocks.empty()) {
     return;
   }
-  string allTracesNames_str;
-  string allChartBlocks_str;
-  const string trace_name_part = "trace";
+  std::string allTracesNames_str;
+  std::string allChartBlocks_str;
+  const std::string trace_name_part = "trace";
   for (int i = 0; i < dvs::allChartBlocks.size(); ++i) {
-    string str_numTrace = std::to_string(i + 1);
-    string filled_trace_name_part = trace_name_part + str_numTrace;
+    std::string str_numTrace = std::to_string(i + 1);
+    std::string filled_trace_name_part = trace_name_part + str_numTrace;
     if (i < dvs::allChartBlocks.size() - 1) {
       filled_trace_name_part.append(",");
     }
     allTracesNames_str.append(filled_trace_name_part);
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
-  string paramWH;
+  std::string paramWH;
   if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
   }
-  string paramWHsecond;
+  std::string paramWHsecond;
   if (configuration.chart.isFitPlotToWindow) {
     if (paramWH == "width") {
       paramWHsecond = "height";
@@ -1826,25 +1826,25 @@ void holdOff(const Config& configuration) {
   } else {
     paramWHsecond = paramWH;
   }
-  vector<string> args = {dvs::kPlotlyJsName,
-                         allChartBlocks_str,
-                         allTracesNames_str,
-                         configuration.chart.title,
-                         configuration.chart.xLabel,
-                         configuration.chart.yLabel,
-                         dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
-                         dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                         paramWH,
-                         paramWHsecond,
-                         dvs::kHtmlComboboxStyleBlock,
-                         dvs::kHtmlComboboxSelectBlock,
-                         dvs::kHtmlComboboxUpdateFooBlock,
-                         dvs::kHtmlDavisLogoHyperlinkBlock
-                        };
-  string multichartPage = dvs::kHtmlMultiChartModel;
-  string filled_multichartPage = "";
+  std::vector<std::string> args = {dvs::kPlotlyJsName,
+                                   allChartBlocks_str,
+                                   allTracesNames_str,
+                                   configuration.chart.title,
+                                   configuration.chart.xLabel,
+                                   configuration.chart.yLabel,
+                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
+                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
+                                   paramWH,
+                                   paramWHsecond,
+                                   dvs::kHtmlComboboxStyleBlock,
+                                   dvs::kHtmlComboboxSelectBlock,
+                                   dvs::kHtmlComboboxUpdateFooBlock,
+                                   dvs::kHtmlDavisLogoHyperlinkBlock
+                                  };
+  std::string multichartPage = dvs::kHtmlMultiChartModel;
+  std::string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
-  string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
+  std::string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
   dvs::openFileBySystem(htmlFullName);
   dvs::allChartBlocks.clear();
