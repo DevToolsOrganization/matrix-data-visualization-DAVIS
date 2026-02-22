@@ -14,57 +14,54 @@
 namespace dv {
 //#START_GRAB_TO_DV_NAMESPACE
 
-using std::vector;
-using std::string;
-
 
 //! (matrix) 2-dimensional array
 template <typename T>
 bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+          const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
-bool save(T** data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
           const configSaveToDisk& configuration = configSaveToDisk());
 
 //! (matrix) 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
 template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+          const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
-bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
           const configSaveToDisk& configuration = configSaveToDisk());
 
 //! (chart) 1-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(const T* data, uint64_t count, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template <typename T>
-bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+bool save(const T* data, uint64_t count, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 //! +(chart) 1-dimensional container
 template<typename C,
          typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& container, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(C const& container, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
          typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& container, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+bool save(C const& container, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
 //! +(chart) Two 1-dimensional container for X-Y plot
 template<typename C,
          typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& containerX, C const& containerY, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(C const& containerX, C const& containerY, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
          typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& containerX, C const& containerY, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+bool save(C const& containerX, C const& containerY, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
 //! (chart / matrix) 2-dimensional container
@@ -72,13 +69,13 @@ template<typename C,
          typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& container_of_containers, const string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(C const& container_of_containers, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
 
 template<typename C,
          typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
          typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
          typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+bool save(C const& container_of_containers, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
 
 
 // ***********************************
@@ -86,7 +83,7 @@ bool save(C const& container_of_containers, const string& filename, const config
 // ***********************************
 
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
+bool show(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& htmlPageName, const Config& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
 
@@ -112,7 +109,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filen
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
+bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& htmlPageName, const Config& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
   std::vector<std::vector<double>> vecVecDbl = dvs::makeVecVecFromFlat<double>(data, arrRows, arrCols);
@@ -125,7 +122,7 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlP
 }
 
 template <typename T>
-bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filename,
+bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
           const configSaveToDisk& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
@@ -135,7 +132,7 @@ bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filen
 }
 
 template <typename T>
-bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
+bool show(const T* data, uint64_t count, const std::string& htmlPageName, const Config& configuration) {
   if (data == nullptr || count == 0)
     return false;
   std::vector<double> dblRow = dvs::makeVecFrom1D<double>(data, count);
@@ -153,7 +150,7 @@ bool show(const T* data, uint64_t count, const string& htmlPageName, const Confi
 }
 
 template <typename T>
-bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
+bool save(const T* data, uint64_t count, const std::string& filename, const configSaveToDisk& configuration) {
   if (data == nullptr || count == 0)
     return false;
   std::vector<T> row = dvs::makeVecFrom1D<T>(data, count);
@@ -162,7 +159,7 @@ bool save(const T* data, uint64_t count, const string& filename, const configSav
 }
 
 template<typename C, typename T, typename>
-bool show(C const& container, const string& htmlPageName, const Config& configuration) {
+bool show(C const& container, const std::string& htmlPageName, const Config& configuration) {
   std::vector<double> dblRow = dvs::vecFromTemplate<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
@@ -178,14 +175,14 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
 }
 
 template<typename C, typename T, typename>
-bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
+bool save(C const& container, const std::string& filename, const configSaveToDisk& configuration) {
   std::vector<T> row = dvs::vecFromTemplate<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
 
 template<typename C, typename T, typename>
-bool show(C const& containerX, C const& containerY, const string& htmlPageName, const Config& configuration) {
+bool show(C const& containerX, C const& containerY, const std::string& htmlPageName, const Config& configuration) {
   if (containerX.size() != containerY.size()) {
     return false;
   }
@@ -203,7 +200,7 @@ bool show(C const& containerX, C const& containerY, const string& htmlPageName, 
 }
 
 template<typename C, typename T, typename Enable>
-bool save(C const& containerX, C const& containerY,  const string& filename, const configSaveToDisk& configuration) {
+bool save(C const& containerX, C const& containerY,  const std::string& filename, const configSaveToDisk& configuration) {
   if (containerX.size() != containerY.size()) {
     return false;
   }
@@ -219,7 +216,7 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
 }
 
 template<typename C, typename E, typename T, typename >
-bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
+bool show(C const& container_of_containers, const std::string& htmlPageName, const Config& configuration) {
   std::vector<std::vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
@@ -261,7 +258,7 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
 }
 
 template<typename C, typename E, typename T, typename Enable>
-bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
+bool save(C const& container_of_containers, const std::string& filename, const configSaveToDisk& configuration) {
   std::vector<std::vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
