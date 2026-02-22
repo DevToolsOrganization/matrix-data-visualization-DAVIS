@@ -225,7 +225,7 @@ template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
   vector<vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
-  for (auto row : container_of_containers) {
+  for (const auto& row : container_of_containers) {
     vector<double> dblRow = dvs::vecFromTemplate<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
@@ -245,7 +245,7 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
       yVals = vecVecDbl[1];
     } else if (size2 == 2) {
       xVals.reserve(size1);
-      for (int i = 0; i < size1; ++i) {
+      for (size_t i = 0; i < size1; ++i) {
         xVals.emplace_back(vecVecDbl[i][0]);
         yVals.emplace_back(vecVecDbl[i][1]);
       }
@@ -267,7 +267,7 @@ template<typename C, typename E, typename T, typename Enable>
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
   vector<vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
-  for (auto row : container_of_containers) {
+  for (const auto& row : container_of_containers) {
     vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
     vecVec.emplace_back(rowTemp);
   }
