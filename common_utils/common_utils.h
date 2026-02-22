@@ -162,7 +162,7 @@ std::vector<G> vecFromTemplate(const C& container) {
 }
 
 template <typename T>
-inline std::vector<std::vector<double>> makeVecVecFromRowPtr(const T* const* data,
+inline std::vector<std::vector<T>> makeVecVecFromRowPtr(const T* const* data,
                                                              uint64_t rows,
 uint64_t cols) {
   std::vector<std::vector<double>> res;
