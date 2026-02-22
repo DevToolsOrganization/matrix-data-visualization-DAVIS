@@ -90,8 +90,8 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
 
-  std::vector<std::vector<T>> vecVecDbl =
-                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
+  std::vector<std::vector<double>> vecVecDbl =
+                                    dvs::makeVecVecFromRowPtr<double>(data, arrRows, arrCols);
 
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
@@ -106,7 +106,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filen
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
   std::vector<std::vector<T>> vecVec =
-                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
+                               dvs::makeVecVecFromRowPtr<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
@@ -115,7 +115,7 @@ template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<T>> vecVecDbl = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
+  std::vector<std::vector<double>> vecVecDbl = dvs::makeVecVecFromFlat<double>(data, arrRows, arrCols);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -129,7 +129,7 @@ bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filen
           const configSaveToDisk& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
+  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
@@ -138,7 +138,7 @@ template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
   if (data == nullptr || count == 0)
     return false;
-  std::vector<double> dblRow = dvs::makeVecFrom1D(data, count);
+  std::vector<double> dblRow = dvs::makeVecFrom1D<double>(data, count);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART) {
@@ -156,7 +156,7 @@ template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
   if (data == nullptr || count == 0)
     return false;
-  std::vector<T> row = dvs::makeVecFrom1D(data, count);
+  std::vector<T> row = dvs::makeVecFrom1D<T>(data, count);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }

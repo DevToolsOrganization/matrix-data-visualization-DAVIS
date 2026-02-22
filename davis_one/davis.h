@@ -376,35 +376,47 @@ std::vector<G> vecFromTemplate(const C& container) {
   return vec;
 }
 
-template <typename T>
-inline std::vector<std::vector<double>> makeVecVecFromRowPtr(const T* const* data,
-                                                             uint64_t rows,
+template <typename G, typename T>
+inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data,
+                                                        uint64_t rows,
 uint64_t cols) {
-  std::vector<std::vector<double>> res;
+  std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
     const T* rowPtr = data[i];
-    res.emplace_back(rowPtr, rowPtr + cols);
+    std::vector<G> row;
+    row.reserve(cols);
+    for (uint64_t j = 0; j < cols; ++j)
+      row.push_back(static_cast<G>(rowPtr[j]));
+    res.emplace_back(std::move(row));
   }
   return res;
 }
 
-template <typename T>
-inline std::vector<std::vector<T>> makeVecVecFromFlat(const T* data,
+template <typename G, typename T>
+inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data,
                                                       uint64_t rows,
 uint64_t cols) {
-  std::vector<std::vector<T>> res;
+  std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
     const T* rowPtr = data + i * cols;
-    res.emplace_back(rowPtr, rowPtr + cols);
+    std::vector<G> row;
+    row.reserve(cols);
+    for (uint64_t j = 0; j < cols; ++j)
+      row.push_back(static_cast<G>(rowPtr[j]));
+    res.emplace_back(std::move(row));
   }
   return res;
 }
 
-template <typename T>
-inline std::vector<T> makeVecFrom1D(const T* data, uint64_t count) {
-  return std::vector<T>(data, data + count);
+template <typename G, typename T>
+inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
+  std::vector<G> res;
+  res.reserve(static_cast<size_t>(count));
+  for (uint64_t i = 0; i < count; ++i)
+    res.push_back(static_cast<G>(data[i]));
+  return res;
 }
 
 bool is_string_convertable_to_digit(const string& sample);
@@ -604,8 +616,8 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageNa
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
 
-  std::vector<std::vector<T>> vecVecDbl =
-                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
+  std::vector<std::vector<double>> vecVecDbl =
+                                    dvs::makeVecVecFromRowPtr<double>(data, arrRows, arrCols);
 
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
@@ -620,7 +632,7 @@ bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filen
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
   std::vector<std::vector<T>> vecVec =
-                               dvs::makeVecVecFromRowPtr(data, arrRows, arrCols);
+                               dvs::makeVecVecFromRowPtr<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
@@ -629,7 +641,7 @@ template <typename T>
 bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const string& htmlPageName, const Config& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<T>> vecVecDbl = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
+  std::vector<std::vector<double>> vecVecDbl = dvs::makeVecVecFromFlat<double>(data, arrRows, arrCols);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -643,7 +655,7 @@ bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const string& filen
           const configSaveToDisk& configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat(data, arrRows, arrCols);
+  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
@@ -652,7 +664,7 @@ template <typename T>
 bool show(const T* data, uint64_t count, const string& htmlPageName, const Config& configuration) {
   if (data == nullptr || count == 0)
     return false;
-  std::vector<double> dblRow = dvs::makeVecFrom1D(data, count);
+  std::vector<double> dblRow = dvs::makeVecFrom1D<double>(data, count);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART) {
@@ -670,14 +682,14 @@ template <typename T>
 bool save(const T* data, uint64_t count, const string& filename, const configSaveToDisk& configuration) {
   if (data == nullptr || count == 0)
     return false;
-  std::vector<T> row = dvs::makeVecFrom1D(data, count);
+  std::vector<T> row = dvs::makeVecFrom1D<T>(data, count);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
 
 template<typename C, typename T, typename>
 bool show(C const& container, const string& htmlPageName, const Config& configuration) {
-  vector<double> dblRow = dvs::vecFromTemplate<double>(container);
+  std::vector<double> dblRow = dvs::vecFromTemplate<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_CHART) {
@@ -693,7 +705,7 @@ bool show(C const& container, const string& htmlPageName, const Config& configur
 
 template<typename C, typename T, typename>
 bool save(C const& container, const string& filename, const configSaveToDisk& configuration) {
-  vector<T> row = dvs::vecFromTemplate<T>(container);
+  std::vector<T> row = dvs::vecFromTemplate<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
@@ -703,8 +715,8 @@ bool show(C const& containerX, C const& containerY, const string& htmlPageName, 
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
-  vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
+  std::vector<double> dblRowX = dvs::vecFromTemplate<double>(containerX);
+  std::vector<double> dblRowY = dvs::vecFromTemplate<double>(containerY);
 
   bool res = false;
   if (!dvs::isHold) {
@@ -721,9 +733,9 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
   if (containerX.size() != containerY.size()) {
     return false;
   }
-  vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
-  vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
-  vector<vector<T>> vecVec;
+  std::vector<T> rowX = dvs::vecFromTemplate<T>(containerX);
+  std::vector<T> rowY = dvs::vecFromTemplate<T>(containerY);
+  std::vector<std::vector<T>> vecVec;
   vecVec.emplace_back(rowX);
   vecVec.emplace_back(rowY);
   configSaveToDisk newConf = configuration;
@@ -734,10 +746,10 @@ bool save(C const& containerX, C const& containerY,  const string& filename, con
 
 template<typename C, typename E, typename T, typename >
 bool show(C const& container_of_containers, const string& htmlPageName, const Config& configuration) {
-  vector<vector<double>> vecVecDbl;
+  std::vector<std::vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
-    vector<double> dblRow = dvs::vecFromTemplate<double>(row);
+    std::vector<double> dblRow = dvs::vecFromTemplate<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
   bool res = false;
@@ -749,8 +761,8 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
   if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
        configuration.typeVisual == VISUALTYPE_CHART) &&
       (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
-    vector<double> xVals;
-    vector<double> yVals;
+    std::vector<double> xVals;
+    std::vector<double> yVals;
     if (size1 == 2) {
       xVals = vecVecDbl[0];
       yVals = vecVecDbl[1];
@@ -776,10 +788,10 @@ bool show(C const& container_of_containers, const string& htmlPageName, const Co
 
 template<typename C, typename E, typename T, typename Enable>
 bool save(C const& container_of_containers, const string& filename, const configSaveToDisk& configuration) {
-  vector<vector<T>> vecVec;
+  std::vector<std::vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
   for (const auto& row : container_of_containers) {
-    vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
+    std::vector<T> rowTemp = dvs::vecFromTemplate<T>(row);
     vecVec.emplace_back(rowTemp);
   }
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);

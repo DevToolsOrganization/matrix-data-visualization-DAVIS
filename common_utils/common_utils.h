@@ -161,35 +161,47 @@ std::vector<G> vecFromTemplate(const C& container) {
   return vec;
 }
 
-template <typename T>
-inline std::vector<std::vector<T>> makeVecVecFromRowPtr(const T* const* data,
-                                                             uint64_t rows,
+template <typename G, typename T>
+inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data,
+                                                        uint64_t rows,
 uint64_t cols) {
-  std::vector<std::vector<double>> res;
+  std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
     const T* rowPtr = data[i];
-    res.emplace_back(rowPtr, rowPtr + cols);
+    std::vector<G> row;
+    row.reserve(cols);
+    for (uint64_t j = 0; j < cols; ++j)
+      row.push_back(static_cast<G>(rowPtr[j]));
+    res.emplace_back(std::move(row));
   }
   return res;
 }
 
-template <typename T>
-inline std::vector<std::vector<T>> makeVecVecFromFlat(const T* data,
+template <typename G, typename T>
+inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data,
                                                       uint64_t rows,
 uint64_t cols) {
-  std::vector<std::vector<T>> res;
+  std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
     const T* rowPtr = data + i * cols;
-    res.emplace_back(rowPtr, rowPtr + cols);
+    std::vector<G> row;
+    row.reserve(cols);
+    for (uint64_t j = 0; j < cols; ++j)
+      row.push_back(static_cast<G>(rowPtr[j]));
+    res.emplace_back(std::move(row));
   }
   return res;
 }
 
-template <typename T>
-inline std::vector<T> makeVecFrom1D(const T* data, uint64_t count) {
-  return std::vector<T>(data, data + count);
+template <typename G, typename T>
+inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
+  std::vector<G> res;
+  res.reserve(static_cast<size_t>(count));
+  for (uint64_t i = 0; i < count; ++i)
+    res.push_back(static_cast<G>(data[i]));
+  return res;
 }
 
 bool is_string_convertable_to_digit(const string& sample);
