@@ -1,5 +1,6 @@
 #include "multi_plot.h"
 #include "plotly_maker/html_parts.h"
+#include "plotly_maker/plotly_maker.h"
 #include "common_utils/common_utils.h"
 #include "common_utils/common_constants.h"
 
@@ -74,8 +75,13 @@ void holdOff(const Config& configuration) {
   std::string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
   std::string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
+  dvs::mayBeCreateJsWorkingFolder();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
-  dvs::openFileBySystem(htmlFullName);
+  if (dvs::isPlotlyScriptExists()) {
+    dvs::openPlotlyHtml(htmlFullName);
+  } else {
+    dvs::showWarningJsAbsentPage();
+  }
   dvs::allChartBlocks.clear();
 }
 

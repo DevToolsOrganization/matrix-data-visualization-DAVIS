@@ -1845,8 +1845,13 @@ void holdOff(const Config& configuration) {
   std::string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
   std::string htmlFullName = dvs::makeUniqueDavisHtmlRelativePath();
+  dvs::mayBeCreateJsWorkingFolder();
   dvs::saveStringToFile(htmlFullName, filled_multichartPage);
-  dvs::openFileBySystem(htmlFullName);
+  if (dvs::isPlotlyScriptExists()) {
+    dvs::openPlotlyHtml(htmlFullName);
+  } else {
+    dvs::showWarningJsAbsentPage();
+  }
   dvs::allChartBlocks.clear();
 }
 
