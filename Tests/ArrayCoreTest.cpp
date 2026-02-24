@@ -126,6 +126,7 @@ TEST(ArrayCore, configurator) {
   auto config = dv::Config();
   config.heatmap.xLabel = "Столбцы";
   config.heatmap.yLabel = "Строки";
+  config.heatmap.zLabel = "Z";
   config.heatmap.title = "Тестовая матрица";
   config.heatmap.colorSc = dv::COLORSCALE_YlGnBu;
   bool result1 = dv::show(values, "HeatMap", config);

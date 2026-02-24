@@ -67,6 +67,7 @@ struct commonSettings {
   std::string title;
   std::string xLabel;
   std::string yLabel;
+  std::string zLabel;
   double aspectRatioWidth; // use it for user scale if isFitPlotToWindow = false
   double aspectRatioHeight;// use it for user scale if isFitPlotToWindow = false
   bool isFitPlotToWindow; //true - plot fits to  browser window, false - square plot

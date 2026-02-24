@@ -1335,6 +1335,7 @@ bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
   args[ARG_TITLE] = configuration.heatmap.title;
   args[ARG_TITLE_X] = configuration.heatmap.xLabel;
   args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
+  args[ARG_TITLE_Z] = configuration.heatmap.zLabel;
   args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
   args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
   string paramWH;
