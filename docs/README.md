@@ -10,7 +10,7 @@ DAVIS is available like C++ one-header library for quick matrix debugging/visual
 In our work, we often had to visualize data arrays while programming in C++. We tried a huge number of visualization tools, but none of them met
 our following requirements:
 - no need to use heavy libraries, which also require compilation. Preferably a one-header library;
-- only pure C++ 14 functionality, no frameworks and dependencies;
+- only pure C++ 11 functionality, no frameworks and dependencies;
 - intuitively simple use without a long study of the documentation. Data visualization from code should be called with just one line of code - one function;
 - cross-platform;
 - working offline without using online visualization platforms.

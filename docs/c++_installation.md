@@ -7,5 +7,5 @@
 5. Now you can use Davis functionality 
 
 > [!Note]
-> If you are lazy to find folder at **step №3** you can skip this step. While running Davis you will be shown error page where you will see path you need
+> If you are lazy to find folder at **step №3** you can skip this step. While running Davis you will be shown error page where you will see path you need  
 > <img src="_media//error_page.png" width="600">

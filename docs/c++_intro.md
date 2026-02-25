@@ -7,5 +7,5 @@ One of the main tasks we solve is to make it easier to debug your application. W
 
 Davis is easy-to-use tool:
 * one .h file, one .cpp file, one .js file
-* only native c++ 14 functions, zero external dependences
+* only native c++ 11 functions, zero external dependences
 * simple short syntaxis for minimize code you need to write 
