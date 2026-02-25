@@ -21,7 +21,7 @@
   <title>DAVIS - data visualization</title>
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="./plugins/vue.css"> 
+  <link rel="stylesheet" href="https://unpkg.com/docsify/lib/themes/vue.css"> 
 </head>
 <body>
   <div id="app"></div>
@@ -76,17 +76,23 @@
     ga: 'G-0EESVCBZJN',
   }
 </script>
-<script src="./plugins/docsify.min.js"></script>
-<script src="./plugins/search.min.js"></script>
-<script src="./plugins/zoom-image.min.js"></script>
-<script src="./plugins/prism-markdown.min.js"></script>
-<script src="./plugins/docsify-copy-code.min.js"></script>
-<script src="./plugins/prism-cpp.min.js"></script>
-<script src="./plugins/docsify-tabs.min.js"></script>
-<script src="./plugins/docsify-plugin-flexible-alerts.min.js"></script>
-<script src="./plugins/docsify-plugin-ga.js"></script>
+<script src="https://unpkg.com/docsify/lib/docsify.min.js"></script>
+<script src="https://unpkg.com/docsify/lib/plugins/search.min.js"></script>
+<script src="https://unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+<script src="https://unpkg.com/prismjs/components/prism-markdown.min.js"></script>
+<script src="https://unpkg.com/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+<script src="https://unpkg.com/prismjs/components/prism-cpp.min.js"></script>
+<script type="module">
+  import mermaid from "https://unpkg.com/mermaid@10/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true });
+  window.mermaid = mermaid;
+</script>
+<script src="https://unpkg.com/docsify-mermaid@2.0.1/dist/docsify-mermaid.js"></script>
+<script src="https://unpkg.com/docsify-tabs@1"></script>
+<script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script>
+<script src="https://unpkg.com/docsify-plugin-ga"></script>
 <!-- Pagination Plugin -->
-<script src="./plugins/docsify-pagination.min.js"></script>
+<script src="https://unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
 <!-- Font Awesome Plugin -->
-<script src="./plugins/docsify-fontawesome.min.js"></script>
+<script src="https://unpkg.com/docsify-fontawesome/dist/docsify-fontawesome.min.js"></script>
 </html>
