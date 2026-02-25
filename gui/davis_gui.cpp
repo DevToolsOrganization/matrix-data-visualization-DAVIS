@@ -34,7 +34,7 @@ using std::string;
 using std::vector;
 using namespace dvs;
 const int ANIMATION_DURATION = 300;
-const double OPACITY_IF_NOT_ACTIVE = 0.92;
+const double OPACITY_IF_NOT_ACTIVE = 0.94;
 
 DavisGUI::DavisGUI(QWidget* parent)
   : QMainWindow(parent)
