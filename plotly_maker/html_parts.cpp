@@ -358,7 +358,7 @@ var config = {
   plotlyServerURL: "https://chart-studio.plotly.com"
 };
 
-Plotly.newPlot('gd', data, layout, config);
+Plotly.newPlot('gd', data);
 %13
 </script>
 </body>
@@ -547,7 +547,7 @@ function updateBackground(select) {
             default: console.log('uknown option');
             }
            }
-           Plotly.newPlot('gd', data, layout, config);
+           Plotly.newPlot('gd', data);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -715,7 +715,7 @@ const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
             const isActive = toggleButton.classList.contains('active');
             stateText.textContent = `Average: ${isActive ? 'ON' : 'OFF'}`;
             if(isActive){temp = data; data = average;}else{data = temp;};
-            Plotly.newPlot('gd', data, layout, config);
+            Plotly.newPlot('gd', data);
             console.log('Toggle button state:', isActive);
         });
 )davis_delimeter";
