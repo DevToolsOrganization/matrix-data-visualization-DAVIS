@@ -1,4 +1,4 @@
-# GraphCode Parser
+# FileRecognizer rules
 
 ## 📋 Список представлений данных в файле
 
