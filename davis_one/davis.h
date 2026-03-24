@@ -10,6 +10,7 @@
 #ifndef DAVIS_H_
 #define DAVIS_H_
 
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -31,6 +32,7 @@ extern const char kPlotlyJsWorkPath[];
 extern const char kWarningPagePath[];
 extern const char kReportPagePath[];
 extern const char kCloudPagePath[];
+extern const char kJsUrlToDownolad[];
 
 } // namespace dvs end
 
@@ -251,8 +253,9 @@ void openFileBySystem(const string& file_name);
 
 bool isPlotlyScriptExists();
 
-bool saveStringToFile(const string& file_name,
-                      const string& data);
+void tryToDownloadJsByCurl();
+
+bool saveStringToFile(const string& file_name, const string& data);
 
 void mayBeCreateJsWorkingFolder();
 
@@ -260,25 +263,22 @@ void sleepMicroSec(unsigned long microsec);
 
 void openPlotlyHtml(const string& file_name);
 
-bool get_data_from_file(const string& path,
-                        vector<std::string>& result);
+bool get_data_from_file(const string& path, vector<std::string>& result);
 
 vector<string> split(const string& target, char c);
 
-bool readMatrix(vector<vector<double>>& outMatrix, const string& path, char dlmtr);
+bool readMatrix(vector<vector<double>>& outMatrix, const string& path,
+                char dlmtr);
 
-
-bool make_string(const string& src,
-                 const vector<string>& args,
-                 string& out);
+bool make_string(const string& src, const vector<string>& args, string& out);
 
 // Now it doesn't work.
 bool deleteFolder(const char* fname);
 
-int find_separator(const std::string& src,
-                   char& separator);
+int find_separator(const std::string& src, char& separator);
 
-//! remove special characters except letters, numbers and '-', '_'. Spaces -> '_'
+//! remove special characters except letters, numbers and '-', '_'. Spaces ->
+//! '_'
 string removeSpecialCharacters(const string& s);
 
 //! convert this cases to string "null" for Plotly
@@ -303,7 +303,8 @@ string toStringDotSeparator(T data) {
 
 //! save to disk vector<T> data
 template <typename T>
-bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk config) {
+bool saveVec(const vector<T>& vec, const string& filename,
+             dv::configSaveToDisk config) {
   if (vec.size() == 0) {
     return false;
   }
@@ -321,7 +322,8 @@ bool saveVec(const vector<T>& vec, const string& filename, dv::configSaveToDisk 
 
 //! save to disk vector<vector<T>> data
 template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::configSaveToDisk config) {
+bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
+                dv::configSaveToDisk config) {
   if (vecVec.size() == 0) {
     return false;
   } else if (vecVec.at(0).size() == 0) {
@@ -339,7 +341,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
       for (int j = 0; j < cols; ++j) {
         double val = vecVec.at(j).at(i);
         fout << val;
-        if (j < cols - 1) { // we dont need sep at row end
+        if (j < cols - 1) {  // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -352,7 +354,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
       for (size_t j = 0; j < cols; ++j) {
         double val = vecVec.at(i).at(j);
         fout << val;
-        if (j < cols - 1) { // we dont need sep at row end
+        if (j < cols - 1) {  // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -364,13 +366,17 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename, dv::con
 }
 
 //! convert any container to std::vector<G>
-template<typename G,
-         typename C, //https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
-         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, G>::value>::type>
+template <
+    typename G,
+    typename C,  // https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+    typename T =
+    typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename Enable =
+    typename std::enable_if<std::is_convertible<T, G>::value>::type >
 std::vector<G> makeVecFromContainer(const C& container) {
   std::vector<G> vec;
-  vec.reserve(static_cast<size_t>(std::distance(std::begin(container), std::end(container))));
+  vec.reserve(static_cast<size_t>(
+                  std::distance(std::begin(container), std::end(container))));
   for (auto const& v : container) {
     vec.push_back(static_cast<G>(v));
   }
@@ -379,7 +385,9 @@ std::vector<G> makeVecFromContainer(const C& container) {
 
 //! convert T** to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data, uint64_t rows, uint64_t cols) {
+inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data,
+                                                        uint64_t rows,
+uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
@@ -395,7 +403,9 @@ inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data, ui
 
 //! convert pseudo 2D T* to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data, uint64_t rows, uint64_t cols) {
+inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data,
+                                                      uint64_t rows,
+uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
@@ -428,11 +438,10 @@ vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
 vector<double> calculateStandardDeviation(const vector<double>& mean,
                                           const vector<vector<double>>& data);
 
-vector<double> doubleAndReverse(const vector<double>& input, const vector<double>& mean);
-
+vector<double> doubleAndReverse(const vector<double>& input,
+                                const vector<double>& mean);
 
 std::string reverseString(const std::string& input);
-
 
 template <typename T>
 std::vector<std::vector<T>> readBinaryFile(const std::string& filePath,
@@ -445,7 +454,8 @@ size_t rowLength) {
   std::vector<std::vector<T>> data;
   std::vector<T> row(rowLength);
 
-  while (file.read(reinterpret_cast<char*>(row.data()), rowLength * sizeof(T))) {
+  while (
+      file.read(reinterpret_cast<char*>(row.data()), rowLength * sizeof(T))) {
     data.push_back(row);
   }
 
