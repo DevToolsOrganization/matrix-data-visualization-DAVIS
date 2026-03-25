@@ -1,31 +1,33 @@
 #include "common_utils.h"
+
 #include "common_constants.h"
-//#START_GRAB_TO_INCLUDES_LIST
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <sys/stat.h>
+// #START_GRAB_TO_INCLUDES_LIST
 #include <ctype.h>
 #include <limits.h>
-#include <set>
+#include <math.h>
+#include <sys/stat.h>
+
+#include <chrono>
 #include <clocale>
 #include <cmath>
-#include <math.h>
-#include <random>
-#include <chrono>
 #include <ctime>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <random>
+#include <set>
+#include <sstream>
 #include <thread>
-//#STOP_GRAB_TO_INCLUDES_LIST
+// #STOP_GRAB_TO_INCLUDES_LIST
 
 namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
+// #START_GRAB_TO_DVS_NAMESPACE
 using std::string;
 
 #ifdef _WIN32
   #include <direct.h>
   #include <windows.h>
-  #define getcwd _getcwd // stupid MSFT "deprecation" warning
+  #define getcwd _getcwd  // stupid MSFT "deprecation" warning
 #elif __linux__
   #include <unistd.h>
 #endif
@@ -54,7 +56,7 @@ void openFileBySystem(const string& file_name) {
 }
 
 string getCurrentPath() {
-#if defined (_WIN32) || (__linux__)
+#if defined(_WIN32) || (__linux__)
   char buffer[1024];
   char* answer = getcwd(buffer, sizeof(buffer));
   string s_cwd;
@@ -63,17 +65,26 @@ string getCurrentPath() {
   }
   return s_cwd;
 #elif __APPLE__
-  //TODO macos get current path implementation
+  // TODO macos get current path implementation
   return "";
 #endif
 }
 
 bool isPlotlyScriptExists() {
+  bool isJsExists = is_file_exists(kPlotlyJsWorkPath);
+  if (!isJsExists)
+    tryToDownloadJsByCurl();
   return is_file_exists(kPlotlyJsWorkPath);
 }
 
-bool saveStringToFile(const string& file_name,
-                      const string& data) {
+void tryToDownloadJsByCurl() {
+  mayBeCreateJsWorkingFolder();
+  std::string cmd = "curl -o " + std::string(dvs::kPlotlyJsWorkPath) + " " +
+                    std::string(dvs::kJsUrlToDownolad);
+  std::system(cmd.c_str());
+}
+
+bool saveStringToFile(const string& file_name, const string& data) {
   std::ofstream out(file_name);
   if (out.is_open()) {
     out << data.c_str();
@@ -83,10 +94,7 @@ bool saveStringToFile(const string& file_name,
   return false;
 }
 
-
-void openPlotlyHtml(const string& file_name) {
-  openFileBySystem(file_name);
-}
+void openPlotlyHtml(const string& file_name) { openFileBySystem(file_name); }
 
 void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
@@ -111,17 +119,15 @@ void mayBeCreateJsWorkingFolder() {
 bool deleteFolder(const char* fname) {
   struct stat sb;
   if (stat(fname, &sb) == 0) {
-    //rmdir(fname);
+    // rmdir(fname);
     return true;
   } else {
     return false;
   }
 }
 
-bool get_data_from_file(const string& path,
-                        vector<string>& result) {
-
-  //TODO different scenarious and sanitizing
+bool get_data_from_file(const string& path, vector<string>& result) {
+  // TODO different scenarious and sanitizing
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
   if (!is_file_exists(path)) {
     return false;
@@ -142,7 +148,8 @@ bool get_data_from_file(const string& path,
   return true;
 }
 
-bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char dlmtr) {
+bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
+                char dlmtr) {
   outMatrix.clear();
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
   std::ifstream ifs;
@@ -151,7 +158,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char
   if (ifs) {
     while (!ifs.eof()) {
       std::getline(ifs, str);
-      if (str.size() == 0) //if exist empty line
+      if (str.size() == 0)  // if exist empty line
         continue;
       std::vector<std::string> parts = split(str, dlmtr);
       vector<double> doubleLine;
@@ -164,14 +171,14 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path, char
     ifs.close();
     return true;
   } else {
-    std:: cout << "Unable to open file to read: " << path << std::endl;
+    std::cout << "Unable to open file to read: " << path << std::endl;
     return false;
   }
 }
 
 vector<string> split(const string& target, char c) {
   std::string temp;
-  std::stringstream stringstream { target };
+  std::stringstream stringstream{target};
   std::vector<std::string> result;
   while (std::getline(stringstream, temp, c)) {
     result.push_back(temp);
@@ -180,9 +187,7 @@ vector<string> split(const string& target, char c) {
   return result;
 }
 
-bool make_string(const string& src,
-                 const vector<string>& args,
-                 string& out) {
+bool make_string(const string& src, const vector<string>& args, string& out) {
   if (!out.empty()) {
     out.clear();
   }
@@ -195,7 +200,7 @@ bool make_string(const string& src,
   while (pos < src.size()) {
     size_t new_pos = src.find('%', pos);
     if (new_pos == string::npos) {
-      //out.append(src.substr(pos, src.size() - pos));
+      // out.append(src.substr(pos, src.size() - pos));
       reserve_size += (src.size() - pos);
       road_map.push_back({pos, src.size() - pos});
       break;
@@ -206,24 +211,24 @@ bool make_string(const string& src,
     while (temp_pos < src.size() && isdigit(src[++temp_pos])) {
       arg_index += src[temp_pos];
     }
-    //string part = src.substr(pos, new_pos - pos);
+    // string part = src.substr(pos, new_pos - pos);
     road_map.push_back({pos, new_pos - pos});
     reserve_size += (new_pos - pos);
     if (!arg_index.empty()) {
       size_t index = std::stol(arg_index);
       if (index > 0 && index <= args.size()) {
-        //part.append(args[index - 1]);
+        // part.append(args[index - 1]);
         reserve_size += args[index - 1].size();
         road_map.push_back({index - 1});
       } else {
-        //TODO return false or continue
+        // TODO return false or continue
       }
     } else {
-      //part.append("%");
+      // part.append("%");
       road_map.push_back({UINT_MAX});
       ++reserve_size;
     }
-    //out.append(part);
+    // out.append(part);
     pos = temp_pos;
   }
   // create out according on the road map
@@ -240,12 +245,11 @@ bool make_string(const string& src,
       }
     }
   }
-  //std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
+  // std::cout<<"\n\n"<<reserve_size<<"<-->"<<out.size();
   return true;
 }
 
-int find_separator(const std::string& src,
-                   char& separator) {
+int find_separator(const std::string& src, char& separator) {
   std::vector<char> ignored_chars = {'+', '-', 'e', 'E', '.', '\r', ','};
   std::set<char> unique_chars;
   bool is_service_char = false;
@@ -255,7 +259,6 @@ int find_separator(const std::string& src,
   size_t dot_counter = 0;
 
   for (size_t i = 0; i < src.size(); ++i) {
-
     if (isdigit((unsigned char)src[i]))
       continue;
     is_service_char = false;
@@ -301,19 +304,17 @@ string removeSpecialCharacters(const string& s) {
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == ' ') {
       t += '_';
-    } else if ((s[i] >= 'a' && s[i] <= 'z')
-               || (s[i] >= 'A' && s[i] <= 'Z')
-               || (s[i] >= '0' && s[i] <= '9')
-               || (s[i] == '-') || (s[i] == '_')) {
+    } else if ((s[i] >= 'a' && s[i] <= 'z') ||
+               (s[i] >= 'A' && s[i] <= 'Z') ||
+               (s[i] >= '0' && s[i] <= '9') || (s[i] == '-') ||
+               (s[i] == '_')) {
       t += s[i];
     }
   }
   return t;
 }
 
-
 bool is_string_convertable_to_digit(const string& sample) {
-
   try {
     std::ignore = std::stod(sample);
   } catch (const std::invalid_argument& e) {
@@ -350,7 +351,8 @@ std::string makeUniqueDavisHtmlName() {
   sleepMicroSec(1);
   using namespace std::chrono;
   auto now = system_clock::now();
-  auto ms_since_epoch = duration_cast<milliseconds>(now.time_since_epoch()).count();
+  auto ms_since_epoch =
+      duration_cast<milliseconds>(now.time_since_epoch()).count();
   int ms = static_cast<int>(ms_since_epoch % 1000);
   std::time_t in_time_t = system_clock::to_time_t(now);
   std::tm tm{};
@@ -361,19 +363,20 @@ std::string makeUniqueDavisHtmlName() {
     tm = *p;
 #endif
   std::ostringstream ss;
-  ss << std::put_time(&tm, "%Y-%m-%d_%H_%M_%S")
-     << '_' << std::setfill('0') << std::setw(3) << ms;
+  ss << std::put_time(&tm, "%Y-%m-%d_%H_%M_%S") << '_' << std::setfill('0')
+     << std::setw(3) << ms;
   return ss.str();
 }
 
 std::string makeUniqueDavisHtmlRelativePath() {
   string name = makeUniqueDavisHtmlName();
-  return std::string("./").append(kOutFolderName).append(name).append(".html");
+  return std::string("./")
+         .append(kOutFolderName)
+         .append(name)
+         .append(".html");
 }
 
-
-void transponeMatrix(std::vector<std::vector<double> >& matrix) {
-
+void transponeMatrix(std::vector<std::vector<double>>& matrix) {
   if (matrix.empty())
     return;
 
@@ -390,7 +393,6 @@ void transponeMatrix(std::vector<std::vector<double> >& matrix) {
 }
 
 vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
-
   if (vectors.empty()) {
     throw std::invalid_argument("Input vector of vectors is empty.");
   }
@@ -414,13 +416,10 @@ vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
   }
 
   return averageVector;
-
 }
-
 
 vector<double> calculateStandardDeviation(const vector<double>& mean,
                                           const vector<vector<double>>& data) {
-
   std::vector<double> stddev(mean.size(), 0.0);
   int n = data.size();
   for (const auto& vec : data) {
@@ -436,7 +435,6 @@ vector<double> calculateStandardDeviation(const vector<double>& mean,
 }
 
 std::string reverseString(const std::string& input) {
-
   std::stringstream ss(input);
   std::string item;
   std::vector<std::string> elements;
@@ -458,10 +456,8 @@ std::string reverseString(const std::string& input) {
   return result;
 }
 
-
 vector<double> doubleAndReverse(const vector<double>& input,
                                 const vector<double>& mean) {
-
   vector<double> result(input.size(), 0);
   vector<double> minus_result = input;
   for (size_t i = 0; i < result.size(); ++i) {
@@ -473,7 +469,5 @@ vector<double> doubleAndReverse(const vector<double>& input,
   return result;
 }
 
-
-
-//#STOP_GRAB_TO_DVS_NAMESPACE
-}; // namespace dvs
+// #STOP_GRAB_TO_DVS_NAMESPACE
+};  // namespace dvs

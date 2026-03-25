@@ -1,7 +1,7 @@
 #include "common_constants.h"
-#include "string"
+
 namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
+// #START_GRAB_TO_DVS_NAMESPACE
 const char kAppName[] = "davis";
 const char kOutFolderName[] = "davis_htmls/";
 const char kPlotlyJsWorkPath[] = "./davis_htmls/plotly-2.32.0.min.js";
@@ -10,5 +10,7 @@ const char kPlotlyJsResourcePath[] = "plotly_maker/plotly-2.32.0.min.js";
 const char kWarningPagePath[] = "./davis_htmls/warning_js_absent.html";
 const char kReportPagePath[] = "./davis_htmls/report.html";
 const char kCloudPagePath[] = "./davis_htmls/cloud_of_points.html";
-//#STOP_GRAB_TO_DVS_NAMESPACE
-}
+const char kJsUrlToDownolad[] =
+    "https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.32.0/plotly.min.js";
+// #STOP_GRAB_TO_DVS_NAMESPACE
+}  // namespace dvs

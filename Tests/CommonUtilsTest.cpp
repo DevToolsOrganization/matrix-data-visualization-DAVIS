@@ -1,29 +1,30 @@
-#include "gtest/gtest.h"
-#include "common_utils/common_utils.h"
-#include <fstream>
 #include <codecvt>
-#include <locale>
+#include <fstream>
 #include <iostream>
-//#include <windows.h>
+#include <locale>
 
+#include "common_utils/common_utils.h"
+#include "gtest/gtest.h"
+// #include <windows.h>
 
 using std::string;
 using std::vector;
 
 vector<string> args{"Apple", "Orange", "Banan", "Pineapple", "Kiwi"};
 
-vector<string> args_big{"Yes",//1
-  "No", //2
-  "Ok", //3
-  "Good",//4
-  "Bad",//5
-  "Nice",//6
-  "Ugly",//7
-  "Perfect",//8
-  "Strong",//9
-  "Davis",//10
-  "Cat",//11
-  "Plotly"//12
+vector<string> args_big{
+  "Yes",      // 1
+  "No",       // 2
+  "Ok",       // 3
+  "Good",     // 4
+  "Bad",      // 5
+  "Nice",     // 6
+  "Ugly",     // 7
+  "Perfect",  // 8
+  "Strong",   // 9
+  "Davis",    // 10
+  "Cat",      // 11
+  "Plotly"    // 12
 };
 
 constexpr char check_test_string_1[] =
@@ -47,18 +48,17 @@ constexpr char not_filled_test_string_3[] =
 // C++ stream interface
 class TestCout : public std::stringstream {
  public:
-  ~TestCout() {
-    std::cout << str() << std::flush;
-  }
+  ~TestCout() { std::cout << str() << std::flush; }
 };
 
-#define TEST_COUT  TestCout()
+#define TEST_COUT TestCout()
 
 TEST(CommonUtils, CreateStringFromArgs1) {
   string out;
   dvs::make_string(not_filled_test_string_1, args, out);
   EXPECT_EQ(check_test_string_1, out) << out;
-  vector<string> neg_args{"Strawbery", "Orange", "Banan", "Pineapple", "Kiwi"};
+  vector<string> neg_args{"Strawbery", "Orange", "Banan", "Pineapple",
+                          "Kiwi"};
   dvs::make_string(not_filled_test_string_1, neg_args, out);
   EXPECT_FALSE(check_test_string_1 == out);
 }
@@ -77,11 +77,10 @@ TEST(CommonUtils, CreateStringFromBigArgs) {
 
 TEST(CommonUtils, CreateStringFantasyArgs) {
   string out;
-  vector<string>sample = {"Ferrari", "Ford", "BMW", "Tatra"};
+  vector<string> sample = {"Ferrari", "Ford", "BMW", "Tatra"};
   dvs::make_string("I like %1 100%! I don't like %4.", sample, out);
   EXPECT_EQ("I like Ferrari 100%! I don't like Tatra.", out) << out;
 }
-
 
 TEST(CommonUtils, SplitString) {
   auto result = dvs::split(not_filled_test_string_1, '%');
@@ -130,6 +129,8 @@ TEST(CommonUtils, RussianFileC) {
   EXPECT_EQ(bool(file), true);
 
 }*/
+
+TEST(CommonUtils, JsDownloadByCurl) { dvs::tryToDownloadJsByCurl(); }
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
