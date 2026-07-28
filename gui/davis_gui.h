@@ -1,3 +1,4 @@
+// clang-format off
 #ifndef DAVISGUI_H
 #define DAVISGUI_H
 
@@ -83,10 +84,9 @@ class DavisGUI : public QMainWindow {
  private:
   Ui::DavisGUI* ui;
   QPoint m_point;
-  QAction*  action_surface;
-  QAction*  action_heatmap;
   QAction*  action_fitPlotToBrowserWindow;
   QAction*  action_holidaysSkins;
+  QAction* action_autodeleteGeneratedHtmls;
   About_window* aboutWindow;
   bool isAboutWindowShowed;
   QAction* m_copy_paste_action;

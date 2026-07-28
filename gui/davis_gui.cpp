@@ -1,34 +1,33 @@
 #include "davis_gui.h"
-#include "./ui_davis_gui.h"
 #include "../davis_one/davis.h"
+#include "./ui_davis_gui.h"
 
-
+#include "json_utils.h"
 #include <QApplication>
-#include <QDragEnterEvent>
-#include <QMimeData>
-#include <QDebug>
-#include <QFileInfo>
-#include <QPainter>
-#include <QMenuBar>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QPainterPath>
-#include <QFileDialog>
-#include <QTextStream>
 #include <QClipboard>
-#include <QPropertyAnimation>
-#include <QParallelAnimationGroup>
-#include <QStateMachine>
-#include <QSignalTransition>
+#include <QDate>
 #include <QDateTime>
+#include <QDebug>
+#include <QDragEnterEvent>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QHBoxLayout>
+#include <QMenuBar>
+#include <QMimeData>
+#include <QMovie>
+#include <QPainter>
+#include <QPainterPath>
+#include <QParallelAnimationGroup>
 #include <QProcess>
 #include <QProgressBar>
-#include <QTimer>
-#include <QDate>
-#include <QtConcurrent/QtConcurrent>
+#include <QPropertyAnimation>
+#include <QPushButton>
 #include <QScreen>
-#include <QMovie>
-#include "json_utils.h"
+#include <QSignalTransition>
+#include <QStateMachine>
+#include <QTextStream>
+#include <QTimer>
+#include <QtConcurrent/QtConcurrent>
 
 using std::string;
 using std::vector;
@@ -36,9 +35,8 @@ using namespace dvs;
 const int ANIMATION_DURATION = 300;
 const double OPACITY_IF_NOT_ACTIVE = 0.94;
 
-DavisGUI::DavisGUI(QWidget* parent)
-  : QMainWindow(parent)
-  , ui(new Ui::DavisGUI) {
+DavisGUI::DavisGUI(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::DavisGUI) {
   jsn::getJsonArrayFromFile(":/keys.json", service_json_keys);
   ui->setupUi(this);
   isAboutWindowShowed = false;
@@ -46,15 +44,15 @@ DavisGUI::DavisGUI(QWidget* parent)
   m_isUseCustomSkins = false;
   m_skin = checkSkin();
   this->setAcceptDrops(true);
-  QHBoxLayout* hbl = ui->horizontalLayout_menu;
+  QHBoxLayout *hbl = ui->horizontalLayout_menu;
 
-  QLabel* labelIco = new QLabel;
+  QLabel *labelIco = new QLabel;
   QString davisIconPath = ":/res/icon/D-16x16.png";
   labelIco->setPixmap(davisIconPath);
   labelIco->setContentsMargins(10, 0, 0, 0);
   hbl->addWidget(labelIco);
 
-  QMenuBar* mb = new QMenuBar;
+  QMenuBar *mb = new QMenuBar;
   QString menuStyle(
       "QMenuBar {"
       "    background-color: transparent;"
@@ -62,16 +60,15 @@ DavisGUI::DavisGUI(QWidget* parent)
       "}"
       "QMenuBar::item {"
       "    background-color: transparent;"
-      "    height: 20px;"  // Set a fixed height
+      "    height: 20px;" // Set a fixed height
       "}"
       "QMenuBar::item:selected {"
       "    background-color: rgb(42, 130, 218);"
-      "    height: 20px;"  // Ensure the height remains the same on hover
-      "}"
-  );
+      "    height: 20px;" // Ensure the height remains the same on hover
+      "}");
   mb->setStyleSheet(menuStyle);
   mb->setFixedSize(QSize(50, 25));
-  QMenu*  menu_root = new QMenu("Menu");
+  QMenu *menu_root = new QMenu("Menu");
 
   action_fitPlotToBrowserWindow = new QAction("Fit graph to window");
   action_fitPlotToBrowserWindow->setCheckable(true);
@@ -92,24 +89,25 @@ DavisGUI::DavisGUI(QWidget* parent)
       setMaxStyleWindow(0);
     }
   });
-
+  action_autodeleteGeneratedHtmls = new QAction("Auto delete generated htmls");
+  action_autodeleteGeneratedHtmls->setCheckable(true);
+  menu_root->addAction(action_autodeleteGeneratedHtmls);
   mb->addMenu(menu_root);
   hbl->addWidget(mb);
-  hbl->addItem(new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
+  hbl->addItem(
+      new QSpacerItem(2, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
   ui->label_text->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
 
-  QString buttonStyle(
-      "QPushButton {"
-      "    background-color: none;"
-      "    border: none;"
-      "    font-size: 13px;"
-      "}"
-      "QPushButton:hover {"
-      "    background-color: rgb(42, 130, 218);"
-      "}"
-  );
-  QPushButton* qpbAbout = new QPushButton;
+  QString buttonStyle("QPushButton {"
+                      "    background-color: none;"
+                      "    border: none;"
+                      "    font-size: 13px;"
+                      "}"
+                      "QPushButton:hover {"
+                      "    background-color: rgb(42, 130, 218);"
+                      "}");
+  QPushButton *qpbAbout = new QPushButton;
   qpbAbout->setFlat(true);
   qpbAbout->setStyleSheet(buttonStyle);
   qpbAbout->setToolTip("About");
@@ -118,7 +116,7 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbAbout->setText("?");
   hbl->addWidget(qpbAbout);
 
-  QPushButton* qpbMinMaxSize = new QPushButton;
+  QPushButton *qpbMinMaxSize = new QPushButton;
   qpbMinMaxSize->setFlat(true);
   qpbMinMaxSize->setStyleSheet(buttonStyle);
   qpbMinMaxSize->setToolTip("Full/compact size");
@@ -134,53 +132,56 @@ DavisGUI::DavisGUI(QWidget* parent)
   qpbMinMaxSize->setText("◰");
   hbl->addWidget(qpbMinMaxSize);
 
-  QPushButton* qpbMinim = new QPushButton;
+  QPushButton *qpbMinim = new QPushButton;
   qpbMinim->setFlat(true);
   qpbMinim->setStyleSheet(buttonStyle);
   qpbMinim->setToolTip("Minimize");
-  connect(qpbMinim, &QPushButton::clicked, [this]() {this->showMinimized();});
+  connect(qpbMinim, &QPushButton::clicked, [this]() { this->showMinimized(); });
   qpbMinim->setFixedSize(QSize(25, 25));
   qpbMinim->setText("─");
   hbl->addWidget(qpbMinim);
 
-  QString buttonStyleExit(
-      "QPushButton {"
-      "    background-color: none;"
-      "    border: none;"
-      "    font-size: 13px;"
-      "}"
-      "QPushButton:hover {"
-      "    background-color: rgb(218, 42, 42);"
-      "}"
-  );
-  QPushButton* qpbExit = new QPushButton;
+  QString buttonStyleExit("QPushButton {"
+                          "    background-color: none;"
+                          "    border: none;"
+                          "    font-size: 13px;"
+                          "}"
+                          "QPushButton:hover {"
+                          "    background-color: rgb(218, 42, 42);"
+                          "}");
+  QPushButton *qpbExit = new QPushButton;
   qpbExit->setFlat(true);
   qpbExit->setStyleSheet(buttonStyleExit);
   qpbExit->setToolTip("Close");
-  connect(qpbExit, &QPushButton::clicked, [this]() {this->close();});
+  connect(qpbExit, &QPushButton::clicked, [this]() { this->close(); });
   qpbExit->setFixedSize(QSize(25, 25));
   qpbExit->setText("✕");
   hbl->addWidget(qpbExit);
-  this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+  this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint |
+                       Qt::WindowStaysOnTopHint);
 
-  barCool = new coolProgressBar(QColor(52, 52, 52), QColor(42, 130, 218), 2500, this);
+  barCool =
+      new coolProgressBar(QColor(52, 52, 52), QColor(42, 130, 218), 2500, this);
   barCool->setGeometry(70, 220, 270, 2);
   this->layout()->addWidget(barCool);
-  connect(this, &DavisGUI::showProgressBar, barCool, &coolProgressBar::startAnimation);
-  connect(this, &DavisGUI::hideProgressBar, barCool, &coolProgressBar::stopAnimation);
+  connect(this, &DavisGUI::showProgressBar, barCool,
+          &coolProgressBar::startAnimation);
+  connect(this, &DavisGUI::hideProgressBar, barCool,
+          &coolProgressBar::stopAnimation);
 
-  qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120), QColor(42, 130, 218), this);
-  qpbBuffer = new AnimatedButton("Past from clipboard (Ctrl+V)",
-                                 QColor(120, 120, 120),
-                                 QColor(42, 130, 218),
-                                 this);
+  qpbOpen = new AnimatedButton("Open", QColor(120, 120, 120),
+                               QColor(42, 130, 218), this);
+  qpbBuffer =
+      new AnimatedButton("Past from clipboard (Ctrl+V)", QColor(120, 120, 120),
+                         QColor(42, 130, 218), this);
 
   connect(qpbOpen, &QPushButton::released, this, &DavisGUI::selectAndShowFiles);
-  connect(qpbBuffer, &QPushButton::released, this, &DavisGUI::pasteFromClipboard);
+  connect(qpbBuffer, &QPushButton::released, this,
+          &DavisGUI::pasteFromClipboard);
 
   // New Year
   QString fileGifPath = ":/res/newYear.gif";
-  QMovie* movie = new QMovie(fileGifPath);
+  QMovie *movie = new QMovie(fileGifPath);
   label_gif = new QLabel(this);
   label_gif->setMovie(movie);
   label_gif->setScaledContents(true);
@@ -193,18 +194,32 @@ DavisGUI::DavisGUI(QWidget* parent)
   QJsonObject settings = loadSettings(settingsFilePath);
   applySettings(settings);
   animationOpacity = new QPropertyAnimation(this, "windowOpacity");
-  animationOpacity->setDuration(ANIMATION_DURATION); // Длительность анимации в миллисекундах
-  animationOpacity->setEasingCurve(QEasingCurve::InOutQuad); // Задаем плавность кривой
+  animationOpacity->setDuration(
+      ANIMATION_DURATION); // Длительность анимации в миллисекундах
+  animationOpacity->setEasingCurve(
+      QEasingCurve::InOutQuad); // Задаем плавность кривой
 }
 
 DavisGUI::~DavisGUI() {
   saveSettings(settingsFilePath);
+  if (action_autodeleteGeneratedHtmls->isChecked()) {
+    QDir dir(kOutFolderName);
+    // Настраиваем фильтр только на HTML-файлы
+    QStringList filters;
+    filters << "*.html";
+
+    // Получаем список только файлов, исключая папки
+    QStringList htmlFiles = dir.entryList(filters, QDir::Files);
+
+    // Удаляем каждый файл
+    for (const QString &fileName : htmlFiles) {
+      dir.remove(fileName);
+    }
+  }
   delete ui;
 }
 
-void DavisGUI::show() {
-  QMainWindow::show();
-}
+void DavisGUI::show() { QMainWindow::show(); }
 
 void DavisGUI::hideElementsDuringResize() {
   ui->label_doc->setVisible(false);
@@ -217,13 +232,14 @@ void DavisGUI::hideElementsDuringResize() {
   update();
 }
 
-void DavisGUI::saveSettings(const QString& fileName) {
+void DavisGUI::saveSettings(const QString &fileName) {
   QJsonObject settings;
   settings["windowPosX"] = pos().x();
   settings["windowPosY"] = pos().y();
   settings["isMinStyleWindow"] = m_isMinStyleWindow;
   settings["isUseCustomSkins"] = m_isUseCustomSkins;
   settings["isFitGraphToWindow"] = action_fitPlotToBrowserWindow->isChecked();
+  settings["isAutoDelete"] = action_autodeleteGeneratedHtmls->isChecked();
   bool isSaved = jsn::saveJsonObjectToFile(fileName, settings);
   if (!isSaved) {
     qWarning("Couldn't save settings file.");
@@ -231,11 +247,11 @@ void DavisGUI::saveSettings(const QString& fileName) {
   return;
 }
 
-QJsonObject DavisGUI::loadSettings(const QString& fileName) {
+QJsonObject DavisGUI::loadSettings(const QString &fileName) {
   QJsonObject settings;
   bool isOpen = jsn::getJsonObjectFromFile(fileName, settings);
   if (!isOpen) {
-    QScreen* screen = QGuiApplication::primaryScreen();
+    QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     int x = (screenGeometry.width() - width()) / 2;
     int y = (screenGeometry.height() - height()) / 2;
@@ -248,7 +264,7 @@ QJsonObject DavisGUI::loadSettings(const QString& fileName) {
   return settings;
 }
 
-void DavisGUI::applySettings(const QJsonObject& settings) {
+void DavisGUI::applySettings(const QJsonObject &settings) {
   m_isMinStyleWindow = settings["isMinStyleWindow"].toBool();
   if (m_isMinStyleWindow) {
     setMinStyleWindow(0);
@@ -258,26 +274,32 @@ void DavisGUI::applySettings(const QJsonObject& settings) {
   int x = settings["windowPosX"].toInt();
   int y = settings["windowPosY"].toInt();
   move(x, y);
-  action_fitPlotToBrowserWindow->setChecked(settings["isFitGraphToWindow"].toBool());
+  action_fitPlotToBrowserWindow->setChecked(
+      settings["isFitGraphToWindow"].toBool());
   action_holidaysSkins->setChecked(settings["isUseCustomSkins"].toBool());
+  action_autodeleteGeneratedHtmls->setChecked(
+      settings["isAutoDelete"].toBool());
 }
 
-void DavisGUI::readJsonToPlot(const QString& pathToFile) {
+void DavisGUI::readJsonToPlot(const QString &pathToFile) {
   QFileInfo fileInfo(pathToFile);
   QString jsonName = fileInfo.fileName();
   QJsonObject user_stamp_keys;
   QJsonArray matrix_to_matrix_stamps;
 
-  if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) == false) {
+  if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) ==
+      false) {
     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
   }
 
   if (user_stamp_keys.keys().contains("matrix_to_matrix")) {
-    matrix_to_matrix_stamps = user_stamp_keys.value("matrix_to_matrix").toArray();
+    matrix_to_matrix_stamps =
+        user_stamp_keys.value("matrix_to_matrix").toArray();
   } else {
     QJsonObject user_stamp_keys;
     jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
-    matrix_to_matrix_stamps = user_stamp_keys.value("matrix_to_matrix").toArray();
+    matrix_to_matrix_stamps =
+        user_stamp_keys.value("matrix_to_matrix").toArray();
   }
 
   QJsonValue jv;
@@ -287,28 +309,32 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
     return;
   };
   jsn::extractAllObjects(jv, result);
-  //qDebug()<<"result all objects size:"<<result.size();
+  // qDebug()<<"result all objects size:"<<result.size();
 
   for (int i = 0; i < result.size(); ++i) {
 
-    //Проверяем является ли объект MATRIX TO MATRIX типом
-    //qDebug()<<"MATRIX TO MATRIX: "<<matrix_to_matrix_stamps;
+    // Проверяем является ли объект MATRIX TO MATRIX типом
+    // qDebug()<<"MATRIX TO MATRIX: "<<matrix_to_matrix_stamps;
     for (int j = 0; j < matrix_to_matrix_stamps.size(); ++j) {
       auto obj = result[i].toObject();
       QStringList check_keys;
 
-      check_keys << matrix_to_matrix_stamps[j].toObject().value("attribute_key").toString();
-      check_keys << matrix_to_matrix_stamps[j].toObject().value("x_values").toString();
-      check_keys << matrix_to_matrix_stamps[j].toObject().value("y_values").toString();
+      check_keys << matrix_to_matrix_stamps[j]
+                        .toObject()
+                        .value("attribute_key")
+                        .toString();
+      check_keys
+          << matrix_to_matrix_stamps[j].toObject().value("x_values").toString();
+      check_keys
+          << matrix_to_matrix_stamps[j].toObject().value("y_values").toString();
 
-      bool is_matrix_to_matrix_result = jsn::isObjectMatrixToMatrixType(
-                                            check_keys,
-                                            obj
-                                        );
-      //qDebug()<<matrix_to_matrix_stamps[j].toObject().keys();
+      bool is_matrix_to_matrix_result =
+          jsn::isObjectMatrixToMatrixType(check_keys, obj);
+      // qDebug()<<matrix_to_matrix_stamps[j].toObject().keys();
       if (is_matrix_to_matrix_result) {
         if (check_keys.size() != 3) {
-          qDebug() << "********************** MATRIX TO MATRIX KEYS EXCEPTION ***************************";
+          qDebug() << "********************** MATRIX TO MATRIX KEYS EXCEPTION "
+                      "***************************";
           continue;
         };
         qDebug() << "MATRIX_TO_MATRIX_PROCESS.......";
@@ -319,27 +345,29 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
         auto x_arr = obj.value(check_keys[1]).toArray();
         auto y_arr = obj.value(check_keys[2]).toArray();
         if (x_arr.size() != y_arr.size()) {
-          qDebug() << "********************** MATRIX TO MATRIX ARRAY ARRAY SIZES EXCEPTION ***************************";
+          qDebug() << "********************** MATRIX TO MATRIX ARRAY ARRAY "
+                      "SIZES EXCEPTION ***************************";
           continue;
         };
         for (int k = 0; k < x_arr.size(); ++k) {
           auto attr = attr_arr[k].toObject();
-          auto x_vals = jsn::getVectorDoubleFromJsonArray(x_arr[k].toArray()).toStdVector();
-          auto y_vals = jsn::getVectorDoubleFromJsonArray(y_arr[k].toArray()).toStdVector();
+          auto x_vals = jsn::getVectorDoubleFromJsonArray(x_arr[k].toArray())
+                            .toStdVector();
+          auto y_vals = jsn::getVectorDoubleFromJsonArray(y_arr[k].toArray())
+                            .toStdVector();
           dv::Config conf;
           conf.chart.yLabel = attr.value("type").toString().toStdString();
           conf.chart.title = attr.value("instrument").toString().toStdString();
-          conf.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
+          conf.chart.isFitPlotToWindow =
+              action_fitPlotToBrowserWindow->isChecked();
           dv::show(x_vals, y_vals, dvs::makeUniqueDavisHtmlName(), conf);
         }
-        return;// выход если это был MATRIX_TO_MATRIX_TYPE
+        return; // выход если это был MATRIX_TO_MATRIX_TYPE
       }
     }
 
-    auto json_object_result = jsn::isJsonObjectContainsUserKeys(result[i].toObject(),
-                                                                service_json_keys,
-                                                                user_stamp_keys);
-
+    auto json_object_result = jsn::isJsonObjectContainsUserKeys(
+        result[i].toObject(), service_json_keys, user_stamp_keys);
 
     if (json_object_result.first) {
       QJsonObject result_obj = json_object_result.second;
@@ -356,7 +384,8 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
       conf.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
       conf.heatmap.isFitPlotToWindow = conf.chart.isFitPlotToWindow;
       if (x_vector.empty() == false && y_vector.empty() == false) {
-        dv::show(x_vector.toStdVector(), y_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
+        dv::show(x_vector.toStdVector(), y_vector.toStdVector(),
+                 dvs::makeUniqueDavisHtmlName(), conf);
       } else if (x_vector.empty() == true && y_vector.empty() == false) {
         dv::show(y_vector.toStdVector(), dvs::makeUniqueDavisHtmlName(), conf);
       } else if (x_vector.empty() == false && y_vector.empty() == true) {
@@ -368,11 +397,8 @@ void DavisGUI::readJsonToPlot(const QString& pathToFile) {
     } else {
       qDebug() << "Check JSON!";
     }
-
   }
-
 }
-
 
 Skins DavisGUI::checkSkin() {
   if (!m_isUseCustomSkins) {
@@ -380,8 +406,8 @@ Skins DavisGUI::checkSkin() {
   }
   Skins skin;
   QDate currentDate = QDate::currentDate();
-  if ((currentDate.month() == 12 && currentDate.day() >= 15)
-      || (currentDate.month() == 1 && currentDate.day() <= 15)) {
+  if ((currentDate.month() == 12 && currentDate.day() >= 15) ||
+      (currentDate.month() == 1 && currentDate.day() <= 15)) {
     skin = Skins::NEWYEAR;
   } else {
     skin = Skins::DEFAULT;
@@ -389,11 +415,10 @@ Skins DavisGUI::checkSkin() {
   return skin;
 }
 
-bool DavisGUI::getDateTimeData(const QStringList& lines,
-                               QString& dates,
-                               std::vector<double>& values,
-                               std::vector<double>& force,
-                               std::vector<std::vector<double>>& multicharts) {
+bool DavisGUI::getDateTimeData(const QStringList &lines, QString &dates,
+                               std::vector<double> &values,
+                               std::vector<double> &force,
+                               std::vector<std::vector<double>> &multicharts) {
   QJsonArray jarr;
   if (jsn::getJsonArrayFromFile("date_time_formats.json", jarr) == false) {
     jsn::getJsonArrayFromFile(":/date_time_formats.json", jarr);
@@ -419,7 +444,7 @@ bool DavisGUI::getDateTimeData(const QStringList& lines,
           dates.append(",");
         }
         auto values_list = test.split(separator);
-        //Clear empty values
+        // Clear empty values
         for (int ch = 0; ch < values_list.size(); ++ch) {
           if (values_list[ch].isEmpty()) {
             values_list.removeAt(ch);
@@ -447,7 +472,7 @@ bool DavisGUI::getDateTimeData(const QStringList& lines,
   return true;
 }
 
-QStringList DavisGUI::getLinesFromFile(const QString& pathToFile) {
+QStringList DavisGUI::getLinesFromFile(const QString &pathToFile) {
   QFile file(pathToFile);
   QTextStream ts(&file);
   ts.setCodec("UTF-8");
@@ -466,7 +491,7 @@ QStringList DavisGUI::getLinesFromFile(const QString& pathToFile) {
   return str_lines;
 }
 
-bool DavisGUI::mayBeShowBIN(const QString& path) {
+bool DavisGUI::mayBeShowBIN(const QString &path) {
   QFileInfo info(path);
   QJsonArray bins;
   if (jsn::getJsonArrayFromFile("bin.json", bins) == false) {
@@ -478,34 +503,44 @@ bool DavisGUI::mayBeShowBIN(const QString& path) {
     QString data_type = bins[i].toObject().value("data_type").toString();
     if (info.size() == file_size) {
       if (data_type == "uint8") {
-        std::vector<std::vector<uint8_t>> data = dvs::readBinaryFile<uint8_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<uint8_t>> data = dvs::readBinaryFile<uint8_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "uint16") {
-        std::vector<std::vector<uint16_t>> data = dvs::readBinaryFile<uint16_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<uint16_t>> data = dvs::readBinaryFile<uint16_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "uint32") {
-        std::vector<std::vector<uint32_t>> data = dvs::readBinaryFile<uint32_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<uint32_t>> data = dvs::readBinaryFile<uint32_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "uint64") {
-        std::vector<std::vector<uint64_t>> data = dvs::readBinaryFile<uint64_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<uint64_t>> data = dvs::readBinaryFile<uint64_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "int8") {
-        std::vector<std::vector<int8_t>> data = dvs::readBinaryFile<int8_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<int8_t>> data = dvs::readBinaryFile<int8_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "int16") {
-        std::vector<std::vector<int16_t>> data = dvs::readBinaryFile<int16_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<int16_t>> data = dvs::readBinaryFile<int16_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "int32") {
-        std::vector<std::vector<int32_t>> data = dvs::readBinaryFile<int32_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<int32_t>> data = dvs::readBinaryFile<int32_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "int64") {
-        std::vector<std::vector<int64_t>> data = dvs::readBinaryFile<int64_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<int64_t>> data = dvs::readBinaryFile<int64_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "float32") {
-        std::vector<std::vector<float_t>> data = dvs::readBinaryFile<float_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<float_t>> data = dvs::readBinaryFile<float_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       } else if (data_type == "float64") {
-        std::vector<std::vector<double_t>> data = dvs::readBinaryFile<double_t>(path.toLatin1().data(), numbers_in_line);
+        std::vector<std::vector<double_t>> data = dvs::readBinaryFile<double_t>(
+            path.toLatin1().data(), numbers_in_line);
         dv::show(data);
       }
       return true;
@@ -518,13 +553,14 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
   m_isMinStyleWindow = false;
   hideElementsDuringResize();
   setWindowOpacity(1);
-  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+  QPropertyAnimation *animationFrame =
+      new QPropertyAnimation(ui->frame_panel, "geometry");
   animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
   animationFrame->setDuration(animDuration);
   animationFrame->setStartValue(ui->frame_panel->geometry());
   animationFrame->setEndValue(QRect(0, 0, 397, 25));
 
-  QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+  QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
   animation->setDuration(animDuration);
   animation->setEasingCurve(QEasingCurve::InOutQuad);
   animation->setStartValue(this->geometry());
@@ -537,20 +573,20 @@ void DavisGUI::setMaxStyleWindow(int animDuration) {
 
   connect(animation, &QPropertyAnimation::finished, this, [this]() {
     switch (m_skin) {
-      case Skins::DEFAULT:
-        setGeometryForMaxStyle_defaultSkin();
-        break;
-      case Skins::NEWYEAR:
-        setGeometryForMaxStyle_newYearSkin();
-        break;
-      default:
-        setGeometryForMaxStyle_defaultSkin();
-        break;
+    case Skins::DEFAULT:
+      setGeometryForMaxStyle_defaultSkin();
+      break;
+    case Skins::NEWYEAR:
+      setGeometryForMaxStyle_newYearSkin();
+      break;
+    default:
+      setGeometryForMaxStyle_defaultSkin();
+      break;
     }
     update();
   });
 
-  QParallelAnimationGroup* group = new QParallelAnimationGroup;
+  QParallelAnimationGroup *group = new QParallelAnimationGroup;
   group->addAnimation(animation);
   group->addAnimation(animationFrame);
   group->start();
@@ -560,7 +596,7 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   m_isMinStyleWindow = true;
   hideElementsDuringResize();
   setWindowOpacity(OPACITY_IF_NOT_ACTIVE);
-  QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+  QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
   animation->setDuration(animDuration);
   animation->setEasingCurve(QEasingCurve::InOutQuad);
   animation->setStartValue(this->geometry());
@@ -571,7 +607,8 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
   int deltaW = newWidth - this->geometry().width();
   animation->setEndValue(QRect(xOld - deltaW, yOld, newWidth, newHeight));
 
-  QPropertyAnimation* animationFrame = new QPropertyAnimation(ui->frame_panel, "geometry");
+  QPropertyAnimation *animationFrame =
+      new QPropertyAnimation(ui->frame_panel, "geometry");
   animationFrame->setDuration(animDuration);
   animationFrame->setEasingCurve(QEasingCurve::InOutQuad);
   animationFrame->setStartValue(ui->frame_panel->geometry());
@@ -579,20 +616,20 @@ void DavisGUI::setMinStyleWindow(int animDuration) {
 
   connect(animation, &QPropertyAnimation::finished, this, [this]() {
     switch (m_skin) {
-      case Skins::DEFAULT:
-        setGeometryForMinStyle_defaultSkin();
-        break;
-      case Skins::NEWYEAR:
-        setGeometryForMinStyle_newYearSkin();
-        break;
-      default:
-        setGeometryForMinStyle_defaultSkin();
-        break;
+    case Skins::DEFAULT:
+      setGeometryForMinStyle_defaultSkin();
+      break;
+    case Skins::NEWYEAR:
+      setGeometryForMinStyle_newYearSkin();
+      break;
+    default:
+      setGeometryForMinStyle_defaultSkin();
+      break;
     }
     update();
   });
 
-  QParallelAnimationGroup* group = new QParallelAnimationGroup;
+  QParallelAnimationGroup *group = new QParallelAnimationGroup;
   group->addAnimation(animation);
   group->addAnimation(animationFrame);
   group->start();
@@ -664,16 +701,17 @@ void DavisGUI::showAboutWindow() {
   if (isAboutWindowShowed) {
     delete aboutWindow;
   }
-  aboutWindow = new About_window(); //NO LEAK because of Qt::WA_DeleteOnClose
-  connect(aboutWindow, &About_window::about_window_closed, [ = ]() {isAboutWindowShowed = false;});
+  aboutWindow = new About_window(); // NO LEAK because of Qt::WA_DeleteOnClose
+  connect(aboutWindow, &About_window::about_window_closed,
+          [=]() { isAboutWindowShowed = false; });
   aboutWindow->show();
   isAboutWindowShowed = true;
 }
 
 void DavisGUI::pasteFromClipboard() {
-  auto lambdaFunction =  [this]() {
+  auto lambdaFunction = [this]() {
     emit showProgressBar();
-    QClipboard* clipboard = QApplication::clipboard();
+    QClipboard *clipboard = QApplication::clipboard();
     QString clipboardText = clipboard->text();
     QStringList lines = clipboardText.split(QRegExp("[\r\n]+"));
     if (checkDateTimeVariant(lines) == false) {
@@ -681,20 +719,22 @@ void DavisGUI::pasteFromClipboard() {
     };
   };
   QFuture<void> future = QtConcurrent::run(lambdaFunction);
-  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this,
+          &DavisGUI::hideProgressBar);
   watcher->setFuture(future);
 }
 
-void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
-  qDebug() << "dvs::makeUniqueDavisHtmlName() << " << QString::fromStdString(dvs::makeUniqueDavisHtmlName());
-  std::vector<double>lines;
+void DavisGUI::readPlotText(QStringList &str_lines, QString titleTopOfPlotly) {
+  qDebug() << "dvs::makeUniqueDavisHtmlName() << "
+           << QString::fromStdString(dvs::makeUniqueDavisHtmlName());
+  std::vector<double> lines;
   std::vector<std::vector<double>> data;
   char separator;
   for (int i = 0; i < str_lines.size(); ++i) {
-    std::vector<double>values;
+    std::vector<double> values;
     auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
-    //qDebug() << "sep result: " << separator << "--->" << res;
+    // qDebug() << "sep result: " << separator << "--->" << res;
 
     if (dvs::MORE_THAN_ONE_SEPARATOR == res)
       continue;
@@ -706,7 +746,8 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
     bool is_one_value = false;
     std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
     if (res != dvs::GOOD_SEPARATOR) {
-      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) ==
+          false) {
         continue;
       } else {
         is_one_value = true;
@@ -715,7 +756,8 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
     if (is_one_value == false) {
       QStringList str_values = str_lines[i].split(separator);
       for (int j = 0; j < str_values.size(); ++j) {
-        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) ==
+            false) {
           continue;
         }
         values.emplace_back(std::stod(str_values[j].toStdString()));
@@ -735,20 +777,20 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
 
   if (data[0].size() == 3) {
     qDebug() << "CLOUD_OF_POINTS........";
-    std::vector<double>x(data.size(), 0);
-    std::vector<double>y(data.size(), 0);
-    std::vector<double>color(data.size(), 0);
+    std::vector<double> x(data.size(), 0);
+    std::vector<double> y(data.size(), 0);
+    std::vector<double> color(data.size(), 0);
     for (size_t i = 0; i < data.size(); ++i) {
       x[i] = data[i][0];
       y[i] = data[i][1];
       color[i] = data[i][2];
     }
-    dvs::showCloudOfPointsChart(x, y, color, action_fitPlotToBrowserWindow->isChecked());
+    dvs::showCloudOfPointsChart(x, y, color,
+                                action_fitPlotToBrowserWindow->isChecked());
     return;
   }
 
-
-  if (data.size() == 2 || data[0].size() == 2) { //chartXY
+  if (data.size() == 2 || data[0].size() == 2) { // chartXY
     dv::Config config;
     config.chart.title = titleTopOfPlotly.toStdString();
     config.chart.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
@@ -756,7 +798,8 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
   } else if (data.size() > 1 && data[0].size() > 1) {
     dv::Config config;
     config.heatmap.title = titleTopOfPlotly.toStdString();
-    config.heatmap.isFitPlotToWindow = action_fitPlotToBrowserWindow->isChecked();
+    config.heatmap.isFitPlotToWindow =
+        action_fitPlotToBrowserWindow->isChecked();
     dv::show(data, dvs::makeUniqueDavisHtmlName(), config);
   } else {
     std::vector<double> showVector;
@@ -777,8 +820,7 @@ void DavisGUI::readPlotText(QStringList& str_lines, QString titleTopOfPlotly) {
   }
 }
 
-bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
-
+bool DavisGUI::checkDateTimeVariant(const QStringList &lines) {
 
   QString dates;
   std::vector<double> values;
@@ -788,7 +830,8 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
 
   if (multicharts.empty() == false) {
     dvs::transponeMatrix(multicharts);
-    dvs::showMultiChart(dates.toStdString(), multicharts, action_fitPlotToBrowserWindow->isChecked());
+    dvs::showMultiChart(dates.toStdString(), multicharts,
+                        action_fitPlotToBrowserWindow->isChecked());
     return true;
   }
 
@@ -796,43 +839,44 @@ bool DavisGUI::checkDateTimeVariant(const QStringList& lines) {
     return false;
 
   if (force.empty() == false) {
-    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force, action_fitPlotToBrowserWindow->isChecked());
+    dvs::showCloudOfPointsChartStr(dates.toStdString(), values, force,
+                                   action_fitPlotToBrowserWindow->isChecked());
     return true;
   }
-  dvs::showDateTimeChart(dates.toStdString(), values, action_fitPlotToBrowserWindow->isChecked());
+  dvs::showDateTimeChart(dates.toStdString(), values,
+                         action_fitPlotToBrowserWindow->isChecked());
   return true;
-
 }
 
 void DavisGUI::selectAndShowFiles() {
 
-  QStringList fileNames = QFileDialog::getOpenFileNames(this,
-                                                        QObject::tr("Open Files"),
-                                                        "",
-                                                        QObject::tr("All Files (*)"));
+  QStringList fileNames = QFileDialog::getOpenFileNames(
+      this, QObject::tr("Open Files"), "", QObject::tr("All Files (*)"));
   emit showProgressBar();
-  QFuture<void> future = QtConcurrent::run(this, &DavisGUI::visualizeFiles, fileNames);
-  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  QFuture<void> future =
+      QtConcurrent::run(this, &DavisGUI::visualizeFiles, fileNames);
+  QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this,
+          &DavisGUI::hideProgressBar);
   watcher->setFuture(future);
 }
 
-bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
-                                         std::vector<double>& outX,
-                                         std::vector<double>& outY) {
+bool DavisGUI::isFileContainsSingleChart(const QString &pathToFile,
+                                         std::vector<double> &outX,
+                                         std::vector<double> &outY) {
 
   QStringList str_lines = getLinesFromFile(pathToFile);
-
 
   std::vector<std::vector<double>> data;
   char separator;
   for (int i = 0; i < str_lines.size(); ++i) {
-    std::vector<double>values;
+    std::vector<double> values;
     auto res = dvs::find_separator(str_lines[i].toStdString(), separator);
     bool is_one_value = false;
     std::replace(str_lines[i].begin(), str_lines[i].end(), ',', '.');
     if (res != dvs::GOOD_SEPARATOR) {
-      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) == false) {
+      if (dvs::is_string_convertable_to_digit(str_lines[i].toStdString()) ==
+          false) {
         continue;
       } else {
         is_one_value = true;
@@ -841,7 +885,8 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
     if (is_one_value == false) {
       QStringList str_values = str_lines[i].split(separator);
       for (int j = 0; j < str_values.size(); ++j) {
-        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) == false) {
+        if (dvs::is_string_convertable_to_digit(str_values[j].toStdString()) ==
+            false) {
           continue;
         }
         values.emplace_back(std::stod(str_values[j].toStdString()));
@@ -872,24 +917,21 @@ bool DavisGUI::isFileContainsSingleChart(const QString& pathToFile,
         outX.push_back(j + 1);
         outY.push_back(data[i][j]);
       }
-
     }
   }
   return true;
 }
 
+void DavisGUI::dragEnterEvent(QDragEnterEvent *event) {
 
-
-void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
-
-  QSequentialAnimationGroup* group = new QSequentialAnimationGroup(this);
+  QSequentialAnimationGroup *group = new QSequentialAnimationGroup(this);
 
   QRect originalGeometry = geometry();
   int shakeDistance = 6; // Distance to shake
-  int duration = 70; // Duration of each shake step
+  int duration = 70;     // Duration of each shake step
 
   for (int i = 0; i < 6; ++i) {
-    QPropertyAnimation* animation = new QPropertyAnimation(this, "geometry");
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(duration);
     if (i % 4 == 0) {
       animation->setStartValue(originalGeometry.translated(-shakeDistance, 0));
@@ -915,17 +957,15 @@ void DavisGUI::dragEnterEvent(QDragEnterEvent* event) {
   } else {
     qDebug() << "not drop";
   }
-
 }
 
-void DavisGUI::dragLeaveEvent(QDragLeaveEvent* event) {
+void DavisGUI::dragLeaveEvent(QDragLeaveEvent *event) {
   if (m_isMinStyleWindow) {
     setSemiOpacity();
   }
 }
 
-
-void DavisGUI::dropEvent(QDropEvent* event) {
+void DavisGUI::dropEvent(QDropEvent *event) {
   emit showProgressBar();
   QList<QUrl> file_list_urls = event->mimeData()->urls();
   QStringList file_list;
@@ -933,13 +973,15 @@ void DavisGUI::dropEvent(QDropEvent* event) {
     file_list.append(file_list_urls[i].toLocalFile());
   }
 
-  QFuture<void> future = QtConcurrent::run(this, &DavisGUI::visualizeFiles, file_list);
-  QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-  connect(watcher, &QFutureWatcher<void>::finished, this, &DavisGUI::hideProgressBar);
+  QFuture<void> future =
+      QtConcurrent::run(this, &DavisGUI::visualizeFiles, file_list);
+  QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, this,
+          &DavisGUI::hideProgressBar);
   watcher->setFuture(future);
 }
 
-void DavisGUI::visualizeFiles(const QStringList& file_list) {
+void DavisGUI::visualizeFiles(const QStringList &file_list) {
   if (file_list.isEmpty()) {
     return;
   }
@@ -963,25 +1005,23 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       }
     }
     if (dates_list.isEmpty() == false) {
-      dvs::showMultiChart(dates_list[0].toStdString(), all_values, action_fitPlotToBrowserWindow->isChecked());
+      dvs::showMultiChart(dates_list[0].toStdString(), all_values,
+                          action_fitPlotToBrowserWindow->isChecked());
       return;
     }
-
-
-    std::vector<std::vector<double>> data;
-    std::vector<double> x_values;
+    dv::holdOn();
     for (int i = 0; i < file_list.size(); ++i) {
       std::vector<double> outX, outY;
+
       if (isFileContainsSingleChart(file_list[i], outX, outY)) {
-        if (i == 0)
-          x_values = outX;
-        data.push_back(outY);
-      };
+
+        dv::show(outX, outY, file_list[i].split("/").last().toStdString());
+      }
     }
-    dvs::showMultiChart(dvs::vectorToString(x_values), data, action_fitPlotToBrowserWindow->isChecked());
+    dv::holdOff();
     return;
   }
-  QString filePath =  file_list.first();
+  QString filePath = file_list.first();
   QFileInfo info(filePath);
 
   QString suffix = info.suffix();
@@ -1014,8 +1054,6 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
       return;
     };
 
-
-
     QString line;
     QStringList str_lines;
     while (ts.readLineInto(&line)) {
@@ -1038,9 +1076,10 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
   }
 }
 
-void DavisGUI::paintEvent(QPaintEvent* event) {
+void DavisGUI::paintEvent(QPaintEvent *event) {
   const int PADDING = 10;
-  QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING, this->height() - 2 * PADDING - 20);
+  QRectF rectangle(PADDING, PADDING + 20, this->width() - 2 * PADDING,
+                   this->height() - 2 * PADDING - 20);
   QPainter painter(this);
 
   painter.setRenderHint(QPainter::Antialiasing);
@@ -1060,15 +1099,13 @@ void DavisGUI::paintEvent(QPaintEvent* event) {
   event->accept();
 }
 
-void DavisGUI::mousePressEvent(QMouseEvent* event) {
-  m_point = event->pos();
-}
+void DavisGUI::mousePressEvent(QMouseEvent *event) { m_point = event->pos(); }
 
-void DavisGUI::mouseMoveEvent(QMouseEvent* event) {
+void DavisGUI::mouseMoveEvent(QMouseEvent *event) {
   move(event->globalPos() - m_point);
 }
 
-void DavisGUI::keyPressEvent(QKeyEvent* event) {
+void DavisGUI::keyPressEvent(QKeyEvent *event) {
   if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V) {
     pasteFromClipboard();
   } else {
@@ -1085,7 +1122,7 @@ void DavisGUI::setFullOpacity() {
   }
 }
 
-void DavisGUI::enterEvent(QEvent* event) {
+void DavisGUI::enterEvent(QEvent *event) {
   setFullOpacity();
   QMainWindow::enterEvent(event);
 }
@@ -1099,8 +1136,7 @@ void DavisGUI::setSemiOpacity() {
   }
 }
 
-void DavisGUI::leaveEvent(QEvent* event) {
+void DavisGUI::leaveEvent(QEvent *event) {
   setSemiOpacity();
   QMainWindow::leaveEvent(event);
 }
-
