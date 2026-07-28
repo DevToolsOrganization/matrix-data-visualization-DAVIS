@@ -996,7 +996,7 @@ void DavisGUI::visualizeFiles(const QStringList& file_list) {
 
       if (isFileContainsSingleChart(file_list[i], outX, outY)) {
 
-        dv::show(outX, outY);
+        dv::show(outX, outY, file_list[i].split("/").last().toStdString());
       }
     }
     dv::holdOff();
