@@ -13,18 +13,18 @@ using std::vector;
 vector<string> args{"Apple", "Orange", "Banan", "Pineapple", "Kiwi"};
 
 vector<string> args_big{
-  "Yes",      // 1
-  "No",       // 2
-  "Ok",       // 3
-  "Good",     // 4
-  "Bad",      // 5
-  "Nice",     // 6
-  "Ugly",     // 7
-  "Perfect",  // 8
-  "Strong",   // 9
-  "Davis",    // 10
-  "Cat",      // 11
-  "Plotly"    // 12
+    "Yes",     // 1
+    "No",      // 2
+    "Ok",      // 3
+    "Good",    // 4
+    "Bad",     // 5
+    "Nice",    // 6
+    "Ugly",    // 7
+    "Perfect", // 8
+    "Strong",  // 9
+    "Davis",   // 10
+    "Cat",     // 11
+    "Plotly"   // 12
 };
 
 constexpr char check_test_string_1[] =
@@ -47,7 +47,7 @@ constexpr char not_filled_test_string_3[] =
 
 // C++ stream interface
 class TestCout : public std::stringstream {
- public:
+public:
   ~TestCout() { std::cout << str() << std::flush; }
 };
 
@@ -57,8 +57,7 @@ TEST(CommonUtils, CreateStringFromArgs1) {
   string out;
   dvs::make_string(not_filled_test_string_1, args, out);
   EXPECT_EQ(check_test_string_1, out) << out;
-  vector<string> neg_args{"Strawbery", "Orange", "Banan", "Pineapple",
-                          "Kiwi"};
+  vector<string> neg_args{"Strawbery", "Orange", "Banan", "Pineapple", "Kiwi"};
   dvs::make_string(not_filled_test_string_1, neg_args, out);
   EXPECT_FALSE(check_test_string_1 == out);
 }
@@ -132,7 +131,7 @@ TEST(CommonUtils, RussianFileC) {
 
 TEST(CommonUtils, JsDownloadByCurl) { dvs::tryToDownloadJsByCurl(); }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();
   return 0;

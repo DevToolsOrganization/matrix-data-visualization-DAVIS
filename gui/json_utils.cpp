@@ -1,19 +1,17 @@
 #include "json_utils.h"
 
-#include <QJsonObject>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QJsonValue>
-#include <QFile>
-#include <QDebug>
-#include <QGuiApplication>
-#include <QDir>
-
 
 namespace jsn {
 
-bool getJsonObjectFromFile(const QString& path,
-                           QJsonObject& object) {
+bool getJsonObjectFromFile(const QString &path, QJsonObject &object) {
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     qDebug() << "File can't be opened!" << path;
@@ -31,8 +29,7 @@ bool getJsonObjectFromFile(const QString& path,
   return true;
 }
 
-bool getJsonArrayFromFile(const QString& path,
-                          QJsonArray& object) {
+bool getJsonArrayFromFile(const QString &path, QJsonArray &object) {
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     qDebug() << "File can't be opened!" << path;
@@ -49,8 +46,7 @@ bool getJsonArrayFromFile(const QString& path,
   return true;
 }
 
-bool saveJsonObjectToFile(const QString& path,
-                          const QJsonObject& json_object,
+bool saveJsonObjectToFile(const QString &path, const QJsonObject &json_object,
                           QJsonDocument::JsonFormat format) {
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly))
@@ -64,8 +60,7 @@ bool saveJsonObjectToFile(const QString& path,
     return true;
 }
 
-bool saveJsonArrayToFile(const QString& path,
-                         const QJsonArray& json_object,
+bool saveJsonArrayToFile(const QString &path, const QJsonArray &json_object,
                          QJsonDocument::JsonFormat format) {
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly))
@@ -79,9 +74,10 @@ bool saveJsonArrayToFile(const QString& path,
     return true;
 }
 
-QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& user_json_from_file,
-                                                      const QJsonArray& service_keys,
-                                                      const QJsonObject& user_stamp_keys) {
+QPair<bool, QJsonObject>
+isJsonObjectContainsUserKeys(const QJsonObject &user_json_from_file,
+                             const QJsonArray &service_keys,
+                             const QJsonObject &user_stamp_keys) {
 
   if (user_json_from_file.isEmpty())
     return {false, QJsonObject()};
@@ -100,7 +96,8 @@ QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& user_js
 
   // Check that we have keys for user json
   for (int i = 0; i < service_keys.size(); ++i) {
-    auto jarr_custom_keys = user_stamp_keys[service_keys[i].toString()].toArray();
+    auto jarr_custom_keys =
+        user_stamp_keys[service_keys[i].toString()].toArray();
     for (int j = 0; j < jarr_custom_keys.size(); ++j) {
       auto custom_key = jarr_custom_keys[j].toString();
       if (user_json_from_file.contains(custom_key)) {
@@ -118,9 +115,9 @@ QPair<bool, QJsonObject> isJsonObjectContainsUserKeys(const QJsonObject& user_js
     return {true, result_object_with_data};
 }
 
-QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array) {
+QVector<double> getVectorDoubleFromJsonArray(const QJsonArray &json_array) {
   QVector<double> vector;
-  for (const QJsonValue& value : json_array) {
+  for (const QJsonValue &value : json_array) {
     if (value.isDouble()) {
       vector.append(value.toDouble());
     }
@@ -128,15 +125,16 @@ QVector<double> getVectorDoubleFromJsonArray(const QJsonArray& json_array) {
   return vector;
 }
 
-std::vector<std::vector<double> > getMatrixFromJsonArray(const QJsonArray& json_array) {
+std::vector<std::vector<double>>
+getMatrixFromJsonArray(const QJsonArray &json_array) {
   std::vector<std::vector<double>> matrix;
 
-  for (const QJsonValue& rowValue : json_array) {
+  for (const QJsonValue &rowValue : json_array) {
     if (rowValue.isArray()) {
       QJsonArray rowArray = rowValue.toArray();
       std::vector<double> row;
 
-      for (const QJsonValue& value : qAsConst(rowArray)) {
+      for (const QJsonValue &value : qAsConst(rowArray)) {
         if (value.isDouble()) {
           row.emplace_back(value.toDouble());
         }
@@ -149,9 +147,7 @@ std::vector<std::vector<double> > getMatrixFromJsonArray(const QJsonArray& json_
   return matrix;
 }
 
-
-bool getJsonValueFromFile(const QString& path,
-                          QJsonValue& jsonValue) {
+bool getJsonValueFromFile(const QString &path, QJsonValue &jsonValue) {
   QFile file(path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     qDebug() << "File can't be opened!" << path;
@@ -175,10 +171,9 @@ bool getJsonValueFromFile(const QString& path,
   return true;
 }
 
-QJsonValue getValueByPath(const QJsonValue& obj,
-                          const QStringList& path) {
+QJsonValue getValueByPath(const QJsonValue &obj, const QStringList &path) {
   QJsonValue value = obj;
-  for (const QString& key : path) {
+  for (const QString &key : path) {
     if (value.isObject()) {
       value = value.toObject().value(key);
     } else if (value.isArray()) {
@@ -196,7 +191,7 @@ QJsonValue getValueByPath(const QJsonValue& obj,
   return value;
 }
 
-QVector<QStringList> getStringListFromJsonArray(const QJsonArray& array) {
+QVector<QStringList> getStringListFromJsonArray(const QJsonArray &array) {
   QVector<QStringList> pathes;
   for (int i = 0; i < array.size(); ++i) {
     if (array[i].isArray() == false)
@@ -210,24 +205,22 @@ QVector<QStringList> getStringListFromJsonArray(const QJsonArray& array) {
   return pathes;
 }
 
-void extractAllObjects(const QJsonValue& value,
-                       QJsonArray& result) {
+void extractAllObjects(const QJsonValue &value, QJsonArray &result) {
   if (value.isObject()) {
     QJsonObject obj = value.toObject();
     result.append(obj);
-    for (const QString& key : obj.keys()) {
+    for (const QString &key : obj.keys()) {
       extractAllObjects(obj[key], result);
     }
   } else if (value.isArray()) {
     QJsonArray array = value.toArray();
-    for (const QJsonValue& item : array) {
+    for (const QJsonValue &item : array) {
       extractAllObjects(item, result);
     }
   }
 }
 
-bool isObjectMatrixToMatrixType(const QStringList& keys,
-                                QJsonObject& object) {
+bool isObjectMatrixToMatrixType(const QStringList &keys, QJsonObject &object) {
   QStringList object_keys = object.keys();
   qDebug() << "Проверочные Ключи: " << keys;
   qDebug() << "Ключи объекта" << object_keys;
@@ -239,6 +232,4 @@ bool isObjectMatrixToMatrixType(const QStringList& keys,
   return true;
 }
 
-
-
-} // end jsn namespace
+} // namespace jsn

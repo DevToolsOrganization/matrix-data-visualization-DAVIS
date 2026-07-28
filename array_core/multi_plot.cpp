@@ -1,29 +1,27 @@
 #include "multi_plot.h"
+#include "common_utils/common_constants.h"
+#include "common_utils/common_utils.h"
 #include "plotly_maker/html_parts.h"
 #include "plotly_maker/plotly_maker.h"
-#include "common_utils/common_utils.h"
-#include "common_utils/common_constants.h"
 
 namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
+// #START_GRAB_TO_DVS_NAMESPACE
 
 bool isHold = false;
 std::vector<std::string> allChartBlocks = {};
 
-//#STOP_GRAB_TO_DVS_NAMESPACE
+// #STOP_GRAB_TO_DVS_NAMESPACE
 } // end namespace dvs
 
-
 namespace dv {
-//#START_GRAB_TO_DV_NAMESPACE
+// #START_GRAB_TO_DV_NAMESPACE
 
 void holdOn() {
   dvs::isHold = true;
   dvs::allChartBlocks.clear();
-
 }
 
-void holdOff(const Config& configuration) {
+void holdOff(const Config &configuration) {
   dvs::isHold = false;
   if (dvs::allChartBlocks.empty()) {
     return;
@@ -41,7 +39,8 @@ void holdOff(const Config& configuration) {
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
   std::string paramWH;
-  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+  if (configuration.chart.aspectRatioWidth >
+      configuration.chart.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -56,21 +55,21 @@ void holdOff(const Config& configuration) {
   } else {
     paramWHsecond = paramWH;
   }
-  std::vector<std::string> args = {dvs::kPlotlyJsName,
-                                   allChartBlocks_str,
-                                   allTracesNames_str,
-                                   configuration.chart.title,
-                                   configuration.chart.xLabel,
-                                   configuration.chart.yLabel,
-                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
-                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                                   paramWH,
-                                   paramWHsecond,
-                                   dvs::kHtmlComboboxStyleBlock,
-                                   dvs::kHtmlComboboxSelectBlock,
-                                   dvs::kHtmlComboboxUpdateFooBlock,
-                                   dvs::kHtmlDavisLogoHyperlinkBlock
-                                  };
+  std::vector<std::string> args = {
+      dvs::kPlotlyJsName,
+      allChartBlocks_str,
+      allTracesNames_str,
+      configuration.chart.title,
+      configuration.chart.xLabel,
+      configuration.chart.yLabel,
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
+      paramWH,
+      paramWHsecond,
+      dvs::kHtmlComboboxStyleBlock,
+      dvs::kHtmlComboboxSelectBlock,
+      dvs::kHtmlComboboxUpdateFooBlock,
+      dvs::kHtmlDavisLogoHyperlinkBlock};
   std::string multichartPage = dvs::kHtmlMultiChartModel;
   std::string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
@@ -85,7 +84,5 @@ void holdOff(const Config& configuration) {
   dvs::allChartBlocks.clear();
 }
 
-
-
-//#STOP_GRAB_TO_DV_NAMESPACE
+// #STOP_GRAB_TO_DV_NAMESPACE
 } // end namespace dv

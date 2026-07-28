@@ -1,11 +1,11 @@
-#include "gtest/gtest.h"
-#include "plotly_maker/plotly_maker.h"
 #include "array_core/array_core.h"
-#include "common_utils/common_utils.h"
 #include "array_core/multi_plot.h"
+#include "common_utils/common_utils.h"
+#include "plotly_maker/plotly_maker.h"
+#include "gtest/gtest.h"
+#include <array>
 #include <fstream>
 #include <list>
-#include <array>
 #include <math.h>
 
 using std::string;
@@ -15,14 +15,15 @@ TEST(ArrayCore, save_to_disk_2d) {
   //! 2-dimensional array
   int rows = 10;
   int cols = 5;
-  int** vals2d = new int* [rows];
+  int **vals2d = new int *[rows];
   for (int i = 0; i < rows; ++i) {
     vals2d[i] = new int[cols];
     for (int j = 0; j < cols; ++j) {
       vals2d[i][j] = i * cols + j;
     }
   }
-  bool result = dv::save(vals2d, rows, cols, "./data/test_saving_save_to_disk_2d.csv");
+  bool result =
+      dv::save(vals2d, rows, cols, "./data/test_saving_save_to_disk_2d.csv");
   EXPECT_EQ(result, true);
 }
 
@@ -30,7 +31,7 @@ TEST(ArrayCore, save_to_disk_pseudo_2d) {
   //! 1-dimensional array that simulates a 2-dimensional
   int rows = 10;
   int cols = 5;
-  int* vals = new int[rows * cols];
+  int *vals = new int[rows * cols];
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       vals[i * cols + j] = i * cols + j;
@@ -39,14 +40,15 @@ TEST(ArrayCore, save_to_disk_pseudo_2d) {
   dv::configSaveToDisk conf;
   conf.separatorOfCols = ";";
   conf.separatorOfRows = "\n";
-  bool result = dv::save(vals, rows, cols, "./data/test_saving_save_to_disk_pseudo_2d.csv", conf);
+  bool result = dv::save(vals, rows, cols,
+                         "./data/test_saving_save_to_disk_pseudo_2d.csv", conf);
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, save_to_disk_1d) {
   //! 1-dimensional array
   int size = 10;
-  int* vals = new int[size];
+  int *vals = new int[size];
   for (int i = 0; i < size; ++i) {
     vals[i] = i;
   }
@@ -60,7 +62,8 @@ TEST(ArrayCore, save_to_disk_container1D) {
   for (size_t i = 0; i < 10; ++i) {
     vec.emplace_back(i * 1e-10);
   }
-  bool result = dv::save(vec, "./data/test_saving_save_to_disk_container1D.csv");
+  bool result =
+      dv::save(vec, "./data/test_saving_save_to_disk_container1D.csv");
   EXPECT_EQ(result, true);
 }
 
@@ -76,7 +79,8 @@ TEST(ArrayCore, save_to_disk_container2D) {
     }
     arr2.emplace_back(vec);
   }
-  bool result = dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
+  bool result =
+      dv::save(arr2, "./data/test_saving_save_to_disk_container2D.csv");
   EXPECT_EQ(result, true);
 }
 
@@ -90,7 +94,8 @@ TEST(ArrayCore, save_to_disk_XYdata) {
   for (size_t i = 0; i < 10; ++i) {
     vecY.emplace_back(i * 3);
   }
-  bool result = dv::save(vecX, vecY, "./data/test_saving_save_to_disk_XYdata.csv");
+  bool result =
+      dv::save(vecX, vecY, "./data/test_saving_save_to_disk_XYdata.csv");
   EXPECT_EQ(result, true);
 }
 
@@ -103,7 +108,10 @@ TEST(ArrayCore, universal_1d_conteiner) {
 
 TEST(ArrayCore, universal_2d_conteiner) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  std::list<std::list<double>> template2d = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 10, 10, 25}, {45, 23, 90, 2}};
+  std::list<std::list<double>> template2d = {{30.312345, 40, 98, 76},
+                                             {-20.12, 45, 20, 1},
+                                             {5, 10, 10, 25},
+                                             {45, 23, 90, 2}};
   bool result = dv::show(template2d, "testTemplate2d");
   EXPECT_EQ(result, true);
 }
@@ -122,7 +130,10 @@ TEST(ArrayCore, stdArray_of_stdArrays) {
 
 TEST(ArrayCore, configurator) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  vector<vector<double>> values = {{30.312345, 40, 98, 76}, {-20.12, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  vector<vector<double>> values = {{30.312345, 40, 98, 76},
+                                   {-20.12, 45, 20, 1},
+                                   {5, 56, 93, 25},
+                                   {45, 23, 90, 2}};
   auto config = dv::Config();
   config.heatmap.xLabel = "Столбцы";
   config.heatmap.yLabel = "Строки";
@@ -135,14 +146,16 @@ TEST(ArrayCore, configurator) {
 
 TEST(ArrayCore, showDefaultSettings) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  vector<vector<double>> values = {{30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  vector<vector<double>> values = {
+      {30.3, 400, 400, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   bool result = dv::show(values, "testDefaultSettings");
   EXPECT_EQ(result, true);
 }
 
 TEST(ArrayCore, showHeatMap1_customAspectRatio) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  vector<vector<double>> values = {
+      {30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
   config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
@@ -154,7 +167,8 @@ TEST(ArrayCore, showHeatMap1_customAspectRatio) {
 
 TEST(ArrayCore, showHeatMap1_AutoScale) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
-  vector<vector<double>> values = {{30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
+  vector<vector<double>> values = {
+      {30.3, 40, 98, 76}, {99, 45, 20, 1}, {5, 56, 93, 25}, {45, 23, 90, 2}};
   auto config = dv::Config();
   config.heatmap.title = "Black & White TEST MATRIX";
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GRAYSCALE;
@@ -166,7 +180,7 @@ TEST(ArrayCore, showHeatMap1_AutoScale) {
 TEST(ArrayCore, showPseudo2D) {
   int rows = 5;
   int cols = 3;
-  int* vals4 = new int[rows * cols];
+  int *vals4 = new int[rows * cols];
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       vals4[i * cols + j] = i * cols + j;
@@ -179,7 +193,7 @@ TEST(ArrayCore, showPseudo2D) {
 TEST(ArrayCore, showArray2D) {
   int rows2 = 20;
   int cols2 = 20;
-  int** vals5 = new int* [rows2];
+  int **vals5 = new int *[rows2];
   for (int i = 0; i < rows2; ++i) {
     vals5[i] = new int[cols2];
     for (int j = 0; j < cols2; ++j) {
@@ -202,7 +216,8 @@ TEST(ArrayCore, showChart) {
   config.chart.title = "Custom title";
   config.chart.xLabel = "Custom xLabel";
   config.chart.yLabel = "Custom yLabel";
-  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
+  bool result =
+      dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChart", config);
   EXPECT_EQ(result, true);
 }
 
@@ -231,7 +246,8 @@ TEST(ArrayCore, showChartXYfrom2Containers) {
 TEST(ArrayCore, readAndShowMatrixFromFile) {
   EXPECT_EQ(dvs::isPlotlyScriptExists(), true);
   vector<vector<double>> values;
-  bool readRes = dvs::readMatrix(values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
+  bool readRes = dvs::readMatrix(
+      values, "./data/2023_07_19-12_59_31_379_Baumer2_text.csv", ';');
   EXPECT_EQ(readRes, true);
   auto config = dv::Config();
   config.heatmap.xLabel = "english";
@@ -249,7 +265,8 @@ TEST(ArrayCore, showChartWithNanAndInf) {
   config.chart.title = "Custom title";
   config.chart.xLabel = "Custom xLabel";
   config.chart.yLabel = "Custom yLabel";
-  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]), "showChartWithNanAndInf", config);
+  bool result = dv::show(vals3, sizeof(vals3) / sizeof(vals3[0]),
+                         "showChartWithNanAndInf", config);
   EXPECT_EQ(result, true);
 }
 
@@ -266,7 +283,7 @@ TEST(ArrayCore, universal_1d_conteinerWithNanAndInf) {
 TEST(ArrayCore, showPseudo2DWithNanAndInf) {
   int rows = 5;
   int cols = 3;
-  double* vals4 = new double[rows * cols];
+  double *vals4 = new double[rows * cols];
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       vals4[i * cols + j] = 20 + i * cols + j;
@@ -306,7 +323,7 @@ TEST(ArrayCore, show3ChartsWithHoldOn) {
 
 TEST(ArrayCore, show2ChartsWithHoldOnCustomSettings) {
   int size = 10;
-  int* vals = new int[size];
+  int *vals = new int[size];
   for (int i = 0; i < size; ++i) {
     vals[i] = i;
   }
@@ -350,7 +367,7 @@ TEST(ArrayCore, testMyltiplyHoldOnOff) {
   EXPECT_EQ(v1 && v2, true);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();
   return 0;

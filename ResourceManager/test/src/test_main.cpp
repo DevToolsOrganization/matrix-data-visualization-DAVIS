@@ -1,10 +1,12 @@
-// Copyright (c) 2018 Johnny Borov <JohnnyBorov@gmail.com>. Released under MIT License.
+// Copyright (c) 2018 Johnny Borov <JohnnyBorov@gmail.com>. Released under MIT
+// License.
 
-#include <iostream>
 #include "ResourceManager/ResourceHandle.h"
+#include <iostream>
 
 void testInvalidResource() {
-  ResourceHandle rhdi("i_dont_exist"); // -DRM_NO_EXCEPTIONS to disable throw on invalid recource
+  ResourceHandle rhdi("i_dont_exist"); // -DRM_NO_EXCEPTIONS to disable throw on
+                                       // invalid recource
   std::cout << "rhdi is valid = " << rhdi.isValid() << '\n';
 }
 
@@ -21,7 +23,7 @@ int main() {
     std::cout << "rh3 size = " << rh3.size() << '\n';
 
     testInvalidResource();
-  } catch (const ResourceNotFound& e) {
+  } catch (const ResourceNotFound &e) {
     std::cout << e.what() << '\n';
   }
 

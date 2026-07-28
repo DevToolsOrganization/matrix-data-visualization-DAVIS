@@ -1,26 +1,22 @@
-//#START_GRAB_TO_INCLUDES_LIST
-#include <iostream>
-#include <vector>
-#include <numeric>
-#include <iostream>
+// #START_GRAB_TO_INCLUDES_LIST
 #include <fstream>
-#include <sys/stat.h>
-#include <sstream>
 #include <iostream>
-//#STOP_GRAB_TO_INCLUDES_LIST
+#include <numeric>
+#include <sstream>
+#include <sys/stat.h>
+#include <vector>
+// #STOP_GRAB_TO_INCLUDES_LIST
 
-#include "html_parts.h"
-#include "common_utils/common_utils.h"
-#include "common_utils/common_constants.h"
-#include "plotly_maker.h"
 #include "array_core/multi_plot.h"
+#include "common_utils/common_constants.h"
+#include "common_utils/common_utils.h"
+#include "html_parts.h"
+#include "plotly_maker.h"
 
 namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
+// #START_GRAB_TO_DVS_NAMESPACE
 
-
-
-bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
+bool checkThatSizesAreTheSame(const vector<vector<double>> &values) {
   size_t size = 0;
   if (!values.empty()) {
     size = values[0].size();
@@ -35,8 +31,8 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   return true;
 }
 
-bool createStringHeatMapValues(const vector<vector<double>>& values,
-                               string& str_values) {
+bool createStringHeatMapValues(const vector<vector<double>> &values,
+                               string &str_values) {
   if (!checkThatSizesAreTheSame(values))
     return false;
   if (!str_values.empty())
@@ -60,9 +56,9 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
   return true;
 }
 
-bool createStringLineChartValues(const vector<double>& xValues,
-                                 const vector<double>& yValues,
-                                 string& out_str_values) {
+bool createStringLineChartValues(const vector<double> &xValues,
+                                 const vector<double> &yValues,
+                                 string &out_str_values) {
   if (xValues.size() != yValues.size()) {
     return false;
   }
@@ -84,16 +80,17 @@ bool createStringLineChartValues(const vector<double>& xValues,
       out_str_values.append(",");
     }
   }
-  out_str_values.append("], mode: 'lines', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  out_str_values.append("], mode: 'lines', hovertemplate: 'x:%{x}, y:%{y:.} "
+                        "<extra></extra>' };var data = [trace];");
   return true;
 }
 
-bool getMatrixValuesFromString(const string& in_values,
-                               vector<vector<double>>& out_values) {
+bool getMatrixValuesFromString(const string &in_values,
+                               vector<vector<double>> &out_values) {
   istringstream f_lines(in_values);
   string lines;
   while (std::getline(f_lines, lines, ';')) {
-    vector<double>vals;
+    vector<double> vals;
     istringstream f_values(lines);
     string str_value;
     while (std::getline(f_values, str_value, ',')) {
@@ -104,9 +101,8 @@ bool getMatrixValuesFromString(const string& in_values,
   return true;
 };
 
-bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
-                           string& page,
-                           const dv::Config& configuration) {
+bool createHtmlPageHeatmap(const std::vector<std::vector<double>> &values,
+                           string &page, const dv::Config &configuration) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -120,10 +116,13 @@ bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
   args[ARG_TITLE_X] = configuration.heatmap.xLabel;
   args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
   args[ARG_TITLE_Z] = configuration.heatmap.zLabel;
-  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
-  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
+  args[ARG_ASPECT_RATIO_WIDTH] =
+      dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] =
+      dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
   string paramWH;
-  if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
+  if (configuration.heatmap.aspectRatioWidth >
+      configuration.heatmap.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -142,50 +141,52 @@ bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
   args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
-  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
+  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateSurfaceMatrixFooBlock;
   args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
 
   dv::config_colorscales clrScale;
   clrScale = configuration.heatmap.colorSc;
   switch (clrScale) {
-    case dv::config_colorscales::COLORSCALE_DEFAULT:
-      args[ARG_COLOR_MAP] = kColorMapDefaultPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_SUNNY:
-      args[ARG_COLOR_MAP] = kColorMapSunnyPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_GLAMOUR:
-      args[ARG_COLOR_MAP] = kColorMapGlamourPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_THERMAL:
-      args[ARG_COLOR_MAP] = kColorMapThermalPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_GRAYSCALE:
-      args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
-      break;
-    case dv::config_colorscales::COLORSCALE_YlGnBu:
-      args[ARG_COLOR_MAP] = kColorMapYlGnBuPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_JET:
-      args[ARG_COLOR_MAP] = kColorMapJetPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_HOT:
-      args[ARG_COLOR_MAP] = kColorMapHotPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_ELECTRIC:
-      args[ARG_COLOR_MAP] = kColorMapElectricPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_PORTLAND:
-      args[ARG_COLOR_MAP] = kColorMapPortlandPart;
-      break;
+  case dv::config_colorscales::COLORSCALE_DEFAULT:
+    args[ARG_COLOR_MAP] = kColorMapDefaultPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_SUNNY:
+    args[ARG_COLOR_MAP] = kColorMapSunnyPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_GLAMOUR:
+    args[ARG_COLOR_MAP] = kColorMapGlamourPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_THERMAL:
+    args[ARG_COLOR_MAP] = kColorMapThermalPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_GRAYSCALE:
+    args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
+    break;
+  case dv::config_colorscales::COLORSCALE_YlGnBu:
+    args[ARG_COLOR_MAP] = kColorMapYlGnBuPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_JET:
+    args[ARG_COLOR_MAP] = kColorMapJetPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_HOT:
+    args[ARG_COLOR_MAP] = kColorMapHotPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_ELECTRIC:
+    args[ARG_COLOR_MAP] = kColorMapElectricPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_PORTLAND:
+    args[ARG_COLOR_MAP] = kColorMapPortlandPart;
+    break;
   }
 
   make_string(kHtmlModel, args, page);
   return true;
 }
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const string& title, const dv::Config& configuration) {
+bool showHeatMapInBrowser(const vector<vector<double>> &values,
+                          const string &title,
+                          const dv::Config &configuration) {
   string page;
   if (!createHtmlPageHeatmap(values, page, configuration)) {
     return false;
@@ -193,37 +194,42 @@ bool showHeatMapInBrowser(const vector<vector<double>>& values,
   string pageName;
   mayBeCreateJsWorkingFolder();
   string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
-  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
+  pageName.append("./")
+      .append(kOutFolderName)
+      .append(titleWithoutSpecialChars)
+      .append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
   } else {
     showWarningJsAbsentPage();
   }
-  return true;// TODO handle different exceptions
+  return true; // TODO handle different exceptions
 }
 
-bool showHeatMapInBrowser(const string& values,
-                          const string& title, const dv::Config& configuration) {
-  vector<vector<double>>heat_map_values;
+bool showHeatMapInBrowser(const string &values, const string &title,
+                          const dv::Config &configuration) {
+  vector<vector<double>> heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title, configuration);
   return true;
 };
 
-bool showLineChartInBrowser(const vector<double>& values,
-                            const string& title, const dv::Config& configuration) {
+bool showLineChartInBrowser(const vector<double> &values, const string &title,
+                            const dv::Config &configuration) {
 
   vector<double> x(values.size());
-  std::iota(std::begin(x), std::end(x), 0);  // Fill with 0, 1, 2...
+  std::iota(std::begin(x), std::end(x), 0); // Fill with 0, 1, 2...
   showLineChartInBrowser(x, values, title, configuration);
   return true;
 }
 
-bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
-                            const std::string& title, const dv::Config& configuration) {
+bool showLineChartInBrowser(const vector<double> &xValues,
+                            const vector<double> &yValues,
+                            const std::string &title,
+                            const dv::Config &configuration) {
   string page;
-  vector<string>args(ARGS_SIZE, "");
+  vector<string> args(ARGS_SIZE, "");
   args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
   createStringLineChartValues(xValues, yValues, str_values);
@@ -231,10 +237,13 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
   args[ARG_TITLE_Y] = configuration.chart.yLabel;
-  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
-  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
+  args[ARG_ASPECT_RATIO_WIDTH] =
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] =
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
   string paramWH;
-  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+  if (configuration.chart.aspectRatioWidth >
+      configuration.chart.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -259,7 +268,10 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   string pageName;
   mayBeCreateJsWorkingFolder();
   string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
-  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
+  pageName.append("./")
+      .append(kOutFolderName)
+      .append(titleWithoutSpecialChars)
+      .append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -269,9 +281,9 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   return true;
 }
 
-bool showLineChartInBrowser(const string& values,
-                            const string& title, const dv::Config& configuration) {
-  vector<double>vals;
+bool showLineChartInBrowser(const string &values, const string &title,
+                            const dv::Config &configuration) {
+  vector<double> vals;
   istringstream f(values);
   string s;
   while (std::getline(f, s, ',')) {
@@ -289,7 +301,7 @@ void showWarningJsAbsentPage() {
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args {ARGS_WARNING_PAGE_SIZE, ""};
+  vector<string> args{ARGS_WARNING_PAGE_SIZE, ""};
   args[ARG_WORKING_FOLDER] = getCurrentPath() + davis_dir;
   args[ARG_JS_VERSION] = kPlotlyJsName;
   make_string(kWarningJSLibAbsentPage, args, out);
@@ -297,10 +309,8 @@ void showWarningJsAbsentPage() {
   openFileBySystem(kWarningPagePath);
 }
 
-
-void showReportPage(const string& title,
-                    const string& svg,
-                    const string& description) {
+void showReportPage(const string &title, const string &svg,
+                    const string &description) {
 
   string out;
   string davis_dir;
@@ -309,63 +319,55 @@ void showReportPage(const string& title,
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args {ARGS_REPORT_PAGE_SIZE, ""};
+  vector<string> args{ARGS_REPORT_PAGE_SIZE, ""};
   args[ARG_REPORT_TITLE] = title;
   args[ARG_SVG_ICON] = svg;
   args[ARG_REPORT_DESCRIPTION] = description;
   make_string(kNoFileFoundedPage, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
-
 }
-
 
 void showReportFileNotFounded() {
 
-  showReportPage("Open file error.",
-                 kWarningIcon,
+  showReportPage("Open file error.", kWarningIcon,
                  "File is not founded. Please, check the path to the file.");
 }
 
 void showReportFileEmpty() {
 
-  showReportPage("File is empty.",
-                 kWarningIcon,
-                 "No data to show.");
+  showReportPage("File is empty.", kWarningIcon, "No data to show.");
 }
-
 
 void showMatrixSizesAreNotTheSame(int badRow) {
 
   string text;
-  text.append("Rows have different sizes in matrix. Check the row № ").append(std::to_string(badRow + 1));
-  showReportPage("Rows sizes are not the same",
-                 kWarningIcon,
-                 text);
+  text.append("Rows have different sizes in matrix. Check the row № ")
+      .append(std::to_string(badRow + 1));
+  showReportPage("Rows sizes are not the same", kWarningIcon, text);
 }
 
-void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues,
-                       bool isFitPlotToWindow) {
+void showDateTimeChart(const string &date_time_values,
+                       const vector<double> &yValues, bool isFitPlotToWindow) {
 
   string out;
-  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  vector<string> args{ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
 
-  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(yValues);
   args_block[ARG_SIMPLE_DATA_X] = date_time_values;
   args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
   std::string data_values_block;
   make_string(kHtmlSimpleDataBlock, args_block, data_values_block);
 
-
   args[ARG_DATE_TIME_VALUES_BLOCK] = data_values_block;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
-  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;
@@ -385,17 +387,18 @@ void showDateTimeChart(const string& date_time_values,
   auto unique_path = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_path, out);
   openFileBySystem(unique_path);
-
-
 }
 
-void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName) {
+void addTraceBlockToGlobal(const vector<double> &yValues,
+                           const string &traceName) {
   vector<double> xValues(yValues.size());
-  std::iota(std::begin(xValues), std::end(xValues), 0);  // Fill with 0, 1, 2...
+  std::iota(std::begin(xValues), std::end(xValues), 0); // Fill with 0, 1, 2...
   addTraceBlockToGlobal(xValues, yValues, traceName);
 }
 
-void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName) {
+void addTraceBlockToGlobal(const vector<double> &xValues,
+                           const vector<double> &yValues,
+                           const string &traceName) {
   string trace_block = dvs::kHtmlMultiChartBlock;
   int trace_i = 1 + dvs::allChartBlocks.size();
   string str_numTrace = std::to_string(trace_i);
@@ -408,13 +411,13 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
   dvs::allChartBlocks.emplace_back(filled_trace_block);
 }
 
-void showCloudOfPointsChart(const vector<double>& xValues,
-                            const vector<double>& yValues,
-                            const vector<double>& colorValues,
+void showCloudOfPointsChart(const vector<double> &xValues,
+                            const vector<double> &yValues,
+                            const vector<double> &colorValues,
                             bool isFitPlotToWindow) {
   string out;
   string davis_dir;
-  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  vector<string> args{ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
@@ -433,7 +436,8 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   } else {
     paramWHsecond = paramWH;
   }
-  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] =
+      paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
@@ -442,12 +446,12 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   openFileBySystem(unique_file_name);
 }
 
-void showCloudOfPointsChartStr(const std::string& xValues,
-                               const vector<double>& yValues,
-                               const vector<double>& colorValues,
+void showCloudOfPointsChartStr(const std::string &xValues,
+                               const vector<double> &yValues,
+                               const vector<double> &colorValues,
                                bool isFitPlotToWindow) {
   string out;
-  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  vector<string> args{ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = xValues;
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
@@ -466,7 +470,8 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   } else {
     paramWHsecond = paramWH;
   }
-  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] =
+      paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
@@ -475,18 +480,16 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   openFileBySystem(unique_file_name);
 }
 
-void showMultiChart(const std::string& date_time_values,
-                    const vector<vector<double>>& yValues,
+void showMultiChart(const std::string &date_time_values,
+                    const vector<vector<double>> &yValues,
                     bool isFitPlotToWindow) {
   string out;
-  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  vector<string> args{ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
-
-
 
   std::string all_data = "";
   for (size_t i = 0; i < yValues.size(); ++i) {
-    vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+    vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
     args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
@@ -504,33 +507,34 @@ void showMultiChart(const std::string& date_time_values,
   auto polygon_date_time = date_time_values;
   polygon_date_time.append(",");
   polygon_date_time.append(reversed_date_time_data);
-  auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
+  auto polygon_deviation_values =
+      doubleAndReverse(deviation_values, average_values);
 
-  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(deviation_values);
   args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
   args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
   std::string average_error_data_values_block;
-  make_string(kAverageErrorDataBlock, args_block, average_error_data_values_block);
+  make_string(kAverageErrorDataBlock, args_block,
+              average_error_data_values_block);
 
   std::string average_values_str = vectorToString(average_values);
-  vector<string>args_aver_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_aver_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   args_aver_block[ARG_SIMPLE_DATA_X] = date_time_values;
   args_aver_block[ARG_SIMPLE_DATA_Y] = average_values_str;
   std::string average_data_values_block;
   make_string(kHtmlSimpleDataBlock, args_aver_block, average_data_values_block);
 
-
   auto all_aver_block = average_error_data_values_block;
   all_aver_block.append(",");
   all_aver_block.append(average_data_values_block);
-
 
   args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = all_aver_block;
 
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
-  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateFooBlock;
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
@@ -559,6 +563,5 @@ void showMultiChart(const std::string& date_time_values,
   openFileBySystem(unique_file_name);
 }
 
-//#STOP_GRAB_TO_DVS_NAMESPACE
+// #STOP_GRAB_TO_DVS_NAMESPACE
 }; // namespace dvs
-

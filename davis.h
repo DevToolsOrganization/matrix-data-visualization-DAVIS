@@ -1,11 +1,11 @@
 #ifndef DAVIS_H
 #define DAVIS_H
 
+#include "array_core/configurator.h"
+#include "plotly_maker/plotly_maker.h"
+#include <cstdlib>
 #include <string>
 #include <vector>
-#include <cstdlib>
-#include "plotly_maker/plotly_maker.h"
-#include "array_core/configurator.h"
 /*
 namespace {
 

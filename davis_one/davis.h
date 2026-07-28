@@ -39,7 +39,8 @@ extern const char kJsUrlToDownolad[];
 namespace dv {
 
 enum config_visualizationTypes {
-  VISUALTYPE_AUTO, //if user not forces some specific type it will be recognized by context
+  VISUALTYPE_AUTO, // if user not forces some specific type it will be
+                   // recognized by context
   VISUALTYPE_CHART,
   VISUALTYPE_HEATMAP
 };
@@ -57,38 +58,33 @@ enum config_colorscales {
   COLORSCALE_PORTLAND
 };
 
-
 struct commonSettings {
-  commonSettings():
-    xLabel("X"),
-    yLabel("Y"),
-    aspectRatioWidth(1),
-    aspectRatioHeight(1),
-    isFitPlotToWindow(false) {}
+  commonSettings()
+      : xLabel("X"), yLabel("Y"), aspectRatioWidth(1), aspectRatioHeight(1),
+        isFitPlotToWindow(false) {}
   virtual ~commonSettings() {}
   std::string title;
   std::string xLabel;
   std::string yLabel;
   std::string zLabel;
   double aspectRatioWidth; // use it for user scale if isFitPlotToWindow = false
-  double aspectRatioHeight;// use it for user scale if isFitPlotToWindow = false
-  bool isFitPlotToWindow; //true - plot fits to  browser window, false - square plot
+  double
+      aspectRatioHeight;  // use it for user scale if isFitPlotToWindow = false
+  bool isFitPlotToWindow; // true - plot fits to  browser window, false - square
+                          // plot
 };
 
 struct chartSettings : public commonSettings {
-  //currently empty
+  // currently empty
 };
 
 struct heatMapSettings : public commonSettings {
-  heatMapSettings():
-    colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
+  heatMapSettings() : colorSc(config_colorscales::COLORSCALE_DEFAULT) {}
   config_colorscales colorSc;
 };
 
-
 struct Config {
-  Config():
-    typeVisual(VISUALTYPE_AUTO) {}
+  Config() : typeVisual(VISUALTYPE_AUTO) {}
   void reset() {
     chart = chartSettings();
     heatmap = heatMapSettings();
@@ -100,37 +96,36 @@ struct Config {
 };
 
 struct configSaveToDisk {
-  configSaveToDisk():
-    separatorOfRows("\n"),
-    separatorOfCols(";"),
-    isTranspose(false) {}
+  configSaveToDisk()
+      : separatorOfRows("\n"), separatorOfCols(";"), isTranspose(false) {}
   std::string separatorOfRows;
   std::string separatorOfCols;
-  bool isTranspose; //rows-cols or cols-rows
+  bool isTranspose; // rows-cols or cols-rows
 };
-
-
 
 
 } // namespace dv end
 namespace dvs {
 enum ARGS_INDEX {
-  ARG_VALUES,     //%1
-  ARG_COLOR_MAP,  //%2
-  ARG_MATRIX_TYPE,//%3
-  ARG_TITLE,      //%4
-  ARG_TITLE_X,    //%5
-  ARG_TITLE_Y,    //%6
-  ARG_TITLE_Z,    //%7
-  ARG_JS_VER,     //%8
+  ARG_VALUES,                 //%1
+  ARG_COLOR_MAP,              //%2
+  ARG_MATRIX_TYPE,            //%3
+  ARG_TITLE,                  //%4
+  ARG_TITLE_X,                //%5
+  ARG_TITLE_Y,                //%6
+  ARG_TITLE_Z,                //%7
+  ARG_JS_VER,                 //%8
   ARG_ASPECT_RATIO_WIDTH,     //%9
-  ARG_ASPECT_RATIO_HEIGHT,     //%10
-  ARG_ASPECT_WIDTH_OR_HEIGHT, //%11 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
-  ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%12 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
-  ARG_POINT_LINE_SWITCHER_STYLE,      //%13
-  ARG_POINT_LINE_SWITCHER_SELECT,     //%14
-  ARG_POINT_LINE_SWITCHER_UPDATE_FOO, //%15
-  ARG_DAVIS_LOGO, //%16
+  ARG_ASPECT_RATIO_HEIGHT,    //%10
+  ARG_ASPECT_WIDTH_OR_HEIGHT, //%11 "width" if ARG_ASPECT_RATIO_WIDTH >
+                              // ARG_ASPECT_RATIO_HEIGHT and "height" if not
+  ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%12 if value of it is equal to
+                                            // ARG_ASPECT_WIDTH_OR_HEIGHT it's
+                                            // mean no autoscale.
+  ARG_POINT_LINE_SWITCHER_STYLE,            //%13
+  ARG_POINT_LINE_SWITCHER_SELECT,           //%14
+  ARG_POINT_LINE_SWITCHER_UPDATE_FOO,       //%15
+  ARG_DAVIS_LOGO,                           //%16
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_SIZE
 };
@@ -141,7 +136,6 @@ enum ARGS_WARNING_PAGE_INDEX {
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_WARNING_PAGE_SIZE
 };
-
 
 enum ARGS_REPORT_PAGE_INDEX {
   ARG_REPORT_TITLE,       //%1
@@ -156,16 +150,21 @@ enum ARGS_DATE_TIME_PAGE_INDEX {
   ARG_DATE_TIME_VALUES_BLOCK,           //%2
   ARG_DATE_TIME_ASPECT_RATIO_WIDTH,     //%3
   ARG_DATE_TIME_ASPECT_RATIO_HEIGHT,    //%4
-  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%5 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
-  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%6 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
+  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT, //%5 "width" if ARG_ASPECT_RATIO_WIDTH >
+                                        // ARG_ASPECT_RATIO_HEIGHT and "height"
+                                        // if not
+  ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%6 if value of it is
+                                                      // equal to
+                                                      // ARG_ASPECT_WIDTH_OR_HEIGHT
+                                                      // it's mean no autoscale.
   ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE,      //%7
   ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT,     //%8
   ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO, //%9
-  ARG_DATE_TIME_DAVIS_LOGO, //%10
-  ARG_DATE_TIME_AVERAGE_BUTTON_STYLE,//%11
-  ARG_DATE_TIME_AVERAGE_BUTTON_DIV,//%12
-  ARG_DATE_TIME_AVERAGE_BUTTON_JS,//%13
-  ARG_DATE_TIME_AVERAGE_VALUES_BLOCK,//%14
+  ARG_DATE_TIME_DAVIS_LOGO,                     //%10
+  ARG_DATE_TIME_AVERAGE_BUTTON_STYLE,           //%11
+  ARG_DATE_TIME_AVERAGE_BUTTON_DIV,             //%12
+  ARG_DATE_TIME_AVERAGE_BUTTON_JS,              //%13
+  ARG_DATE_TIME_AVERAGE_VALUES_BLOCK,           //%14
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_DATE_TIME_PAGE_SIZE
 };
@@ -176,9 +175,16 @@ enum ARGS_CLOUD_OF_POINTS_PAGE {
   ARG_Y_CLOUD_OF_POINTS,
   ARG_COLOR_CLOUD_OF_POINTS,
   ARG_CLOUD_OF_POINTS_ASPECT_RATIO_WIDTH,     //%5
-  ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT,     //%6
-  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT, //7 "width" if ARG_ASPECT_RATIO_WIDTH > ARG_ASPECT_RATIO_HEIGHT and "height" if not
-  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%8 if value of it is equal to  ARG_ASPECT_WIDTH_OR_HEIGHT it's mean no autoscale.
+  ARG_CLOUD_OF_POINTS_ASPECT_RATIO_HEIGHT,    //%6
+  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT, // 7 "width" if
+                                              // ARG_ASPECT_RATIO_WIDTH >
+                                              // ARG_ASPECT_RATIO_HEIGHT and
+                                              // "height" if not
+  ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE, //%8 if value of it
+                                                            // is equal to
+                                                            // ARG_ASPECT_WIDTH_OR_HEIGHT
+                                                            // it's mean no
+                                                            // autoscale.
   ARG_CLOUD_OF_POINTS_DAVIS_LOGO, //%9
   // ADD NEW ENUM BEFORE THIS COMMENT
   ARGS_CLOUD_OF_POINTS_PAGE_SIZE
@@ -189,7 +195,6 @@ enum ARGS_SIMPLE_DATA_BLOCK {
   ARG_SIMPLE_DATA_Y,
   ARGS_SIMPLE_DATA_BLOCK_SIZE
 };
-
 
 extern const char kHtmlModel[];
 extern const char kColorMapDefaultPart[];
@@ -211,7 +216,6 @@ extern const char kNoFileFoundedPage[];
 extern const char kWarningIcon[];
 
 extern const char kHtmlDateTimeModel[];
-
 
 extern const char kHtmlMultiChartBlock[];
 extern const char kHtmlMultiChartModel[];
@@ -247,45 +251,45 @@ using std::vector;
 
 string getCurrentPath();
 
-bool is_file_exists(const string& file_name);
+bool is_file_exists(const string &file_name);
 
-void openFileBySystem(const string& file_name);
+void openFileBySystem(const string &file_name);
 
 bool isPlotlyScriptExists();
 
 void tryToDownloadJsByCurl();
 
-bool saveStringToFile(const string& file_name, const string& data);
+bool saveStringToFile(const string &file_name, const string &data);
 
 void mayBeCreateJsWorkingFolder();
 
 void sleepMicroSec(unsigned long microsec);
 
-void openPlotlyHtml(const string& file_name);
+void openPlotlyHtml(const string &file_name);
 
-bool get_data_from_file(const string& path, vector<std::string>& result);
+bool get_data_from_file(const string &path, vector<std::string> &result);
 
-vector<string> split(const string& target, char c);
+vector<string> split(const string &target, char c);
 
-bool readMatrix(vector<vector<double>>& outMatrix, const string& path,
+bool readMatrix(vector<vector<double>> &outMatrix, const string &path,
                 char dlmtr);
 
-bool make_string(const string& src, const vector<string>& args, string& out);
+bool make_string(const string &src, const vector<string> &args, string &out);
 
 // Now it doesn't work.
-bool deleteFolder(const char* fname);
+bool deleteFolder(const char *fname);
 
-int find_separator(const std::string& src, char& separator);
+int find_separator(const std::string &src, char &separator);
 
 //! remove special characters except letters, numbers and '-', '_'. Spaces ->
 //! '_'
-string removeSpecialCharacters(const string& s);
+string removeSpecialCharacters(const string &s);
 
 //! convert this cases to string "null" for Plotly
 string nullIfNotFinite(double val);
 
 //! convert vec to string, separated by ","
-string vectorToString(const vector<double>& vec);
+string vectorToString(const vector<double> &vec);
 
 //! only name
 string makeUniqueDavisHtmlName();
@@ -294,8 +298,7 @@ string makeUniqueDavisHtmlName();
 string makeUniqueDavisHtmlRelativePath();
 
 //! sometimes std::to_string reurn str with ',' as separator what is wrong
-template <typename T>
-string toStringDotSeparator(T data) {
+template <typename T> string toStringDotSeparator(T data) {
   string str = std::to_string(data);
   std::replace(str.begin(), str.end(), ',', '.');
   return str;
@@ -303,7 +306,7 @@ string toStringDotSeparator(T data) {
 
 //! save to disk vector<T> data
 template <typename T>
-bool saveVec(const vector<T>& vec, const string& filename,
+bool saveVec(const vector<T> &vec, const string &filename,
              dv::configSaveToDisk config) {
   if (vec.size() == 0) {
     return false;
@@ -322,7 +325,7 @@ bool saveVec(const vector<T>& vec, const string& filename,
 
 //! save to disk vector<vector<T>> data
 template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
+bool saveVecVec(const vector<vector<T>> &vecVec, const string &filename,
                 dv::configSaveToDisk config) {
   if (vecVec.size() == 0) {
     return false;
@@ -341,7 +344,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
       for (int j = 0; j < cols; ++j) {
         double val = vecVec.at(j).at(i);
         fout << val;
-        if (j < cols - 1) {  // we dont need sep at row end
+        if (j < cols - 1) { // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -354,7 +357,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
       for (size_t j = 0; j < cols; ++j) {
         double val = vecVec.at(i).at(j);
         fout << val;
-        if (j < cols - 1) {  // we dont need sep at row end
+        if (j < cols - 1) { // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -368,16 +371,16 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
 //! convert any container to std::vector<G>
 template <
     typename G,
-    typename C,  // https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+    typename C, // https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
     typename T =
-    typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
     typename Enable =
-    typename std::enable_if<std::is_convertible<T, G>::value>::type >
-std::vector<G> makeVecFromContainer(const C& container) {
+        typename std::enable_if<std::is_convertible<T, G>::value>::type>
+std::vector<G> makeVecFromContainer(const C &container) {
   std::vector<G> vec;
   vec.reserve(static_cast<size_t>(
-                  std::distance(std::begin(container), std::end(container))));
-  for (auto const& v : container) {
+      std::distance(std::begin(container), std::end(container))));
+  for (auto const &v : container) {
     vec.push_back(static_cast<G>(v));
   }
   return vec;
@@ -385,13 +388,12 @@ std::vector<G> makeVecFromContainer(const C& container) {
 
 //! convert T** to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data,
-                                                        uint64_t rows,
-uint64_t cols) {
+inline std::vector<std::vector<G>>
+makeVecVecFromRowPtr(const T *const *data, uint64_t rows, uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
-    const T* rowPtr = data[i];
+    const T *rowPtr = data[i];
     std::vector<G> row;
     row.reserve(cols);
     for (uint64_t j = 0; j < cols; ++j)
@@ -403,13 +405,12 @@ uint64_t cols) {
 
 //! convert pseudo 2D T* to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data,
-                                                      uint64_t rows,
-uint64_t cols) {
+inline std::vector<std::vector<G>>
+makeVecVecFromFlat(const T *data, uint64_t rows, uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
-    const T* rowPtr = data + i * cols;
+    const T *rowPtr = data + i * cols;
     std::vector<G> row;
     row.reserve(cols);
     for (uint64_t j = 0; j < cols; ++j)
@@ -421,7 +422,7 @@ uint64_t cols) {
 
 //! convert pseudo T* to std::vector<G>
 template <typename G, typename T>
-inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
+inline std::vector<G> makeVecFrom1D(const T *data, uint64_t count) {
   std::vector<G> res;
   res.reserve(static_cast<size_t>(count));
   for (uint64_t i = 0; i < count; ++i)
@@ -429,23 +430,23 @@ inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
   return res;
 }
 
-bool is_string_convertable_to_digit(const string& sample);
+bool is_string_convertable_to_digit(const string &sample);
 
-void transponeMatrix(std::vector<std::vector<double>>& matrix);
+void transponeMatrix(std::vector<std::vector<double>> &matrix);
 
-vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
+vector<double> calculateAverageVector(const vector<vector<double>> &vectors);
 
-vector<double> calculateStandardDeviation(const vector<double>& mean,
-                                          const vector<vector<double>>& data);
+vector<double> calculateStandardDeviation(const vector<double> &mean,
+                                          const vector<vector<double>> &data);
 
-vector<double> doubleAndReverse(const vector<double>& input,
-                                const vector<double>& mean);
+vector<double> doubleAndReverse(const vector<double> &input,
+                                const vector<double> &mean);
 
-std::string reverseString(const std::string& input);
+std::string reverseString(const std::string &input);
 
 template <typename T>
-std::vector<std::vector<T>> readBinaryFile(const std::string& filePath,
-size_t rowLength) {
+std::vector<std::vector<T>> readBinaryFile(const std::string &filePath,
+                                           size_t rowLength) {
   std::ifstream file(filePath, std::ios::binary);
   if (!file) {
     throw std::runtime_error("Cannot open file");
@@ -455,7 +456,7 @@ size_t rowLength) {
   std::vector<T> row(rowLength);
 
   while (
-      file.read(reinterpret_cast<char*>(row.data()), rowLength * sizeof(T))) {
+      file.read(reinterpret_cast<char *>(row.data()), rowLength * sizeof(T))) {
     data.push_back(row);
   }
 
@@ -474,26 +475,30 @@ size_t rowLength) {
 
 namespace dvs {
 
+using std::istringstream;
 using std::string;
 using std::vector;
-using std::istringstream;
 
+bool createHtmlPageHeatmap(const vector<vector<double>> &values, string &page,
+                           const dv::Config &configuration);
 
-bool createHtmlPageHeatmap(const vector<vector<double>>& values,
-                           string& page,
-                           const dv::Config& configuration);
+bool showHeatMapInBrowser(const vector<vector<double>> &values,
+                          const string &title, const dv::Config &configuration);
+bool showHeatMapInBrowser(const string &values, const string &title,
+                          const dv::Config &configuration);
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values, const string& title, const dv::Config& configuration);
-bool showHeatMapInBrowser(const string& values, const string& title, const dv::Config& configuration);
-
-bool showLineChartInBrowser(const vector<double>& values, const string& title, const dv::Config& configuration);
-bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
-                            const string& title, const dv::Config& configuration);
-bool showLineChartInBrowser(const string& values, const string& title, const dv::Config& configuration);
+bool showLineChartInBrowser(const vector<double> &values, const string &title,
+                            const dv::Config &configuration);
+bool showLineChartInBrowser(const vector<double> &xValues,
+                            const vector<double> &yValues, const string &title,
+                            const dv::Config &configuration);
+bool showLineChartInBrowser(const string &values, const string &title,
+                            const dv::Config &configuration);
 
 void showWarningJsAbsentPage();
 
-void showReportPage(const string& page, const string& title, const string& svg, const string& description);
+void showReportPage(const string &page, const string &title, const string &svg,
+                    const string &description);
 
 void showReportFileNotFounded();
 
@@ -501,26 +506,27 @@ void showReportFileEmpty();
 
 void showMatrixSizesAreNotTheSame(int badRow);
 
-void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues,
-                       bool isFitPlotToWindow);
+void showDateTimeChart(const string &date_time_values,
+                       const vector<double> &yValues, bool isFitPlotToWindow);
 
-void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName);
-void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName);
+void addTraceBlockToGlobal(const vector<double> &yValues,
+                           const string &traceName);
+void addTraceBlockToGlobal(const vector<double> &xValues,
+                           const vector<double> &yValues,
+                           const string &traceName);
 
-void showCloudOfPointsChart(const vector<double>& xValues,
-                            const vector<double>& yValues,
-                            const vector<double>& colorValues,
+void showCloudOfPointsChart(const vector<double> &xValues,
+                            const vector<double> &yValues,
+                            const vector<double> &colorValues,
                             bool isFitPlotToWindow);
 
-
-void showCloudOfPointsChartStr(const string& xValues,
-                               const vector<double>& yValues,
-                               const vector<double>& colorValues,
+void showCloudOfPointsChartStr(const string &xValues,
+                               const vector<double> &yValues,
+                               const vector<double> &colorValues,
                                bool isFitPlotToWindow);
 
-void showMultiChart(const string& date_time_values,
-                    const vector<vector<double>>& yValues,
+void showMultiChart(const string &date_time_values,
+                    const vector<vector<double>> &yValues,
                     bool isFitPlotToWindow);
 
 
@@ -536,95 +542,126 @@ extern vector<string> allChartBlocks;
 
 namespace dv {
 
-
 //! it shows, that we want to start accumulate chart graphs for showing
 //! them all at one html in one axes
 void holdOn();
 
 //! finish creation of html page with multi pages
-void holdOff(const Config& configuration = Config());
-
-
+void holdOff(const Config &configuration = Config());
 
 
 } // namespace dv end
 namespace dv {
 
-
 //! (matrix) 2-dimensional array
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols,
-          const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(T **data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
 template <typename T>
-bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
-          const configSaveToDisk& configuration = configSaveToDisk());
+bool save(T **data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
-//! (matrix) 1-dimensional array that simulates a 2-dimensional one (element access [i*cols+j])
+//! (matrix) 1-dimensional array that simulates a 2-dimensional one (element
+//! access [i*cols+j])
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols,
-          const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(const T *data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
 template <typename T>
-bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
-          const configSaveToDisk& configuration = configSaveToDisk());
+bool save(const T *data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
 //! (chart) 1-dimensional array
 template <typename T>
-bool show(const T* data, uint64_t count, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+bool show(const T *data, uint64_t count,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
 template <typename T>
-bool save(const T* data, uint64_t count, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
+bool save(const T *data, uint64_t count, const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
 //! +(chart) 1-dimensional container
-template<typename C,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& container, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+template <
+    typename C,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool show(C const &container,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
-template<typename C,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& container, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
-
+template <
+    typename C,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool save(C const &container, const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
 //! +(chart) Two 1-dimensional container for X-Y plot
-template<typename C,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& containerX, C const& containerY, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+template <
+    typename C,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool show(C const &containerX, C const &containerY,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
-template<typename C,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& containerX, C const& containerY, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
-
+template <
+    typename C,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool save(C const &containerX, C const &containerY, const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
 //! (chart / matrix) 2-dimensional container
-template<typename C,
-         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool show(C const& container_of_containers, const std::string& htmlPageName = dvs::makeUniqueDavisHtmlName(), const Config& configuration = Config());
+template <
+    typename C,
+    typename E =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool show(C const &container_of_containers,
+          const std::string &htmlPageName = dvs::makeUniqueDavisHtmlName(),
+          const Config &configuration = Config());
 
-template<typename C,
-         typename E = typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
-         typename T = typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
-         typename Enable = typename std::enable_if<std::is_convertible<T, double>::value>::type>
-bool save(C const& container_of_containers, const std::string& filename, const configSaveToDisk& configuration = configSaveToDisk());
-
+template <
+    typename C,
+    typename E =
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+    typename T =
+        typename std::decay<decltype(*std::begin(std::declval<E>()))>::type,
+    typename Enable =
+        typename std::enable_if<std::is_convertible<T, double>::value>::type>
+bool save(C const &container_of_containers, const std::string &filename,
+          const configSaveToDisk &configuration = configSaveToDisk());
 
 // ***********************************
 // template functions implementations:
 // ***********************************
 
 template <typename T>
-bool show(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& htmlPageName, const Config& configuration) {
+bool show(T **data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &htmlPageName, const Config &configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
 
   std::vector<std::vector<double>> vecVecDbl =
-                                    dvs::makeVecVecFromRowPtr<double>(data, arrRows, arrCols);
+      dvs::makeVecVecFromRowPtr<double>(data, arrRows, arrCols);
 
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
@@ -635,20 +672,23 @@ bool show(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& htmlP
 }
 
 template <typename T>
-bool save(T** data, uint64_t arrRows, uint64_t arrCols, const std::string& filename, const configSaveToDisk& configuration) {
+bool save(T **data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &filename, const configSaveToDisk &configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
   std::vector<std::vector<T>> vecVec =
-                               dvs::makeVecVecFromRowPtr<T>(data, arrRows, arrCols);
+      dvs::makeVecVecFromRowPtr<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& htmlPageName, const Config& configuration) {
+bool show(const T *data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &htmlPageName, const Config &configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<double>> vecVecDbl = dvs::makeVecVecFromFlat<double>(data, arrRows, arrCols);
+  std::vector<std::vector<double>> vecVecDbl =
+      dvs::makeVecVecFromFlat<double>(data, arrRows, arrCols);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
       configuration.typeVisual == VISUALTYPE_HEATMAP) {
@@ -658,17 +698,19 @@ bool show(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& 
 }
 
 template <typename T>
-bool save(const T* data, uint64_t arrRows, uint64_t arrCols, const std::string& filename,
-          const configSaveToDisk& configuration) {
+bool save(const T *data, uint64_t arrRows, uint64_t arrCols,
+          const std::string &filename, const configSaveToDisk &configuration) {
   if (data == nullptr || arrRows == 0 || arrCols == 0)
     return false;
-  std::vector<std::vector<T>> vecVec = dvs::makeVecVecFromFlat<T>(data, arrRows, arrCols);
+  std::vector<std::vector<T>> vecVec =
+      dvs::makeVecVecFromFlat<T>(data, arrRows, arrCols);
   bool res = dvs::saveVecVec<T>(vecVec, filename, configuration);
   return res;
 }
 
 template <typename T>
-bool show(const T* data, uint64_t count, const std::string& htmlPageName, const Config& configuration) {
+bool show(const T *data, uint64_t count, const std::string &htmlPageName,
+          const Config &configuration) {
   if (data == nullptr || count == 0)
     return false;
   std::vector<double> dblRow = dvs::makeVecFrom1D<double>(data, count);
@@ -686,7 +728,8 @@ bool show(const T* data, uint64_t count, const std::string& htmlPageName, const 
 }
 
 template <typename T>
-bool save(const T* data, uint64_t count, const std::string& filename, const configSaveToDisk& configuration) {
+bool save(const T *data, uint64_t count, const std::string &filename,
+          const configSaveToDisk &configuration) {
   if (data == nullptr || count == 0)
     return false;
   std::vector<T> row = dvs::makeVecFrom1D<T>(data, count);
@@ -694,8 +737,9 @@ bool save(const T* data, uint64_t count, const std::string& filename, const conf
   return res;
 }
 
-template<typename C, typename T, typename>
-bool show(C const& container, const std::string& htmlPageName, const Config& configuration) {
+template <typename C, typename T, typename>
+bool show(C const &container, const std::string &htmlPageName,
+          const Config &configuration) {
   std::vector<double> dblRow = dvs::makeVecFromContainer<double>(container);
   bool res = false;
   if (configuration.typeVisual == VISUALTYPE_AUTO ||
@@ -710,15 +754,17 @@ bool show(C const& container, const std::string& htmlPageName, const Config& con
   return res;
 }
 
-template<typename C, typename T, typename>
-bool save(C const& container, const std::string& filename, const configSaveToDisk& configuration) {
+template <typename C, typename T, typename>
+bool save(C const &container, const std::string &filename,
+          const configSaveToDisk &configuration) {
   std::vector<T> row = dvs::makeVecFromContainer<T>(container);
   bool res = dvs::saveVec<T>(row, filename, configuration);
   return res;
 }
 
-template<typename C, typename T, typename>
-bool show(C const& containerX, C const& containerY, const std::string& htmlPageName, const Config& configuration) {
+template <typename C, typename T, typename>
+bool show(C const &containerX, C const &containerY,
+          const std::string &htmlPageName, const Config &configuration) {
   if (containerX.size() != containerY.size()) {
     return false;
   }
@@ -727,7 +773,8 @@ bool show(C const& containerX, C const& containerY, const std::string& htmlPageN
 
   bool res = false;
   if (!dvs::isHold) {
-    res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName, configuration);
+    res = dvs::showLineChartInBrowser(dblRowX, dblRowY, htmlPageName,
+                                      configuration);
   } else {
     dvs::addTraceBlockToGlobal(dblRowX, dblRowY, htmlPageName);
     res = true;
@@ -735,8 +782,9 @@ bool show(C const& containerX, C const& containerY, const std::string& htmlPageN
   return res;
 }
 
-template<typename C, typename T, typename Enable>
-bool save(C const& containerX, C const& containerY,  const std::string& filename, const configSaveToDisk& configuration) {
+template <typename C, typename T, typename Enable>
+bool save(C const &containerX, C const &containerY, const std::string &filename,
+          const configSaveToDisk &configuration) {
   if (containerX.size() != containerY.size()) {
     return false;
   }
@@ -751,11 +799,12 @@ bool save(C const& containerX, C const& containerY,  const std::string& filename
   return res;
 }
 
-template<typename C, typename E, typename T, typename >
-bool show(C const& container_of_containers, const std::string& htmlPageName, const Config& configuration) {
+template <typename C, typename E, typename T, typename>
+bool show(C const &container_of_containers, const std::string &htmlPageName,
+          const Config &configuration) {
   std::vector<std::vector<double>> vecVecDbl;
   vecVecDbl.reserve(container_of_containers.size());
-  for (const auto& row : container_of_containers) {
+  for (const auto &row : container_of_containers) {
     std::vector<double> dblRow = dvs::makeVecFromContainer<double>(row);
     vecVecDbl.emplace_back(dblRow);
   }
@@ -765,9 +814,12 @@ bool show(C const& container_of_containers, const std::string& htmlPageName, con
   if (!vecVecDbl.empty()) {
     size2 = vecVecDbl[0].size();
   }
-  if ((configuration.typeVisual == VISUALTYPE_AUTO || //case when we want to plot graph with X and Y vectors
+  if ((configuration.typeVisual ==
+           VISUALTYPE_AUTO || // case when we want to plot graph with X and Y
+                              // vectors
        configuration.typeVisual == VISUALTYPE_CHART) &&
-      (size1 == 2 || size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
+      (size1 == 2 ||
+       size2 == 2)) { // it can be or 2-columns-data or 2-rows-data
     std::vector<double> xVals;
     std::vector<double> yVals;
     if (size1 == 2) {
@@ -781,7 +833,8 @@ bool show(C const& container_of_containers, const std::string& htmlPageName, con
       }
     }
     if (!dvs::isHold) {
-      res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName, configuration);
+      res = dvs::showLineChartInBrowser(xVals, yVals, htmlPageName,
+                                        configuration);
     } else {
       dvs::addTraceBlockToGlobal(xVals, yVals, htmlPageName);
       res = true;
@@ -793,11 +846,12 @@ bool show(C const& container_of_containers, const std::string& htmlPageName, con
   return res;
 }
 
-template<typename C, typename E, typename T, typename Enable>
-bool save(C const& container_of_containers, const std::string& filename, const configSaveToDisk& configuration) {
+template <typename C, typename E, typename T, typename Enable>
+bool save(C const &container_of_containers, const std::string &filename,
+          const configSaveToDisk &configuration) {
   std::vector<std::vector<T>> vecVec;
   vecVec.reserve(container_of_containers.size());
-  for (const auto& row : container_of_containers) {
+  for (const auto &row : container_of_containers) {
     std::vector<T> rowTemp = dvs::makeVecFromContainer<T>(row);
     vecVec.emplace_back(rowTemp);
   }

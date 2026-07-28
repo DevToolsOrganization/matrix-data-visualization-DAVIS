@@ -25,14 +25,14 @@ namespace dvs {
 using std::string;
 
 #ifdef _WIN32
-  #include <direct.h>
-  #include <windows.h>
-  #define getcwd _getcwd  // stupid MSFT "deprecation" warning
+#include <direct.h>
+#include <windows.h>
+#define getcwd _getcwd // stupid MSFT "deprecation" warning
 #elif __linux__
-  #include <unistd.h>
+#include <unistd.h>
 #endif
 
-bool is_file_exists(const string& file_name) {
+bool is_file_exists(const string &file_name) {
   std::ifstream file(file_name.c_str());
   if (!file) {
     return false;
@@ -40,7 +40,7 @@ bool is_file_exists(const string& file_name) {
   return true;
 }
 
-void openFileBySystem(const string& file_name) {
+void openFileBySystem(const string &file_name) {
   string command;
 #ifdef _WIN32
   command = "start ";
@@ -58,7 +58,7 @@ void openFileBySystem(const string& file_name) {
 string getCurrentPath() {
 #if defined(_WIN32) || (__linux__)
   char buffer[1024];
-  char* answer = getcwd(buffer, sizeof(buffer));
+  char *answer = getcwd(buffer, sizeof(buffer));
   string s_cwd;
   if (answer) {
     s_cwd = answer;
@@ -84,7 +84,7 @@ void tryToDownloadJsByCurl() {
   std::system(cmd.c_str());
 }
 
-bool saveStringToFile(const string& file_name, const string& data) {
+bool saveStringToFile(const string &file_name, const string &data) {
   std::ofstream out(file_name);
   if (out.is_open()) {
     out << data.c_str();
@@ -94,7 +94,7 @@ bool saveStringToFile(const string& file_name, const string& data) {
   return false;
 }
 
-void openPlotlyHtml(const string& file_name) { openFileBySystem(file_name); }
+void openPlotlyHtml(const string &file_name) { openFileBySystem(file_name); }
 
 void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
@@ -116,7 +116,7 @@ void mayBeCreateJsWorkingFolder() {
   }
 }
 
-bool deleteFolder(const char* fname) {
+bool deleteFolder(const char *fname) {
   struct stat sb;
   if (stat(fname, &sb) == 0) {
     // rmdir(fname);
@@ -126,7 +126,7 @@ bool deleteFolder(const char* fname) {
   }
 }
 
-bool get_data_from_file(const string& path, vector<string>& result) {
+bool get_data_from_file(const string &path, vector<string> &result) {
   // TODO different scenarious and sanitizing
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
   if (!is_file_exists(path)) {
@@ -148,7 +148,7 @@ bool get_data_from_file(const string& path, vector<string>& result) {
   return true;
 }
 
-bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
+bool readMatrix(vector<vector<double>> &outMatrix, const std::string &path,
                 char dlmtr) {
   outMatrix.clear();
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
@@ -158,7 +158,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
   if (ifs) {
     while (!ifs.eof()) {
       std::getline(ifs, str);
-      if (str.size() == 0)  // if exist empty line
+      if (str.size() == 0) // if exist empty line
         continue;
       std::vector<std::string> parts = split(str, dlmtr);
       vector<double> doubleLine;
@@ -176,7 +176,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
   }
 }
 
-vector<string> split(const string& target, char c) {
+vector<string> split(const string &target, char c) {
   std::string temp;
   std::stringstream stringstream{target};
   std::vector<std::string> result;
@@ -187,7 +187,7 @@ vector<string> split(const string& target, char c) {
   return result;
 }
 
-bool make_string(const string& src, const vector<string>& args, string& out) {
+bool make_string(const string &src, const vector<string> &args, string &out) {
   if (!out.empty()) {
     out.clear();
   }
@@ -249,7 +249,7 @@ bool make_string(const string& src, const vector<string>& args, string& out) {
   return true;
 }
 
-int find_separator(const std::string& src, char& separator) {
+int find_separator(const std::string &src, char &separator) {
   std::vector<char> ignored_chars = {'+', '-', 'e', 'E', '.', '\r', ','};
   std::set<char> unique_chars;
   bool is_service_char = false;
@@ -299,27 +299,25 @@ int find_separator(const std::string& src, char& separator) {
   return UNDEFINED_BEHAVIOR;
 }
 
-string removeSpecialCharacters(const string& s) {
+string removeSpecialCharacters(const string &s) {
   string t;
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == ' ') {
       t += '_';
-    } else if ((s[i] >= 'a' && s[i] <= 'z') ||
-               (s[i] >= 'A' && s[i] <= 'Z') ||
-               (s[i] >= '0' && s[i] <= '9') || (s[i] == '-') ||
-               (s[i] == '_')) {
+    } else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') ||
+               (s[i] >= '0' && s[i] <= '9') || (s[i] == '-') || (s[i] == '_')) {
       t += s[i];
     }
   }
   return t;
 }
 
-bool is_string_convertable_to_digit(const string& sample) {
+bool is_string_convertable_to_digit(const string &sample) {
   try {
     std::ignore = std::stod(sample);
-  } catch (const std::invalid_argument& e) {
+  } catch (const std::invalid_argument &e) {
     return false;
-  } catch (const std::out_of_range& e) {
+  } catch (const std::out_of_range &e) {
     return false;
   }
   return true;
@@ -336,7 +334,7 @@ string nullIfNotFinite(double val) {
   return plotlyVar;
 }
 
-string vectorToString(const vector<double>& vec) {
+string vectorToString(const vector<double> &vec) {
   std::ostringstream oss;
   for (size_t i = 0; i < vec.size(); ++i) {
     if (i != 0) {
@@ -359,7 +357,7 @@ std::string makeUniqueDavisHtmlName() {
 #if defined(_MSC_VER)
   localtime_s(&tm, &in_time_t);
 #else
-  if (std::tm* p = std::localtime(&in_time_t))
+  if (std::tm *p = std::localtime(&in_time_t))
     tm = *p;
 #endif
   std::ostringstream ss;
@@ -370,13 +368,10 @@ std::string makeUniqueDavisHtmlName() {
 
 std::string makeUniqueDavisHtmlRelativePath() {
   string name = makeUniqueDavisHtmlName();
-  return std::string("./")
-         .append(kOutFolderName)
-         .append(name)
-         .append(".html");
+  return std::string("./").append(kOutFolderName).append(name).append(".html");
 }
 
-void transponeMatrix(std::vector<std::vector<double>>& matrix) {
+void transponeMatrix(std::vector<std::vector<double>> &matrix) {
   if (matrix.empty())
     return;
 
@@ -392,37 +387,37 @@ void transponeMatrix(std::vector<std::vector<double>>& matrix) {
   matrix = std::move(transposed);
 }
 
-vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+vector<double> calculateAverageVector(const vector<vector<double>> &vectors) {
   if (vectors.empty()) {
     throw std::invalid_argument("Input vector of vectors is empty.");
   }
 
   size_t vectorSize = vectors[0].size();
-  for (const auto& vec : vectors) {
+  for (const auto &vec : vectors) {
     if (vec.size() != vectorSize) {
       throw std::invalid_argument("All vectors must have the same size.");
     }
   }
 
   std::vector<double> averageVector(vectorSize, 0.0);
-  for (const auto& vec : vectors) {
+  for (const auto &vec : vectors) {
     for (size_t i = 0; i < vectorSize; ++i) {
       averageVector[i] += vec[i];
     }
   }
 
-  for (double& value : averageVector) {
+  for (double &value : averageVector) {
     value /= vectors.size();
   }
 
   return averageVector;
 }
 
-vector<double> calculateStandardDeviation(const vector<double>& mean,
-                                          const vector<vector<double>>& data) {
+vector<double> calculateStandardDeviation(const vector<double> &mean,
+                                          const vector<vector<double>> &data) {
   std::vector<double> stddev(mean.size(), 0.0);
   int n = data.size();
-  for (const auto& vec : data) {
+  for (const auto &vec : data) {
     for (size_t i = 0; i < vec.size(); ++i) {
       double diff = vec[i] - mean[i];
       stddev[i] += diff * diff;
@@ -434,7 +429,7 @@ vector<double> calculateStandardDeviation(const vector<double>& mean,
   return stddev;
 }
 
-std::string reverseString(const std::string& input) {
+std::string reverseString(const std::string &input) {
   std::stringstream ss(input);
   std::string item;
   std::vector<std::string> elements;
@@ -456,8 +451,8 @@ std::string reverseString(const std::string& input) {
   return result;
 }
 
-vector<double> doubleAndReverse(const vector<double>& input,
-                                const vector<double>& mean) {
+vector<double> doubleAndReverse(const vector<double> &input,
+                                const vector<double> &mean) {
   vector<double> result(input.size(), 0);
   vector<double> minus_result = input;
   for (size_t i = 0; i < result.size(); ++i) {
@@ -470,4 +465,4 @@ vector<double> doubleAndReverse(const vector<double>& input,
 }
 
 // #STOP_GRAB_TO_DVS_NAMESPACE
-};  // namespace dvs
+}; // namespace dvs
