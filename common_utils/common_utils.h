@@ -30,45 +30,45 @@ using std::vector;
 
 string getCurrentPath();
 
-bool is_file_exists(const string& file_name);
+bool is_file_exists(const string &file_name);
 
-void openFileBySystem(const string& file_name);
+void openFileBySystem(const string &file_name);
 
 bool isPlotlyScriptExists();
 
 void tryToDownloadJsByCurl();
 
-bool saveStringToFile(const string& file_name, const string& data);
+bool saveStringToFile(const string &file_name, const string &data);
 
 void mayBeCreateJsWorkingFolder();
 
 void sleepMicroSec(unsigned long microsec);
 
-void openPlotlyHtml(const string& file_name);
+void openPlotlyHtml(const string &file_name);
 
-bool get_data_from_file(const string& path, vector<std::string>& result);
+bool get_data_from_file(const string &path, vector<std::string> &result);
 
-vector<string> split(const string& target, char c);
+vector<string> split(const string &target, char c);
 
-bool readMatrix(vector<vector<double>>& outMatrix, const string& path,
+bool readMatrix(vector<vector<double>> &outMatrix, const string &path,
                 char dlmtr);
 
-bool make_string(const string& src, const vector<string>& args, string& out);
+bool make_string(const string &src, const vector<string> &args, string &out);
 
 // Now it doesn't work.
-bool deleteFolder(const char* fname);
+bool deleteFolder(const char *fname);
 
-int find_separator(const std::string& src, char& separator);
+int find_separator(const std::string &src, char &separator);
 
 //! remove special characters except letters, numbers and '-', '_'. Spaces ->
 //! '_'
-string removeSpecialCharacters(const string& s);
+string removeSpecialCharacters(const string &s);
 
 //! convert this cases to string "null" for Plotly
 string nullIfNotFinite(double val);
 
 //! convert vec to string, separated by ","
-string vectorToString(const vector<double>& vec);
+string vectorToString(const vector<double> &vec);
 
 //! only name
 string makeUniqueDavisHtmlName();
@@ -77,8 +77,7 @@ string makeUniqueDavisHtmlName();
 string makeUniqueDavisHtmlRelativePath();
 
 //! sometimes std::to_string reurn str with ',' as separator what is wrong
-template <typename T>
-string toStringDotSeparator(T data) {
+template <typename T> string toStringDotSeparator(T data) {
   string str = std::to_string(data);
   std::replace(str.begin(), str.end(), ',', '.');
   return str;
@@ -86,7 +85,7 @@ string toStringDotSeparator(T data) {
 
 //! save to disk vector<T> data
 template <typename T>
-bool saveVec(const vector<T>& vec, const string& filename,
+bool saveVec(const vector<T> &vec, const string &filename,
              dv::configSaveToDisk config) {
   if (vec.size() == 0) {
     return false;
@@ -105,7 +104,7 @@ bool saveVec(const vector<T>& vec, const string& filename,
 
 //! save to disk vector<vector<T>> data
 template <typename T>
-bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
+bool saveVecVec(const vector<vector<T>> &vecVec, const string &filename,
                 dv::configSaveToDisk config) {
   if (vecVec.size() == 0) {
     return false;
@@ -124,7 +123,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
       for (int j = 0; j < cols; ++j) {
         double val = vecVec.at(j).at(i);
         fout << val;
-        if (j < cols - 1) {  // we dont need sep at row end
+        if (j < cols - 1) { // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -137,7 +136,7 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
       for (size_t j = 0; j < cols; ++j) {
         double val = vecVec.at(i).at(j);
         fout << val;
-        if (j < cols - 1) {  // we dont need sep at row end
+        if (j < cols - 1) { // we dont need sep at row end
           fout << config.separatorOfCols;
         }
       }
@@ -151,16 +150,16 @@ bool saveVecVec(const vector<vector<T>>& vecVec, const string& filename,
 //! convert any container to std::vector<G>
 template <
     typename G,
-    typename C,  // https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
+    typename C, // https://devblogs.microsoft.com/oldnewthing/20190619-00/?p=102599
     typename T =
-    typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
+        typename std::decay<decltype(*std::begin(std::declval<C>()))>::type,
     typename Enable =
-    typename std::enable_if<std::is_convertible<T, G>::value>::type >
-std::vector<G> makeVecFromContainer(const C& container) {
+        typename std::enable_if<std::is_convertible<T, G>::value>::type>
+std::vector<G> makeVecFromContainer(const C &container) {
   std::vector<G> vec;
   vec.reserve(static_cast<size_t>(
-                  std::distance(std::begin(container), std::end(container))));
-  for (auto const& v : container) {
+      std::distance(std::begin(container), std::end(container))));
+  for (auto const &v : container) {
     vec.push_back(static_cast<G>(v));
   }
   return vec;
@@ -168,13 +167,12 @@ std::vector<G> makeVecFromContainer(const C& container) {
 
 //! convert T** to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromRowPtr(const T* const* data,
-                                                        uint64_t rows,
-uint64_t cols) {
+inline std::vector<std::vector<G>>
+makeVecVecFromRowPtr(const T *const *data, uint64_t rows, uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
-    const T* rowPtr = data[i];
+    const T *rowPtr = data[i];
     std::vector<G> row;
     row.reserve(cols);
     for (uint64_t j = 0; j < cols; ++j)
@@ -186,13 +184,12 @@ uint64_t cols) {
 
 //! convert pseudo 2D T* to std::vector<G>
 template <typename G, typename T>
-inline std::vector<std::vector<G>> makeVecVecFromFlat(const T* data,
-                                                      uint64_t rows,
-uint64_t cols) {
+inline std::vector<std::vector<G>>
+makeVecVecFromFlat(const T *data, uint64_t rows, uint64_t cols) {
   std::vector<std::vector<G>> res;
   res.reserve(rows);
   for (uint64_t i = 0; i < rows; ++i) {
-    const T* rowPtr = data + i * cols;
+    const T *rowPtr = data + i * cols;
     std::vector<G> row;
     row.reserve(cols);
     for (uint64_t j = 0; j < cols; ++j)
@@ -204,7 +201,7 @@ uint64_t cols) {
 
 //! convert pseudo T* to std::vector<G>
 template <typename G, typename T>
-inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
+inline std::vector<G> makeVecFrom1D(const T *data, uint64_t count) {
   std::vector<G> res;
   res.reserve(static_cast<size_t>(count));
   for (uint64_t i = 0; i < count; ++i)
@@ -212,23 +209,23 @@ inline std::vector<G> makeVecFrom1D(const T* data, uint64_t count) {
   return res;
 }
 
-bool is_string_convertable_to_digit(const string& sample);
+bool is_string_convertable_to_digit(const string &sample);
 
-void transponeMatrix(std::vector<std::vector<double>>& matrix);
+void transponeMatrix(std::vector<std::vector<double>> &matrix);
 
-vector<double> calculateAverageVector(const vector<vector<double>>& vectors);
+vector<double> calculateAverageVector(const vector<vector<double>> &vectors);
 
-vector<double> calculateStandardDeviation(const vector<double>& mean,
-                                          const vector<vector<double>>& data);
+vector<double> calculateStandardDeviation(const vector<double> &mean,
+                                          const vector<vector<double>> &data);
 
-vector<double> doubleAndReverse(const vector<double>& input,
-                                const vector<double>& mean);
+vector<double> doubleAndReverse(const vector<double> &input,
+                                const vector<double> &mean);
 
-std::string reverseString(const std::string& input);
+std::string reverseString(const std::string &input);
 
 template <typename T>
-std::vector<std::vector<T>> readBinaryFile(const std::string& filePath,
-size_t rowLength) {
+std::vector<std::vector<T>> readBinaryFile(const std::string &filePath,
+                                           size_t rowLength) {
   std::ifstream file(filePath, std::ios::binary);
   if (!file) {
     throw std::runtime_error("Cannot open file");
@@ -238,7 +235,7 @@ size_t rowLength) {
   std::vector<T> row(rowLength);
 
   while (
-      file.read(reinterpret_cast<char*>(row.data()), rowLength * sizeof(T))) {
+      file.read(reinterpret_cast<char *>(row.data()), rowLength * sizeof(T))) {
     data.push_back(row);
   }
 
@@ -253,6 +250,6 @@ size_t rowLength) {
 }
 
 // #STOP_GRAB_TO_DVS_NAMESPACE
-};  // namespace dvs
+}; // namespace dvs
 
-#endif  // COMMON_UTILS_COMMON_UTILS_H_
+#endif // COMMON_UTILS_COMMON_UTILS_H_

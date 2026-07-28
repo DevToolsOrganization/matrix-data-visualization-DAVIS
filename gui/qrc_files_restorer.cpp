@@ -1,14 +1,14 @@
 #include "qrc_files_restorer.h"
-#include <QFile>
 #include <QDir>
+#include <QFile>
 #include <QString>
 
-QrcFilesRestorer::QrcFilesRestorer(const QString& path2Qrc) {
+QrcFilesRestorer::QrcFilesRestorer(const QString &path2Qrc) {
   QDir dir(path2Qrc);
   QStringList files = dir.entryList();
 }
 
-void QrcFilesRestorer::restoreFilesFromQrc(const QString& path2Qrc) {
+void QrcFilesRestorer::restoreFilesFromQrc(const QString &path2Qrc) {
   QDir dir(path2Qrc);
   QStringList files = dir.entryList();
   for (int i = 0; i < files.count(); ++i) {
@@ -20,5 +20,3 @@ void QrcFilesRestorer::restoreFilesFromQrc(const QString& path2Qrc) {
     }
   }
 }
-
-

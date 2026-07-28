@@ -1,11 +1,11 @@
-#include "gtest/gtest.h"
 #include "plotly_maker/plotly_maker.h"
+#include "gtest/gtest.h"
 #include <fstream>
 using std::string;
 
-
 TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
-  std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
+  std::vector<std::vector<double>> testValues = {
+      {43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "test_page";
   auto config = dv::Config();
   config.typeVisual = dv::VISUALTYPE_HEATMAP;
@@ -22,7 +22,8 @@ TEST(PlotlyMaker, CreateDefaultHeatMapHtmlPageTest) {
 }
 
 TEST(PlotlyMaker, ShowGlamourHeatMapHtmlPageTest) {
-  std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
+  std::vector<std::vector<double>> testValues = {
+      {43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "veryGlamourPage";
   auto config = dv::Config();
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_GLAMOUR;
@@ -31,7 +32,8 @@ TEST(PlotlyMaker, ShowGlamourHeatMapHtmlPageTest) {
 }
 
 TEST(PlotlyMaker, ShowThermalHeatMapHtmlPageTest) {
-  std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
+  std::vector<std::vector<double>> testValues = {
+      {43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "veryHotPage";
   auto config = dv::Config();
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_THERMAL;
@@ -40,7 +42,8 @@ TEST(PlotlyMaker, ShowThermalHeatMapHtmlPageTest) {
 }
 
 TEST(PlotlyMaker, ShowSunnyHeatMapHtmlPageTest) {
-  std::vector<std::vector<double>>testValues = {{43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
+  std::vector<std::vector<double>> testValues = {
+      {43, 400, 54, 980}, {200, 36, 400, 55}, {120, 4, 650, 5}};
   std::string str_page = "SunnyPage";
   auto config = dv::Config();
   config.heatmap.colorSc = dv::config_colorscales::COLORSCALE_SUNNY;
@@ -52,7 +55,7 @@ TEST(PlotlyMaker, ShowWarnigJsAbsentPageTest) {
   dvs::showWarningJsAbsentPage();
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   std::ignore = RUN_ALL_TESTS();
   return 0;

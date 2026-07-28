@@ -13,4 +13,4 @@ const char kCloudPagePath[] = "./davis_htmls/cloud_of_points.html";
 const char kJsUrlToDownolad[] =
     "https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.32.0/plotly.min.js";
 // #STOP_GRAB_TO_DVS_NAMESPACE
-}  // namespace dvs
+} // namespace dvs

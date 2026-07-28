@@ -13,6 +13,6 @@ extern const char kReportPagePath[];
 extern const char kCloudPagePath[];
 extern const char kJsUrlToDownolad[];
 // #STOP_GRAB_TO_DVS_NAMESPACE
-}  // namespace dvs
+} // namespace dvs
 
-#endif  // COMMON_UTILS_COMMON_CONSTANTS_H
+#endif // COMMON_UTILS_COMMON_CONSTANTS_H

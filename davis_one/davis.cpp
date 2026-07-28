@@ -42,7 +42,7 @@ const char kJsUrlToDownolad[] =
 } // namespace dvs end
 
 namespace dvs {
-//  *INDENT-OFF*
+// clang-format off
 const char kHtmlModel[] =
     R"(
 <head>
@@ -779,7 +779,7 @@ const char kAverageErrorDataBlock[] = R"davis_delimeter({
 }
 )davis_delimeter";
 
-// *INDENT-ON*
+// clang-format on
 
 } // namespace dvs end
 
@@ -787,14 +787,14 @@ namespace dvs {
 using std::string;
 
 #ifdef _WIN32
-  #include <direct.h>
-  #include <windows.h>
-  #define getcwd _getcwd  // stupid MSFT "deprecation" warning
+#include <direct.h>
+#include <windows.h>
+#define getcwd _getcwd // stupid MSFT "deprecation" warning
 #elif __linux__
-  #include <unistd.h>
+#include <unistd.h>
 #endif
 
-bool is_file_exists(const string& file_name) {
+bool is_file_exists(const string &file_name) {
   std::ifstream file(file_name.c_str());
   if (!file) {
     return false;
@@ -802,7 +802,7 @@ bool is_file_exists(const string& file_name) {
   return true;
 }
 
-void openFileBySystem(const string& file_name) {
+void openFileBySystem(const string &file_name) {
   string command;
 #ifdef _WIN32
   command = "start ";
@@ -820,7 +820,7 @@ void openFileBySystem(const string& file_name) {
 string getCurrentPath() {
 #if defined(_WIN32) || (__linux__)
   char buffer[1024];
-  char* answer = getcwd(buffer, sizeof(buffer));
+  char *answer = getcwd(buffer, sizeof(buffer));
   string s_cwd;
   if (answer) {
     s_cwd = answer;
@@ -846,7 +846,7 @@ void tryToDownloadJsByCurl() {
   std::system(cmd.c_str());
 }
 
-bool saveStringToFile(const string& file_name, const string& data) {
+bool saveStringToFile(const string &file_name, const string &data) {
   std::ofstream out(file_name);
   if (out.is_open()) {
     out << data.c_str();
@@ -856,7 +856,7 @@ bool saveStringToFile(const string& file_name, const string& data) {
   return false;
 }
 
-void openPlotlyHtml(const string& file_name) { openFileBySystem(file_name); }
+void openPlotlyHtml(const string &file_name) { openFileBySystem(file_name); }
 
 void sleepMicroSec(unsigned long microsec) {
 #ifdef _WIN32
@@ -878,7 +878,7 @@ void mayBeCreateJsWorkingFolder() {
   }
 }
 
-bool deleteFolder(const char* fname) {
+bool deleteFolder(const char *fname) {
   struct stat sb;
   if (stat(fname, &sb) == 0) {
     // rmdir(fname);
@@ -888,7 +888,7 @@ bool deleteFolder(const char* fname) {
   }
 }
 
-bool get_data_from_file(const string& path, vector<string>& result) {
+bool get_data_from_file(const string &path, vector<string> &result) {
   // TODO different scenarious and sanitizing
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
   if (!is_file_exists(path)) {
@@ -910,7 +910,7 @@ bool get_data_from_file(const string& path, vector<string>& result) {
   return true;
 }
 
-bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
+bool readMatrix(vector<vector<double>> &outMatrix, const std::string &path,
                 char dlmtr) {
   outMatrix.clear();
   std::setlocale(LC_ALL, "ru_RU.UTF-8");
@@ -920,7 +920,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
   if (ifs) {
     while (!ifs.eof()) {
       std::getline(ifs, str);
-      if (str.size() == 0)  // if exist empty line
+      if (str.size() == 0) // if exist empty line
         continue;
       std::vector<std::string> parts = split(str, dlmtr);
       vector<double> doubleLine;
@@ -938,7 +938,7 @@ bool readMatrix(vector<vector<double>>& outMatrix, const std::string& path,
   }
 }
 
-vector<string> split(const string& target, char c) {
+vector<string> split(const string &target, char c) {
   std::string temp;
   std::stringstream stringstream{target};
   std::vector<std::string> result;
@@ -949,7 +949,7 @@ vector<string> split(const string& target, char c) {
   return result;
 }
 
-bool make_string(const string& src, const vector<string>& args, string& out) {
+bool make_string(const string &src, const vector<string> &args, string &out) {
   if (!out.empty()) {
     out.clear();
   }
@@ -1011,7 +1011,7 @@ bool make_string(const string& src, const vector<string>& args, string& out) {
   return true;
 }
 
-int find_separator(const std::string& src, char& separator) {
+int find_separator(const std::string &src, char &separator) {
   std::vector<char> ignored_chars = {'+', '-', 'e', 'E', '.', '\r', ','};
   std::set<char> unique_chars;
   bool is_service_char = false;
@@ -1061,27 +1061,25 @@ int find_separator(const std::string& src, char& separator) {
   return UNDEFINED_BEHAVIOR;
 }
 
-string removeSpecialCharacters(const string& s) {
+string removeSpecialCharacters(const string &s) {
   string t;
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == ' ') {
       t += '_';
-    } else if ((s[i] >= 'a' && s[i] <= 'z') ||
-               (s[i] >= 'A' && s[i] <= 'Z') ||
-               (s[i] >= '0' && s[i] <= '9') || (s[i] == '-') ||
-               (s[i] == '_')) {
+    } else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') ||
+               (s[i] >= '0' && s[i] <= '9') || (s[i] == '-') || (s[i] == '_')) {
       t += s[i];
     }
   }
   return t;
 }
 
-bool is_string_convertable_to_digit(const string& sample) {
+bool is_string_convertable_to_digit(const string &sample) {
   try {
     std::ignore = std::stod(sample);
-  } catch (const std::invalid_argument& e) {
+  } catch (const std::invalid_argument &e) {
     return false;
-  } catch (const std::out_of_range& e) {
+  } catch (const std::out_of_range &e) {
     return false;
   }
   return true;
@@ -1098,7 +1096,7 @@ string nullIfNotFinite(double val) {
   return plotlyVar;
 }
 
-string vectorToString(const vector<double>& vec) {
+string vectorToString(const vector<double> &vec) {
   std::ostringstream oss;
   for (size_t i = 0; i < vec.size(); ++i) {
     if (i != 0) {
@@ -1121,7 +1119,7 @@ std::string makeUniqueDavisHtmlName() {
 #if defined(_MSC_VER)
   localtime_s(&tm, &in_time_t);
 #else
-  if (std::tm* p = std::localtime(&in_time_t))
+  if (std::tm *p = std::localtime(&in_time_t))
     tm = *p;
 #endif
   std::ostringstream ss;
@@ -1132,13 +1130,10 @@ std::string makeUniqueDavisHtmlName() {
 
 std::string makeUniqueDavisHtmlRelativePath() {
   string name = makeUniqueDavisHtmlName();
-  return std::string("./")
-         .append(kOutFolderName)
-         .append(name)
-         .append(".html");
+  return std::string("./").append(kOutFolderName).append(name).append(".html");
 }
 
-void transponeMatrix(std::vector<std::vector<double>>& matrix) {
+void transponeMatrix(std::vector<std::vector<double>> &matrix) {
   if (matrix.empty())
     return;
 
@@ -1154,37 +1149,37 @@ void transponeMatrix(std::vector<std::vector<double>>& matrix) {
   matrix = std::move(transposed);
 }
 
-vector<double> calculateAverageVector(const vector<vector<double>>& vectors) {
+vector<double> calculateAverageVector(const vector<vector<double>> &vectors) {
   if (vectors.empty()) {
     throw std::invalid_argument("Input vector of vectors is empty.");
   }
 
   size_t vectorSize = vectors[0].size();
-  for (const auto& vec : vectors) {
+  for (const auto &vec : vectors) {
     if (vec.size() != vectorSize) {
       throw std::invalid_argument("All vectors must have the same size.");
     }
   }
 
   std::vector<double> averageVector(vectorSize, 0.0);
-  for (const auto& vec : vectors) {
+  for (const auto &vec : vectors) {
     for (size_t i = 0; i < vectorSize; ++i) {
       averageVector[i] += vec[i];
     }
   }
 
-  for (double& value : averageVector) {
+  for (double &value : averageVector) {
     value /= vectors.size();
   }
 
   return averageVector;
 }
 
-vector<double> calculateStandardDeviation(const vector<double>& mean,
-                                          const vector<vector<double>>& data) {
+vector<double> calculateStandardDeviation(const vector<double> &mean,
+                                          const vector<vector<double>> &data) {
   std::vector<double> stddev(mean.size(), 0.0);
   int n = data.size();
-  for (const auto& vec : data) {
+  for (const auto &vec : data) {
     for (size_t i = 0; i < vec.size(); ++i) {
       double diff = vec[i] - mean[i];
       stddev[i] += diff * diff;
@@ -1196,7 +1191,7 @@ vector<double> calculateStandardDeviation(const vector<double>& mean,
   return stddev;
 }
 
-std::string reverseString(const std::string& input) {
+std::string reverseString(const std::string &input) {
   std::stringstream ss(input);
   std::string item;
   std::vector<std::string> elements;
@@ -1218,8 +1213,8 @@ std::string reverseString(const std::string& input) {
   return result;
 }
 
-vector<double> doubleAndReverse(const vector<double>& input,
-                                const vector<double>& mean) {
+vector<double> doubleAndReverse(const vector<double> &input,
+                                const vector<double> &mean) {
   vector<double> result(input.size(), 0);
   vector<double> minus_result = input;
   for (size_t i = 0; i < result.size(); ++i) {
@@ -1236,9 +1231,7 @@ vector<double> doubleAndReverse(const vector<double>& input,
 
 namespace dvs {
 
-
-
-bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
+bool checkThatSizesAreTheSame(const vector<vector<double>> &values) {
   size_t size = 0;
   if (!values.empty()) {
     size = values[0].size();
@@ -1253,8 +1246,8 @@ bool checkThatSizesAreTheSame(const vector<vector<double>>& values) {
   return true;
 }
 
-bool createStringHeatMapValues(const vector<vector<double>>& values,
-                               string& str_values) {
+bool createStringHeatMapValues(const vector<vector<double>> &values,
+                               string &str_values) {
   if (!checkThatSizesAreTheSame(values))
     return false;
   if (!str_values.empty())
@@ -1278,9 +1271,9 @@ bool createStringHeatMapValues(const vector<vector<double>>& values,
   return true;
 }
 
-bool createStringLineChartValues(const vector<double>& xValues,
-                                 const vector<double>& yValues,
-                                 string& out_str_values) {
+bool createStringLineChartValues(const vector<double> &xValues,
+                                 const vector<double> &yValues,
+                                 string &out_str_values) {
   if (xValues.size() != yValues.size()) {
     return false;
   }
@@ -1302,16 +1295,17 @@ bool createStringLineChartValues(const vector<double>& xValues,
       out_str_values.append(",");
     }
   }
-  out_str_values.append("], mode: 'lines', hovertemplate: 'x:%{x}, y:%{y:.} <extra></extra>' };var data = [trace];");
+  out_str_values.append("], mode: 'lines', hovertemplate: 'x:%{x}, y:%{y:.} "
+                        "<extra></extra>' };var data = [trace];");
   return true;
 }
 
-bool getMatrixValuesFromString(const string& in_values,
-                               vector<vector<double>>& out_values) {
+bool getMatrixValuesFromString(const string &in_values,
+                               vector<vector<double>> &out_values) {
   istringstream f_lines(in_values);
   string lines;
   while (std::getline(f_lines, lines, ';')) {
-    vector<double>vals;
+    vector<double> vals;
     istringstream f_values(lines);
     string str_value;
     while (std::getline(f_values, str_value, ',')) {
@@ -1322,9 +1316,8 @@ bool getMatrixValuesFromString(const string& in_values,
   return true;
 };
 
-bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
-                           string& page,
-                           const dv::Config& configuration) {
+bool createHtmlPageHeatmap(const std::vector<std::vector<double>> &values,
+                           string &page, const dv::Config &configuration) {
   vector<string> args(ARGS_SIZE, "");
   string str_values = "";
   if (!checkThatSizesAreTheSame(values)) {
@@ -1338,10 +1331,13 @@ bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
   args[ARG_TITLE_X] = configuration.heatmap.xLabel;
   args[ARG_TITLE_Y] = configuration.heatmap.yLabel;
   args[ARG_TITLE_Z] = configuration.heatmap.zLabel;
-  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
-  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
+  args[ARG_ASPECT_RATIO_WIDTH] =
+      dvs::toStringDotSeparator(configuration.heatmap.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] =
+      dvs::toStringDotSeparator(configuration.heatmap.aspectRatioHeight);
   string paramWH;
-  if (configuration.heatmap.aspectRatioWidth > configuration.heatmap.aspectRatioHeight) {
+  if (configuration.heatmap.aspectRatioWidth >
+      configuration.heatmap.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -1360,50 +1356,52 @@ bool createHtmlPageHeatmap(const std::vector<std::vector<double>>& values,
   args[ARG_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectSurfaceMatrixBlock;
-  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateSurfaceMatrixFooBlock;
+  args[ARG_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateSurfaceMatrixFooBlock;
   args[ARG_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
 
   dv::config_colorscales clrScale;
   clrScale = configuration.heatmap.colorSc;
   switch (clrScale) {
-    case dv::config_colorscales::COLORSCALE_DEFAULT:
-      args[ARG_COLOR_MAP] = kColorMapDefaultPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_SUNNY:
-      args[ARG_COLOR_MAP] = kColorMapSunnyPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_GLAMOUR:
-      args[ARG_COLOR_MAP] = kColorMapGlamourPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_THERMAL:
-      args[ARG_COLOR_MAP] = kColorMapThermalPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_GRAYSCALE:
-      args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
-      break;
-    case dv::config_colorscales::COLORSCALE_YlGnBu:
-      args[ARG_COLOR_MAP] = kColorMapYlGnBuPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_JET:
-      args[ARG_COLOR_MAP] = kColorMapJetPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_HOT:
-      args[ARG_COLOR_MAP] = kColorMapHotPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_ELECTRIC:
-      args[ARG_COLOR_MAP] = kColorMapElectricPart;
-      break;
-    case dv::config_colorscales::COLORSCALE_PORTLAND:
-      args[ARG_COLOR_MAP] = kColorMapPortlandPart;
-      break;
+  case dv::config_colorscales::COLORSCALE_DEFAULT:
+    args[ARG_COLOR_MAP] = kColorMapDefaultPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_SUNNY:
+    args[ARG_COLOR_MAP] = kColorMapSunnyPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_GLAMOUR:
+    args[ARG_COLOR_MAP] = kColorMapGlamourPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_THERMAL:
+    args[ARG_COLOR_MAP] = kColorMapThermalPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_GRAYSCALE:
+    args[ARG_COLOR_MAP] = kColorMapGrayscalePart;
+    break;
+  case dv::config_colorscales::COLORSCALE_YlGnBu:
+    args[ARG_COLOR_MAP] = kColorMapYlGnBuPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_JET:
+    args[ARG_COLOR_MAP] = kColorMapJetPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_HOT:
+    args[ARG_COLOR_MAP] = kColorMapHotPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_ELECTRIC:
+    args[ARG_COLOR_MAP] = kColorMapElectricPart;
+    break;
+  case dv::config_colorscales::COLORSCALE_PORTLAND:
+    args[ARG_COLOR_MAP] = kColorMapPortlandPart;
+    break;
   }
 
   make_string(kHtmlModel, args, page);
   return true;
 }
 
-bool showHeatMapInBrowser(const vector<vector<double>>& values,
-                          const string& title, const dv::Config& configuration) {
+bool showHeatMapInBrowser(const vector<vector<double>> &values,
+                          const string &title,
+                          const dv::Config &configuration) {
   string page;
   if (!createHtmlPageHeatmap(values, page, configuration)) {
     return false;
@@ -1411,37 +1409,42 @@ bool showHeatMapInBrowser(const vector<vector<double>>& values,
   string pageName;
   mayBeCreateJsWorkingFolder();
   string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
-  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
+  pageName.append("./")
+      .append(kOutFolderName)
+      .append(titleWithoutSpecialChars)
+      .append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
   } else {
     showWarningJsAbsentPage();
   }
-  return true;// TODO handle different exceptions
+  return true; // TODO handle different exceptions
 }
 
-bool showHeatMapInBrowser(const string& values,
-                          const string& title, const dv::Config& configuration) {
-  vector<vector<double>>heat_map_values;
+bool showHeatMapInBrowser(const string &values, const string &title,
+                          const dv::Config &configuration) {
+  vector<vector<double>> heat_map_values;
   getMatrixValuesFromString(values, heat_map_values);
   showHeatMapInBrowser(heat_map_values, title, configuration);
   return true;
 };
 
-bool showLineChartInBrowser(const vector<double>& values,
-                            const string& title, const dv::Config& configuration) {
+bool showLineChartInBrowser(const vector<double> &values, const string &title,
+                            const dv::Config &configuration) {
 
   vector<double> x(values.size());
-  std::iota(std::begin(x), std::end(x), 0);  // Fill with 0, 1, 2...
+  std::iota(std::begin(x), std::end(x), 0); // Fill with 0, 1, 2...
   showLineChartInBrowser(x, values, title, configuration);
   return true;
 }
 
-bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>& yValues,
-                            const std::string& title, const dv::Config& configuration) {
+bool showLineChartInBrowser(const vector<double> &xValues,
+                            const vector<double> &yValues,
+                            const std::string &title,
+                            const dv::Config &configuration) {
   string page;
-  vector<string>args(ARGS_SIZE, "");
+  vector<string> args(ARGS_SIZE, "");
   args[ARG_JS_VER] = kPlotlyJsName;
   string str_values = "";
   createStringLineChartValues(xValues, yValues, str_values);
@@ -1449,10 +1452,13 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   args[ARG_TITLE] = configuration.chart.title;
   args[ARG_TITLE_X] = configuration.chart.xLabel;
   args[ARG_TITLE_Y] = configuration.chart.yLabel;
-  args[ARG_ASPECT_RATIO_WIDTH] = dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
-  args[ARG_ASPECT_RATIO_HEIGHT] = dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
+  args[ARG_ASPECT_RATIO_WIDTH] =
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth);
+  args[ARG_ASPECT_RATIO_HEIGHT] =
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight);
   string paramWH;
-  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+  if (configuration.chart.aspectRatioWidth >
+      configuration.chart.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -1477,7 +1483,10 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   string pageName;
   mayBeCreateJsWorkingFolder();
   string titleWithoutSpecialChars = dvs::removeSpecialCharacters(title);
-  pageName.append("./").append(kOutFolderName).append(titleWithoutSpecialChars).append(".html");
+  pageName.append("./")
+      .append(kOutFolderName)
+      .append(titleWithoutSpecialChars)
+      .append(".html");
   saveStringToFile(pageName, page);
   if (isPlotlyScriptExists()) {
     openPlotlyHtml(pageName);
@@ -1487,9 +1496,9 @@ bool showLineChartInBrowser(const vector<double>& xValues, const vector<double>&
   return true;
 }
 
-bool showLineChartInBrowser(const string& values,
-                            const string& title, const dv::Config& configuration) {
-  vector<double>vals;
+bool showLineChartInBrowser(const string &values, const string &title,
+                            const dv::Config &configuration) {
+  vector<double> vals;
   istringstream f(values);
   string s;
   while (std::getline(f, s, ',')) {
@@ -1507,7 +1516,7 @@ void showWarningJsAbsentPage() {
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args {ARGS_WARNING_PAGE_SIZE, ""};
+  vector<string> args{ARGS_WARNING_PAGE_SIZE, ""};
   args[ARG_WORKING_FOLDER] = getCurrentPath() + davis_dir;
   args[ARG_JS_VERSION] = kPlotlyJsName;
   make_string(kWarningJSLibAbsentPage, args, out);
@@ -1515,10 +1524,8 @@ void showWarningJsAbsentPage() {
   openFileBySystem(kWarningPagePath);
 }
 
-
-void showReportPage(const string& title,
-                    const string& svg,
-                    const string& description) {
+void showReportPage(const string &title, const string &svg,
+                    const string &description) {
 
   string out;
   string davis_dir;
@@ -1527,63 +1534,55 @@ void showReportPage(const string& title,
 #elif __linux__
   davis_dir = "/davis_htmls";
 #endif
-  vector<string>args {ARGS_REPORT_PAGE_SIZE, ""};
+  vector<string> args{ARGS_REPORT_PAGE_SIZE, ""};
   args[ARG_REPORT_TITLE] = title;
   args[ARG_SVG_ICON] = svg;
   args[ARG_REPORT_DESCRIPTION] = description;
   make_string(kNoFileFoundedPage, args, out);
   saveStringToFile(kReportPagePath, out);
   openFileBySystem(kReportPagePath);
-
 }
-
 
 void showReportFileNotFounded() {
 
-  showReportPage("Open file error.",
-                 kWarningIcon,
+  showReportPage("Open file error.", kWarningIcon,
                  "File is not founded. Please, check the path to the file.");
 }
 
 void showReportFileEmpty() {
 
-  showReportPage("File is empty.",
-                 kWarningIcon,
-                 "No data to show.");
+  showReportPage("File is empty.", kWarningIcon, "No data to show.");
 }
-
 
 void showMatrixSizesAreNotTheSame(int badRow) {
 
   string text;
-  text.append("Rows have different sizes in matrix. Check the row № ").append(std::to_string(badRow + 1));
-  showReportPage("Rows sizes are not the same",
-                 kWarningIcon,
-                 text);
+  text.append("Rows have different sizes in matrix. Check the row № ")
+      .append(std::to_string(badRow + 1));
+  showReportPage("Rows sizes are not the same", kWarningIcon, text);
 }
 
-void showDateTimeChart(const string& date_time_values,
-                       const vector<double>& yValues,
-                       bool isFitPlotToWindow) {
+void showDateTimeChart(const string &date_time_values,
+                       const vector<double> &yValues, bool isFitPlotToWindow) {
 
   string out;
-  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  vector<string> args{ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
 
-  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(yValues);
   args_block[ARG_SIMPLE_DATA_X] = date_time_values;
   args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
   std::string data_values_block;
   make_string(kHtmlSimpleDataBlock, args_block, data_values_block);
 
-
   args[ARG_DATE_TIME_VALUES_BLOCK] = data_values_block;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
-  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateFooBlock;
 
   string paramWH = "height";
   string paramWHsecond;
@@ -1603,17 +1602,18 @@ void showDateTimeChart(const string& date_time_values,
   auto unique_path = dvs::makeUniqueDavisHtmlName();
   saveStringToFile(unique_path, out);
   openFileBySystem(unique_path);
-
-
 }
 
-void addTraceBlockToGlobal(const vector<double>& yValues, const string& traceName) {
+void addTraceBlockToGlobal(const vector<double> &yValues,
+                           const string &traceName) {
   vector<double> xValues(yValues.size());
-  std::iota(std::begin(xValues), std::end(xValues), 0);  // Fill with 0, 1, 2...
+  std::iota(std::begin(xValues), std::end(xValues), 0); // Fill with 0, 1, 2...
   addTraceBlockToGlobal(xValues, yValues, traceName);
 }
 
-void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& yValues, const string& traceName) {
+void addTraceBlockToGlobal(const vector<double> &xValues,
+                           const vector<double> &yValues,
+                           const string &traceName) {
   string trace_block = dvs::kHtmlMultiChartBlock;
   int trace_i = 1 + dvs::allChartBlocks.size();
   string str_numTrace = std::to_string(trace_i);
@@ -1626,13 +1626,13 @@ void addTraceBlockToGlobal(const vector<double>& xValues, const vector<double>& 
   dvs::allChartBlocks.emplace_back(filled_trace_block);
 }
 
-void showCloudOfPointsChart(const vector<double>& xValues,
-                            const vector<double>& yValues,
-                            const vector<double>& colorValues,
+void showCloudOfPointsChart(const vector<double> &xValues,
+                            const vector<double> &yValues,
+                            const vector<double> &colorValues,
                             bool isFitPlotToWindow) {
   string out;
   string davis_dir;
-  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  vector<string> args{ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = vectorToString(xValues);
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
@@ -1651,7 +1651,8 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   } else {
     paramWHsecond = paramWH;
   }
-  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] =
+      paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
@@ -1660,12 +1661,12 @@ void showCloudOfPointsChart(const vector<double>& xValues,
   openFileBySystem(unique_file_name);
 }
 
-void showCloudOfPointsChartStr(const std::string& xValues,
-                               const vector<double>& yValues,
-                               const vector<double>& colorValues,
+void showCloudOfPointsChartStr(const std::string &xValues,
+                               const vector<double> &yValues,
+                               const vector<double> &colorValues,
                                bool isFitPlotToWindow) {
   string out;
-  vector<string>args {ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
+  vector<string> args{ARGS_CLOUD_OF_POINTS_PAGE_SIZE, ""};
   args[ARG_JS_COF_NAME] = kPlotlyJsName;
   args[ARG_X_CLOUD_OF_POINTS] = xValues;
   args[ARG_Y_CLOUD_OF_POINTS] = vectorToString(yValues);
@@ -1684,7 +1685,8 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   } else {
     paramWHsecond = paramWH;
   }
-  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
+  args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] =
+      paramWHsecond;
   args[ARG_CLOUD_OF_POINTS_ASPECT_WIDTH_OR_HEIGHT] = paramWH;
   args[ARG_CLOUD_OF_POINTS_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlCloudOfPoints, args, out);
@@ -1693,18 +1695,16 @@ void showCloudOfPointsChartStr(const std::string& xValues,
   openFileBySystem(unique_file_name);
 }
 
-void showMultiChart(const std::string& date_time_values,
-                    const vector<vector<double>>& yValues,
+void showMultiChart(const std::string &date_time_values,
+                    const vector<vector<double>> &yValues,
                     bool isFitPlotToWindow) {
   string out;
-  vector<string>args {ARGS_DATE_TIME_PAGE_SIZE, ""};
+  vector<string> args{ARGS_DATE_TIME_PAGE_SIZE, ""};
   args[ARG_JS_NAME] = kPlotlyJsName;
-
-
 
   std::string all_data = "";
   for (size_t i = 0; i < yValues.size(); ++i) {
-    vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+    vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
     std::string simpleData_yValues = vectorToString(yValues[i]);
     args_block[ARG_SIMPLE_DATA_X] = date_time_values;
     args_block[ARG_SIMPLE_DATA_Y] = simpleData_yValues;
@@ -1722,33 +1722,34 @@ void showMultiChart(const std::string& date_time_values,
   auto polygon_date_time = date_time_values;
   polygon_date_time.append(",");
   polygon_date_time.append(reversed_date_time_data);
-  auto polygon_deviation_values = doubleAndReverse(deviation_values, average_values);
+  auto polygon_deviation_values =
+      doubleAndReverse(deviation_values, average_values);
 
-  vector<string>args_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   std::string simpleData_yValues = vectorToString(deviation_values);
   args_block[ARG_SIMPLE_DATA_X] = polygon_date_time;
   args_block[ARG_SIMPLE_DATA_Y] = vectorToString(polygon_deviation_values);
   std::string average_error_data_values_block;
-  make_string(kAverageErrorDataBlock, args_block, average_error_data_values_block);
+  make_string(kAverageErrorDataBlock, args_block,
+              average_error_data_values_block);
 
   std::string average_values_str = vectorToString(average_values);
-  vector<string>args_aver_block {ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
+  vector<string> args_aver_block{ARGS_SIMPLE_DATA_BLOCK_SIZE, ""};
   args_aver_block[ARG_SIMPLE_DATA_X] = date_time_values;
   args_aver_block[ARG_SIMPLE_DATA_Y] = average_values_str;
   std::string average_data_values_block;
   make_string(kHtmlSimpleDataBlock, args_aver_block, average_data_values_block);
 
-
   auto all_aver_block = average_error_data_values_block;
   all_aver_block.append(",");
   all_aver_block.append(average_data_values_block);
-
 
   args[ARG_DATE_TIME_AVERAGE_VALUES_BLOCK] = all_aver_block;
 
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_STYLE] = kHtmlComboboxStyleBlock;
   args[ARG_DATE_TIME_POINT_LINE_SWITCHER_SELECT] = kHtmlComboboxSelectBlock;
-  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] = kHtmlComboboxUpdateFooBlock;
+  args[ARG_DATE_TIME_POINT_LINE_SWITCHER_UPDATE_FOO] =
+      kHtmlComboboxUpdateFooBlock;
   args[ARG_DATE_TIME_VALUES_BLOCK] = all_data;
   args[ARG_DATE_TIME_ASPECT_RATIO_WIDTH] = "1";
   args[ARG_DATE_TIME_ASPECT_RATIO_HEIGHT] = "1";
@@ -1793,10 +1794,9 @@ namespace dv {
 void holdOn() {
   dvs::isHold = true;
   dvs::allChartBlocks.clear();
-
 }
 
-void holdOff(const Config& configuration) {
+void holdOff(const Config &configuration) {
   dvs::isHold = false;
   if (dvs::allChartBlocks.empty()) {
     return;
@@ -1814,7 +1814,8 @@ void holdOff(const Config& configuration) {
     allChartBlocks_str.append(dvs::allChartBlocks[i]);
   }
   std::string paramWH;
-  if (configuration.chart.aspectRatioWidth > configuration.chart.aspectRatioHeight) {
+  if (configuration.chart.aspectRatioWidth >
+      configuration.chart.aspectRatioHeight) {
     paramWH = "width";
   } else {
     paramWH = "height";
@@ -1829,21 +1830,21 @@ void holdOff(const Config& configuration) {
   } else {
     paramWHsecond = paramWH;
   }
-  std::vector<std::string> args = {dvs::kPlotlyJsName,
-                                   allChartBlocks_str,
-                                   allTracesNames_str,
-                                   configuration.chart.title,
-                                   configuration.chart.xLabel,
-                                   configuration.chart.yLabel,
-                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
-                                   dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
-                                   paramWH,
-                                   paramWHsecond,
-                                   dvs::kHtmlComboboxStyleBlock,
-                                   dvs::kHtmlComboboxSelectBlock,
-                                   dvs::kHtmlComboboxUpdateFooBlock,
-                                   dvs::kHtmlDavisLogoHyperlinkBlock
-                                  };
+  std::vector<std::string> args = {
+      dvs::kPlotlyJsName,
+      allChartBlocks_str,
+      allTracesNames_str,
+      configuration.chart.title,
+      configuration.chart.xLabel,
+      configuration.chart.yLabel,
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioWidth),
+      dvs::toStringDotSeparator(configuration.chart.aspectRatioHeight),
+      paramWH,
+      paramWHsecond,
+      dvs::kHtmlComboboxStyleBlock,
+      dvs::kHtmlComboboxSelectBlock,
+      dvs::kHtmlComboboxUpdateFooBlock,
+      dvs::kHtmlDavisLogoHyperlinkBlock};
   std::string multichartPage = dvs::kHtmlMultiChartModel;
   std::string filled_multichartPage = "";
   dvs::make_string(multichartPage, args, filled_multichartPage);
@@ -1857,8 +1858,6 @@ void holdOff(const Config& configuration) {
   }
   dvs::allChartBlocks.clear();
 }
-
-
 
 
 } // namespace dv end

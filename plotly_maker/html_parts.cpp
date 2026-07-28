@@ -2,7 +2,7 @@
 
 namespace dvs {
 // #START_GRAB_TO_DVS_NAMESPACE
-//  *INDENT-OFF*
+// clang-format off
 const char kHtmlModel[] =
     R"(
 <head>
@@ -739,6 +739,6 @@ const char kAverageErrorDataBlock[] = R"davis_delimeter({
 }
 )davis_delimeter";
 
-// *INDENT-ON*
+// clang-format on
 // #STOP_GRAB_TO_DVS_NAMESPACE
 } // namespace dvs

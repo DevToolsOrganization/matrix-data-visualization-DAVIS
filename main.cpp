@@ -1,25 +1,23 @@
-#include <iostream>
-#include <sys/stat.h>
-#include <string>
-#include <fstream>
 #include "ResourceManager/ResourceHandle.h"
-#include <cxxopts.hpp>
 #include "array_core/array_core.h"
 #include "common_utils/common_constants.h"
 #include "common_utils/common_utils.h"
+#include <cxxopts.hpp>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sys/stat.h>
 
 using std::vector;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
   cxxopts::Options options("davis", "data visualization utility");
-  options.add_options()
-         ("h,help", "davis commands")
-         ("l,linechart", "linechart values", cxxopts::value<std::string>())
-         ("m,heatmap", "heatmap values", cxxopts::value<std::string>())
-         ("f,file", "path to input file", cxxopts::value<std::string>())
-         ("t,charttype", "chart type", cxxopts::value<std::string>())
-         ;
+  options.add_options()("h,help", "davis commands")(
+      "l,linechart", "linechart values", cxxopts::value<std::string>())(
+      "m,heatmap", "heatmap values", cxxopts::value<std::string>())(
+      "f,file", "path to input file", cxxopts::value<std::string>())(
+      "t,charttype", "chart type", cxxopts::value<std::string>());
   auto result = options.parse(argc, argv);
   if (result.count("help")) {
     std::cout << options.help() << std::endl;
@@ -59,5 +57,3 @@ int main(int argc, char* argv[]) {
 
   return EXIT_SUCCESS;
 }
-
-
