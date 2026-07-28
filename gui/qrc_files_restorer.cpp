@@ -1,4 +1,5 @@
 #include "qrc_files_restorer.h"
+#include <QApplication>
 #include <QDir>
 #include <QFile>
 #include <QString>
