@@ -5,6 +5,7 @@
 #include "QStyleFactory"
 #include "QUrl"
 #include "davis_gui.h"
+#include "qrc_files_restorer.h"
 #include <QApplication>
 
 void applyDark() {
@@ -40,6 +41,7 @@ void applyDark() {
 };
 
 int main(int argc, char *argv[]) {
+  QrcFilesRestorer::restoreFilesFromQrc(":/res/4restore");
   dvs::mayBeCreateJsWorkingFolder();
   if (dvs::isPlotlyScriptExists() == false) {
     qDebug() << "try to copy file.....";

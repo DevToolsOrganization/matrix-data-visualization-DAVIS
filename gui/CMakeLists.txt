@@ -55,6 +55,9 @@ set(PROJECT_SOURCES
         cool_progressbar.cpp
         davis.rc
         version.h
+        qrc_files_restorer.h
+        qrc_files_restorer.cpp
+
 )
 
 qt5_add_resources(PROJECT_SOURCES res.qrc)
