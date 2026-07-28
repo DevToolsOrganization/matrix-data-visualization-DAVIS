@@ -1599,7 +1599,7 @@ void showDateTimeChart(const string &date_time_values,
   args[ARG_DATE_TIME_ASPECT_WIDTH_OR_HEIGHT_FOR_AUTOSCALE] = paramWHsecond;
   args[ARG_DATE_TIME_DAVIS_LOGO] = kHtmlDavisLogoHyperlinkBlock;
   make_string(kHtmlDateTimeModel, args, out);
-  auto unique_path = dvs::makeUniqueDavisHtmlName();
+  auto unique_path = dvs::makeUniqueDavisHtmlRelativePath();
   saveStringToFile(unique_path, out);
   openFileBySystem(unique_path);
 }
