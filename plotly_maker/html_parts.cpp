@@ -1,10 +1,10 @@
 #include "html_parts.h"
 
 namespace dvs {
-//#START_GRAB_TO_DVS_NAMESPACE
-// *INDENT-OFF*
-    const char kHtmlModel[] =
-R"(
+// #START_GRAB_TO_DVS_NAMESPACE
+//  *INDENT-OFF*
+const char kHtmlModel[] =
+    R"(
 <head>
   <title>DAVIS</title>
   <script src="./%8" charset="utf-8"></script>
@@ -57,7 +57,7 @@ R"(
 </body>
 )";
 
-    const char kColorMapDefaultPart[] = R"(
+const char kColorMapDefaultPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(165,0,38)'],
     ['0.111111111111', 'rgb(215,48,39)'],
@@ -71,8 +71,7 @@ R"(
     ['1.0', 'rgb(49,54,149)']
   ],)";
 
-
-    const char kColorMapSunnyPart[] = R"(
+const char kColorMapSunnyPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(250, 134, 7)'],
     ['0.2', 'rgb(250, 150, 27)'],
@@ -82,7 +81,7 @@ R"(
     ['1.0', 'rgb(255, 245, 123)']
   ],)";
 
-    const char kColorMapGlamourPart[] = R"(
+const char kColorMapGlamourPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(17,63,93)'],
     ['0.2', 'rgb(88,80,143)'],
@@ -92,7 +91,7 @@ R"(
     ['1.0', 'rgb(235,248,0)']
   ],)";
 
-    const char kColorMapThermalPart[] = R"(
+const char kColorMapThermalPart[] = R"(
   colorscale: [
     ['0.0', 'rgb(0,0,5)'],
     ['0.2', 'rgb(12,0,44)'],
@@ -102,34 +101,33 @@ R"(
     ['1.0', 'rgb(255,213,0)']
   ],)";
 
-
-    const char kColorMapGrayscalePart[] = R"(
+const char kColorMapGrayscalePart[] = R"(
   colorscale: [
     ['0.0', 'rgb(0,0,0)'],
     ['1.0', 'rgb(255, 255, 255)']
   ],)";
 
-    const char kColorMapYlGnBuPart[] = R"(
+const char kColorMapYlGnBuPart[] = R"(
   colorscale: 'YlGnBu',
   )";
 
-    const char kColorMapJetPart[] = R"(
+const char kColorMapJetPart[] = R"(
   colorscale: 'Jet',
   )";
 
-    const char kColorMapHotPart[] = R"(
+const char kColorMapHotPart[] = R"(
   colorscale: 'Hot',
   )";
 
-    const char kColorMapElectricPart[] = R"(
+const char kColorMapElectricPart[] = R"(
   colorscale: 'Electric',
   )";
 
-    const char kColorMapPortlandPart[] = R"(
+const char kColorMapPortlandPart[] = R"(
   colorscale: 'Portland',
   )";
 
-    const char kHeatMapTypePart[] = R"(
+const char kHeatMapTypePart[] = R"(
 type: 'heatmap',
 hovertemplate: 'x:%{x} <br>y:%{y} <br>val:%{z:.}<extra></extra>',
 colorbar: {
@@ -273,8 +271,6 @@ For any questions please contact
 </html>
 )";
 
-
-
 const char kNoFileFoundedPage[] = R"(<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -322,10 +318,8 @@ const char kNoFileFoundedPage[] = R"(<!DOCTYPE html>
 
 )";
 
-
-const char kWarningIcon[] = R"davis_delimeter(<svg xmlns="http://www.w3.org/2000/svg" width="50%" height="50%" viewBox="0 0 156.262 144.407"><path d="M-109.166 7.227a2 2 0 0 0-.406.046c-3.195.03-6.176 1.695-7.785 4.483l-31.25 54.127-31.25 54.127h.002c-3.42 5.922 1.017 13.609 7.855 13.61h125.002c6.839-.001 11.277-7.688 7.857-13.61l-31.25-54.127-31.252-54.127c-1.465-2.539-4.079-4.164-6.978-4.45a2 2 0 0 0-.445-.077h-.004a2.006 2.006 0 0 0-.094-.002z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fff" d="M-109.165 9.227a7.081 7.081 0 0 0-6.46 3.529l-31.25 54.127-31.25 54.127c-2.674 4.631.777 10.609 6.126 10.61h125.002c5.348-.001 8.8-5.979 6.125-10.61l-31.25-54.127-31.252-54.127a7.079 7.079 0 0 0-5.79-3.53h-.001z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path d="M-109.26 11.225a5.073 5.073 0 0 0-4.632 2.53l-31.25 54.128-31.25 54.127c-1.953 3.381.488 7.609 4.393 7.61h125.002c3.905-.001 6.345-4.229 4.392-7.61l-31.25-54.127-31.252-54.127a5.073 5.073 0 0 0-4.152-2.531z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fc0" d="M140.053 125.83H16.209L47.17 72.204l30.961-53.626 30.961 53.626z"/><g transform="translate(.295 2.437) scale(.99073)"><circle cx="78.564" cy="111.117" r="8.817"/><path d="M78.564 42.955a8.817 8.817 0 0 0-8.818 8.816l3.156 37.461a5.662 5.662 0 0 0 11.325 0l3.154-37.46a8.817 8.817 0 0 0-8.817-8.817z"/></g></svg>)davis_delimeter";
-
-
+const char kWarningIcon[] =
+    R"davis_delimeter(<svg xmlns="http://www.w3.org/2000/svg" width="50%" height="50%" viewBox="0 0 156.262 144.407"><path d="M-109.166 7.227a2 2 0 0 0-.406.046c-3.195.03-6.176 1.695-7.785 4.483l-31.25 54.127-31.25 54.127h.002c-3.42 5.922 1.017 13.609 7.855 13.61h125.002c6.839-.001 11.277-7.688 7.857-13.61l-31.25-54.127-31.252-54.127c-1.465-2.539-4.079-4.164-6.978-4.45a2 2 0 0 0-.445-.077h-.004a2.006 2.006 0 0 0-.094-.002z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fff" d="M-109.165 9.227a7.081 7.081 0 0 0-6.46 3.529l-31.25 54.127-31.25 54.127c-2.674 4.631.777 10.609 6.126 10.61h125.002c5.348-.001 8.8-5.979 6.125-10.61l-31.25-54.127-31.252-54.127a7.079 7.079 0 0 0-5.79-3.53h-.001z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path d="M-109.26 11.225a5.073 5.073 0 0 0-4.632 2.53l-31.25 54.128-31.25 54.127c-1.953 3.381.488 7.609 4.393 7.61h125.002c3.905-.001 6.345-4.229 4.392-7.61l-31.25-54.127-31.252-54.127a5.073 5.073 0 0 0-4.152-2.531z" color="#000" style="solid-color:#000" transform="translate(186.615 2.437) scale(.99073)"/><path fill="#fc0" d="M140.053 125.83H16.209L47.17 72.204l30.961-53.626 30.961 53.626z"/><g transform="translate(.295 2.437) scale(.99073)"><circle cx="78.564" cy="111.117" r="8.817"/><path d="M78.564 42.955a8.817 8.817 0 0 0-8.818 8.816l3.156 37.461a5.662 5.662 0 0 0 11.325 0l3.154-37.46a8.817 8.817 0 0 0-8.817-8.817z"/></g></svg>)davis_delimeter";
 
 const char kHtmlDateTimeModel[] = R"davis_delimeter(
 <head>
@@ -352,6 +346,32 @@ var data = [
 %2
 ];
 %9
+var layout = {
+  title: {
+    text:''
+  },
+  xaxis: {
+    title: {
+      text: 'X'
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Y'
+    }
+  },
+  scene: {
+    xaxis: {
+      title: 'X',
+    },
+    yaxis: {
+      title: 'Y',
+    },
+    zaxis: {
+      title: '',
+    }
+  }
+};
 var config = {
   editable: true,
   showLink: true,
@@ -364,8 +384,6 @@ Plotly.newPlot('gd', data, layout, config);
 </body>
 )davis_delimeter";
 
-
-
 const char kHtmlMultiChartBlock[] = R"davis_delimeter(
 var trace%1 = {
   x: [%2],
@@ -374,9 +392,6 @@ var trace%1 = {
   name: '%4'
 };
 )davis_delimeter";
-
-
-
 
 const char kHtmlMultiChartModel[] = R"davis_delimeter(
 <head>
@@ -442,8 +457,6 @@ Plotly.newPlot('gd', data, layout, config);
 </body>
 )davis_delimeter";
 
-
-
 const char kHtmlCloudOfPoints[] = R"davis_delimeter(
 
 <head>
@@ -483,12 +496,11 @@ Plotly.newPlot('gd', data,layout,config);
 
 )davis_delimeter";
 
-const char kHtmlSimpleDataBlock[]= R"davis_delimeter({
+const char kHtmlSimpleDataBlock[] = R"davis_delimeter({
     x: [%1],
     y: [%2],
     mode: 'lines'
   })davis_delimeter";
-
 
 const char kHtmlComboboxStyleBlock[] = R"davis_delimeter(
 <style>
@@ -518,14 +530,13 @@ const char kHtmlComboboxStyleBlock[] = R"davis_delimeter(
     </style>
 )davis_delimeter";
 
-const char kHtmlComboboxSelectBlock[] =R"davis_delimeter(
+const char kHtmlComboboxSelectBlock[] = R"davis_delimeter(
     <select id="dropdown" onchange="updateBackground(this)">
         <option value="image1" data-image="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 11.261'><path d='M0 0h171.373v11.261H0z'/></svg>">line</option>
         <option value="image2" data-image="<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 50'><g transform='translate(-20.762 -48.999)'><path d='M20.762 68.268h171.373v11.261H20.762z'/><circle cx='107.49' cy='73.999' r='25'/></g></svg>">line + point</option>
         <option value="3.svg" data-image="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 171.373 50'><circle cx='107.49' cy='73.999' r='25' transform='translate(-20.762 -48.999)'/></svg>">point</option>
     </select>
 )davis_delimeter";
-
 
 const char kHtmlComboboxUpdateFooBlock[] = R"davis_delimeter(
 function updateBackground(select) {
@@ -556,15 +567,14 @@ function updateBackground(select) {
         });
 )davis_delimeter";
 
-
-const char kHtmlComboboxSelectSurfaceMatrixBlock[]=R"davis_delimeter(
+const char kHtmlComboboxSelectSurfaceMatrixBlock[] = R"davis_delimeter(
     <select id="dropdown" onchange="updateBackground(this)">
         <option value="matrix_image" data-image="<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width='60mm'   height='60mm'   viewBox='0 0 60 60'   version='1.1'   id='svg1'   inkscape:export-filename='matrix.svg'   inkscape:export-xdpi='96'   inkscape:export-ydpi='96'   xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'   xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'   xmlns='http://www.w3.org/2000/svg'   xmlns:svg='http://www.w3.org/2000/svg'>  <sodipodi:namedview     id='namedview1'     pagecolor='#ffffff'     bordercolor='#000000'     borderopacity='0.25'     inkscape:showpageshadow='2'     inkscape:pageopacity='0.0'     inkscape:pagecheckerboard='0'     inkscape:deskcolor='#d1d1d1'     inkscape:document-units='mm'     inkscape:zoom='0.73139029'     inkscape:cx='118.26791'     inkscape:cy='428.63571'     inkscape:window-width='1920'     inkscape:window-height='1017'     inkscape:window-x='1912'     inkscape:window-y='-8'     inkscape:window-maximized='1'     inkscape:current-layer='layer1' />  <defs     id='defs1' />  <g     inkscape:label='Слой 1'     inkscape:groupmode='layer'     id='layer1'>    <rect       style='fill:#ff2a2a;stroke-width:0.264583'       id='rect1'       width='30'       height='30'       x='0'       y='0' />    <rect       style='fill:#ffff00;stroke-width:0.264583'       id='rect2'       width='30'       height='30'       x='30'       y='0' />    <rect       style='fill:#ff00ff;stroke-width:0.264583'       id='rect3'       width='30'       height='30'       x='30'       y='30' />    <rect       style='fill:#00ffff;stroke-width:0.264583'       id='rect4'       width='30'       height='30'       x='0'       y='30' />  </g></svg>">matrix</option>
         <option value="surface_image" data-image="<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg   width='48.685608mm'   height='57.444851mm'   viewBox='0 0 48.685608 57.444851'   version='1.1'   id='svg1'   inkscape:export-filename='matrix.svg'   inkscape:export-xdpi='96'   inkscape:export-ydpi='96'   xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'   xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'   xmlns='http://www.w3.org/2000/svg'   xmlns:svg='http://www.w3.org/2000/svg'>  <sodipodi:namedview     id='namedview1'     pagecolor='#ffffff'     bordercolor='#000000'     borderopacity='0.25'     inkscape:showpageshadow='2'     inkscape:pageopacity='0.0'     inkscape:pagecheckerboard='0'     inkscape:deskcolor='#d1d1d1'     inkscape:document-units='mm'     inkscape:zoom='0.73139029'     inkscape:cx='118.26791'     inkscape:cy='428.63571'     inkscape:window-width='1920'     inkscape:window-height='1017'     inkscape:window-x='1912'     inkscape:window-y='-8'     inkscape:window-maximized='1'     inkscape:current-layer='layer1' />  <defs     id='defs1' />  <g     inkscape:label='Слой 1'     inkscape:groupmode='layer'     id='layer1'     transform='translate(-5.1280656,-1.0459301)'>    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='M 15.257176,8.9730377 5.1280653,39.450809 24.934094,46.052817 Z'       id='path8' />    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='M 39.107412,1.0459301 21.435214,27.86359 38.857644,39.366818 Z'       id='path12' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='M 15.259243,8.9749767 33.254436,35.200199 24.753217,45.962379 Z'       id='path9'       sodipodi:nodetypes='cccc' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='m 39.108907,1.048338 10.594434,29.989119 -10.997004,8.19519 z'       id='path13'       sodipodi:nodetypes='cccc' />    <path       style='fill:#0099ff;fill-opacity:1;stroke-width:0.264583'       d='m 53.813674,29.791115 -31.459079,6.466818 4.185507,20.453528 z'       id='path10' />    <path       style='fill:#00d3ff;fill-opacity:1;stroke-width:0.264583'       d='M 53.813028,29.793875 40.098917,58.49078 26.527985,56.509598 Z'       id='path11'       sodipodi:nodetypes='cccc' />  </g></svg>">surface</option>
     </select>
 )davis_delimeter";
 
-const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[]=R"davis_delimeter(
+const char kHtmlComboboxUpdateSurfaceMatrixFooBlock[] = R"davis_delimeter(
 function updateBackground(select) {
             var selectedImage = select.options[select.selectedIndex].getAttribute('data-image');
             select.style.backgroundImage = 'url("data:image/svg+xml,' + encodeURIComponent(selectedImage) + '")';
@@ -664,7 +674,6 @@ extern const char kHtmlDavisLogoHyperlinkBlock[] = R"davis_delimeter(
 </a>
 )davis_delimeter";
 
-
 const char kAverageButtonStyleBlock[] = R"davis_delimeter(
 <style>
         .toggle-button {
@@ -705,7 +714,6 @@ const char kAverageButtonDivBlock[] = R"davis_delimeter(
     <div class="state-text" id="stateText">Average: OFF</div>
 )davis_delimeter";
 
-
 const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
  const toggleButton = document.getElementById('toggleButton');
         const stateText = document.getElementById('stateText');
@@ -720,7 +728,6 @@ const char kAverageButtonJsFooBlock[] = R"davis_delimeter(
         });
 )davis_delimeter";
 
-
 const char kAverageErrorDataBlock[] = R"davis_delimeter({
     x: [%1],
     y: [%2],
@@ -733,5 +740,5 @@ const char kAverageErrorDataBlock[] = R"davis_delimeter({
 )davis_delimeter";
 
 // *INDENT-ON*
-//#STOP_GRAB_TO_DVS_NAMESPACE
+// #STOP_GRAB_TO_DVS_NAMESPACE
 } // namespace dvs
