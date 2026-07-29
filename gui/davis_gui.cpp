@@ -37,7 +37,7 @@ const double OPACITY_IF_NOT_ACTIVE = 0.94;
 
 DavisGUI::DavisGUI(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::DavisGUI) {
-  jsn::getJsonArrayFromFile(":/keys.json", service_json_keys);
+  jsn::getJsonArrayFromFile("keys.json", service_json_keys);
   ui->setupUi(this);
   isAboutWindowShowed = false;
   m_isMinStyleWindow = false;
@@ -289,7 +289,7 @@ void DavisGUI::readJsonToPlot(const QString &pathToFile) {
 
   if (jsn::getJsonObjectFromFile("user_keys_list.json", user_stamp_keys) ==
       false) {
-    jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+    jsn::getJsonObjectFromFile(":/res/4restore/user_keys_list.json", user_stamp_keys);
   }
 
   if (user_stamp_keys.keys().contains("matrix_to_matrix")) {
@@ -297,7 +297,7 @@ void DavisGUI::readJsonToPlot(const QString &pathToFile) {
         user_stamp_keys.value("matrix_to_matrix").toArray();
   } else {
     QJsonObject user_stamp_keys;
-    jsn::getJsonObjectFromFile(":/user_keys_list.json", user_stamp_keys);
+    jsn::getJsonObjectFromFile(":/res/4restore/user_keys_list.json", user_stamp_keys);
     matrix_to_matrix_stamps =
         user_stamp_keys.value("matrix_to_matrix").toArray();
   }
@@ -309,7 +309,9 @@ void DavisGUI::readJsonToPlot(const QString &pathToFile) {
     return;
   };
   jsn::extractAllObjects(jv, result);
-  // qDebug()<<"result all objects size:"<<result.size();
+  //qDebug()<<"result all objects size:"<<result.size()<<jv;
+  //qDebug()<<"service_json_keys: "<<service_json_keys;
+  //qDebug()<<"user_stamp_keys: "<<user_stamp_keys;
 
   for (int i = 0; i < result.size(); ++i) {
 
