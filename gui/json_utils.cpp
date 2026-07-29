@@ -86,13 +86,13 @@ isJsonObjectContainsUserKeys(const QJsonObject &user_json_from_file,
   QStringList user_stamp_keys_list = user_stamp_keys.keys();
 
   // Check that all user stamp keys are valid
-  for (int i = 0; i < user_stamp_keys_list.size(); ++i) {
+  /*for (int i = 0; i < user_stamp_keys_list.size(); ++i) {
     QString check_key = user_stamp_keys_list[i];
     if (service_keys.contains(QJsonValue(check_key)) == false) {
       qDebug() << "invalid key in the user stamps json" << check_key;
       return {false, QJsonObject()};
     }
-  }
+  }*/
 
   // Check that we have keys for user json
   for (int i = 0; i < service_keys.size(); ++i) {
